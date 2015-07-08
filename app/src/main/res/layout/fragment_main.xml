@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.MainFragment" android:background="#EEE"
+    android:id="@+id/fragment_main_container">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_main_relative_layout1">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/location_edittext"
+            android:id="@+id/fragment_main_edittext1"
+            android:imeOptions="flagNoExtractUi|actionSearch"
+            android:textSize="15sp"
+            android:textColor="#999"
+            android:paddingLeft="10dp"
+            android:drawableLeft="@mipmap/dc_location"
+            android:singleLine="true"
+            android:inputType="textNoSuggestions"
+            android:focusable="false"
+            android:editable="false"/>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#FFF"
+            android:visibility="gone">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_style"
+                android:id="@+id/activity_main_button1"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:src="@mipmap/dc_correct"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:background="#EEE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_main_relative_layout1"
+        android:orientation="vertical"
+        android:id="@+id/mainActivityLinearLayout1">
+
+        <com.example.ravi_gupta.slider.ViewPagerCustomDuration
+            android:layout_width="match_parent"
+            android:layout_height="183dp"
+            android:id="@+id/viewPager"
+            android:scrollbarStyle="outsideOverlay">
+        </com.example.ravi_gupta.slider.ViewPagerCustomDuration>
+
+        <fragment
+            android:layout_weight="1"
+            android:id="@+id/ListFragment"
+            android:name="com.example.ravi_gupta.slider.ListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_shop_list" />
+
+    </LinearLayout>
+
+</RelativeLayout>

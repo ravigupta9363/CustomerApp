@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Slider</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_settings">Settings</string>
+    <string name="str_atv_places">Enter Place Here</string>
+    <color name="autocomplete_background_color">#FFFFFF</color>
+</resources>
