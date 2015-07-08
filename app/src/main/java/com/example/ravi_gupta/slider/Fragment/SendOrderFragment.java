@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.ravi_gupta.slider.R;
 
 
 /**

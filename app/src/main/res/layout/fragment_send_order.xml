@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:orientation="vertical"
-    tools:context="com.example.ravi_gupta.slider.SendOrderFragment"
+    tools:context="com.example.ravi_gupta.slider.Fragment.SendOrderFragment"
     android:background="#FFF" android:padding="10dp" android:layout_marginTop="2dp" android:weightSum="3">
 
         <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.ViewPager;
 
 /**
  * Created by Ravi-Gupta on 7/1/2015.

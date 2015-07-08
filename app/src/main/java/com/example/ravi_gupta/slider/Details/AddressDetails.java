@@ -1,12 +1,13 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Details;
 
 /**
  * Created by Ravi-Gupta on 7/7/2015.
  */
+
 public class AddressDetails {
 
-    String address1;
-    String address2;
+    public String address1;
+    public String address2;
 
     public AddressDetails() { super(); }
 

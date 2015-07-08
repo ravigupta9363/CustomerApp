@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
 /**
  * Created by Ravi-Gupta on 6/30/2015.

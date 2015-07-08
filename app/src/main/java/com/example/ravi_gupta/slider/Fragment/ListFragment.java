@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
+import com.example.ravi_gupta.slider.Details.ShopListDetails;
+import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
 

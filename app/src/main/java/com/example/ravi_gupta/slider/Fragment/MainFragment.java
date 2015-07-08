@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
+import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.example.ravi_gupta.slider.Location.LocationAddress;
+import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -104,7 +111,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
             double longitude = gpsLocation.getLongitude();
             // String result = "Latitude: " + gpsLocation.getLatitude() +
             //    " Longitude: " + gpsLocation.getLongitude();
-            //locationEdittext.setText(result);
+            //fragment_change_location_edittext.setText(result);
         } else {
             showSettingsAlert();
         }

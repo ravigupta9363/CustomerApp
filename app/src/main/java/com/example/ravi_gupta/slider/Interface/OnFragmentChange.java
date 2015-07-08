@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Interface;
 
 /**
  * Created by Tarun on 03-05-2015.

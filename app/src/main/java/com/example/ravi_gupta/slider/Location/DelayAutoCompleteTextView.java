@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Location;
 
 import android.content.Context;
 import android.os.Handler;

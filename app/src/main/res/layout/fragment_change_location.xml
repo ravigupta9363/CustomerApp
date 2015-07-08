@@ -5,7 +5,7 @@
 
     <LinearLayout  android:layout_width="match_parent"
     android:layout_height="match_parent" android:orientation="vertical"
-    tools:context="com.example.ravi_gupta.slider.changeLocationFragment"
+    tools:context="com.example.ravi_gupta.slider.Fragment.changeLocationFragment"
     android:background="#FFF" android:layout_marginTop="2dp" android:weightSum="8"
         android:id="@+id/fragment_change_location_container">
 
@@ -13,11 +13,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-        <com.example.ravi_gupta.slider.DelayAutoCompleteTextView
+        <com.example.ravi_gupta.slider.Location.DelayAutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@drawable/location_edittext"
-            android:id="@+id/locationEdittext"
+            android:id="@+id/fragment_change_location_edittext"
             android:imeOptions="flagNoExtractUi|actionSearch"
             android:textSize="15sp"
             android:textColor="#999"
@@ -39,7 +39,7 @@
 
 
             <ProgressBar
-                android:id="@+id/pb_loading_indicator"
+                android:id="@+id/fragment_change_pb_loading_indicator"
                 style="?android:attr/progressBarStyleSmall"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"

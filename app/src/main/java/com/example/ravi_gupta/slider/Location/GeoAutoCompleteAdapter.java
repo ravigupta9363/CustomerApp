@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Location;
 
 import android.content.Context;
 import android.location.Address;
@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import com.example.ravi_gupta.slider.R;
 
 import java.io.IOException;
 import java.util.ArrayList;

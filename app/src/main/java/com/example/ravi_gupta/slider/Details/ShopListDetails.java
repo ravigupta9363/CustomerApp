@@ -1,16 +1,16 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Details;
 
 /**
  * Created by Ravi-Gupta on 7/2/2015.
  */
 public class ShopListDetails {
-    String shopName;
-    int discount;
-    String address;
-    boolean Isreturn;
-    int deliveryTime;
-    int orderFulfilment;
-    boolean Isopen;
+    public String shopName;
+    public int discount;
+    public String address;
+    public boolean Isreturn;
+    public int deliveryTime;
+    public int orderFulfilment;
+    public boolean Isopen;
 
 
     public ShopListDetails() {

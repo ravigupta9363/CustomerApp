@@ -1,4 +1,4 @@
-package com.example.ravi_gupta.slider;
+package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -17,6 +17,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import com.example.ravi_gupta.slider.Adapter.AddressAdapter;
+import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.example.ravi_gupta.slider.Location.DelayAutoCompleteTextView;
+import com.example.ravi_gupta.slider.Details.AddressDetails;
+import com.example.ravi_gupta.slider.Location.GeoAutoCompleteAdapter;
+import com.example.ravi_gupta.slider.Location.GeoSearchResult;
+import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
 
@@ -51,6 +60,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     Button useMyLocationButton;
     private Integer THRESHOLD = 2;
     ProgressBar progressBar;
+    GeoSearchResult resultToBeAddedOnList;
 
 
     private OnFragmentInteractionListener mListener;
@@ -85,13 +95,13 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
 
         useMyLocationButton.setTypeface(typeface);
 
-        locationEdittext = (DelayAutoCompleteTextView) rootview.findViewById(R.id.locationEdittext);
+        locationEdittext = (DelayAutoCompleteTextView) rootview.findViewById(R.id.fragment_change_location_edittext);
         locationEdittext.setDropDownBackgroundResource(R.color.autocomplete_background_color);
         locationEdittext.setThreshold(THRESHOLD);
         locationEdittext.setAdapter(new GeoAutoCompleteAdapter(getActivity())); // 'this' is Activity instance
         locationEdittext.setLoadingIndicator(
-                (android.widget.ProgressBar) rootview.findViewById(R.id.pb_loading_indicator));
-        progressBar = (ProgressBar) rootview.findViewById(R.id.pb_loading_indicator);
+                (android.widget.ProgressBar) rootview.findViewById(R.id.fragment_change_pb_loading_indicator));
+        progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_change_pb_loading_indicator);
         mListview = (ListView) rootview.findViewById(R.id.addressListView);
         addressAdapter = new AddressAdapter(getActivity(),R.layout.address_list,addressDetailses);
         mListview.setAdapter(addressAdapter);
@@ -108,11 +118,12 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                // imm.hideSoftInputFromWindow(locationEdittext.getWindowToken(), 0);
+                // imm.hideSoftInputFromWindow(fragment_change_location_edittext.getWindowToken(), 0);
                 hiddenKeyboard(locationEdittext);
                 GeoSearchResult result = (GeoSearchResult) adapterView.getItemAtPosition(position);
                 locationEdittext.setText(result.getAddress());
-                mainActivity.replaceFragment(R.id.locationEdittext, result);
+                resultToBeAddedOnList = result;
+                mainActivity.replaceFragment(R.id.fragment_change_location_edittext, result);
 
 
             }
@@ -185,7 +196,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
                     locationAddress = null;
             }
             //Main.setText(locationAddress);
-            //locationEdittext.setText(locationAddress);
+            //fragment_change_location_edittext.setText(locationAddress);
         }
     }
 
@@ -217,6 +228,13 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             addressDetailses.add(new AddressDetails("Sector 21","DLF Phase 3, P Block"));
             addressDetailses.add(new AddressDetails("Sector 25", "DLF Phase 2"));
             addressDetailses.add(new AddressDetails("Ghitorni", "New Colony"));
+            if(mainActivity.addedToList == false){
+                mainActivity.addedToList = true;
+            }
+            else {
+                //Log.v("Result",resultToBeAddedOnList.getAddress());
+                //addressDetailses.add(new AddressDetails(resultToBeAddedOnList.getAddress(), ""));
+            }
 
             return null;
         }

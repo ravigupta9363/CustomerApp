@@ -11,12 +11,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.ravi_gupta.slider.Details.AddressDetails;
+import com.example.ravi_gupta.slider.Fragment.ListFragment;
+import com.example.ravi_gupta.slider.Fragment.MainFragment;
+import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
+import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
+import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
+import com.example.ravi_gupta.slider.Location.GeoSearchResult;
+
 
 public class MainActivity extends AppCompatActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener{
 
-    int updateLocation = 0;
+    public int updateLocation = 0;
+    public boolean addedToList = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +38,6 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-    /*@Override
-    public void onBackPressed() {
-
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-            //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            //additional code
-        } else {
-            getFragmentManager().popBackStack();
-        }
-
-    }*/
 
     @Override
     public void replaceFragment(int id, Object object) {
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnFr
                 ft.commitAllowingStateLoss();
                 break;
 
-            case R.id.locationEdittext :
+            case R.id.fragment_change_location_edittext:
                 GeoSearchResult result = (GeoSearchResult)object;
                // Log.v("Result", "is equals to " + result.getAddress());
                 Bundle bundle = new Bundle();
