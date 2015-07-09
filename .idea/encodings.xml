@@ -5,7 +5,16 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/ravi_gupta/slider/Location/DelayAutoCompleteTextView.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/ravi_gupta/slider/Location/GeoAutoCompleteAdapter.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/ravi_gupta/slider/Location/GeoSearchResult.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/dc_drawer_item_selector.xml" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/drawer_shadow.9.png" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/geo_search_result.xml" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/global.xml" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_discount.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_logout.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_menu.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_profile.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_stop.png" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/dc_transaction.png" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
