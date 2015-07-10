@@ -2,7 +2,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FFF</item>
-        <item name="colorPrimaryDark">#DDD</item>//#2E9C58
+        <item name="colorPrimaryDark">#000</item>//#2E9C58
         <item name="colorAccent">#74C291</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="homeAsUpIndicator">@mipmap/dc_menu</item>

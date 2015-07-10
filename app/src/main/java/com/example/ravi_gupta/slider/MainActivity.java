@@ -1,8 +1,9 @@
 package com.example.ravi_gupta.slider;
 
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
+import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
-        MainFragment.OnFragmentInteractionListener{
+        MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean addedToList = false;
@@ -80,17 +82,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         decor.removeView(child);
         LinearLayout container = (LinearLayout) mDrawerLayout.findViewById(R.id.mContainer); // This is the container we defined just now.
         container.addView(child);
-
         // Make the drawer replace the first child
         decor.addView(mDrawerLayout);
-        //android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
-        //TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
-
-        //Typeface typeFace=Typeface.createFromAsset(toolbar.getContext().getAssets(), "fonts/gothic.ttf");
-        //toolbarText.setTypeface(typeFace);
-
-
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setElevation(0);//Removing Shaodow
 
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.sections_title);
@@ -113,21 +107,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
 
-
         // Recycle the typed array
         navMenuIcons.recycle();
 
-
-
-        //Typeface typeFace=Typeface.createFromAsset(getAssets(), "fonts/gothic.ttf");
-
         SpannableString s = new SpannableString("Drug Corner");
-        //
-
         s.setSpan(new TypefaceSpan(this, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-// Update the action bar title with the TypefaceSpan instance
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
         mTitle = mDrawerTitle = s.toString();
@@ -149,25 +134,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 R.string.app_name // nav drawer close - description for accessibility
         ){
             public void onDrawerClosed(View view) {
-               // getSupportActionBar().setTitle(mDrawerTitle);
-                //getActionBar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-              //  getSupportActionBar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
         };
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
         if (savedInstanceState == null) {
-            // on first time display view for first nav item
-            //displayView(0);
         }
 
     }
@@ -185,6 +163,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private void displayView(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
+        final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
             case 0:
                 //fragment = new HomeFragment();
@@ -201,10 +180,25 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 //fragment = new CommunityFragment();
                 break;
             case 4:
-                //fragment = new PagesFragment();
+                Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree" );// this.getPackageName()
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" +  "com.cubeactive.qnotelistfree")));
+                }
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 5:
                 //fragment = new WhatsHotFragment();
+                break;
+            case 6:
+                break;
+            case 7:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
 
             default:
@@ -212,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
 
         if (fragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
+            //FragmentManager fragmentManager = getFragmentManager();
             //fragmentManager.beginTransaction()
               //      .replace(R.id.frame_container, fragment).commit();
 
@@ -221,6 +215,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
             mDrawerLayout.closeDrawer(mDrawerList);
+
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
