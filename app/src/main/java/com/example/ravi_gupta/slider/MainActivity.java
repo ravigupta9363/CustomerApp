@@ -38,6 +38,7 @@ import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
+import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
@@ -49,7 +50,8 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener,
-        FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener{
+        FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener,
+        NotificationFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean addedToList = false;
@@ -178,7 +180,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 //fragment = new FindPeopleFragment();
                 break;
             case 2:
-                //fragment = new PhotosFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 3:
                 //fragment = new CommunityFragment();
@@ -200,6 +205,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share Via"));
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 6:
                 fragmentManager.beginTransaction()
