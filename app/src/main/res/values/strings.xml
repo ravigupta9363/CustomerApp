@@ -19,6 +19,7 @@
         <item>@mipmap/dc_share</item>
         <item>@mipmap/dc_nav_contact</item>
         <item>@mipmap/dc_about</item>
+        <item>@mipmap/dc_faq</item>
     </string-array>
 
     <string-array name="sections_title">
@@ -30,6 +31,7 @@
         <item>  Share</item>
         <item>  Contact</item>
         <item>  About</item>
+        <item>  FAQs</item>
     </string-array>
 
     <string name="title_section1">Section 1</string>

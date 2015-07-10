@@ -34,6 +34,7 @@ import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
+import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
@@ -46,7 +47,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
-        MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener{
+        MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener,
+        FAQFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean addedToList = false;
@@ -106,6 +108,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
+        navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[8], navMenuIcons.getResourceId(8, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -197,6 +200,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             case 7:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
+                break;
+            case 8:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
