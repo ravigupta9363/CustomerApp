@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.Fragment.ContactUsFragment"
+    android:orientation="vertical" android:background="@drawable/dc_background" android:weightSum="5">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EEE"
+        android:id="@+id/view"/>
+
+   <TextView
+       android:layout_weight="1"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/fragment_contact_us_textview1"
+       android:layout_gravity="center"
+       android:layout_marginTop="10dp"
+       android:layout_marginLeft="30dp"
+       android:layout_marginRight="30dp"
+       android:gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center|top">
+
+        <Button
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Mail Us"
+            android:textColor="#FFF"
+            android:background="@drawable/round_button"
+            android:id="@+id/fragment_contact_us_button1"
+            android:textStyle="bold"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+
+
+        <Button
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/round_button"
+            android:textColor="#FFF"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Call Us"
+            android:id="@+id/fragment_contact_us_button2"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>

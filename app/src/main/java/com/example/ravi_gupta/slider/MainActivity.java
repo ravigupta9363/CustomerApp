@@ -34,6 +34,7 @@ import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
+import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener,
-        FAQFragment.OnFragmentInteractionListener{
+        FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean addedToList = false;
@@ -193,9 +194,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 5:
-                //fragment = new WhatsHotFragment();
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = "Here is the share content body";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share Via"));
                 break;
             case 6:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 7:
                 fragmentManager.beginTransaction()
