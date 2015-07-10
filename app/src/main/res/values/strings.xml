@@ -12,20 +12,24 @@
 
     <string-array name="sections_icons">
         <item>@mipmap/dc_profile</item>
-        <item>@mipmap/dc_discount</item>
-        <item>@mipmap/dc_transaction</item>
-        <item>@mipmap/dc_profile</item>
-        <item>@mipmap/dc_stop</item>
-        <item>@mipmap/dc_logout</item>
+        <item>@mipmap/dc_nav_previous_order</item>
+        <item>@mipmap/dc_notification</item>
+        <item>@mipmap/dc_status</item>
+        <item>@mipmap/dc_feedback</item>
+        <item>@mipmap/dc_share</item>
+        <item>@mipmap/dc_nav_contact</item>
+        <item>@mipmap/dc_about</item>
     </string-array>
 
     <string-array name="sections_title">
         <item>  Profile</item>
-        <item>  Discount &amp; Return</item>
-        <item>  Today Transaction</item>
-        <item>  Contact us</item>
-        <item>  Start / Stop service</item>
-        <item>  Logout</item>
+        <item>  Past Orders</item>
+        <item>  Notifications</item>
+        <item>  Status</item>
+        <item>  Feedback</item>
+        <item>  Share</item>
+        <item>  Contact</item>
+        <item>  About</item>
     </string-array>
 
     <string name="title_section1">Section 1</string>

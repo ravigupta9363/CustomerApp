@@ -80,6 +80,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override

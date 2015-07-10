@@ -19,9 +19,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.ravi_gupta.slider.Adapter.AddressAdapter;
+import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.DelayAutoCompleteTextView;
-import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Location.GeoAutoCompleteAdapter;
 import com.example.ravi_gupta.slider.Location.GeoSearchResult;
 import com.example.ravi_gupta.slider.MainActivity;
@@ -80,6 +80,11 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        //SpannableString s = new SpannableString("Change Location");
+        //s.setSpan(new TypefaceSpan(this, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(s.toString());
+
     }
 
     @Override
@@ -154,6 +159,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
