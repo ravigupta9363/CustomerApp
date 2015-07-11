@@ -39,6 +39,8 @@ import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
+import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
+import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
@@ -51,13 +53,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         SendOrderFragment.OnFragmentInteractionListener, changeLocationFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener,
         FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener,
-        NotificationFragment.OnFragmentInteractionListener{
+        NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
+        ProfileEditFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
+    public boolean updateUserInfo = false;
+    public boolean updateUserInfoProfileEditFragment = false;
     public boolean addedToList = false;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    public int FRAGMENT_CODE = 0;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -172,9 +178,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
             case 0:
-                //fragment = new HomeFragment();
-                //Toast.makeText(this,"I am Clicked",Toast.LENGTH_SHORT);
-                Log.v("Navigation","Yes");
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
                 //fragment = new FindPeopleFragment();
@@ -291,41 +298,41 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         switch (id) {
 
             case R.layout.fragment_main :
-                MainFragment frag6 = (MainFragment) getSupportFragmentManager().
+                MainFragment frag1 = (MainFragment) getSupportFragmentManager().
                         findFragmentByTag(MainFragment.TAG);
-                if (frag6 == null) {
-                    frag6 = MainFragment.newInstance();
+                if (frag1 == null) {
+                    frag1 = MainFragment.newInstance();
                 }
-                ft.replace(R.id.container, frag6, MainFragment.TAG);
+                ft.replace(R.id.container, frag1, MainFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
 
             case R.id.shopListview :
-                Fragment newFragment = new SendOrderFragment();
-                ft.replace(R.id.ListFragment, newFragment);
+                Fragment newFragment1 = new SendOrderFragment();
+                ft.replace(R.id.ListFragment, newFragment1);
                 ft.addToBackStack(null); // Ads FirstFragment to the back-stack
                 ft.commit();
                 break;
 
             case R.id.fragment_main_edittext1 :
-                changeLocationFragment frag4 = (changeLocationFragment) getSupportFragmentManager().
+                changeLocationFragment frag2 = (changeLocationFragment) getSupportFragmentManager().
                         findFragmentByTag(changeLocationFragment.TAG);
-                if (frag4 == null) {
-                    frag4 = changeLocationFragment.newInstance();
+                if (frag2 == null) {
+                    frag2 = changeLocationFragment.newInstance();
                 }
-                ft.replace(R.id.fragment_main_container, frag4, changeLocationFragment.TAG).addToBackStack(null);
+                ft.replace(R.id.fragment_main_container, frag2, changeLocationFragment.TAG).addToBackStack(null);
                 Log.v("Result", "Called2");
                 ft.commitAllowingStateLoss();
                 break;
 
             case R.id.fragment_change_location_button2 :
-                MainFragment frag5 = (MainFragment) getSupportFragmentManager().
+                MainFragment frag3 = (MainFragment) getSupportFragmentManager().
                         findFragmentByTag(MainFragment.TAG);
                 updateLocation = 3;
-                if (frag5 == null) {
-                    frag5 = MainFragment.newInstance();
+                if (frag3 == null) {
+                    frag3 = MainFragment.newInstance();
                 }
-                ft.replace(R.id.container, frag5, MainFragment.TAG).addToBackStack(null);
+                ft.replace(R.id.container, frag3, MainFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 break;
 
@@ -335,9 +342,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 Bundle bundle = new Bundle();
                 bundle.putString("newAddress", result.getAddress().toString());
                 updateLocation = 1;
-                Fragment newFragment4 = new MainFragment();
-                ft.replace(R.id.container, newFragment4);
-                newFragment4.setArguments(bundle);
+                Fragment newFragment2 = new MainFragment();
+                ft.replace(R.id.container, newFragment2);
+                newFragment2.setArguments(bundle);
                 ft.addToBackStack(null);
                 ft.commit();
                 break;
@@ -350,11 +357,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 bundle2.putString("newAddress2", addressDetails.address2.toString());
                 Log.v("Result", "is equals to " + addressDetails.address1.toString());
                 updateLocation = 2;
-                Fragment newFragment5 = new MainFragment();
-                ft.replace(R.id.container, newFragment5);
-                newFragment5.setArguments(bundle2);
+                Fragment newFragment3 = new MainFragment();
+                ft.replace(R.id.container, newFragment3);
+                newFragment3.setArguments(bundle2);
                 ft.addToBackStack(null);
                 ft.commit();
+                break;
+
+            case R.id.fragment_profile_button1:
+
+                break;
+
+            case R.id.fragment_profile_edit_button1:
                 break;
         }
     }
