@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crocin"
+            android:layout_weight="1"
+            android:id="@+id/order_status_medicine_list_textview1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 x "
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:id="@+id/order_status_medicine_list_textview2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:layout_weight="0.5"
+            android:id="@+id/order_status_medicine_list_textview3"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50/-"
+            android:gravity="right"
+            android:layout_weight="0.5"
+            android:id="@+id/order_status_medicine_list_textview4"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Piramal Healthcare"
+        android:id="@+id/order_status_medicine_list_textview5"
+        android:textColor="#AAA"
+        android:padding="3dp"
+        android:textSize="12sp"/>
+
+</LinearLayout>

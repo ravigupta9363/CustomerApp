@@ -36,9 +36,11 @@ import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
+import com.example.ravi_gupta.slider.Fragment.OrderStatusShopDetailFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
+import com.example.ravi_gupta.slider.Fragment.OrderStatusFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
@@ -54,7 +56,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         MainFragment.OnFragmentInteractionListener, AboutUsFragment.OnFragmentInteractionListener,
         FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener,
         NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
-        ProfileEditFragment.OnFragmentInteractionListener{
+        ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
+        OrderStatusShopDetailFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -193,7 +196,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 3:
-                //fragment = new CommunityFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 4:
                 Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree" );// this.getPackageName()

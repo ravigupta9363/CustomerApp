@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.Fragment.OrderStatusShopDetailFragment"
+    android:background="#FFF" android:orientation="vertical">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Apollo Pharmacy"
+          android:textSize="18sp"
+          android:id="@+id/fragment_order_status_shop_details_textview1"
+          android:textAllCaps="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="120/-"
+            android:gravity="right"
+            android:layout_gravity="right|center"
+            android:textSize="15sp"
+            android:id="@+id/fragment_order_status_shop_details_textview2"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_status_shop_details_listview">
+    </ListView>
+
+</LinearLayout>

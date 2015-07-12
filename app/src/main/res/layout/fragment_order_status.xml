@@ -1,0 +1,160 @@
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:orientation="vertical"
+        tools:context="com.example.ravi_gupta.slider.Fragment.OrderStatusFragment"
+       android:background="#EEE" >
+
+
+     <View
+         android:layout_width="match_parent"
+         android:layout_height="2dp"
+         android:background="#EEE"
+         android:id="@+id/view"/>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:background="#FFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="26 JULY 2015"
+                android:id="@+id/fragment_order_status_textview1"
+                android:drawableLeft="@mipmap/dc_date"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02:52 PM"
+                android:gravity="right|center"
+                android:id="@+id/fragment_order_status_textview2"
+                android:drawableLeft="@mipmap/dc_time"
+                android:paddingLeft="90dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DC112553"
+            android:id="@+id/fragment_order_status_textview3"
+            android:drawableLeft="@mipmap/dc_order"
+            android:gravity="center|left"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:src="@drawable/list"
+            android:layout_marginTop="5dp"
+            android:id="@+id/fragment_order_status_imageview1"/>
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="#EEE"
+             android:id="@+id/view2"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="List is been Preparing"
+            android:gravity="center"
+            android:id="@+id/fragment_order_status_textview4"
+            android:padding="10dp"
+            android:textColor="#36B666"
+            android:textSize="15sp"/>
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="#EEE"
+             android:id="@+id/view3"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="7dp"
+           android:layout_marginBottom="3dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Subtotal"
+               android:id="@+id/fragment_order_status_textview5"/>
+
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="right"
+               android:text="200.25/-"
+               android:id="@+id/fragment_order_status_textview6"/>
+
+       </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service Charge"
+                android:id="@+id/fragment_order_status_textview7"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="40/-"
+                android:id="@+id/fragment_order_status_textview8"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:id="@+id/fragment_order_status_textview9"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="240.25/-"
+                android:id="@+id/fragment_order_status_textview10"/>
+
+        </LinearLayout>
+
+     </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_order_status_viewPager1"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="2dp">
+
+        </android.support.v4.view.ViewPager>
+
+ </LinearLayout>
+
