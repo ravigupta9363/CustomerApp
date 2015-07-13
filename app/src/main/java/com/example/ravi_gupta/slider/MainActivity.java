@@ -41,6 +41,7 @@ import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
 import com.example.ravi_gupta.slider.Fragment.OrderStatusFragment;
+import com.example.ravi_gupta.slider.Fragment.PastOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
@@ -57,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener,
         NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
-        OrderStatusShopDetailFragment.OnFragmentInteractionListener{
+        OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -187,7 +188,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
-                //fragment = new FindPeopleFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(null)
+                        .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 2:
                 fragmentManager.beginTransaction()
@@ -370,12 +374,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 ft.commit();
                 break;
 
-            case R.id.fragment_profile_button1:
+            case R.id.fragment_past_order_listview1:
+                OrderStatusFragment frag4 = (OrderStatusFragment) getSupportFragmentManager().
+                        findFragmentByTag(OrderStatusFragment.TAG);
+                if (frag4 == null) {
+                    frag4 = OrderStatusFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag4, OrderStatusFragment.TAG);
+                ft.commitAllowingStateLoss();
 
                 break;
 
-            case R.id.fragment_profile_edit_button1:
-                break;
         }
     }
 

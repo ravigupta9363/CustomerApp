@@ -26,34 +26,74 @@
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="26 JULY 2015"
-                android:id="@+id/fragment_order_status_textview1"
-                android:drawableLeft="@mipmap/dc_date"
-                android:gravity="center"/>
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/dc_date" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26 JULY 2015"
+                    android:textSize="12sp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/fragment_order_status_textview1"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="02:52 PM"
-                android:gravity="right|center"
-                android:id="@+id/fragment_order_status_textview2"
-                android:drawableLeft="@mipmap/dc_time"
-                android:paddingLeft="90dp" />
+                android:orientation="horizontal"
+                android:gravity="right">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/dc_time"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="02:52 PM"
+                    android:textSize="12sp"
+                    android:paddingTop="4dp"
+                    android:gravity="right|center"
+                    android:id="@+id/fragment_order_status_textview2" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="DC112553"
-            android:id="@+id/fragment_order_status_textview3"
-            android:drawableLeft="@mipmap/dc_order"
-            android:gravity="center|left"/>
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
 
-        <ImageView
+             <ImageView
+                 android:layout_width="wrap_content"
+                 android:layout_height="25dp"
+                 android:src="@mipmap/dc_order"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DC112553"
+                android:id="@+id/fragment_order_status_textview3"
+                android:textSize="12sp"
+                android:paddingTop="4dp"
+                android:gravity="center|left"/>
+
+         </LinearLayout>
+
+
+         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="130dp"
             android:src="@drawable/list"
