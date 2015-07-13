@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="address"
+            android:textColor="#AAA"
             android:paddingLeft="20dp"
             android:id="@+id/past_order_layout_textview5"/>
 

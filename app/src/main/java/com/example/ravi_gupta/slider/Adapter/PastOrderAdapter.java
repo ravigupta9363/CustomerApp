@@ -76,7 +76,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.time.setText(pastOrdersDetail.time);
         holder.orderId.setText(pastOrdersDetail.orderId);
         holder.price.setText(String.valueOf(pastOrdersDetail.price)+"/-");
-        holder.address.setText(pastOrdersDetail.address);
+        holder.address.setText("To - "+pastOrdersDetail.address);
         holder.status.setText(pastOrdersDetail.status);
 
         return row;

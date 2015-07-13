@@ -14,7 +14,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="Apollo Pharmacy"
-          android:textSize="18sp"
+          android:textSize="15sp"
           android:id="@+id/fragment_order_status_shop_details_textview1"
           android:textAllCaps="true"/>
 

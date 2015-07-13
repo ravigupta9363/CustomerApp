@@ -16,7 +16,6 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="vertical"
-         android:paddingLeft="10dp"
          android:paddingRight="10dp"
          android:background="#FFF">
 
@@ -104,7 +103,8 @@
              android:layout_width="match_parent"
              android:layout_height="1dp"
              android:background="#EEE"
-             android:id="@+id/view2"/>
+             android:id="@+id/view2"
+             android:paddingLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -120,13 +120,15 @@
              android:layout_width="match_parent"
              android:layout_height="1dp"
              android:background="#EEE"
-             android:id="@+id/view3"/>
+             android:id="@+id/view3"
+             android:paddingLeft="10dp"/>
 
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="7dp"
-           android:layout_marginBottom="3dp">
+           android:layout_marginBottom="3dp"
+           android:paddingLeft="10dp">
 
            <TextView
                android:layout_width="wrap_content"
@@ -146,7 +148,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -169,7 +172,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

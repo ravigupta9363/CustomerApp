@@ -380,7 +380,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 if (frag4 == null) {
                     frag4 = OrderStatusFragment.newInstance();
                 }
-                ft.replace(R.id.container, frag4, OrderStatusFragment.TAG);
+                ft.replace(R.id.fragment_main_container, frag4, OrderStatusFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
 
                 break;

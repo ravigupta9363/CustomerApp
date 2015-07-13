@@ -1,15 +1,17 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 
@@ -30,6 +32,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    MainActivity mainActivity;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,15 +57,41 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_send_order, container, false);
+
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Lato-Regular.ttf");
 
-        TextView sendPrescriptionTextView = (TextView) rootview.findViewById(R.id.fragment_send_order_textview1);
-        TextView repeatOrderTextView = (TextView) rootview.findViewById(R.id.fragment_send_order_textview2);
-        TextView callUsTextView = (TextView) rootview.findViewById(R.id.fragment_send_order_textview3);
+        Button sendPrescriptionButton = (Button) rootview.findViewById(R.id.fragment_send_order_button1);
+        Button repeatOrderButton = (Button) rootview.findViewById(R.id.fragment_send_order_button2);
+        Button callUsButton = (Button) rootview.findViewById(R.id.fragment_send_order_button3);
 
-        sendPrescriptionTextView.setTypeface(typeface);
-        repeatOrderTextView.setTypeface(typeface);
-        callUsTextView.setTypeface(typeface);
+        sendPrescriptionButton.setTypeface(typeface);
+        repeatOrderButton.setTypeface(typeface);
+        callUsButton.setTypeface(typeface);
+
+        sendPrescriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        repeatOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.fragment_send_order_button2,null);
+            }
+        });
+
+        callUsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:91-9460109363"));
+                startActivity(callIntent);
+            }
+        });
 
         return rootview;
     }
@@ -77,6 +106,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {

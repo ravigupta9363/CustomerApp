@@ -4,91 +4,56 @@
     tools:context="com.example.ravi_gupta.slider.Fragment.SendOrderFragment"
     android:background="#FFF" android:padding="10dp" android:layout_marginTop="2dp" android:weightSum="3">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
 
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/dc_prescription"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"/>
-
-            <TextView
-                android:id="@+id/fragment_send_order_textview1"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Prescription"
-                android:textSize="18sp"
-                android:gravity="left"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEE"/>
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/dc_previous_order"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"/>
-
-            <TextView
-                android:id="@+id/fragment_send_order_textview2"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Repeat Order"
-                android:gravity="left"
-                android:textSize="18sp"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEE"/>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/fragment_send_order_button1"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:text="Send Prescription"
+        android:textSize="18sp"
+        android:gravity="left|center"
+        android:layout_weight="1"
+        android:background="@drawable/button_style"
+        android:drawableLeft="@mipmap/dc_location"
+        android:textAllCaps="false"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEE"/>
 
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@mipmap/dc_contact"
-            android:layout_gravity="center"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"/>
+    <Button
+        android:id="@+id/fragment_send_order_button2"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repeat Order"
+        android:gravity="left|center"
+        android:background="@drawable/button_style"
+        android:textSize="18sp"
+        android:layout_weight="1"
+        android:drawableLeft="@mipmap/dc_location"
+        android:textAllCaps="false"/>
 
-        <TextView
-            android:id="@+id/fragment_send_order_textview3"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Call Us"
-            android:textSize="18sp"
-            android:gravity="left"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEE"/>
 
-    </LinearLayout>
+
+    <Button
+        android:id="@+id/fragment_send_order_button3"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Call Us"
+        android:textSize="18sp"
+        android:gravity="left|center"
+        android:drawableLeft="@mipmap/dc_location"
+        android:background="@drawable/button_style"
+        android:layout_weight="1"
+        android:textAllCaps="false"/>
 
 </LinearLayout>
