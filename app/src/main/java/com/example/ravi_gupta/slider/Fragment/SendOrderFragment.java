@@ -73,7 +73,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         sendPrescriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 
             }
         });
