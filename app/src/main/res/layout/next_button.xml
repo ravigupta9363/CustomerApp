@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shoppingCartTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="35dp"
+    android:gravity="center"
+    android:textColor="#FFF"
+    android:background="@drawable/round_button"
+    android:text="Next"
+    android:textAllCaps="true"
+    android:layout_marginRight="10dp"
+    android:paddingRight="10dp"
+    android:textSize="13sp"
+    android:padding="2dp"/>

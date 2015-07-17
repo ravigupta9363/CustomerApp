@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.Fragment.LandmarkFragment"
+    android:background="@drawable/dc_background"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EEE"
+        android:id="@+id/view"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:orientation="vertical"
+        android:paddingRight="15dp" android:paddingTop="20dp">
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Flat Number"
+       android:id="@+id/fragment_landmark_textview1"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/fragment_landmark_edittext1"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp"
+        android:drawableLeft="@mipmap/dc_flat"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Landmark"
+        android:id="@+id/fragment_landmark_textview2"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:textSize="14sp"
+        android:id="@+id/fragment_landmark_edittext2"
+        android:drawableLeft="@mipmap/dc_landmark"/>
+
+        <CheckBox
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragment_landmark_checkbox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Request callback for order confirmation"/>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/round_button"
+        android:text="Place Order"
+        android:textColor="#FFF"
+        android:layout_gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textAllCaps="false"
+        android:id="@+id/fragment_landmark_button1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

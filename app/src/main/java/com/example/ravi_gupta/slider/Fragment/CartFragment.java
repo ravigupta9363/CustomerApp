@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.example.ravi_gupta.slider.Adapter.PrescriptionAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -32,7 +34,7 @@ public class CartFragment extends android.support.v4.app.Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ListView mListview;
+    GridView gridView;
     PrescriptionAdapter prescriptionAdapter;
     ArrayList<PrescriptionDetail> prescriptionDetails = new ArrayList<PrescriptionDetail>();
     MainActivity mainActivity;
@@ -62,6 +64,7 @@ public class CartFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class CartFragment extends android.support.v4.app.Fragment {
         Uri thumbnailUri = null;
 
 
-        mListview = (ListView) rootview.findViewById(R.id.fragment_cart_listview1);
+        gridView = (GridView) rootview.findViewById(R.id.fragment_cart_gridview1);
 
         //pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
         //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
@@ -95,7 +98,7 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
 
         prescriptionAdapter = new PrescriptionAdapter(getActivity(),R.layout.prescription,prescriptionDetails);
-        mListview.setAdapter(prescriptionAdapter);
+        gridView.setAdapter(prescriptionAdapter);
 
 
         return rootview;
@@ -141,11 +144,15 @@ public class CartFragment extends android.support.v4.app.Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void addNewPrescription(Uri imagePath,Uri thumbnailUri) {
-        prescriptionDetails.add(new PrescriptionDetail(imagePath,thumbnailUri));
-        prescriptionAdapter.notifyDataSetChanged();
-        this.imagePath = imagePath;
-        this.thumbnail = thumbnailUri;
-    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item= menu.findItem(R.id.cart);
+        MenuItem item2 = menu.findItem(R.id.nextButton);
+        item.setEnabled(false);
+        item.setVisible(false);
+        item2.setEnabled(true);
+        item2.setVisible(true);
 
+    }
 }

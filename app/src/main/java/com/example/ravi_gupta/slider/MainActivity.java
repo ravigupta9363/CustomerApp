@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,6 +49,7 @@ import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.CartFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
+import com.example.ravi_gupta.slider.Fragment.LandmarkFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
@@ -73,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
         OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
-        CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback{
+        CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -465,7 +468,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 File oldFile = new File(fileUri.getPath());
                 Uri thumbnailUri = Uri.fromFile(imageFile);
                 Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile.getPath()),
-                        100, 100);
+                        100, 130);
                 try {
                     FileOutputStream out = new FileOutputStream(imageFile);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -501,7 +504,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 File oldFile1 = new File(path);
                 Uri thumbnailUri1 = Uri.fromFile(imageFile1);
                 Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile1.getAbsolutePath()),
-                        100, 100);
+                        100, 130);
                 try {
                     FileOutputStream out = new FileOutputStream(imageFile1);
                     bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -511,6 +514,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     e.printStackTrace();
                 }
                 databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri1));
+                break;
+
+            case R.id.nextButton:
+                LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
+                        findFragmentByTag(LandmarkFragment.TAG);
+                if (frag7 == null) {
+                    frag7 = LandmarkFragment.newInstance();
+                }
+                ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
+                ft.commitAllowingStateLoss();
                 break;
 
         }
@@ -524,20 +537,34 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(),"fonts/OpenSans-Regular.ttf");
         MenuItem item = menu.findItem(R.id.cart);
+        MenuItem item2 = menu.findItem(R.id.nextButton);
         MenuItemCompat.setActionView(item, R.layout.shopping_cart);
-        ImageButton notifCount = (ImageButton) MenuItemCompat.getActionView(item);
-        notifCount.setOnClickListener(new View.OnClickListener() {
+        MenuItemCompat.setActionView(item2, R.layout.next_button);
+        ImageButton cart = (ImageButton) MenuItemCompat.getActionView(item);
+        Button nextButton = (Button) MenuItemCompat.getActionView(item2);
+        item2.setVisible(false);
+        item2.setEnabled(false);
+        nextButton.setTypeface(typeface);
+        cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(R.id.shoppingCart,null);
+                replaceFragment(R.id.shoppingCart, null);
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("next","Clicked");
+                replaceFragment(R.id.nextButton,null);
             }
         });
         return super.onCreateOptionsMenu(menu);
-
-
         //return true;
     }
+
 
 
 

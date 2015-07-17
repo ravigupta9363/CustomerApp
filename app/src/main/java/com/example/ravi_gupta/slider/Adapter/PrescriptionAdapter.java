@@ -6,10 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -41,7 +39,7 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
 
     static class PrescriptionHolder {
         ImageView prescriptionImage;
-        Button removeButton;
+        ImageButton removeButton;
     }
 
     @Override
@@ -57,7 +55,7 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
             row = layoutInflater.inflate(resource,parent,false);
             holder = new PrescriptionHolder();
             holder.prescriptionImage = (ImageView)row.findViewById(R.id.prescription_imageview1);
-            holder.removeButton = (Button)row.findViewById(R.id.prescription_button1);
+            holder.removeButton = (ImageButton)row.findViewById(R.id.prescription_button1);
             row.setTag(holder);
         }
         else {
@@ -66,7 +64,6 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
         }
         //Assigning custom fonts
 
-        holder.removeButton.setTypeface(typeface);
         final PrescriptionDetail prescriptionDetail = prescriptionDetails.get(position);
         holder.prescriptionImage.setImageURI(prescriptionDetail.getThumbnailUri());
         holder.prescriptionImage.setOnClickListener(new View.OnClickListener() {
@@ -81,26 +78,9 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
             @Override
             public void onClick(View v) {
                 Log.v("signup", "not available");
-                final Animation animation = AnimationUtils.loadAnimation(context,
-                        R.anim.slide_out);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
                         prescriptionDetails.remove(position);
                         notifyDataSetChanged();
                         databaseHelper.deleteContact(position);
-                    }
-                });
-                convertView.startAnimation(animation);
-
             }
         });
         return row;
