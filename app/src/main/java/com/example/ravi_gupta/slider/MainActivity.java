@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -337,7 +338,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     public void choosePhotoFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
+        startActivityForResult(galleryIntent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -480,11 +484,33 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 Bundle bundle4 = new Bundle();
                 //bundle2.pu("prescription",medicineListAdapter);
                 Uri image = (Uri) object;
-                bundle4.putParcelable("prescription",image);
+                bundle4.putParcelable("prescription", image);
                 ImageZoomDialog imageZoomDialog = new ImageZoomDialog();
                 imageZoomDialog.setArguments(bundle4);
-                imageZoomDialog.show(getFragmentManager(),ImageZoomDialog.TAG);
+                imageZoomDialog.show(getFragmentManager(), ImageZoomDialog.TAG);
                 Log.v("signin","image  "+image);
+                break;
+
+            case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
+                //Thumbnail is being saved
+                String path = getRealPathFromURI(this,fileUri);
+
+                Calendar calendar1 = Calendar.getInstance();
+                File dir1 = getPicStorageDir("prescription_thumbnails");
+                File imageFile1 = new File(dir1, calendar1.getTimeInMillis() + ".jpeg");
+                File oldFile1 = new File(path);
+                Uri thumbnailUri1 = Uri.fromFile(imageFile1);
+                Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile1.getAbsolutePath()),
+                        100, 100);
+                try {
+                    FileOutputStream out = new FileOutputStream(imageFile1);
+                    bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri1));
                 break;
 
         }
@@ -594,6 +620,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 Environment.DIRECTORY_MOVIES), dirName);
         file.mkdirs();
         return file;
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
 
