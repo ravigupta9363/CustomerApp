@@ -6,10 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -31,16 +36,21 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
+import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
+import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
+import com.example.ravi_gupta.slider.Dialog.ImageZoomDialog;
+import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
+import com.example.ravi_gupta.slider.Fragment.CartFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
-import com.example.ravi_gupta.slider.Fragment.OrderStatusShopDetailFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
 import com.example.ravi_gupta.slider.Fragment.OrderStatusFragment;
+import com.example.ravi_gupta.slider.Fragment.OrderStatusShopDetailFragment;
 import com.example.ravi_gupta.slider.Fragment.PastOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
@@ -49,7 +59,10 @@ import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.GeoSearchResult;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -58,7 +71,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         FAQFragment.OnFragmentInteractionListener, ContactUsFragment.OnFragmentInteractionListener,
         NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
-        OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener{
+        OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
+        CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -68,6 +82,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     public int FRAGMENT_CODE = 0;
+    private Uri fileUri;
+    private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+    public DatabaseHelper databaseHelper;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -86,7 +104,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        replaceFragment(R.layout.fragment_main,null);
+        replaceFragment(R.layout.fragment_main, null);
+        databaseHelper = new DatabaseHelper(this);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -165,6 +184,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
 
     }
+
 
     private class SlideMenuClickListener implements
             ListView.OnItemClickListener {
@@ -303,6 +323,37 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     @Override
+    public void takePhoto() {
+        if (isExternalStorageWritable()) {
+            Calendar cal = Calendar.getInstance();
+            File dir = getPicStorageDir("prescription_images");
+            File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
+            fileUri = Uri.fromFile(imageFile);
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void choosePhotoFromGallery() {
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if(resultCode == RESULT_OK)
+                replaceFragment(CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE, null);
+        }
+        else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                fileUri = data.getData();
+                replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE,null);
+            }
+        }
+    }
+
+    @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (id) {
@@ -382,10 +433,62 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 }
                 ft.replace(R.id.fragment_main_container, frag4, OrderStatusFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
+                break;
 
+            case R.id.shoppingCart:
+                CartFragment frag5 = (CartFragment) getSupportFragmentManager().
+                        findFragmentByTag(CartFragment.TAG);
+                if (frag5 == null) {
+                    frag5 = CartFragment.newInstance();
+                }
+                ft.replace(R.id.fragment_main_container, frag5, CartFragment.TAG).addToBackStack(null);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_send_order_button1:
+                SendPrescriptionDialog dialog = new SendPrescriptionDialog();
+                dialog.show(getSupportFragmentManager(), SendPrescriptionDialog.TAG);
+            break;
+
+            case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                CartFragment frag6 = (CartFragment) getSupportFragmentManager().
+                        findFragmentByTag(CartFragment.TAG);
+                //Thumbnail is being saved
+                Calendar calendar = Calendar.getInstance();
+                File dir = getPicStorageDir("prescription_thumbnails");
+                File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
+
+                File oldFile = new File(fileUri.getPath());
+                Uri thumbnailUri = Uri.fromFile(imageFile);
+                Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile.getPath()),
+                        100, 100);
+                try {
+                    FileOutputStream out = new FileOutputStream(imageFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.v("camera",fileUri.toString());
+                Log.v("camera", thumbnailUri.toString());
+                databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri));
+                Log.v("camera", databaseHelper.getPresciptionCount() + "");
+                break;
+
+            case R.id.prescription_imageview1:
+                Bundle bundle4 = new Bundle();
+                //bundle2.pu("prescription",medicineListAdapter);
+                Uri image = (Uri) object;
+                bundle4.putParcelable("prescription",image);
+                ImageZoomDialog imageZoomDialog = new ImageZoomDialog();
+                imageZoomDialog.setArguments(bundle4);
+                imageZoomDialog.show(getFragmentManager(),ImageZoomDialog.TAG);
+                Log.v("signin","image  "+image);
                 break;
 
         }
+
     }
 
 
@@ -401,7 +504,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         notifCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("menu","Cart");
+                replaceFragment(R.id.shoppingCart,null);
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -466,6 +569,31 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             pdLoading.dismiss();
         }
 
+    }
+
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public File getPicStorageDir(String dirName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES), dirName);
+        file.mkdirs();
+        return file;
     }
 
 
