@@ -92,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     public DatabaseHelper databaseHelper;
+    TextView tv;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -379,6 +380,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shopListview :
                 Fragment newFragment1 = new SendOrderFragment();
+                ft.setCustomAnimations(R.anim.slide_in_top,R.anim.slide_out_top,R.anim.slide_out_bottom,R.anim.slide_in_bottom);
                 ft.replace(R.id.ListFragment, newFragment1);
                 ft.addToBackStack(null); // Ads FirstFragment to the back-stack
                 ft.commit();
@@ -479,9 +481,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Log.v("camera",fileUri.toString());
+                Log.v("camera", fileUri.toString());
                 Log.v("camera", thumbnailUri.toString());
                 databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri));
+                String cartItems = databaseHelper.getPresciptionCount()+"";
+                tv.setText(cartItems);
                 Log.v("camera", databaseHelper.getPresciptionCount() + "");
                 break;
 
@@ -516,6 +520,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     e.printStackTrace();
                 }
                 databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri1));
+                String cartItem = databaseHelper.getPresciptionCount()+"";
+                tv.setText(cartItem);
                 break;
 
             case R.id.nextButton:
@@ -547,9 +553,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         MenuItemCompat.setActionView(item2, R.layout.next_button);
 
         RelativeLayout badgeLayout = (RelativeLayout) MenuItemCompat.getActionView(item);
-        TextView tv = (TextView) badgeLayout.findViewById(R.id.shopping_cart_textview1);
+        tv = (TextView) badgeLayout.findViewById(R.id.shopping_cart_textview1);
         ImageButton ib = (ImageButton) badgeLayout.findViewById(R.id.shoppingCart);
-        tv.setText("3");
+        String cartItems = databaseHelper.getPresciptionCount()+"";
+        tv.setText(cartItems);
         Button nextButton = (Button) MenuItemCompat.getActionView(item2);
 
         item2.setVisible(false);
