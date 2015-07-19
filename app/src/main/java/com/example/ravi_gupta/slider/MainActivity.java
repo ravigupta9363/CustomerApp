@@ -37,6 +37,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -537,19 +539,27 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/OpenSans-Regular.ttf");
         MenuItem item = menu.findItem(R.id.cart);
         MenuItem item2 = menu.findItem(R.id.nextButton);
+
         MenuItemCompat.setActionView(item, R.layout.shopping_cart);
         MenuItemCompat.setActionView(item2, R.layout.next_button);
-        ImageButton cart = (ImageButton) MenuItemCompat.getActionView(item);
+
+        RelativeLayout badgeLayout = (RelativeLayout) MenuItemCompat.getActionView(item);
+        TextView tv = (TextView) badgeLayout.findViewById(R.id.shopping_cart_textview1);
+        ImageButton ib = (ImageButton) badgeLayout.findViewById(R.id.shoppingCart);
+        tv.setText("3");
         Button nextButton = (Button) MenuItemCompat.getActionView(item2);
+
         item2.setVisible(false);
         item2.setEnabled(false);
         nextButton.setTypeface(typeface);
-        cart.setOnClickListener(new View.OnClickListener() {
+
+        ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("cart","Clicked");
                 replaceFragment(R.id.shoppingCart, null);
             }
         });
@@ -557,10 +567,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("next","Clicked");
-                replaceFragment(R.id.nextButton,null);
+                Log.v("next", "Clicked");
+                replaceFragment(R.id.nextButton, null);
             }
         });
+
         return super.onCreateOptionsMenu(menu);
         //return true;
     }

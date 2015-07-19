@@ -40,6 +40,7 @@ import java.util.TimerTask;
  * to handle interaction events.
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * FFFEFC
  */
 public class MainFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -89,7 +90,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
 
-        sliderItems = new int[]{R.drawable.image1, R.drawable.image1, R.drawable.image1, R.drawable.image1, R.drawable.image1};
+        sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
         pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
         viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
         viewPager.setScrollDurationFactor(0.5);
