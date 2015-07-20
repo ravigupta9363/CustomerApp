@@ -5,6 +5,8 @@
         <item name="colorPrimaryDark">#000</item>//#2E9C58
         <item name="colorAccent">#74C291</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowTitleSize">0dp</item>
         <item name="homeAsUpIndicator">@mipmap/dc_menu</item>
     </style>
 

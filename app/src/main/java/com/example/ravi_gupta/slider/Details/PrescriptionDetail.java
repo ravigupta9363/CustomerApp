@@ -9,16 +9,25 @@ public class PrescriptionDetail {
 
     String imageUri;
     String thumbnailUri;
+    int id;
 
     public PrescriptionDetail() {
             super();
     }
 
-    public PrescriptionDetail(Uri imageUri,Uri thumbnailUri) {
-       // prescriptionID = helperIDGenerator.getID();
+    public PrescriptionDetail(int id, Uri imageUri,Uri thumbnailUri) {
+        // prescriptionID = helperIDGenerator.getID();
+        this.id = id;
         this.imageUri = imageUri.toString();
         this.thumbnailUri = thumbnailUri.toString();
-       // prescriptionType = TypesOfPrescription.UNTRANSLATED_PRESCRIPTION;
+        // prescriptionType = TypesOfPrescription.UNTRANSLATED_PRESCRIPTION;
+    }
+
+    public PrescriptionDetail(Uri imageUri,Uri thumbnailUri) {
+        // prescriptionID = helperIDGenerator.getID();
+        this.imageUri = imageUri.toString();
+        this.thumbnailUri = thumbnailUri.toString();
+        // prescriptionType = TypesOfPrescription.UNTRANSLATED_PRESCRIPTION;
     }
 
     public void setImageUri(Uri imageUri){
@@ -35,5 +44,13 @@ public class PrescriptionDetail {
 
     public Uri getThumbnailUri() {
         return Uri.parse(thumbnailUri);
+    }
+
+    public int getID(){
+        return this.id;
+    }
+
+    public void setID(int id){
+        this.id = id;
     }
 }

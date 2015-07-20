@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 PrescriptionDetail prescriptionDetail = new PrescriptionDetail();
-                //prescriptionDetail.setID(Integer.parseInt(cursor.getString(0)));
+                prescriptionDetail.setID(Integer.parseInt(cursor.getString(0)));
                 prescriptionDetail.setImageUri(Uri.parse(cursor.getString(1)));
                 prescriptionDetail.setThumbnailUri(Uri.parse(cursor.getString(2)));
                 // Adding contact to list
@@ -95,10 +95,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return prescriptionList;
     }
 
-    public void deleteContact(int prescriptionDetailPosition) {
+    public void deleteContact(int prescriptionDetailId) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PRESCRIPTION, KEY_ID + " = ?",
-                new String[] { String.valueOf(prescriptionDetailPosition) });
+                new String[] { String.valueOf(prescriptionDetailId) });
         db.close();
     }
 

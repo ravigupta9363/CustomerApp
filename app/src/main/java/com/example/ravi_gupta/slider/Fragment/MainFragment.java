@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +82,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override
@@ -156,6 +156,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
             // As the TimerTask run on a seprate thread from UI thread we have
             // to call runOnUiThread to do work on UI thread.
+            if(getActivity() == null)
+                return;
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
 
@@ -215,6 +217,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
+
                     locationAddress = bundle.getString("address");
                     break;
                 default:
@@ -288,6 +291,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        ((ActionBarActivity)getActivity()).getSupportActionBar().show();
         new AsyncCaller().execute();
     }
 

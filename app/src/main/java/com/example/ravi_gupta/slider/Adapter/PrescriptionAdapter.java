@@ -69,7 +69,7 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
         holder.prescriptionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.prescription_imageview1,prescriptionDetail.getImageUri());
+                mainActivity.replaceFragment(R.id.prescription_imageview1, prescriptionDetail.getImageUri());
             }
         });
 
@@ -80,7 +80,13 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
                 Log.v("signup", "not available");
                         prescriptionDetails.remove(position);
                         notifyDataSetChanged();
-                        databaseHelper.deleteContact(position);
+
+                        Log.v("count", "Id = " + databaseHelper.getPresciptionCount() + "");
+                        if(databaseHelper.getPresciptionCount() == 1) {
+                            //Toast.makeText(context,"No Prescription",Toast.LENGTH_SHORT).show();
+                            mainActivity.onBackPressed();
+                        }
+                        databaseHelper.deleteContact(prescriptionDetail.getID());
             }
         });
         return row;

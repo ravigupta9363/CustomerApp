@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -39,6 +42,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -49,11 +53,13 @@ import com.example.ravi_gupta.slider.Dialog.ImageZoomDialog;
 import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.CartFragment;
+import com.example.ravi_gupta.slider.Fragment.CartNoOrdersFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.LandmarkFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
+import com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
 import com.example.ravi_gupta.slider.Fragment.OrderStatusFragment;
 import com.example.ravi_gupta.slider.Fragment.OrderStatusShopDetailFragment;
@@ -78,13 +84,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NotificationFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
         OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
-        CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener{
+        CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
+        CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
     public boolean updateUserInfoProfileEditFragment = false;
     public boolean addedToList = false;
-    private DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     public int FRAGMENT_CODE = 0;
@@ -92,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     public DatabaseHelper databaseHelper;
+    public int prescriptionId = 0;
     TextView tv;
 
     // nav drawer title
@@ -109,13 +117,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        replaceFragment(R.layout.fragment_main, null);
-        databaseHelper = new DatabaseHelper(this);
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+
+        if(haveNetworkConnection()) {
+            replaceFragment(R.layout.fragment_main, null);
+        }
+            else {
+            getSupportActionBar().hide();
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            replaceFragment(R.layout.fragment_no_internet_connection, null);
+        }
+        databaseHelper = new DatabaseHelper(this);
+
+
 
         // HACK: "steal" the first child of decor view
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
@@ -190,6 +208,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (savedInstanceState == null) {
         }
 
+    }
+
+    public boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 
 
@@ -375,12 +410,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     frag1 = MainFragment.newInstance();
                 }
                 ft.replace(R.id.container, frag1, MainFragment.TAG);
+                //getSupportActionBar().show();
                 ft.commitAllowingStateLoss();
                 break;
 
             case R.id.shopListview :
                 Fragment newFragment1 = new SendOrderFragment();
-                ft.setCustomAnimations(R.anim.slide_in_top,R.anim.slide_out_top,R.anim.slide_out_bottom,R.anim.slide_in_bottom);
+                ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
                 ft.replace(R.id.ListFragment, newFragment1);
                 ft.addToBackStack(null); // Ads FirstFragment to the back-stack
                 ft.commit();
@@ -389,6 +425,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             case R.id.fragment_main_edittext1 :
                 changeLocationFragment frag2 = (changeLocationFragment) getSupportFragmentManager().
                         findFragmentByTag(changeLocationFragment.TAG);
+                ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
                 if (frag2 == null) {
                     frag2 = changeLocationFragment.newInstance();
                 }
@@ -447,13 +484,24 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 break;
 
             case R.id.shoppingCart:
-                CartFragment frag5 = (CartFragment) getSupportFragmentManager().
-                        findFragmentByTag(CartFragment.TAG);
-                if (frag5 == null) {
-                    frag5 = CartFragment.newInstance();
+                if(databaseHelper.getPresciptionCount() == 0){
+                    CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
+                            findFragmentByTag(CartNoOrdersFragment.TAG);
+                    if (frag5 == null) {
+                        frag5 = CartNoOrdersFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag5, CartNoOrdersFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
                 }
-                ft.replace(R.id.fragment_main_container, frag5, CartFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
+                else {
+                    CartFragment frag5 = (CartFragment) getSupportFragmentManager().
+                            findFragmentByTag(CartFragment.TAG);
+                    if (frag5 == null) {
+                        frag5 = CartFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag5, CartFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                }
                 break;
 
             case R.id.fragment_send_order_button1:
@@ -483,7 +531,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 }
                 Log.v("camera", fileUri.toString());
                 Log.v("camera", thumbnailUri.toString());
-                databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri));
+                Log.v("delete", "Id  Camera = " + prescriptionId);
+                databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri));
+                prescriptionId++;
                 String cartItems = databaseHelper.getPresciptionCount()+"";
                 tv.setText(cartItems);
                 Log.v("camera", databaseHelper.getPresciptionCount() + "");
@@ -519,18 +569,35 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                databaseHelper.addPrescription(new PrescriptionDetail(fileUri, thumbnailUri1));
+                Log.v("delete","Id Gallery= "+prescriptionId);
+                databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri1));
+                prescriptionId++;
                 String cartItem = databaseHelper.getPresciptionCount()+"";
                 tv.setText(cartItem);
                 break;
 
             case R.id.nextButton:
-                LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
-                        findFragmentByTag(LandmarkFragment.TAG);
-                if (frag7 == null) {
-                    frag7 = LandmarkFragment.newInstance();
+                if(databaseHelper.getPresciptionCount() == 0){
+                    Toast.makeText(this,"Please add Prescription First",Toast.LENGTH_SHORT).show();
                 }
-                ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
+                else {
+                    LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
+                            findFragmentByTag(LandmarkFragment.TAG);
+                    if (frag7 == null) {
+                        frag7 = LandmarkFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                }
+                break;
+
+            case R.layout.fragment_no_internet_connection :
+                NoInternetConnectionFragment frag8 = (NoInternetConnectionFragment) getSupportFragmentManager().
+                        findFragmentByTag(NoInternetConnectionFragment.TAG);
+                if (frag8 == null) {
+                    frag8 = NoInternetConnectionFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag8, NoInternetConnectionFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
 
@@ -657,6 +724,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
     }
 
     public File getPicStorageDir(String dirName) {

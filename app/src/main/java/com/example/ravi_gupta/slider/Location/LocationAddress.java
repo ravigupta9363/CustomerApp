@@ -31,11 +31,14 @@ public class LocationAddress {
                             latitude, longitude, 1);
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
+                        Log.v("locality",address+"");
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                             sb.append(address.getAddressLine(i)).append("\n");
+                            Log.v("locality", "Address = "+address.getAddressLine(i) + "");
                         }
                         sb.append(address.getLocality()).append("\n");
+                        Log.v("locality",address.getPostalCode()+"");
                         sb.append(address.getPostalCode()).append("\n");
                         sb.append(address.getCountryName());
                         result = sb.toString();

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //SpannableString s = new SpannableString("Change Location");
         //s.setSpan(new TypefaceSpan(this, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -128,6 +130,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
                 GeoSearchResult result = (GeoSearchResult) adapterView.getItemAtPosition(position);
                 locationEdittext.setText(result.getAddress());
                 resultToBeAddedOnList = result;
+                Log.v("location3",result+"");
                 mainActivity.replaceFragment(R.id.fragment_change_location_edittext, result);
 
 
@@ -139,6 +142,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
                 AddressDetails addressDetails = (AddressDetails) mListview.getItemAtPosition(position);
+
                 //Log.v("Listview1", "Shop Name = " + shopListDetails.shopName + "");
                 mainActivity.replaceFragment(R.id.addressListView, addressDetails);
 
@@ -159,7 +163,6 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -196,6 +199,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
+                    Log.v("location2", bundle + "");
                     locationAddress = bundle.getString("address");
                     break;
                 default:

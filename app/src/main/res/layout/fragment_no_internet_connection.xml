@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment"
+    android:background="@drawable/dc_background" android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EEE"
+        android:id="@+id/view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please check your Internet connection"
+        android:textColor="#36B666"
+        android:id="@+id/fragment_no_internet_connection_textview1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:textSize="18sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:textAllCaps="false"
+        android:background="@drawable/round_button"
+        android:id="@+id/fragment_no_internet_connection_button1"
+        android:textColor="#FFF"
+        android:layout_below="@+id/fragment_no_internet_connection_textview1"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:textSize="15sp"/>
+
+</RelativeLayout>

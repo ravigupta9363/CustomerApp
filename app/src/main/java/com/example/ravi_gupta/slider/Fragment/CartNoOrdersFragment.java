@@ -2,46 +2,32 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.TextView;
 
-import com.example.ravi_gupta.slider.Adapter.PrescriptionAdapter;
-import com.example.ravi_gupta.slider.Database.DatabaseHelper;
-import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
-import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CartFragment.OnFragmentInteractionListener} interface
+ * {@link CartNoOrdersFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CartFragment#newInstance} factory method to
+ * Use the {@link CartNoOrdersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CartFragment extends android.support.v4.app.Fragment {
+public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    GridView gridView;
-    PrescriptionAdapter prescriptionAdapter;
-    ArrayList<PrescriptionDetail> prescriptionDetails = new ArrayList<PrescriptionDetail>();
-    MainActivity mainActivity;
-    public static String TAG = "CartFragment";
-    DatabaseHelper databaseHelper;
-    Uri imagePath;
-    Uri thumbnail;
+    public static String TAG = "CartNoOrdersFragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,19 +37,18 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static CartFragment newInstance() {
-        CartFragment fragment = new CartFragment();
+    public static CartNoOrdersFragment newInstance() {
+        CartNoOrdersFragment fragment = new CartNoOrdersFragment();
         return fragment;
     }
 
-    public CartFragment() {
+    public CartNoOrdersFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        databaseHelper = new DatabaseHelper(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -71,36 +56,10 @@ public class CartFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_cart, container, false);
-        Uri imageuri = null;
-        Uri thumbnailUri = null;
-
-
-        gridView = (GridView) rootview.findViewById(R.id.fragment_cart_gridview1);
-
-        //pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        Log.v("camera", " Count = " + databaseHelper.getPresciptionCount());
-        List<PrescriptionDetail> contacts = databaseHelper.getAllPrescription();
-        for (PrescriptionDetail cn : contacts) {
-            String log = "Id: "+ cn.getID() +" Name: " + cn.getImageUri() + " ,Phone: " +
-                    cn.getThumbnailUri();
-            prescriptionDetails.add(new PrescriptionDetail(cn.getID(),cn.getImageUri(),cn.getThumbnailUri()));
-            // Writing Contacts to log
-            Log.v("camera ", log);
-        }
-        //addNewPrescription();
-        //if(this.imagePath!=null)
-            //prescriptionDetails.add(new PrescriptionDetail(this.imagePath,this.thumbnail));
-
-
-        prescriptionAdapter = new PrescriptionAdapter(getActivity(),R.layout.prescription,prescriptionDetails);
-        gridView.setAdapter(prescriptionAdapter);
-
-
+        View rootview = inflater.inflate(R.layout.fragment_cart_no_orders, container, false);
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        TextView text = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview1);
+        text.setTypeface(typeface);
         return rootview;
     }
 
@@ -114,7 +73,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //databaseHelper = (DatabaseHelper) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -147,12 +105,10 @@ public class CartFragment extends android.support.v4.app.Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        MenuItem item= menu.findItem(R.id.cart);
-        MenuItem item2 = menu.findItem(R.id.nextButton);
+        MenuItem item = menu.findItem(R.id.cart);
         item.setEnabled(false);
         item.setVisible(false);
-        item2.setEnabled(true);
-        item2.setVisible(true);
 
     }
+
 }
