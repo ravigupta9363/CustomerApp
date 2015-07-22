@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -30,6 +32,7 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
     TextView productName;
     TextView version;
     TextView aboutText;
+    MainActivity mainActivity;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -99,6 +102,7 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -126,6 +130,26 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 }

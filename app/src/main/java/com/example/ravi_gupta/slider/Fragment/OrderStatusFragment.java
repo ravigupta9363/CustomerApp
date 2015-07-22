@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     TextView total;
     ImageView orderStatusImage;
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
+    MainActivity mainActivity;
 
 
     // TODO: Rename and change types of parameters
@@ -160,6 +163,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -187,6 +191,26 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 }

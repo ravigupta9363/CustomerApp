@@ -10,13 +10,12 @@
         android:title="cart">
     </item>
 
-
-
     <item
         android:id="@+id/nextButton"
         android:actionLayout="@layout/next_button"
         app:showAsAction="always"
         android:title="nextButton">
     </item>
+
 
 </menu>

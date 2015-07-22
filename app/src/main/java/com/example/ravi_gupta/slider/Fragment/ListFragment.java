@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,11 +128,23 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
-    }
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
 
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
 

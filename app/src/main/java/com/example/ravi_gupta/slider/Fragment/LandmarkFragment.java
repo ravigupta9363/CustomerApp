@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -36,6 +38,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     EditText flatNumberEditText;
     EditText landmarkEditText;
     Button placeOrder;
+    MainActivity mainActivity;
     CheckBox requestCallback;
     public static String TAG = "LandmarkFragment";
 
@@ -58,6 +61,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -103,6 +107,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -118,6 +123,26 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         MenuItem item= menu.findItem(R.id.cart);
@@ -126,6 +151,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
 
 
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

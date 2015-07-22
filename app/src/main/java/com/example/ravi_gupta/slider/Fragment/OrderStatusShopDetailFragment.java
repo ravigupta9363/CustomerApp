@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.OrderStatusDetailAdapter;
 import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
     TextView shopName;
     TextView totalAmount;
     OrderStatusDetailAdapter orderStatusDetailAdapter;
+    MainActivity mainActivity;
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
 
     // TODO: Rename and change types of parameters
@@ -112,6 +115,7 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -139,6 +143,26 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 }

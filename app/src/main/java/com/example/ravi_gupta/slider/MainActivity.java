@@ -1,8 +1,10 @@
 package com.example.ravi_gupta.slider;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -93,14 +95,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public boolean addedToList = false;
     public DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    public ActionBarDrawerToggle mDrawerToggle;
     public int FRAGMENT_CODE = 0;
+    private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private Uri fileUri;
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     public DatabaseHelper databaseHelper;
     public int prescriptionId = 0;
-    TextView tv;
+    public TextView tv;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -120,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
 
@@ -132,6 +136,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             replaceFragment(R.layout.fragment_no_internet_connection, null);
         }
         databaseHelper = new DatabaseHelper(this);
+        databaseHelper.deleteAllPrescription();
 
 
 
@@ -207,6 +212,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         if (savedInstanceState == null) {
         }
+
+
 
     }
 
@@ -416,10 +423,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shopListview :
                 Fragment newFragment1 = new SendOrderFragment();
-                ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
-                ft.replace(R.id.ListFragment, newFragment1);
-                ft.addToBackStack(null); // Ads FirstFragment to the back-stack
+                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
+                ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
                 ft.commit();
+                //getSupportFragmentManager().executePendingTransactions();
                 break;
 
             case R.id.fragment_main_edittext1 :
@@ -729,16 +737,65 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void onBackPressed() {
 
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        SendOrderFragment sendOrderFragment = (SendOrderFragment)getSupportFragmentManager().findFragmentByTag(SendOrderFragment.TAG);
+        /*getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            public void onBackStackChanged() {
+               /* if (mainActivity.databaseHelper.getPresciptionCount() > 0) {
+                    showSettingsAlert();
+                }
+                int backCount = getSupportFragmentManager().getBackStackEntryCount();
+                Log.v("hello",""+backCount);
+                if (backCount == 0) {
+                    // block where back has been pressed. since backstack is zero.
+                    Log.v("hello", "ALert ");
+                    if (databaseHelper.getPresciptionCount() > 0) {
+                        //showSettingsAlert();
+                    }
 
+                }
+            }
+        });*/
+        Log.v("count","Count = "+count);
         if (count == 0) {
             super.onBackPressed();
+            Log.v("hello", "" +"One"+ count);
+
             //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             //additional code
         } else {
-            getFragmentManager().popBackStack();
+            Log.v("hello", "Two" + count);
+            if(count == 1 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
+                Log.v("hello","Send Prescription");
+                showSettingsAlert();
+            }
+            else
+            getSupportFragmentManager().popBackStack();
         }
 
+    }
+
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                this);
+        alertDialog.setTitle("Order Confirmation");
+        alertDialog.setMessage("Discard Prescription?");
+        alertDialog.setPositiveButton("Discard",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        getSupportFragmentManager().popBackStack();
+                        databaseHelper.deleteAllPrescription();
+                        String cartItems = databaseHelper.getPresciptionCount() + "";
+                        tv.setText(cartItems);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
     public File getPicStorageDir(String dirName) {
@@ -763,6 +820,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         }
     }
+
 
 
 }

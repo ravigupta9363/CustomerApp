@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -292,6 +293,20 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // TODO Auto-generated method stub
         super.onResume();
         ((ActionBarActivity)getActivity()).getSupportActionBar().show();
+            getView().setFocusableInTouchMode(true);
+            getView().requestFocus();
+            getView().setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        // handle back button's click listener
+                        mainActivity.onBackPressed();
+                        return true;
+                    }
+                    return false;
+                }
+            });
         new AsyncCaller().execute();
     }
 
