@@ -301,6 +301,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
                     if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                         // handle back button's click listener
+                        Log.v("hello","close"+mainActivity.getSupportFragmentManager().getBackStackEntryCount());
                         mainActivity.onBackPressed();
                         return true;
                     }

@@ -2,6 +2,8 @@ package com.example.ravi_gupta.slider.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +86,8 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
                         Log.v("count", "Id = " + databaseHelper.getPresciptionCount() + "");
                         if(databaseHelper.getPresciptionCount() == 1) {
                             //Toast.makeText(context,"No Prescription",Toast.LENGTH_SHORT).show();
+                            ((ActionBarActivity) mainActivity).getSupportActionBar().show();
+                            mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                             mainActivity.onBackPressed();
                         }
                         databaseHelper.deleteContact(prescriptionDetail.getID());

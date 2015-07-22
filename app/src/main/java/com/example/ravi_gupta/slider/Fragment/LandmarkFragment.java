@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +82,21 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         landmarkEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext2);
         placeOrder = (Button) rootview.findViewById(R.id.fragment_landmark_button1);
         requestCallback = (CheckBox)rootview.findViewById(R.id.fragment_landmark_checkbox1);
+        TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_landmark_textview3);
+        ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_landmark_imagebutton1);
+
+
+        //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
+        toolbarTitle.setTypeface(typeface1);
+        //toolbarButton.setTypeface(typeface);
+
+        toolbarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.onBackPressed();
+                Log.v("hello", "Back Button");
+            }
+        });
 
         flatNumberTextView.setTypeface(typeface2);
         landmarkTextView.setTypeface(typeface2);

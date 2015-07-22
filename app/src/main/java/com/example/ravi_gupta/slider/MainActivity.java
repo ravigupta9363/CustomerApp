@@ -171,6 +171,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[8], navMenuIcons.getResourceId(8, -1)));
+        navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[9], navMenuIcons.getResourceId(9, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -250,31 +251,40 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
-            case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(null)
-                        .commitAllowingStateLoss();
+            case 0:MainFragment mainFragment = (MainFragment)getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+                int count = getSupportFragmentManager().getBackStackEntryCount();
+                if(mainFragment != null && count != 0) {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new MainFragment()).addToBackStack(null)
+                            .commitAllowingStateLoss();
+                }
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(null)
+                            .commitAllowingStateLoss();
+                mDrawerLayout.closeDrawer(mDrawerList);
+                break;
+            case 2:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 2:
+            case 3:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 3:
+            case 4:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 4:
+            case 5:
                 Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree" );// this.getPackageName()
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 try {
@@ -284,7 +294,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 }
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 5:
+            case 6:
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = "Here is the share content body";
@@ -293,19 +303,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 startActivity(Intent.createChooser(sharingIntent, "Share Via"));
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 6:
+            case 7:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 7:
+            case 8:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
-            case 8:
+            case 9:
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(null)
                         .commitAllowingStateLoss();
@@ -493,6 +503,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shoppingCart:
                 if(databaseHelper.getPresciptionCount() == 0){
+                    getSupportActionBar().hide();
                     CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
                             findFragmentByTag(CartNoOrdersFragment.TAG);
                     if (frag5 == null) {
@@ -504,6 +515,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 else {
                     CartFragment frag5 = (CartFragment) getSupportFragmentManager().
                             findFragmentByTag(CartFragment.TAG);
+                    getSupportActionBar().hide();
                     if (frag5 == null) {
                         frag5 = CartFragment.newInstance();
                     }
@@ -646,13 +658,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+       /* nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("next", "Clicked");
                 replaceFragment(R.id.nextButton, null);
             }
-        });
+        });*/
 
         return super.onCreateOptionsMenu(menu);
         //return true;
@@ -739,23 +751,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
         SendOrderFragment sendOrderFragment = (SendOrderFragment)getSupportFragmentManager().findFragmentByTag(SendOrderFragment.TAG);
-        /*getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            public void onBackStackChanged() {
-               /* if (mainActivity.databaseHelper.getPresciptionCount() > 0) {
-                    showSettingsAlert();
-                }
-                int backCount = getSupportFragmentManager().getBackStackEntryCount();
-                Log.v("hello",""+backCount);
-                if (backCount == 0) {
-                    // block where back has been pressed. since backstack is zero.
-                    Log.v("hello", "ALert ");
-                    if (databaseHelper.getPresciptionCount() > 0) {
-                        //showSettingsAlert();
-                    }
+        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
 
-                }
-            }
-        });*/
         Log.v("count","Count = "+count);
         if (count == 0) {
             super.onBackPressed();

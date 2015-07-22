@@ -2,8 +2,11 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.PrescriptionAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -78,6 +84,30 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
 
         gridView = (GridView) rootview.findViewById(R.id.fragment_cart_gridview1);
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
+        TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_cart_textview1);
+        ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_cart_imagebutton1);
+        Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_button1);
+        toolbarButton.setTypeface(typeface);
+        toolbarTitle.setTypeface(typeface2);
+        //toolbarButton.setTypeface(typeface);
+
+        toolbarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mainActivity.onBackPressed();
+            }
+        });
+
+        toolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               mainActivity.replaceFragment(R.id.nextButton, null);
+            }
+        });
 
         //pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
         //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
@@ -149,7 +179,8 @@ public class CartFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
@@ -158,8 +189,9 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-
                     mainActivity.onBackPressed();
+                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }
                 return false;
