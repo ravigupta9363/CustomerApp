@@ -2,11 +2,10 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -15,11 +14,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.ravi_gupta.slider.Database.ProfileDatabase;
+import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
@@ -53,6 +55,8 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     String updatedName;
     String updatedMail;
     String updatedPhone;
+    ProfileDatabase profileDatabase;
+    MainFragment mainFragment;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,6 +74,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        profileDatabase = new ProfileDatabase(getActivity());
     }
 
     @Override
@@ -78,7 +83,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_profile_edit, container, false);
 
-        Bundle bundle = getArguments();
+        //Bundle bundle = getArguments();
         //ArrayList<String> infoUser = bundle.getStringArrayList("infoUser");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
@@ -93,25 +98,62 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerMail.setTypeface(typeface2);
         customerPhone.setTypeface(typeface2);
 
-        if(mainActivity.updateUserInfoProfileEditFragment == true) {
-            customerName.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));
+        ProfileDetail profileDetail = profileDatabase.getProfile();
+
+            updatedName = profileDetail.getName();
+            updatedMail = profileDetail.getEmail();
+            updatedPhone = profileDetail.getPhone();
+
+
+        customerName.setText(updatedName);
+        customerMail.setText(updatedMail);
+        customerPhone.setText(updatedPhone);
+
+       /* if(mainActivity.updateUserInfoProfileEditFragment == true) {
+            /*customerName.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));
             customerMail.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_MAIL", "defaultStringIfNothingFound"));
             customerPhone.setText( PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_PHONE", "defaultStringIfNothingFound"));
             Log.v("profile","Bye Bye "+customerName.getText());
-        }
+            List<ProfileDetail> profile = profileDatabase.getProfile();
+            for (ProfileDetail profileDetail : profile) {
+                String log = "Id: "+ profileDetail.getName() +" Name: " + profileDetail.getEmail() + " ,Phone: " +
+                        profileDetail.getPhone();
+                updatedName = profileDetail.getName();
+                updatedMail = profileDetail.getEmail();
+                updatedPhone = profileDetail.getPhone();
+                // Writing Contacts to log
+                Log.v("camera ", log);
+            }
+        }*/
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatedArrayList = new ArrayList<String>();
-                mainActivity.updateUserInfoProfileEditFragment = true;
+                //updatedArrayList = new ArrayList<String>();
+                //mainActivity.updateUserInfoProfileEditFragment = true;
 
                 updatedName = customerName.getText().toString();
                 updatedMail = customerMail.getText().toString();
                 updatedPhone = customerPhone.getText().toString();
 
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_NAME", updatedName).commit();
+                Log.v("profile",updatedName+updatedMail+updatedPhone);
+
+                profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+
+                ProfileDetail profileDetail = profileDatabase.getProfile();
+
+                    updatedName = profileDetail.getName();
+                    updatedMail = profileDetail.getEmail();
+                    updatedPhone = profileDetail.getPhone();
+
+                //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+                Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
+                hiddenKeyboard(customerPhone);
+                mainActivity.onBackPressed();
+
+
+               /* PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_NAME", updatedName).commit();
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_MAIL", updatedMail).commit();
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_PHONE", updatedPhone).commit();
 
@@ -119,13 +161,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 updatedArrayList.add(1,updatedMail);
                 updatedArrayList.add(2, updatedPhone);
 
-                Log.v("profile","Hello "+PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));
+                Log.v("profile","Hello "+PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));*/
 
-                Intent intent = new Intent();
-                intent.putExtra("updatedArrayList", updatedArrayList);
-                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
-                getFragmentManager().popBackStack();
-
+                //Intent intent = new Intent();
+                //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                //
 
 
             }
@@ -167,6 +207,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void hiddenKeyboard(View v) {
+        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override

@@ -419,7 +419,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 if (frag1 == null) {
                     frag1 = MainFragment.newInstance();
                 }
-                ft.replace(R.id.container, frag1, MainFragment.TAG);
+                ft.replace(R.id.container, frag1, MainFragment.TAG).addToBackStack(MainFragment.TAG);
                 //getSupportActionBar().show();
                 ft.commitAllowingStateLoss();
                 break;
@@ -771,7 +771,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             super.onBackPressed();
         }
         else {
-            if(count == 1 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
+            if(count == 2 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
                 showSettingsAlert();
             } else {
                 getSupportFragmentManager().popBackStack();

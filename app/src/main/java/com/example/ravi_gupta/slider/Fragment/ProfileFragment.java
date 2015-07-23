@@ -2,7 +2,6 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.ravi_gupta.slider.Database.ProfileDatabase;
+import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
@@ -47,6 +48,10 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
     public static String TAG = "ProfileFragment";
     ProfileFragment profileFragment;
     ArrayList<String> value;
+    ProfileDatabase profileDatabase;
+    String updatedName;
+    String updatedMail;
+    String updatedPhone;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -75,6 +80,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        profileDatabase = new ProfileDatabase(getActivity());
     }
 
     @Override
@@ -96,6 +102,17 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         customerEmail.setTypeface(typeface2);
         customerPhone.setTypeface(typeface2);
 
+        ProfileDetail profileDetail = profileDatabase.getProfile();
+
+        updatedName = profileDetail.getName();
+        updatedMail = profileDetail.getEmail();
+        updatedPhone = profileDetail.getPhone();
+
+
+        customerName.setText(updatedName);
+        customerEmail.setText(updatedMail);
+        customerPhone.setText(updatedPhone);
+
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_profile_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_profile_imagebutton1);
         toolbarTitle.setTypeface(typeface1);
@@ -111,12 +128,22 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        if(mainActivity.updateUserInfo) {
-            customerName.setText(value.get(0));
+     /*   if(mainActivity.updateUserInfo) {
+           /* customerName.setText(value.get(0));
             customerEmail.setText(value.get(1));
             customerPhone.setText(value.get(2));
+            List<ProfileDetail> profile = profileDatabase.getProfile();
+            for (ProfileDetail profileDetail : profile) {
+                String log = "Id: "+ profileDetail.getName() +" Name: " + profileDetail.getEmail() + " ,Phone: " +
+                        profileDetail.getPhone();
+                customerName.setText(profileDetail.getName());
+                customerEmail.setText(profileDetail.getEmail());
+                customerPhone.setText(profileDetail.getPhone());
+                // Writing Contacts to log
+                Log.v("camera ", log);
+            }
             mainActivity.updateUserInfo  = false;
-        }
+        }*/
 
         Log.v(TAG, "Data passed from Child fragment = " + customerEmail.getText());
 
@@ -125,7 +152,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 android.support.v4.app.Fragment newFragment4 = new ProfileEditFragment();
-                newFragment4.setTargetFragment(profileFragment, mainActivity.FRAGMENT_CODE);
+                //newFragment4.setTargetFragment(profileFragment, mainActivity.FRAGMENT_CODE);
                 ft.replace(R.id.fragment_main_container, newFragment4);
                 ft.addToBackStack(null); // Ads FirstFragment to the back-stack
                 ft.commit();
@@ -161,16 +188,25 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  /*  public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == mainActivity.FRAGMENT_CODE && resultCode == Activity.RESULT_OK) {
             if(data != null) {
-                value = data.getStringArrayListExtra("updatedArrayList");
+                List<ProfileDetail> profile = profileDatabase.getProfile();
+                for (ProfileDetail profileDetail : profile) {
+                    String log = "Id: "+ profileDetail.getName() +" Name: " + profileDetail.getEmail() + " ,Phone: " +
+                            profileDetail.getPhone();
+                    customerName.setText(profileDetail.getName());
+                    customerEmail.setText(profileDetail.getEmail());
+                    customerPhone.setText(profileDetail.getPhone());
+                    // Writing Contacts to log
+                    Log.v("camera ", log);
+                }
                 if(value != null) {
                     mainActivity.updateUserInfo = true;
                 }
             }
         }
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
