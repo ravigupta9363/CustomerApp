@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+
+import java.lang.reflect.Field;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,7 +85,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
                 ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 mainActivity.onBackPressed();
-                Log.v("hello","Back Button");
+                Log.v("hello", "Back Button");
             }
         });
         return rootview;
@@ -99,6 +102,8 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mainActivity = (MainActivity) getActivity();
+
+
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -111,6 +116,11 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /**
@@ -131,6 +141,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
@@ -141,16 +152,44 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-
                     mainActivity.onBackPressed();
+                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
                     return true;
                 }
                 return false;
             }
         });
     }
+
+    public static void disableShowHideAnimation(ActionBar actionBar) {
+        try
+        {
+            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
+        }
+        catch (Exception exception)
+        {
+            try {
+                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
+                mActionBarField.setAccessible(true);
+                Object icsActionBar = mActionBarField.get(actionBar);
+                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
+                mShowHideAnimationEnabledField.setAccessible(true);
+                mShowHideAnimationEnabledField.set(icsActionBar,false);
+                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
+                mCurrentShowAnimField.setAccessible(true);
+                mCurrentShowAnimField.set(icsActionBar,null);
+            }catch (Exception e){
+                //....
+            }
+        }
+    }
+
+
+
+
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

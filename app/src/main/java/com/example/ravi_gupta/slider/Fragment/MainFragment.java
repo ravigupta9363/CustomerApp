@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -16,6 +17,9 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +33,7 @@ import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.LocationAddress;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.TypefaceSpan;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
 import java.util.Timer;
@@ -83,6 +88,11 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpannableString s = new SpannableString("Drug Corner");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 
     @Override
@@ -292,23 +302,25 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        ((ActionBarActivity)getActivity()).getSupportActionBar().show();
-            getView().setFocusableInTouchMode(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+        getView().setFocusableInTouchMode(true);
             getView().requestFocus();
-            getView().setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        // handle back button's click listener
-                        Log.v("hello","close"+mainActivity.getSupportFragmentManager().getBackStackEntryCount());
-                        mainActivity.onBackPressed();
-                        return true;
-                    }
-                    return false;
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    Log.v("hello", "close" + mainActivity.getSupportFragmentManager().getBackStackEntryCount());
+                    mainActivity.onBackPressed();
+                    return true;
                 }
-            });
+                return false;
+                }
+        });
         new AsyncCaller().execute();
+
+
     }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
@@ -335,6 +347,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         }
 
     }
+
+
 
 
 

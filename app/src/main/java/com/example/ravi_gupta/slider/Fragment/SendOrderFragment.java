@@ -3,9 +3,13 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,6 +20,7 @@ import android.widget.Button;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.TypefaceSpan;
 
 
 /**
@@ -56,6 +61,11 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
+        SpannableString s = new SpannableString("Send Prescription");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 
 
@@ -162,5 +172,15 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         Log.v("Pressed State", "Attached");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        SpannableString s = new SpannableString("Drug Corner");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 }

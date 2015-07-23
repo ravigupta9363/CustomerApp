@@ -26,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -75,6 +76,7 @@ import com.example.ravi_gupta.slider.Location.GeoSearchResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -246,41 +248,43 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
-    private void displayView(int position) {
+    public void displayView(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
-            case 0:MainFragment mainFragment = (MainFragment)getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+
+            case 0:
+                MainFragment mainFragment = (MainFragment)getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 int count = getSupportFragmentManager().getBackStackEntryCount();
                 if(mainFragment != null && count != 0) {
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new MainFragment()).addToBackStack(null)
+                            .replace(R.id.fragment_main_container, new MainFragment()).addToBackStack(MainFragment.TAG)
                             .commitAllowingStateLoss();
                 }
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(null)
+                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
                             .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 2:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 3:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(NotificationFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 4:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
@@ -305,19 +309,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 break;
             case 7:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 8:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 9:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(null)
+                        .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
                         .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
                 break;
@@ -503,7 +507,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shoppingCart:
                 if(databaseHelper.getPresciptionCount() == 0){
-                    getSupportActionBar().hide();
                     CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
                             findFragmentByTag(CartNoOrdersFragment.TAG);
                     if (frag5 == null) {
@@ -515,7 +518,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 else {
                     CartFragment frag5 = (CartFragment) getSupportFragmentManager().
                             findFragmentByTag(CartFragment.TAG);
-                    getSupportActionBar().hide();
                     if (frag5 == null) {
                         frag5 = CartFragment.newInstance();
                     }
@@ -691,6 +693,30 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return super.onOptionsItemSelected(item);
     }
 
+    public static void disableShowHideAnimation(ActionBar actionBar) {
+        try
+        {
+            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
+        }
+        catch (Exception exception)
+        {
+            try {
+                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
+                mActionBarField.setAccessible(true);
+                Object icsActionBar = mActionBarField.get(actionBar);
+                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
+                mShowHideAnimationEnabledField.setAccessible(true);
+                mShowHideAnimationEnabledField.set(icsActionBar,false);
+                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
+                mCurrentShowAnimField.setAccessible(true);
+                mCurrentShowAnimField.set(icsActionBar,null);
+            }catch (Exception e){
+                //....
+            }
+        }
+    }
+
+
 
 
     @Override
@@ -752,25 +778,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         int count = getSupportFragmentManager().getBackStackEntryCount();
         SendOrderFragment sendOrderFragment = (SendOrderFragment)getSupportFragmentManager().findFragmentByTag(SendOrderFragment.TAG);
         MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-
-        Log.v("count","Count = "+count);
         if (count == 0) {
             super.onBackPressed();
-            Log.v("hello", "" +"One"+ count);
-
-            //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            //additional code
-        } else {
-            Log.v("hello", "Two" + count);
+        }
+        else {
             if(count == 1 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
-                Log.v("hello","Send Prescription");
                 showSettingsAlert();
+            } else {
+                getSupportFragmentManager().popBackStack();
             }
-            else
-            getSupportFragmentManager().popBackStack();
         }
 
     }
+
 
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(

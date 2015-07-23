@@ -2,12 +2,16 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.TypefaceSpan;
 
 import java.util.ArrayList;
 
@@ -71,6 +76,11 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpannableString s = new SpannableString("Order Status");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 
     @Override

@@ -3,10 +3,14 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.widget.EditText;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.TypefaceSpan;
 
 import java.util.ArrayList;
 
@@ -64,6 +69,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpannableString s = new SpannableString("Edit Profile");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 
     @Override

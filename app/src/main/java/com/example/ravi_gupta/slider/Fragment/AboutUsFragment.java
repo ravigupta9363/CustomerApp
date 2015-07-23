@@ -2,11 +2,15 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.TypefaceSpan;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +38,7 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
     TextView version;
     TextView aboutText;
     MainActivity mainActivity;
+    public static String TAG = "AboutUsFragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,6 +67,11 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SpannableString s = new SpannableString("About Us");
+        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);
     }
 
     @Override
