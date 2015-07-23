@@ -1,16 +1,56 @@
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:orientation="vertical"
+        android:layout_height="match_parent"
         tools:context="com.example.ravi_gupta.slider.Fragment.OrderStatusFragment"
        android:background="#EEE" >
+
+     <!-- TODO: Update blank fragment layout -->
+     <android.support.v7.widget.Toolbar
+         xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+         android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="?attr/colorPrimary"
+         android:elevation="0dp"
+         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+         <ImageButton
+             android:paddingRight="4dp"
+             android:id="@+id/fragment_order_status_imagebutton1"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:src="@mipmap/dc_back_button"
+             android:background="@drawable/button_style" />
+         <!-- </RelativeLayout>-->
+
+         <TextView
+             android:padding="2dp"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:id="@+id/fragment_order_status_textview11"
+             android:textSize="20sp"
+             android:textColor="#999"
+             android:text="Order Status" />
+
+
+     </android.support.v7.widget.Toolbar>
 
 
      <View
          android:layout_width="match_parent"
          android:layout_height="2dp"
          android:background="#EEE"
-         android:id="@+id/view"/>
+         android:id="@+id/view"
+         android:layout_below="@+id/toolbar"/>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical"
+         android:layout_below="@+id/view">
 
      <LinearLayout
          android:layout_width="match_parent"
@@ -200,5 +240,7 @@
 
         </android.support.v4.view.ViewPager>
 
- </LinearLayout>
+     </LinearLayout>
+
+ </RelativeLayout>
 

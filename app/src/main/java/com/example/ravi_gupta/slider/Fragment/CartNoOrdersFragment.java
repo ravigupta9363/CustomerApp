@@ -82,9 +82,11 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
-                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 mainActivity.onBackPressed();
+                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+
                 Log.v("hello", "Back Button");
             }
         });
@@ -152,8 +154,8 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    mainActivity.onBackPressed();
                     disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+                    mainActivity.onBackPressed();
                     ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 

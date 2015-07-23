@@ -3,14 +3,13 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,11 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
-import com.example.ravi_gupta.slider.TypefaceSpan;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -69,11 +70,6 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SpannableString s = new SpannableString("Edit Profile");
-        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setTitle(s);
     }
 
     @Override
@@ -130,9 +126,20 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 getFragmentManager().popBackStack();
 
+
+
             }
         });
+        TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_profile_edit_textview4);
+        ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_profile_edit_imagebutton1);
+        toolbarTitle.setTypeface(typeface1);
 
+        toolbarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.onBackPressed();
+            }
+        });
 
         return rootview;
     }
@@ -166,6 +173,9 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
 
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
@@ -175,6 +185,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
                     mainActivity.onBackPressed();
+
                     return true;
                 }
                 return false;
@@ -196,5 +207,29 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+    public static void disableShowHideAnimation(ActionBar actionBar) {
+        try
+        {
+            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
+        }
+        catch (Exception exception)
+        {
+            try {
+                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
+                mActionBarField.setAccessible(true);
+                Object icsActionBar = mActionBarField.get(actionBar);
+                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
+                mShowHideAnimationEnabledField.setAccessible(true);
+                mShowHideAnimationEnabledField.set(icsActionBar,false);
+                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
+                mCurrentShowAnimField.setAccessible(true);
+                mCurrentShowAnimField.set(icsActionBar,null);
+            }catch (Exception e){
+                //....
+            }
+        }
+    }
+
 
 }

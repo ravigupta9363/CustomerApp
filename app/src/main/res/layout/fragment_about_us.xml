@@ -1,14 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.AboutUsFragment"
     android:background="#FFF">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageButton
+            android:paddingRight="4dp"
+            android:id="@+id/fragment_about_us_imagebutton1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/dc_back_button"
+            android:background="@drawable/button_style" />
+        <!-- </RelativeLayout>-->
+
+        <TextView
+            android:padding="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_about_us_textview4"
+            android:textSize="20sp"
+            android:textColor="#999"
+            android:text="About us" />
+
+
+    </android.support.v7.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_below="@+id/toolbar"
         android:background="#EEE"
         android:id="@+id/view"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/view">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,5 +88,7 @@
         android:maxLines = "100"
         android:scrollbars = "vertical"/>
 
+    </LinearLayout>
 
-</LinearLayout>
+
+</RelativeLayout>

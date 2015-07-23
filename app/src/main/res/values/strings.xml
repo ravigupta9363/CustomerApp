@@ -11,7 +11,6 @@
     <color name="autocomplete_background_color">#FFFFFF</color>
 
     <string-array name="sections_icons">
-        <item>@mipmap/dc_flat</item>
         <item>@mipmap/dc_profile</item>
         <item>@mipmap/dc_nav_previous_order</item>
         <item>@mipmap/dc_notification</item>
@@ -24,7 +23,6 @@
     </string-array>
 
     <string-array name="sections_title">
-        <item>  Home</item>
         <item>  Profile</item>
         <item>  Past Orders</item>
         <item>  Notifications</item>
