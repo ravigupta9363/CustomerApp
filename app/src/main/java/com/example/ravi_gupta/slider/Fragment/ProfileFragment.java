@@ -152,6 +152,9 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 android.support.v4.app.Fragment newFragment4 = new ProfileEditFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment","profileFragment");
+                newFragment4.setArguments(bundle);
                 //newFragment4.setTargetFragment(profileFragment, mainActivity.FRAGMENT_CODE);
                 ft.replace(R.id.fragment_main_container, newFragment4);
                 ft.addToBackStack(null); // Ads FirstFragment to the back-stack

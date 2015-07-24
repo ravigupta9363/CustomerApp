@@ -57,6 +57,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     String updatedPhone;
     ProfileDatabase profileDatabase;
     MainFragment mainFragment;
+    String fragment;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,6 +83,8 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_profile_edit, container, false);
+        fragment = getArguments().getString("fragment");
+
 
         //Bundle bundle = getArguments();
         //ArrayList<String> infoUser = bundle.getStringArrayList("infoUser");
@@ -150,7 +153,10 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
                 hiddenKeyboard(customerPhone);
-                mainActivity.onBackPressed();
+                if(fragment.equals("profileFragment"))
+                 mainActivity.onBackPressed();
+                else
+                    mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,null);
 
 
                /* PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_NAME", updatedName).commit();

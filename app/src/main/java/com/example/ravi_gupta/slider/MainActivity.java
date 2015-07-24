@@ -45,13 +45,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
+import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
+import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.Dialog.ImageZoomDialog;
 import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
@@ -104,6 +105,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     public DatabaseHelper databaseHelper;
+    public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
     public TextView tv;
 
@@ -138,6 +140,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             replaceFragment(R.layout.fragment_no_internet_connection, null);
         }
         databaseHelper = new DatabaseHelper(this);
+        profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
 
 
@@ -587,9 +590,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 tv.setText(cartItem);
                 break;
 
-            case R.id.nextButton:
-                if(databaseHelper.getPresciptionCount() == 0){
-                    Toast.makeText(this,"Please add Prescription First",Toast.LENGTH_SHORT).show();
+            case R.id.nextButton :
+                ProfileDetail profileDetail = profileDatabase.getProfile();
+                if(profileDetail.getPhone() == null){
+                    ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
+                            findFragmentByTag(ProfileEditFragment.TAG);
+                    if (frag7 == null) {
+                        frag7 = ProfileEditFragment.newInstance();
+                    }
+                    Bundle bundle5 = new Bundle();
+                    bundle5.putString("fragment","cartFragment");
+                    frag7.setArguments(bundle5);
+                    ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
                 }
                 else {
                     LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
@@ -609,6 +622,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     frag8 = NoInternetConnectionFragment.newInstance();
                 }
                 ft.replace(R.id.container, frag8, NoInternetConnectionFragment.TAG);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_profile_edit_button1:
+                LandmarkFragment frag9 = (LandmarkFragment) getSupportFragmentManager().
+                        findFragmentByTag(LandmarkFragment.TAG);
+                if (frag9 == null) {
+                    frag9 = LandmarkFragment.newInstance();
+                }
+                ft.replace(R.id.fragment_main_container, frag9, LandmarkFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
 

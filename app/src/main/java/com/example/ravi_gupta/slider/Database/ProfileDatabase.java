@@ -55,6 +55,7 @@ public class ProfileDatabase extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+
     public ProfileDetail getProfile() {
         ProfileDetail profileDetail = new ProfileDetail();
         // Select All Query
@@ -67,8 +68,8 @@ public class ProfileDatabase extends SQLiteOpenHelper {
        if (cursor.moveToFirst()) {
             do {
                 profileDetail.setName((cursor.getString(0)));
-        profileDetail.setEmail((cursor.getString(1)));
-        profileDetail.setPhone((cursor.getString(2)));
+                profileDetail.setEmail((cursor.getString(1)));
+                profileDetail.setPhone((cursor.getString(2)));
 
                 // Adding contact to list
                 //profileList.add(profileDetail);
@@ -84,4 +85,6 @@ public class ProfileDatabase extends SQLiteOpenHelper {
         db.delete(TABLE_PROFILE, null, null);
         //db.execSQL(DELETEPASSCODE_DETAIL);
     }
+
+
 }
