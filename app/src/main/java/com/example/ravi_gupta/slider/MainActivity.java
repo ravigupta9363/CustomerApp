@@ -73,7 +73,6 @@ import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
-import com.example.ravi_gupta.slider.Location.GeoSearchResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -109,6 +108,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
     public TextView tv;
+    public boolean enableEditText = true;
 
     // nav drawer title
     private CharSequence mDrawerTitle;

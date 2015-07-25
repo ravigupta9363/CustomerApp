@@ -144,8 +144,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
         disabledocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_main_edittext1, null);
-                Log.v("Result","Called");
+               // mainActivity.replaceFragment(R.id.fragment_main_edittext1, null);
+               // Log.v("Result","Called");
+                if(mainActivity.enableEditText == true)
+                showLocationAlert();
             }
         });
         return rootview;
@@ -197,6 +199,36 @@ public class MainFragment extends android.support.v4.app.Fragment {
             });
 
         }
+    }
+
+    public void showLocationAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                getActivity());
+        alertDialog.setTitle("Change Location");
+        alertDialog.setMessage("Use my location from google maps?");
+        alertDialog.setPositiveButton("Update",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Location location = appLocationService
+                                .getLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            LocationAddress locationAddress = new LocationAddress();
+                            locationAddress.getAddressFromLocation(latitude, longitude,
+                                    getActivity().getApplicationContext(), new GeocoderHandler());
+                        } else {
+                            //showSettingsAlert();
+                        }
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
     public void showSettingsAlert() {

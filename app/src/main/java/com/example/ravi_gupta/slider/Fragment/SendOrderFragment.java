@@ -75,6 +75,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_send_order, container, false);
+        mainActivity.enableEditText = false;
 
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
@@ -178,6 +179,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         SpannableString s = new SpannableString("Drug Corner");
+        mainActivity.enableEditText = true;
         s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
