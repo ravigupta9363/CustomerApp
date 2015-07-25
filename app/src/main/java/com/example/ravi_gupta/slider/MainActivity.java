@@ -60,6 +60,7 @@ import com.example.ravi_gupta.slider.Fragment.CartFragment;
 import com.example.ravi_gupta.slider.Fragment.CartNoOrdersFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
+import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
 import com.example.ravi_gupta.slider.Fragment.LandmarkFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
@@ -90,7 +91,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ProfileEditFragment.OnFragmentInteractionListener, OrderStatusFragment.OnFragmentInteractionListener,
         OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
         CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
-        CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener{
+        CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
+        IncomingSmsFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -605,12 +607,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     ft.commitAllowingStateLoss();
                 }
                 else {
-                    LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
-                            findFragmentByTag(LandmarkFragment.TAG);
+                    IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
+                            findFragmentByTag(IncomingSmsFragment.TAG);
                     if (frag7 == null) {
-                        frag7 = LandmarkFragment.newInstance();
+                        frag7 = IncomingSmsFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
+                    ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG);
                     ft.commitAllowingStateLoss();
                 }
                 break;
@@ -626,15 +628,24 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 break;
 
             case R.id.fragment_profile_edit_button1:
-                LandmarkFragment frag9 = (LandmarkFragment) getSupportFragmentManager().
-                        findFragmentByTag(LandmarkFragment.TAG);
+                IncomingSmsFragment frag9 = (IncomingSmsFragment) getSupportFragmentManager().
+                        findFragmentByTag(IncomingSmsFragment.TAG);
                 if (frag9 == null) {
-                    frag9 = LandmarkFragment.newInstance();
+                    frag9 = IncomingSmsFragment.newInstance();
                 }
-                ft.replace(R.id.fragment_main_container, frag9, LandmarkFragment.TAG);
+                ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
 
+            case R.id.fragment_incoming_sms_button1:
+                LandmarkFragment frag10 = (LandmarkFragment) getSupportFragmentManager().
+                        findFragmentByTag(LandmarkFragment.TAG);
+                if (frag10 == null) {
+                    frag10 = LandmarkFragment.newInstance();
+                }
+                ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG);
+                ft.commitAllowingStateLoss();
+                break;
         }
 
     }
