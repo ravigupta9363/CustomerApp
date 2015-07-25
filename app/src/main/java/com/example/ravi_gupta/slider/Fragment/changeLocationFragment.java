@@ -9,26 +9,30 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.AddressAdapter;
 import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.DelayAutoCompleteTextView;
-import com.example.ravi_gupta.slider.Location.GeoAutoCompleteAdapter;
 import com.example.ravi_gupta.slider.Location.GeoSearchResult;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 //Places API : AIzaSyB8ztCQFxZnBcUFbewXTlTgobzOhSe_iBU
@@ -95,28 +99,46 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
         useMyLocationButton = (Button) rootview.findViewById(R.id.fragment_change_location_button2);
         spinner = (ProgressBar)rootview.findViewById(R.id.progressBar);
 
+        TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_change_location_textview1);
+        ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_change_location_imagebutton1);
+        toolbarTitle.setTypeface(typeface);
+
+        toolbarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.onBackPressed();
+                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+            }
+        });
+
         useMyLocationButton.setTypeface(typeface);
 
-        locationEdittext = (DelayAutoCompleteTextView) rootview.findViewById(R.id.fragment_change_location_edittext);
+      /*  locationEdittext = (DelayAutoCompleteTextView) rootview.findViewById(R.id.fragment_change_location_edittext);
         locationEdittext.setDropDownBackgroundResource(R.color.autocomplete_background_color);
         locationEdittext.setThreshold(THRESHOLD);
         locationEdittext.setAdapter(new GeoAutoCompleteAdapter(getActivity())); // 'this' is Activity instance
         locationEdittext.setLoadingIndicator(
-                (android.widget.ProgressBar) rootview.findViewById(R.id.fragment_change_pb_loading_indicator));
+                (android.widget.ProgressBar) rootview.findViewById(R.id.fragment_change_pb_loading_indicator));*/
         progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_change_pb_loading_indicator);
-        mListview = (ListView) rootview.findViewById(R.id.addressListView);
+      /*  mListview = (ListView) rootview.findViewById(R.id.addressListView);
         addressAdapter = new AddressAdapter(getActivity(),R.layout.address_list,addressDetailses);
-        mListview.setAdapter(addressAdapter);
+        mListview.setAdapter(addressAdapter);*/
 
         useMyLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
+               // spinner.setVisibility(View.VISIBLE);
                 mainActivity.replaceFragment(R.id.fragment_change_location_button2, null);
+                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         });
 
-        locationEdittext.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    /*    locationEdittext.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -130,9 +152,9 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
 
 
             }
-        });
+        });*/
 
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      /*  mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
@@ -142,7 +164,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
                 mainActivity.replaceFragment(R.id.addressListView, addressDetails);
 
             }
-        });
+        });*/
 
 
         return rootview;
@@ -209,6 +231,9 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
             getView().setOnKeyListener(new View.OnKeyListener() {
@@ -217,7 +242,10 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
 
                     if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                         // handle back button's click listener
+                        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                         mainActivity.onBackPressed();
+                        ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                         return true;
                     }
                     return false;
@@ -233,7 +261,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            spinner.setVisibility(View.VISIBLE);
+           // spinner.setVisibility(View.VISIBLE);
             //this method will be running on UI thread
         }
         @Override
@@ -243,7 +271,8 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
 
 
-            addressDetailses.add(new AddressDetails("Sector 26","DLF Phase 3, U Block"));
+            //Data List View Suggetion
+           /* addressDetailses.add(new AddressDetails("Sector 26","DLF Phase 3, U Block"));
             addressDetailses.add(new AddressDetails("Sector 21","DLF Phase 3, P Block"));
             addressDetailses.add(new AddressDetails("Sector 25", "DLF Phase 2"));
             addressDetailses.add(new AddressDetails("Ghitorni", "New Colony"));
@@ -253,7 +282,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
             else {
                 //Log.v("Result",resultToBeAddedOnList.getAddress());
                 //addressDetailses.add(new AddressDetails(resultToBeAddedOnList.getAddress(), ""));
-            }
+            }*/
 
             return null;
         }
@@ -262,7 +291,7 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             //this method will be running on UI thread
-            spinner.setVisibility(View.GONE);
+            //spinner.setVisibility(View.GONE);
 
         }
 
@@ -272,6 +301,30 @@ public class changeLocationFragment extends android.support.v4.app.Fragment {
         InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
+
+    public static void disableShowHideAnimation(ActionBar actionBar) {
+        try
+        {
+            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
+        }
+        catch (Exception exception)
+        {
+            try {
+                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
+                mActionBarField.setAccessible(true);
+                Object icsActionBar = mActionBarField.get(actionBar);
+                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
+                mShowHideAnimationEnabledField.setAccessible(true);
+                mShowHideAnimationEnabledField.set(icsActionBar,false);
+                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
+                mCurrentShowAnimField.setAccessible(true);
+                mCurrentShowAnimField.set(icsActionBar,null);
+            }catch (Exception e){
+                //....
+            }
+        }
+    }
+
 
 }
 

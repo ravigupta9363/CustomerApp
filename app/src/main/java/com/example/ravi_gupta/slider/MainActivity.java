@@ -49,7 +49,6 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
-import com.example.ravi_gupta.slider.Details.AddressDetails;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
@@ -461,7 +460,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 ft.commitAllowingStateLoss();
                 break;
 
-            case R.id.fragment_change_location_edittext:
+           /* case R.id.fragment_change_location_edittext:
                 GeoSearchResult result = (GeoSearchResult)object;
                // Log.v("Result", "is equals to " + result.getAddress());
                 Bundle bundle = new Bundle();
@@ -472,9 +471,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 newFragment2.setArguments(bundle);
                 ft.addToBackStack(null);
                 ft.commit();
-                break;
+                break;*/
 
-            case R.id.addressListView :
+          /*  case R.id.addressListView :
                 AddressDetails addressDetails = (AddressDetails)object;
                 //
                 Bundle bundle2 = new Bundle();
@@ -487,7 +486,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 newFragment3.setArguments(bundle2);
                 ft.addToBackStack(null);
                 ft.commit();
-                break;
+                break;*/
 
             case R.id.fragment_past_order_listview1:
                 OrderStatusFragment frag4 = (OrderStatusFragment) getSupportFragmentManager().
