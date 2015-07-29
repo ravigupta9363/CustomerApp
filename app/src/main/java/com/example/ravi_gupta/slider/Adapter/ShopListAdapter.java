@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.R;
@@ -49,6 +50,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.isReturn = (TextView)row.findViewById(R.id.shop_list_textview5);
             holder.deliveryTime = (TextView)row.findViewById(R.id.shop_list_textview4);
             holder.orderFulfilment = (TextView) row.findViewById(R.id.shop_list_textview6);
+            holder.icon = (ImageView) row.findViewById(R.id.shop_list_imageview1);
 
             row.setTag(holder);
         }
@@ -58,7 +60,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         }
         //Assigning custom fonts
 
-        holder.shopName.setTypeface(typeface);
+        holder.shopName.setTypeface(typeface3);
         holder.discount.setTypeface(typeface2);
         holder.address.setTypeface(typeface2);
         holder.isReturn.setTypeface(typeface2);
@@ -72,11 +74,12 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         holder.address.setText(shopListDetails.address);
         if(shopListDetails.Isopen && shopListDetails.Isreturn){
             holder.isReturn.setText("Return");
-            holder.isReturn.setTextColor(Color.parseColor("#36B666"));
+            holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
         }
         else if(shopListDetails.Isopen && !shopListDetails.Isreturn) {
             holder.isReturn.setText(" No Return");
-           // holder.isReturn.setTextColor(Color.parseColor("#36B666"));
+            holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
+            // holder.isReturn.setTextColor(Color.parseColor("#36B666"));
         }
         else {
             holder.isReturn.setText("Closed");
@@ -84,6 +87,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         }
         holder.deliveryTime.setText(String.valueOf(shopListDetails.deliveryTime) + " min");
         holder.orderFulfilment.setText(String.valueOf("Order fulfilment "+shopListDetails.orderFulfilment)+"%");
+        holder.icon.setImageDrawable(shopListDetails.icon);
 
         return row;
     }
@@ -96,5 +100,6 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         TextView isReturn;
         TextView deliveryTime;
         TextView orderFulfilment;
+        ImageView icon;
     }
 }
