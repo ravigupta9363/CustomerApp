@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -279,30 +280,51 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         switch (position) {
 
             case 0:
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
-                            .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
+                                .commitAllowingStateLoss();
+                    }
+                },250);
                 break;
             case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
-                        .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
+                                .commitAllowingStateLoss();
+                    }
+                },250);
                 break;
             case 2:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(NotificationFragment.TAG)
-                        .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
+               new Handler().postDelayed(new Runnable() {
+               @Override
+                public void run() {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(NotificationFragment.TAG)
+                            .commitAllowingStateLoss();
+               }
+               },250);
                 break;
             case 3:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
-                        .commitAllowingStateLoss();
-                mDrawerLayout.closeDrawer(mDrawerList);
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                   new Handler().postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
+                                    .commitAllowingStateLoss();
+                       }
+                   },250);
                 break;
             case 4:
+                mDrawerLayout.closeDrawer(mDrawerList);
                 Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree" );// this.getPackageName()
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 try {
@@ -310,34 +332,49 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" +  "com.cubeactive.qnotelistfree")));
                 }
-                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 5:
+                mDrawerLayout.closeDrawer(mDrawerList);
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 String shareBody = "Here is the share content body";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share Via"));
-                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 6:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
-                        .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
+                                .commitAllowingStateLoss();
+                    }
+                }, 250);
                 break;
             case 7:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
-                        .commitAllowingStateLoss();
-                mDrawerLayout.closeDrawer(mDrawerList);
+                 mDrawerLayout.closeDrawer(mDrawerList);
+                  new Handler().postDelayed(new Runnable() {
+                      @Override
+                      public void run() {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
+                                .commitAllowingStateLoss();
+
+                      }
+                  },250);
                 break;
             case 8:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
-                        .commitAllowingStateLoss();
                 mDrawerLayout.closeDrawer(mDrawerList);
+               new Handler().postDelayed(new Runnable() {
+                   @Override
+                    public void run() {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
+                                .commitAllowingStateLoss();
+                   }
+               },250);
                 break;
 
             default:
