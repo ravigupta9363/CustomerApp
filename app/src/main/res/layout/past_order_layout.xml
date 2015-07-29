@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#FFF"
+    android:layout_height="match_parent" android:background="@android:color/transparent"
     android:paddingRight="10dp" android:paddingTop="10dp">
 
     <LinearLayout
@@ -25,7 +25,7 @@
                 android:text="26 JULY 2015"
                 android:textSize="10sp"
                 android:id="@+id/past_order_layout_textview1"
-                android:paddingTop="3dp"/>
+                android:paddingTop="3dp" />
 
         </LinearLayout>
 
@@ -46,7 +46,7 @@
                 android:text="02 : 25 PM"
                 android:textSize="10sp"
                 android:id="@+id/past_order_layout_textview2"
-                android:paddingTop="3dp"/>
+                android:paddingTop="3dp" />
 
         </LinearLayout>
 
@@ -74,7 +74,7 @@
                 android:text="DC25956"
                 android:textSize="10sp"
                 android:id="@+id/past_order_layout_textview3"
-                android:paddingTop="3dp"/>
+                android:paddingTop="3dp" />
 
         </LinearLayout>
 
@@ -84,7 +84,7 @@
             android:text="230/-"
             android:gravity="right"
             android:textSize="15sp"
-            android:id="@+id/past_order_layout_textview4"/>
+            android:id="@+id/past_order_layout_textview4" />
 
     </LinearLayout>
 

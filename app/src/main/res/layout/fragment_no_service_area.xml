@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@drawable/dc_background"
+    tools:context="com.example.ravi_gupta.slider.Fragment.NoServiceAreaFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#EEE"
+        android:id="@+id/view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="We are not currently serving \n in your area"
+        android:textColor="#36B666"
+        android:id="@+id/fragment_no_service_area_textview1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:textSize="18sp" />
+
+
+</RelativeLayout>

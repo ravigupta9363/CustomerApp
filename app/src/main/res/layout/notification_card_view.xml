@@ -11,16 +11,28 @@
         android:layout_gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
         card_view:cardCornerRadius="2dp"
         card_view:contentPadding="10dp">
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:background="#FFF">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:id="@+id/dc_logo"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:src="@mipmap/dc_logo"
+                android:paddingTop="10dp"/>
 
             <TextView
                 android:id="@+id/fragment_notification_textView1"
@@ -28,21 +40,25 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:layout_alignParentTop="true"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:text="This is a Title"
+                android:paddingRight="10dp"
                 android:paddingTop="10dp"
                 android:textSize="18sp"
-                android:textColor="#000"/>
+                android:textColor="#000"
+                android:background="@android:color/transparent"
+                android:layout_toRightOf="@+id/dc_logo"/>
 
             <TextView
                 android:id="@+id/fragment_notification_textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:text="This is Content"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:layout_below="@+id/fragment_notification_textView1"/>
+                android:layout_below="@+id/fragment_notification_textView1"
+                android:layout_toRightOf="@+id/dc_logo"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

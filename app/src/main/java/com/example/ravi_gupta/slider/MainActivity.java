@@ -145,7 +145,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if(haveNetworkConnection()) {
             replaceFragment(R.layout.fragment_main, null);
         }
-            else {
+        else {
+            //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
             getSupportActionBar().hide();
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_internet_connection, null);
