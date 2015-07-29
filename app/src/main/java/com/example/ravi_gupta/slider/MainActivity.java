@@ -1,6 +1,9 @@
 package com.example.ravi_gupta.slider;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -13,6 +16,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +29,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -122,12 +128,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
+    int mNotificationId1 = 001;
+    int mNotificationId2 = 002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.v("Notifications", getIntent().getAction().equals("OpenNotificationFragment") + "Hello");
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -143,6 +152,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         databaseHelper = new DatabaseHelper(this);
         profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
+
+        final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        if(getIntent().getAction().equals("OpenNotificationFragment")) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(PastOrderFragment.TAG)
+                    .commitAllowingStateLoss();
+        }
+        else if(getIntent().getAction().equals("OpenStatusFragment")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(PastOrderFragment.TAG)
+                    .commitAllowingStateLoss();
+        }
 
 
 
@@ -858,6 +879,78 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 cursor.close();
             }
         }
+    }
+
+    public void showImageNotification() {
+
+        Drawable d = getResources().getDrawable(R.drawable.pills1);
+
+        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.dc_feedback)
+                        .setAutoCancel(true)
+                        .setContentTitle("Drug Corner")
+                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+
+        NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
+        bigPicStyle.bigPicture(bitmap);
+        bigPicStyle.setBigContentTitle("Drug Corner");
+        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+        mBuilder.setStyle(bigPicStyle);
+
+
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction("OpenNotificationFragment");
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId1, mBuilder.build());
+        Log.v("notification","Notification");
+    }
+
+    public void showStatusNotification() {
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.dc_feedback)
+                        .setAutoCancel(true)
+                        .setContentTitle("Order Id DC256649")
+                        .setContentText("Your Order has been cancelled as per your request");
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction("OpenStatusFragment");
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId2, mBuilder.build());
+        Log.v("notification","Notification");
     }
 
 
