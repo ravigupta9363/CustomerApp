@@ -86,10 +86,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
         String address= "36, Galli No 2, U Block, DLF Phase 3, Sector 24, Gurgaon, Haryana";
 
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
 
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

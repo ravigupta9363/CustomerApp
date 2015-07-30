@@ -48,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_past_order_listview1"
-        android:layout_below="@+id/view">
+        android:layout_below="@+id/view"
+        android:background="#f9f9f7">
 
     </ListView>
 

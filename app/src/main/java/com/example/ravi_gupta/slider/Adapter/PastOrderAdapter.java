@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
@@ -35,7 +36,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         TextView time;
         TextView price;
         TextView address;
-        TextView status;
+        Button status;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             holder.orderId = (TextView)row.findViewById(R.id.past_order_layout_textview3);
             holder.price = (TextView)row.findViewById(R.id.past_order_layout_textview4);
             holder.address = (TextView)row.findViewById(R.id.past_order_layout_textview5);
-            holder.status = (TextView)row.findViewById(R.id.past_order_layout_textview6);
+            holder.status = (Button)row.findViewById(R.id.past_order_layout_textview6);
             row.setTag(holder);
         }
         else {
@@ -69,7 +70,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.time.setTypeface(typeface2);
         holder.price.setTypeface(typeface2);
         holder.address.setTypeface(typeface2);
-        holder.status.setTypeface(typeface2);
+        //holder.status.setTypeface(typeface2);
 
         PastOrdersDetail pastOrdersDetail = pastOrdersDetails.get(position);
         holder.date.setText(pastOrdersDetail.date);

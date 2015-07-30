@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="@android:color/transparent"
-    android:paddingRight="10dp" android:paddingTop="10dp">
+    android:layout_height="match_parent" android:background="#f9f9f7"
+    android:paddingRight="10dp" android:paddingTop="25dp" android:paddingBottom="5dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_gravity="top">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_logo"
             android:layout_gravity="top"
@@ -119,15 +119,19 @@
             android:id="@+id/past_order_layout_textview5"/>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delivered"
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Reorder"
+            android:layout_gravity="right"
+            android:background="@drawable/round_button"
             android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textStyle="bold"
             android:layout_marginBottom="10dp"
-            android:gravity="right"
+            android:gravity="right|center"
             android:id="@+id/past_order_layout_textview6"
-            android:textColor="#36B666"/>
+            android:textColor="#FFF"/>
 
     </LinearLayout>
 
