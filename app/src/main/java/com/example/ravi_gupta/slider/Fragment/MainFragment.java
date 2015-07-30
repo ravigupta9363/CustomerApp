@@ -101,7 +101,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
 
-        sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
+        sliderItems = new int[]{R.drawable.small_slider3, R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
         pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
         viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
         viewPager.setScrollDurationFactor(0.5);

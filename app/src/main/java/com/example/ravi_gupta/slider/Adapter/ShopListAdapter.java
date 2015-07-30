@@ -70,14 +70,14 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
 
         ShopListDetails shopListDetails = shopListDetailses.get(position);
         holder.shopName.setText(shopListDetails.shopName);
-        holder.discount.setText(String.valueOf("- "+(shopListDetails.discount)+"% off"));
+        holder.discount.setText(String.valueOf((shopListDetails.discount)+"% off on medicines"));
         holder.address.setText(shopListDetails.address);
         if(shopListDetails.Isopen && shopListDetails.Isreturn){
-            holder.isReturn.setText("Return");
+            holder.isReturn.setText("Return 5 days");
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
         }
         else if(shopListDetails.Isopen && !shopListDetails.Isreturn) {
-            holder.isReturn.setText(" No Return");
+            holder.isReturn.setText("No Return");
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
             // holder.isReturn.setTextColor(Color.parseColor("#36B666"));
         }
