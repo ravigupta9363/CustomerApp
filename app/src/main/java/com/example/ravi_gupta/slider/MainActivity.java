@@ -115,6 +115,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
     public TextView tv;
+    public String OTP;
     public boolean enableEditText = true;
 
     // nav drawer title
@@ -262,6 +263,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
+
+
 
 
     private class SlideMenuClickListener implements
@@ -702,6 +705,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     frag10 = LandmarkFragment.newInstance();
                 }
                 ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_send_order_button2:
+                PastOrderFragment frag11 = (PastOrderFragment) getSupportFragmentManager().
+                        findFragmentByTag(PastOrderFragment.TAG);
+                if (frag11 == null) {
+                    frag11 = PastOrderFragment.newInstance();
+                }
+                Bundle bundle5 = new Bundle();
+                bundle5.putString("fragment","repeatOrder");
+                frag11.setArguments(bundle5);
+                ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
         }

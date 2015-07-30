@@ -72,6 +72,8 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         holder.shopName.setText(shopListDetails.shopName);
         holder.discount.setText(String.valueOf((shopListDetails.discount)+"% off on medicines"));
         holder.address.setText(shopListDetails.address);
+
+
         if(shopListDetails.Isopen && shopListDetails.Isreturn){
             holder.isReturn.setText("Return 5 days");
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));

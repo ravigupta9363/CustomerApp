@@ -43,6 +43,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     ArrayList<PastOrdersDetail> pastOrdersDetails = new ArrayList<PastOrdersDetail>();
     MainActivity mainActivity;
     public static String TAG = "PastOrderFragment";
+    String fragment;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -50,16 +51,9 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PastOrderFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static PastOrderFragment newInstance(String param1, String param2) {
+    public static PastOrderFragment newInstance() {
         PastOrderFragment fragment = new PastOrderFragment();
         return fragment;
     }
@@ -78,6 +72,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_past_order, container, false);
+        fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
@@ -180,8 +175,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                     // handle back button's click listener
                     disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
-                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    if(!fragment.equals("repeatOrder")) {
+                        ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+                        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    }
                     return true;
                 }
                 return false;

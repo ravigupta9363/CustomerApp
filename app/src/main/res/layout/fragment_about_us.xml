@@ -32,7 +32,7 @@
             android:id="@+id/fragment_about_us_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="About us" />
+            android:text="DrugCorner  version 1.0.0" />
 
 
     </android.support.v7.widget.Toolbar>
@@ -54,9 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:padding="10dp"
+        android:padding="0dp"
         android:layout_marginLeft="10dp">
 
         <TextView
@@ -66,6 +66,7 @@
             android:textSize="20dp"
             android:text="Drugcorner"
             android:layout_marginRight="10sp"
+            android:visibility="gone"
             />
 
         <TextView
@@ -73,14 +74,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/fragment_about_us_textview2"
             android:text="v 1.1.1"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/fragment_about_us_textview3"
         android:lineSpacingMultiplier="1"
         android:padding="10dp"

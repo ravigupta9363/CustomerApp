@@ -9,6 +9,9 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
+import com.example.ravi_gupta.slider.Interface.FindOTP;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,15 @@ public class IncomingSms extends BroadcastReceiver {
     // Get the object of SmsManager
     final SmsManager sms = SmsManager.getDefault();
     public Matcher m;
+    String myOTP;
+    MainActivity mainActivity;
+    FindOTP findOTP;
+    IncomingSmsFragment incomingSmsFragment;
+
+    public IncomingSms() {
+
+        incomingSmsFragment = new IncomingSmsFragment();
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -47,6 +59,10 @@ public class IncomingSms extends BroadcastReceiver {
                     m = p.matcher(message);
                     while (m.find()) {
                         Log.v("SmsReceiver","Hello "+m.group());
+                        myOTP = m.group();
+                        //incomingSmsFragment.setOTP(myOTP);
+                        //incomingSmsFragment.otpEdittext.setText(myOTP);
+                        //Log.v("Sms","Sms "+incomingSmsFragment.OTP);
                     }
 
 
@@ -64,4 +80,5 @@ public class IncomingSms extends BroadcastReceiver {
 
         }
     }
+
 }

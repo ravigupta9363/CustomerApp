@@ -1,8 +1,10 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -39,11 +41,13 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     TextView phoneNumber;
     TextView orText;
     TextView manuallyEntryText;
-    EditText otpEdittext;
+    public EditText otpEdittext;
     Button resendCode;
     MainActivity mainActivity;
     IncomingSms incomingSms;
     ProgressBar progressBar;
+    public String OTP;
+    private BroadcastReceiver receiver;
 
 
 
@@ -60,7 +64,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //incomingSms = new IncomingSms();
     }
 
     @Override
@@ -92,10 +95,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         resendCode.setTypeface(typeface2);
         progressBar.setVisibility(View.VISIBLE);
 
-       /* while (incomingSms.m.find()) {
-            Log.v("SmsReceiver", "Hello Ji" + incomingSms.m.group());
-            manuallyEntryText.setText(incomingSms.m.group());
-        }*/
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,12 +160,13 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                   mainActivity.onBackPressed();
+                    mainActivity.onBackPressed();
                     return true;
                 }
                 return false;
             }
         });
+        new AsyncCaller().execute();
     }
 
     /**
@@ -182,6 +182,37 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    public void setOTP(String OTP) {
+        this.OTP = OTP;
+    }
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //this method will be running on UI thread
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+                //Log.v("SmsReceiver", "Hello Fragment" + OTP);
+               // otpEdittext.setText(OTP);
+
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //this method will be running on UI thread
+        }
+
     }
 
 }

@@ -100,6 +100,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.replaceFragment(R.id.fragment_send_order_button2,null);
+                Log.v("click","click");
             }
         });
 

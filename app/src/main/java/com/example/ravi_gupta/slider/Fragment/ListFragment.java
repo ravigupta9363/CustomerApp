@@ -170,9 +170,8 @@ public class ListFragment extends android.support.v4.app.Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
                     ShopListDetails shopListDetails =(ShopListDetails) mListview.getItemAtPosition(position);
-                    //Log.v("Listview1", "Shop Name = " + shopListDetails.shopName + "");
-                    mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
-
+                    if(shopListDetails.Isopen)
+                     mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
                 }
             });
             return null;
