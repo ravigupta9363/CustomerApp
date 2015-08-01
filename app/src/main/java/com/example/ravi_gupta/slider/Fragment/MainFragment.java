@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -16,10 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.ActionBarActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,13 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.LocationAddress;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
-import com.example.ravi_gupta.slider.TypefaceSpan;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
 import java.util.Timer;
@@ -64,6 +63,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
     int page = 1;
     AppLocationService appLocationService;
     EditText disabledocationEditText;
+    ImageButton menuButton;
+    ImageButton cartButton;
+    TextView toolbarTitle;
+    TextView cartItems;
     boolean isItemClickable;
     MainActivity mainActivity;
     public static String TAG = "MainFragment";
@@ -88,11 +91,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SpannableString s = new SpannableString("Drug Corner");
-        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setTitle(s);
     }
 
     @Override
@@ -100,6 +98,18 @@ public class MainFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
+        Drawable drawable = getResources().getDrawable(R.mipmap.dc_location);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.7),
+                (int) (drawable.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
+        //mainActivity.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //mainActivity.getSupportActionBar().setCustomView(R.layout.actionbar_layout);
+
 
         sliderItems = new int[]{R.drawable.small_slider3, R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
         pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
@@ -115,6 +125,19 @@ public class MainFragment extends android.support.v4.app.Fragment {
         pageSwitcher(4);
 
         disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
+        menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
+        cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
+        toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
+        disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
+
+        toolbarTitle.setTypeface(typeface2);
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.mDrawerLayout.openDrawer(mainActivity.mDrawerList);
+            }
+        });
 
         appLocationService = new AppLocationService(getActivity());
         Location gpsLocation = appLocationService
@@ -334,7 +357,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        ((ActionBarActivity) getActivity()).getSupportActionBar().show();
+        //((ActionBarActivity) getActivity()).getSupportActionBar().show();
         getView().setFocusableInTouchMode(true);
             getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
@@ -381,7 +404,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
     }
 
 
-
-
-
 }
+
+
+/* SpannableString s = new SpannableString(mainActivity.actionbarTitle);
+        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
+        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
+        actionBar.setTitle(s);*/

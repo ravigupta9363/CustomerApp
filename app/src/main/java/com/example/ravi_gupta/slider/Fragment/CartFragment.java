@@ -100,7 +100,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                 mainActivity.onBackPressed();
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         });
@@ -182,8 +181,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -195,7 +192,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
                     // handle back button's click listener
                     disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }

@@ -5,10 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,72 +17,65 @@ import com.example.ravi_gupta.slider.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NoInternetConnectionFragment.OnFragmentInteractionListener} interface
+ * {@link ConfirmOrderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NoInternetConnectionFragment#newInstance} factory method to
+ * Use the {@link ConfirmOrderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoInternetConnectionFragment extends android.support.v4.app.Fragment {
+public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    TextView orderConfirmText;
+    Button orderStatusButton;
     MainActivity mainActivity;
+    public static String TAG = "ConfirmOrderFragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    public static String TAG = "NoInternetConnectionFragment";
 
     private OnFragmentInteractionListener mListener;
 
 
     // TODO: Rename and change types and number of parameters
-    public static NoInternetConnectionFragment newInstance() {
-        NoInternetConnectionFragment fragment = new NoInternetConnectionFragment();
-
+    public static ConfirmOrderFragment newInstance() {
+        ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         return fragment;
     }
 
-    public NoInternetConnectionFragment() {
+    public ConfirmOrderFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_no_internet_connection, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_confirm_order, container, false);
 
-        TextView textView = (TextView)rootview.findViewById(R.id.fragment_no_internet_connection_textview1);
-        Button retryButton = (Button)rootview.findViewById(R.id.fragment_no_internet_connection_button1);
-
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
-        textView.setTypeface(typeface2);
-        retryButton.setTypeface(typeface2);
+        orderConfirmText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview1);
+        orderStatusButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button1);
 
-        retryButton.setOnClickListener(new View.OnClickListener() {
+        orderConfirmText.setTypeface(typeface2);
+        orderStatusButton.setTypeface(typeface2);
+
+        orderStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mainActivity.haveNetworkConnection()) {
-                    mainActivity.replaceFragment(R.layout.fragment_main, null);
-                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                }
-                else {
-                    //mainActivity.getSupportActionBar().hide();
-                    //mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    //mainActivity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-                }
+                mainActivity.replaceFragment(R.id.fragment_confirm_order_button1,null);
             }
         });
-
 
         return rootview;
     }
@@ -128,15 +118,6 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item= menu.findItem(R.id.cart);
-        item.setEnabled(false);
-        item.setVisible(false);
-
     }
 
 }

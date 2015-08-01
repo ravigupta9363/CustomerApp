@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,8 +118,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
-                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             }
@@ -217,8 +214,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -228,9 +223,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }

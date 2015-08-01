@@ -87,9 +87,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
-                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
 
                 Log.v("hello", "Back Button");
             }
@@ -147,8 +145,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -159,8 +155,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
                     disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
-                    mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
                     return true;

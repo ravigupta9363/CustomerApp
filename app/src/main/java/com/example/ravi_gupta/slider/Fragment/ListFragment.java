@@ -160,10 +160,10 @@ public class ListFragment extends android.support.v4.app.Fragment {
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
 
-            shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,60,99,getResources().getDrawable(R.mipmap.dc_logo5)));
-            shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,90,84,getResources().getDrawable(R.mipmap.dc_logo4)));
-            shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,120,45,getResources().getDrawable(R.mipmap.dc_logo6)));
-            shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 120, 33,getResources().getDrawable(R.mipmap.dc_logo)));
+            shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,60,99));
+            shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,90,84));
+            shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,120,45));
+            shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 120, 33));
 
             mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

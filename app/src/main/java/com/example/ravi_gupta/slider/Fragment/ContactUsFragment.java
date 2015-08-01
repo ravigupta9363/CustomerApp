@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -97,8 +96,6 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
-                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             }
@@ -171,8 +168,6 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -182,9 +177,7 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }

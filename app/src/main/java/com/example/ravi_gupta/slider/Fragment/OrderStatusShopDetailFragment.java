@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,8 +152,6 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
     public void onResume() {
         super.onResume();
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -164,9 +161,7 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }

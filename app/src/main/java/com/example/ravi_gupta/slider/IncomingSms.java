@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
-import com.example.ravi_gupta.slider.Interface.FindOTP;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +24,6 @@ public class IncomingSms extends BroadcastReceiver {
     public Matcher m;
     String myOTP;
     MainActivity mainActivity;
-    FindOTP findOTP;
     IncomingSmsFragment incomingSmsFragment;
 
     public IncomingSms() {

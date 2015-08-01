@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
@@ -107,7 +106,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         placeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"Your Order has been Placed",Toast.LENGTH_SHORT).show();
+                mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
             }
         });
 

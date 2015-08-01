@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ravi_gupta.slider.Fragment.ConfirmOrderFragment"
+    android:background="@drawable/slider_background">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Order has been Placed"
+        android:gravity="center|top"
+        android:layout_marginTop="120dp"
+        android:textSize="15sp"
+        android:id="@+id/fragment_confirm_order_textview1"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_confirm_order_textview1"
+        android:background="@drawable/round_button"
+        android:text="Go to Status Page"
+        android:textColor="#FFF"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:id="@+id/fragment_confirm_order_button1"/>
+
+</RelativeLayout>

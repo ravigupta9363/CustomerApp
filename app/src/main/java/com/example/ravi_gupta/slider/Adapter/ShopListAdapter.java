@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
+import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
 
@@ -23,6 +22,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
     ArrayList<ShopListDetails> shopListDetailses  = new ArrayList<ShopListDetails>();
     Context context;
     int resource;
+    int counter = 0;
 
     public ShopListAdapter(Context context, int resource, ArrayList<ShopListDetails> shopListDetailses) {
         super(context, resource,shopListDetailses);
@@ -50,7 +50,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.isReturn = (TextView)row.findViewById(R.id.shop_list_textview5);
             holder.deliveryTime = (TextView)row.findViewById(R.id.shop_list_textview4);
             holder.orderFulfilment = (TextView) row.findViewById(R.id.shop_list_textview6);
-            holder.icon = (ImageView) row.findViewById(R.id.shop_list_imageview1);
+            holder.icon = (TextView) row.findViewById(R.id.shop_list_textview7);
 
             row.setTag(holder);
         }
@@ -69,8 +69,9 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
 
 
         ShopListDetails shopListDetails = shopListDetailses.get(position);
+        String firstCharacter = String.valueOf(shopListDetails.shopName.charAt(0));
         holder.shopName.setText(shopListDetails.shopName);
-        holder.discount.setText(String.valueOf((shopListDetails.discount)+"% off on medicines"));
+        holder.discount.setText(String.valueOf((shopListDetails.discount)+"%"));
         holder.address.setText(shopListDetails.address);
 
 
@@ -88,8 +89,30 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.isReturn.setTextColor(Color.RED);
         }
         holder.deliveryTime.setText(String.valueOf(shopListDetails.deliveryTime) + " min");
-        holder.orderFulfilment.setText(String.valueOf("Order fulfilment "+shopListDetails.orderFulfilment)+"%");
-        holder.icon.setImageDrawable(shopListDetails.icon);
+        holder.orderFulfilment.setText(String.valueOf("Order fulfilment " + shopListDetails.orderFulfilment) + "%");
+        //holder.icon.setImageDrawable(shopListDetails.icon);
+        holder.icon.setText(firstCharacter);
+        switch (counter){
+            case 0:
+                holder.icon.setBackgroundColor(Color.parseColor("#9A12B3"));
+                counter = 1;
+                break;
+            case 1:
+                holder.icon.setBackgroundColor(Color.parseColor("#F27935"));
+                counter = 2;
+                break;
+            case 2:
+                holder.icon.setBackgroundColor(Color.parseColor("#138BC3"));
+                counter = 3;
+                break;
+            case 3:
+                holder.icon.setBackgroundColor(Color.parseColor("#D24D57"));
+                counter = 0;
+                break;
+
+        }
+
+
 
         return row;
     }
@@ -102,6 +125,6 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         TextView isReturn;
         TextView deliveryTime;
         TextView orderFulfilment;
-        ImageView icon;
+        TextView icon;
     }
 }

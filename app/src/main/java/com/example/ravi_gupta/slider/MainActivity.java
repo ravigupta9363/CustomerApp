@@ -38,6 +38,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,6 +65,7 @@ import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.CartFragment;
 import com.example.ravi_gupta.slider.Fragment.CartNoOrdersFragment;
+import com.example.ravi_gupta.slider.Fragment.ConfirmOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.ContactUsFragment;
 import com.example.ravi_gupta.slider.Fragment.FAQFragment;
 import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
@@ -97,14 +99,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
         CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
-        IncomingSmsFragment.OnFragmentInteractionListener{
+        IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
     public boolean updateUserInfoProfileEditFragment = false;
     public boolean addedToList = false;
     public DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    public ListView mDrawerList;
     public ActionBarDrawerToggle mDrawerToggle;
     public int FRAGMENT_CODE = 0;
     private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
@@ -117,6 +119,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public TextView tv;
     public String OTP;
     public boolean enableEditText = true;
+    public String actionbarTitle = "DRUGCORNER";
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -139,6 +142,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.v("Notifications", getIntent().getAction().equals("OpenNotificationFragment") + "Hello");
+        getSupportActionBar().hide();
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -205,9 +209,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // Recycle the typed array
         navMenuIcons.recycle();
 
-        SpannableString s = new SpannableString("Drug Corner");
-        s.setSpan(new TypefaceSpan(this, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString s = new SpannableString(actionbarTitle);
+        s.setSpan(new TypefaceSpan(this, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
         mTitle = mDrawerTitle = s.toString();
@@ -221,6 +226,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getSupportActionBar().setCustomView(R.layout.actionbar_layout);
         //getSupportActionBar().setTitle(Html.fromHtml("<font color='#999999'>DrugCorner </font>"));
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -492,7 +499,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shopListview :
                 Fragment newFragment1 = new SendOrderFragment();
-                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
                 ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
                 ft.commit();
@@ -718,6 +725,26 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 bundle5.putString("fragment","repeatOrder");
                 frag11.setArguments(bundle5);
                 ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_confirm_order_button1:
+                OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
+                        findFragmentByTag(OrderStatusFragment.TAG);
+                if (frag12 == null) {
+                    frag12 = OrderStatusFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag12, OrderStatusFragment.TAG);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_landmark_button1:
+                ConfirmOrderFragment frag13 = (ConfirmOrderFragment) getSupportFragmentManager().
+                        findFragmentByTag(ConfirmOrderFragment.TAG);
+                if (frag13 == null) {
+                    frag13 = ConfirmOrderFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag13, ConfirmOrderFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
         }

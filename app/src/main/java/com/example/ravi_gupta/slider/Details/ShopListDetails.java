@@ -1,7 +1,5 @@
 package com.example.ravi_gupta.slider.Details;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by Ravi-Gupta on 7/2/2015.
  */
@@ -13,14 +11,14 @@ public class ShopListDetails {
     public int deliveryTime;
     public int orderFulfilment;
     public boolean Isopen;
-    public Drawable icon;
+    //public Drawable icon;
 
 
     public ShopListDetails() {
         super();
     }
 
-    public ShopListDetails(String shopName, int discount, String address, boolean Isopen, boolean Isreturn, int deliveryTime, int orderFulfilment, Drawable icon) {
+    public ShopListDetails(String shopName, int discount, String address, boolean Isopen, boolean Isreturn, int deliveryTime, int orderFulfilment) {
         this.shopName = shopName;
         this.discount = discount;
         this.address = address;
@@ -28,6 +26,6 @@ public class ShopListDetails {
         this.Isreturn = Isreturn;
         this.deliveryTime = deliveryTime;
         this.orderFulfilment = orderFulfilment;
-        this.icon = icon;
+        //this.icon = icon;
     }
 }

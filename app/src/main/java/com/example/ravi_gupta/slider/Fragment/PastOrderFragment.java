@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +71,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_past_order, container, false);
-        fragment = getArguments().getString("fragment");
+       // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
@@ -105,8 +104,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
-                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
-                ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             }
@@ -162,8 +159,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().hide();
-        disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
@@ -173,10 +168,8 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
                     if(!fragment.equals("repeatOrder")) {
-                        ((ActionBarActivity) getActivity()).getSupportActionBar().show();
                         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     }
                     return true;

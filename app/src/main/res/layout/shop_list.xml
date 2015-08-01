@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#f9f9f7"
+    android:layout_height="match_parent" android:background="#fff"
     android:paddingTop="5dp" android:paddingBottom="5dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
         android:paddingTop="13dp"
         android:layout_gravity="top"
         android:gravity="top">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:src="@mipmap/dc_logo6"
-            android:id="@+id/shop_list_imageview1"
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/icon_color_one"
+            android:id="@+id/shop_list_textview7"
             android:layout_gravity="top"
+            android:text="A"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:textSize="20sp"
             android:scaleType="fitStart"/>
 
     </LinearLayout>
@@ -26,7 +30,7 @@
 
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="15dp"
         android:paddingRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,17 +49,35 @@
             android:textColor="#555"
             android:id="@+id/shop_list_textview1"
             android:text="Apollo Pharmacy"
-            android:layout_weight="1.5"/>
+            android:layout_weight="1.5" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:id="@+id/shop_list_textview2"
-            android:text="-7%"
-            android:textColor="#999"
+            android:orientation="horizontal"
             android:layout_weight="0.5"
-            android:gravity="right"/>
+            android:layout_gravity="right"
+            android:gravity="right">
+
+           <!-- <ImageView
+                android:layout_width="17dp"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/dc_discount2"
+                android:layout_gravity="center"
+                android:scaleType="fitStart"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:id="@+id/shop_list_textview2"
+                android:text="7%"
+                android:layout_marginTop="0dp"
+                android:padding="3dp"
+                android:background="@drawable/circular_text_view"
+                android:textColor="#FFF" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -72,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/shop_list_textview4"
@@ -87,28 +110,29 @@
 
 
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/shop_list_textview6"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order Fulfilment 36%"
-            android:textSize="13sp"
-            android:textColor="#AAA"
-            android:layout_weight="1"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
 
-        <TextView
-            android:id="@+id/shop_list_textview5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Return"
-            android:textSize="12sp"
-            android:gravity="right"/>
+            <TextView
+                android:id="@+id/shop_list_textview6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Order Fulfilment 36%"
+                android:textSize="13sp"
+                android:textColor="#AAA"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/shop_list_textview5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Return"
+                android:textSize="12sp"
+                android:gravity="right"/>
 
 
     </LinearLayout>

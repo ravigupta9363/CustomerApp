@@ -5,11 +5,15 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -61,9 +65,10 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
-        SpannableString s = new SpannableString("Send Prescription");
-        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString s = new SpannableString("SEND PRESCRIPTION");
+        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new RelativeSizeSpan(0.9f),0,17, 0);
         android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
         actionBar.setTitle(s);
     }
@@ -77,6 +82,24 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_send_order, container, false);
         mainActivity.enableEditText = false;
 
+        //Setting Drawable small
+        Drawable drawablePrescription = getResources().getDrawable(R.mipmap.dc_prescription);
+        drawablePrescription.setBounds(0, 0, (int) (drawablePrescription.getIntrinsicWidth() * 0.7),
+                (int) (drawablePrescription.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd1 = new ScaleDrawable(drawablePrescription, 0, 1f, 1f);
+
+        Drawable drawableRepeatOrder = getResources().getDrawable(R.mipmap.dc_repeat_order);
+        drawableRepeatOrder.setBounds(0, 0, (int) (drawableRepeatOrder.getIntrinsicWidth() * 0.7),
+                (int) (drawableRepeatOrder.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd2 = new ScaleDrawable(drawableRepeatOrder, 0, 1f, 1f);
+
+        Drawable drawableCallUs = getResources().getDrawable(R.mipmap.dc_nav_contact);
+        drawableCallUs.setBounds(0, 0, (int) (drawableCallUs.getIntrinsicWidth() * 0.7),
+                (int) (drawableCallUs.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);
+
+
+
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Lato-Regular.ttf");
@@ -85,9 +108,13 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         Button repeatOrderButton = (Button) rootview.findViewById(R.id.fragment_send_order_button2);
         Button callUsButton = (Button) rootview.findViewById(R.id.fragment_send_order_button3);
 
-        sendPrescriptionButton.setTypeface(typeface);
-        repeatOrderButton.setTypeface(typeface);
-        callUsButton.setTypeface(typeface);
+        sendPrescriptionButton.setTypeface(typeface2);
+        repeatOrderButton.setTypeface(typeface2);
+        callUsButton.setTypeface(typeface2);
+
+        sendPrescriptionButton.setCompoundDrawables(sd1.getDrawable(), null, null, null);
+        repeatOrderButton.setCompoundDrawables(sd2.getDrawable(), null, null, null);
+        callUsButton.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
         sendPrescriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,16 +201,48 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         Log.v("Pressed State", "Attached");
+        new AsyncCaller().execute();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        SpannableString s = new SpannableString("Drug Corner");
+        SpannableString s = new SpannableString(mainActivity.actionbarTitle);
         mainActivity.enableEditText = true;
-        s.setSpan(new TypefaceSpan(mainActivity, "gothic.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
         android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
         actionBar.setTitle(s);
+    }
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //this method will be running on UI thread
+
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.v("loop","Loop Start");
+            for (int i = 0; i<=1000000000; i++){
+
+            }
+            Log.v("loop","Loop C0mpleted");
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //this method will be running on UI thread
+        }
+
     }
 }
