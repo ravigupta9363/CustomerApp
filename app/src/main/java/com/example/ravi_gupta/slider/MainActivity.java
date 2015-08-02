@@ -292,7 +292,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         switch (position) {
 
             case 0:
-                mDrawerLayout.closeDrawer(mDrawerList);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -301,17 +300,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                                 .commitAllowingStateLoss();
                     }
                 },250);
+                mDrawerLayout.closeDrawer(mDrawerList);
                 break;
             case 1:
                 mDrawerLayout.closeDrawer(mDrawerList);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
-                                .commitAllowingStateLoss();
-                    }
-                },250);
+                if(databaseHelper.getPresciptionCount() > 0) {
+                    showOpenPastOrderAlert();
+                }
+                else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
+                                    .commitAllowingStateLoss();
+                        }
+                    }, 250);
+                }
                 break;
             case 2:
                 mDrawerLayout.closeDrawer(mDrawerList);
@@ -718,16 +723,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 break;
 
             case R.id.fragment_send_order_button2:
-                PastOrderFragment frag11 = (PastOrderFragment) getSupportFragmentManager().
-                        findFragmentByTag(PastOrderFragment.TAG);
-                if (frag11 == null) {
-                    frag11 = PastOrderFragment.newInstance();
+                if(databaseHelper.getPresciptionCount() > 0) {
+                    showOpenPastOrderAlert();
                 }
-                Bundle bundle5 = new Bundle();
-                bundle5.putString("fragment","repeatOrder");
-                frag11.setArguments(bundle5);
-                ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
+                else {
+                    PastOrderFragment frag11 = (PastOrderFragment) getSupportFragmentManager().
+                            findFragmentByTag(PastOrderFragment.TAG);
+                    if (frag11 == null) {
+                        frag11 = PastOrderFragment.newInstance();
+                    }
+                    Bundle bundle5 = new Bundle();
+                    bundle5.putString("fragment", "repeatOrder");
+                    frag11.setArguments(bundle5);
+                    ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                }
                 break;
 
             case R.id.fragment_confirm_order_button1:
@@ -970,6 +980,39 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         getSupportFragmentManager().popBackStack();
+                        databaseHelper.deleteAllPrescription();
+                        String cartItems = databaseHelper.getPresciptionCount() + "";
+                        mainFragment.cartItems.setText(cartItems);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public void showOpenPastOrderAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                this);
+        alertDialog.setTitle("Order Confirmation");
+        alertDialog.setMessage("Discard Prescription?");
+        alertDialog.setPositiveButton("Discard",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        PastOrderFragment frag = (PastOrderFragment) getSupportFragmentManager().
+                                findFragmentByTag(PastOrderFragment.TAG);
+                        if (frag == null) {
+                            frag = PastOrderFragment.newInstance();
+                        }
+                        Bundle bundle5 = new Bundle();
+                        bundle5.putString("fragment", "repeatOrder");
+                        frag.setArguments(bundle5);
+                        ft.replace(R.id.fragment_main_container, frag, PastOrderFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
                         mainFragment.cartItems.setText(cartItems);

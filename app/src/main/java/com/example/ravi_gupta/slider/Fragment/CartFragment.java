@@ -6,8 +6,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +70,16 @@ public class CartFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
+        Log.v("camera", " Count = " + databaseHelper.getPresciptionCount());
+        List<PrescriptionDetail> contacts = databaseHelper.getAllPrescription();
+        for (PrescriptionDetail cn : contacts) {
+            String log = "Id: "+ cn.getID() +" Name: " + cn.getImageUri() + " ,Phone: " +
+                    cn.getThumbnailUri();
+            prescriptionDetails.add(new PrescriptionDetail(cn.getID(),cn.getImageUri(),cn.getThumbnailUri()));
+            // Writing Contacts to log
+            Log.v("camera ", log);
+        }
     }
 
     @Override
@@ -98,7 +104,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                 mainActivity.onBackPressed();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
@@ -116,15 +121,7 @@ public class CartFragment extends android.support.v4.app.Fragment {
         //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
         //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
         //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        Log.v("camera", " Count = " + databaseHelper.getPresciptionCount());
-        List<PrescriptionDetail> contacts = databaseHelper.getAllPrescription();
-        for (PrescriptionDetail cn : contacts) {
-            String log = "Id: "+ cn.getID() +" Name: " + cn.getImageUri() + " ,Phone: " +
-                    cn.getThumbnailUri();
-            prescriptionDetails.add(new PrescriptionDetail(cn.getID(),cn.getImageUri(),cn.getThumbnailUri()));
-            // Writing Contacts to log
-            Log.v("camera ", log);
-        }
+
         //addNewPrescription();
         //if(this.imagePath!=null)
             //prescriptionDetails.add(new PrescriptionDetail(this.imagePath,this.thumbnail));
@@ -190,7 +187,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
                     mainActivity.onBackPressed();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
@@ -212,26 +208,5 @@ public class CartFragment extends android.support.v4.app.Fragment {
 
     }
 
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
-    }
+
 }

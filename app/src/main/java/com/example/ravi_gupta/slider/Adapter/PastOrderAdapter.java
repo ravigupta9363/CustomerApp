@@ -89,6 +89,8 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.price.setText(String.valueOf(pastOrdersDetail.price)+"/-");
         holder.address.setText(pastOrdersDetail.address);
         holder.prescription.setImageDrawable(pastOrdersDetail.drawable);
+        if(pastOrdersDetail.isDelivered)
+            holder.cancel.setVisibility(View.GONE);
 
         holder.reorder.setOnClickListener(new View.OnClickListener() {
             @Override

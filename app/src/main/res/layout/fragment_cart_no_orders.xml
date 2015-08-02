@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.CartNoOrdersFragment"
-    android:background="@drawable/dc_background">
+    android:background="#f9f9f7">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_back_button"
-            android:background="@drawable/button_style" />
+            android:background="@drawable/ripple_button" />
         <!-- </RelativeLayout>-->
 
         <TextView
@@ -51,9 +51,24 @@
        android:text="Add Prescription First"
        android:textAlignment="gravity"
        android:layout_centerHorizontal="true"
-       android:layout_marginTop="150dp"
-       android:textSize="18sp"
-       android:textColor="#36B666"
+       android:layout_marginTop="120dp"
+       android:gravity="center|top"
+       android:textSize="25sp"
+       android:textColor="#555"
        android:id="@+id/fragment_cart_no_orders_textview1"/>
+
+    <TextView
+        android:layout_below="@+id/fragment_cart_no_orders_textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Prescription First"
+        android:textAlignment="gravity"
+        android:padding="20dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center|top"
+        android:textSize="15sp"
+        android:textColor="#555"
+        android:id="@+id/fragment_cart_no_orders_textview3"/>
+
 
 </RelativeLayout>

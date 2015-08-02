@@ -66,10 +66,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
 
         String address= "36, Galli No 2, U Block, DLF Phase 3, Sector 24, Gurgaon, Haryana";
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016", "02:25 PM", "DC1245", 320, address, getResources().getDrawable(R.drawable.prescrption_image)));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),false));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),true));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),true));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016", "02:25 PM", "DC1245", 320, address, getResources().getDrawable(R.drawable.prescrption_image),true));
 
     }
 
@@ -88,9 +88,9 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
-                PastOrdersDetail pastOrdersDetail =(PastOrdersDetail) mListview.getItemAtPosition(position);
+              //  PastOrdersDetail pastOrdersDetail =(PastOrdersDetail) mListview.getItemAtPosition(position);
                 //Log.v("Listview1", "Shop Name = " + shopListDetails.shopName + "");
-                mainActivity.replaceFragment(R.id.fragment_past_order_listview1, pastOrdersDetail);
+               // mainActivity.replaceFragment(R.id.fragment_past_order_listview1, pastOrdersDetail);
 
             }
         });

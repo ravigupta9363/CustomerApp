@@ -121,16 +121,13 @@
             android:paddingLeft="20dp"
             android:id="@+id/past_order_layout_textview5"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_gravity="right"
-            android:gravity="right">
+            android:layout_marginTop="15dp">
 
             <Button
-                android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:text="Cancel"
@@ -141,23 +138,25 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="left|center"
                 android:id="@+id/past_order_layout_button1"
-                android:textColor="#36B666"/>
+                android:textColor="#36B666"
+                android:focusable="false"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_weight="0.5"
             android:text="Reorder"
-            android:layout_gravity="end"
             android:background="@drawable/button_style"
             android:paddingLeft="20dp"
             android:paddingRight="5dp"
             android:layout_marginBottom="10dp"
             android:gravity="center|right"
             android:id="@+id/past_order_layout_button2"
-            android:textColor="#36B666"/>
+            android:textColor="#36B666"
+            android:focusable="false"
+            android:layout_gravity="right"
+            android:layout_alignParentRight="true"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

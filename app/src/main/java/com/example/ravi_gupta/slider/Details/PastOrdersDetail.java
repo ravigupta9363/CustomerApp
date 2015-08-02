@@ -13,6 +13,7 @@ public class PastOrdersDetail {
     public int price;
     public String address;
     public Drawable drawable;
+    public boolean isDelivered;
 
     public PastOrdersDetail() {
         super();
@@ -22,12 +23,14 @@ public class PastOrdersDetail {
             String time,
             String orderId,
             int price,
-            String address,Drawable drawable){
+            String address,Drawable drawable,
+            boolean isDelivered){
         this.date = date;
         this.time = time;
         this.orderId = orderId;
         this.price = price;
         this.address = address;
         this.drawable = drawable;
+        this.isDelivered = isDelivered;
     }
 }

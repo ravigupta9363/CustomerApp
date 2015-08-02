@@ -2,12 +2,19 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,8 +27,6 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
-
-import java.lang.reflect.Field;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,9 +74,11 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_cart_no_orders, container, false);
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
+        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
         TextView text = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview1);
+        TextView text2 = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview3);
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview2);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_cart_no_orders_imagebutton1);
         //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
@@ -79,16 +86,42 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         mainActivity.showStatusNotification();
         mainActivity.showImageNotification();
 
-        text.setTypeface(typeface);
         toolbarTitle.setTypeface(typeface2);
         //toolbarButton.setTypeface(typeface);
+
+        SpannableString ss = new SpannableString("What are you waiting for \n To add prescription click here or call us and enjoy the day!!");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                mainActivity.onBackPressed();
+            }
+
+            public void updateDrawState(TextPaint ds) {// override updateDrawState
+                ds.setUnderlineText(false); // set to false to remove underline
+            }
+        };
+        ss.setSpan(clickableSpan, 47, 57, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(54, 182, 102));
+
+        //http://stackoverflow.com/questions/4897349/android-coloring-part-of-a-string-using-textview-settext
+        //http://stackoverflow.com/questions/10696986/how-to-set-the-part-of-the-text-view-is-clickable
+        // Set the text color for first 4 characters
+        ss.setSpan(fcs, 47, 57, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+
+        String string1 = "<p>No Prescription Yet?</p>";
+        String string2 = "";
+        text.setText((Html.fromHtml(string1)));
+        text2.setText(ss);
+        text2.setMovementMethod(LinkMovementMethod.getInstance());
+        text.setTypeface(typeface4);
+        text2.setTypeface(typeface1);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
                 Log.v("hello", "Back Button");
             }
         });
@@ -154,7 +187,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    disableShowHideAnimation(((ActionBarActivity) getActivity()).getSupportActionBar());
+                    mainActivity.onBackPressed();
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
                     return true;
@@ -164,34 +197,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
-    }
-
-
-
-
-
-    @Override
+        @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         MenuItem item = menu.findItem(R.id.cart);
