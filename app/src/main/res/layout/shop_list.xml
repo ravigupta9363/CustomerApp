@@ -59,11 +59,11 @@
             android:layout_gravity="right"
             android:gravity="right">
 
-           <!-- <ImageView
-                android:layout_width="17dp"
+           <!--<TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/dc_discount2"
                 android:layout_gravity="center"
+                android:paddingRight="7dp"
                 android:scaleType="fitStart"/>-->
 
             <TextView

@@ -76,7 +76,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
 
 
         if(shopListDetails.Isopen && shopListDetails.Isreturn){
-            holder.isReturn.setText("Return 5 days");
+            holder.isReturn.setText("30 days return");
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
         }
         else if(shopListDetails.Isopen && !shopListDetails.Isreturn) {

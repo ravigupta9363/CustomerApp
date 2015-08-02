@@ -29,7 +29,8 @@
             android:src="@mipmap/dc_menu"
             android:layout_gravity="left"
             android:layout_alignParentLeft="true"
-            android:background="@android:color/transparent" />
+            android:background="@drawable/ripple_button"
+            android:paddingLeft="5dp"/>
         <!-- </RelativeLayout>-->
 
         <TextView
@@ -60,7 +61,7 @@
                 android:minHeight="20dp"
                 android:src="@mipmap/dc_bag"
                 android:gravity="center|right"
-                android:background="@android:color/transparent"
+                android:background="@drawable/ripple_button"
                 android:padding="2dp"/> />
 
             <!-- Badge Count -->

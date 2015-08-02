@@ -120,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String OTP;
     public boolean enableEditText = true;
     public String actionbarTitle = "DRUGCORNER";
+    MainFragment mainFragment;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -499,6 +500,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case R.id.shopListview :
                 Fragment newFragment1 = new SendOrderFragment();
+                mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                 ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
                 ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
@@ -619,7 +621,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri));
                 prescriptionId++;
                 String cartItems = databaseHelper.getPresciptionCount()+"";
-                tv.setText(cartItems);
+                mainFragment.cartItems.setText(cartItems);
                 Log.v("camera", databaseHelper.getPresciptionCount() + "");
                 break;
 
@@ -657,7 +659,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri1));
                 prescriptionId++;
                 String cartItem = databaseHelper.getPresciptionCount()+"";
-                tv.setText(cartItem);
+                mainFragment.cartItems.setText(cartItem);
                 break;
 
             case R.id.nextButton :
@@ -796,9 +798,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -973,7 +972,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         getSupportFragmentManager().popBackStack();
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
-                        tv.setText(cartItems);
+                        mainFragment.cartItems.setText(cartItems);
                     }
                 });
         alertDialog.setNegativeButton("Cancel",

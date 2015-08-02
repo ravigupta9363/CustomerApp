@@ -29,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
+import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.LocationAddress;
 import com.example.ravi_gupta.slider.MainActivity;
@@ -66,10 +67,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton menuButton;
     ImageButton cartButton;
     TextView toolbarTitle;
-    TextView cartItems;
+    public TextView cartItems;
     boolean isItemClickable;
     MainActivity mainActivity;
+    String cartNumber;
     public static String TAG = "MainFragment";
+    DatabaseHelper databaseHelper;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -91,6 +94,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseHelper = new DatabaseHelper(getActivity());
     }
 
     @Override
@@ -132,6 +136,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
 
         toolbarTitle.setTypeface(typeface2);
+        String cartItem = databaseHelper.getPresciptionCount()+"";
 
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
