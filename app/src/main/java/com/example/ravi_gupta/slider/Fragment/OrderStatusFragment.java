@@ -83,9 +83,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_order_status, container, false);
 
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         date = (TextView) rootview.findViewById(R.id.fragment_order_status_textview1);
         time = (TextView) rootview.findViewById(R.id.fragment_order_status_textview2);
@@ -102,7 +103,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         date.setTypeface(typeface2);
         time.setTypeface(typeface2);
         orderId.setTypeface(typeface2);
-        orderStatusText.setTypeface(typeface1);
+        orderStatusText.setTypeface(typeface2);
         subTotalText.setTypeface(typeface2);
         serviceChargesText.setTypeface(typeface2);
         totalText.setTypeface(typeface2);
@@ -112,7 +113,9 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_order_status_textview11);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_order_status_imagebutton1);
+        TextView realTimeSystemText = (TextView)rootview.findViewById(R.id.fragment_order_status_textview12);
         toolbarTitle.setTypeface(typeface1);
+        realTimeSystemText.setTypeface(typeface4);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override

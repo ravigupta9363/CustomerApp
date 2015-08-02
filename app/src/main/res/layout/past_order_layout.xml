@@ -2,28 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="#f9f9f7"
-    android:paddingRight="10dp" android:paddingTop="25dp" android:paddingBottom="5dp">
+    android:paddingRight="10dp" android:paddingTop="25dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="top"
         android:layout_gravity="top">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:src="@mipmap/dc_logo"
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/prescrption_image"
+            android:id="@+id/past_order_layout_imageview1"
             android:layout_gravity="top"
-            android:paddingLeft="7dp"
+            android:paddingLeft="15dp"
             android:scaleType="fitStart"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <LinearLayout
@@ -114,24 +116,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="address"
+            android:visibility="gone"
             android:textColor="#AAA"
             android:paddingLeft="20dp"
             android:id="@+id/past_order_layout_textview5"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="right"
+            android:gravity="right">
+
+            <Button
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Cancel"
+                android:layout_gravity="left"
+                android:background="@drawable/button_style"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="left|center"
+                android:id="@+id/past_order_layout_button1"
+                android:textColor="#36B666"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_weight="0.5"
             android:text="Reorder"
-            android:layout_gravity="right"
-            android:background="@drawable/round_button"
+            android:layout_gravity="end"
+            android:background="@drawable/button_style"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textStyle="bold"
+            android:paddingRight="5dp"
             android:layout_marginBottom="10dp"
-            android:gravity="right|center"
-            android:id="@+id/past_order_layout_textview6"
-            android:textColor="#FFF"/>
+            android:gravity="center|right"
+            android:id="@+id/past_order_layout_button2"
+            android:textColor="#36B666"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

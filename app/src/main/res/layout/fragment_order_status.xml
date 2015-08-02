@@ -23,7 +23,7 @@
              android:layout_width="wrap_content"
              android:layout_height="match_parent"
              android:src="@mipmap/dc_back_button"
-             android:background="@drawable/button_style" />
+             android:background="@drawable/ripple_button" />
          <!-- </RelativeLayout>-->
 
          <TextView
@@ -54,7 +54,7 @@
 
      <LinearLayout
          android:layout_width="match_parent"
-         android:layout_height="wrap_content"
+         android:layout_height="match_parent"
          android:orientation="vertical"
          android:paddingRight="10dp"
          android:background="#f9f9f7">
@@ -134,9 +134,9 @@
 
          <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="130dp"
+            android:layout_height="175dp"
             android:src="@drawable/packing"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="30dp"
             android:id="@+id/fragment_order_status_imageview1"/>
 
          <View
@@ -144,15 +144,16 @@
              android:layout_height="1dp"
              android:background="#EEE"
              android:id="@+id/view2"
-             android:paddingLeft="10dp"/>
+             android:paddingLeft="10dp"
+             android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="List is been Preparing"
+            android:text="Ready for Delivery"
             android:gravity="center"
             android:id="@+id/fragment_order_status_textview4"
-            android:padding="10dp"
+            android:padding="20dp"
             android:textColor="#36B666"
             android:textSize="15sp"/>
 
@@ -163,12 +164,23 @@
              android:id="@+id/view3"
              android:paddingLeft="10dp"/>
 
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:text="Real time tracking coming soon"
+             android:textSize="35sp"
+             android:layout_gravity="center"
+             android:textColor="#555"
+             android:gravity="center"
+             android:id="@+id/fragment_order_status_textview12"/>
+
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="7dp"
            android:layout_marginBottom="3dp"
-           android:paddingLeft="10dp">
+           android:paddingLeft="10dp"
+           android:visibility="gone">
 
            <TextView
                android:layout_width="wrap_content"
@@ -189,7 +201,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -213,7 +226,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="5dp"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -236,9 +250,12 @@
             android:id="@+id/fragment_order_status_viewPager1"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_marginTop="2dp">
+            android:layout_marginTop="2dp"
+            android:visibility="gone">
 
         </android.support.v4.view.ViewPager>
+
+
 
      </LinearLayout>
 

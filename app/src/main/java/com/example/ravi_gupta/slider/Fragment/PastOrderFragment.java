@@ -64,6 +64,13 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String address= "36, Galli No 2, U Block, DLF Phase 3, Sector 24, Gurgaon, Haryana";
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image)));
+        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016", "02:25 PM", "DC1245", 320, address, getResources().getDrawable(R.drawable.prescrption_image)));
+
     }
 
     @Override
@@ -77,14 +84,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
         mListview = (ListView) rootview.findViewById(R.id.fragment_past_order_listview1);
-
-        String address= "36, Galli No 2, U Block, DLF Phase 3, Sector 24, Gurgaon, Haryana";
-
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Reorder"));
-
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -169,9 +168,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
                     mainActivity.onBackPressed();
-                    if(!fragment.equals("repeatOrder")) {
-                        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    }
+                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                   /* if(!fragment.equals("repeatOrder")) {
+
+                    }*/
                     return true;
                 }
                 return false;

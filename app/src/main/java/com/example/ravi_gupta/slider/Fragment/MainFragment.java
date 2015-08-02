@@ -126,6 +126,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
         disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
         menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
+        cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
         cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
         disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
@@ -136,6 +137,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.mDrawerLayout.openDrawer(mainActivity.mDrawerList);
+            }
+        });
+
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.fragment_main_imagebutton2,null);
             }
         });
 

@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
+import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
     Context context;
     int resource;
     ArrayList<PastOrdersDetail> pastOrdersDetails = new ArrayList<PastOrdersDetail>();
+    MainActivity mainActivity;
 
     public PastOrderAdapter(Context context, int resource, ArrayList<PastOrdersDetail> pastOrdersDetails) {
         super(context, resource,pastOrdersDetails);
@@ -31,17 +35,20 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
     }
 
     static class PastOrderHolder {
+        ImageButton prescription;
         TextView orderId;
         TextView date;
         TextView time;
         TextView price;
         TextView address;
-        Button status;
+        Button reorder;
+        Button cancel;
     }
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View row = convertView;
+        mainActivity = (MainActivity) getContext();
         PastOrderHolder holder = null;
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
@@ -56,7 +63,10 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             holder.orderId = (TextView)row.findViewById(R.id.past_order_layout_textview3);
             holder.price = (TextView)row.findViewById(R.id.past_order_layout_textview4);
             holder.address = (TextView)row.findViewById(R.id.past_order_layout_textview5);
-            holder.status = (Button)row.findViewById(R.id.past_order_layout_textview6);
+            holder.reorder = (Button)row.findViewById(R.id.past_order_layout_button2);
+            holder.cancel = (Button)row.findViewById(R.id.past_order_layout_button1);
+            holder.prescription = (ImageButton)row.findViewById(R.id.past_order_layout_imageview1);
+
             row.setTag(holder);
         }
         else {
@@ -72,13 +82,35 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.address.setTypeface(typeface2);
         //holder.status.setTypeface(typeface2);
 
-        PastOrdersDetail pastOrdersDetail = pastOrdersDetails.get(position);
+        final PastOrdersDetail pastOrdersDetail = pastOrdersDetails.get(position);
         holder.date.setText(pastOrdersDetail.date);
         holder.time.setText(pastOrdersDetail.time);
         holder.orderId.setText(pastOrdersDetail.orderId);
         holder.price.setText(String.valueOf(pastOrdersDetail.price)+"/-");
         holder.address.setText(pastOrdersDetail.address);
-        holder.status.setText(pastOrdersDetail.status);
+        holder.prescription.setImageDrawable(pastOrdersDetail.drawable);
+
+        holder.reorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.past_order_layout_button2, null);//Open OTP if data is entered
+            }
+        });
+
+        holder.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.past_order_layout_button1,null);//Open Status
+            }
+        });
+
+        holder.prescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.past_order_layout_imageview1,null);//Open Dialog
+                Toast.makeText(getContext(),"Image Dialog will appear",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return row;
     }

@@ -1,5 +1,7 @@
 package com.example.ravi_gupta.slider.Details;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by Ravi-Gupta on 7/13/2015.
  */
@@ -10,7 +12,7 @@ public class PastOrdersDetail {
     public String orderId;
     public int price;
     public String address;
-    public String status;
+    public Drawable drawable;
 
     public PastOrdersDetail() {
         super();
@@ -20,13 +22,12 @@ public class PastOrdersDetail {
             String time,
             String orderId,
             int price,
-            String address,
-            String status){
+            String address,Drawable drawable){
         this.date = date;
         this.time = time;
         this.orderId = orderId;
         this.price = price;
         this.address = address;
-        this.status = status;
+        this.drawable = drawable;
     }
 }

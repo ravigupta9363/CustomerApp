@@ -3,11 +3,12 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -89,8 +89,23 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         View rootview =  inflater.inflate(R.layout.fragment_profile, container, false);
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
+        Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
+        drawableProfile.setBounds(0, 0, (int) (drawableProfile.getIntrinsicWidth() * 0.7),
+                (int) (drawableProfile.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd1 = new ScaleDrawable(drawableProfile, 0, 1f, 1f);
+
+        Drawable drawableEmail = getResources().getDrawable(R.mipmap.dc_about);
+        drawableEmail.setBounds(0, 0, (int) (drawableEmail.getIntrinsicWidth() * 0.7),
+                (int) (drawableEmail.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd2 = new ScaleDrawable(drawableEmail, 0, 1f, 1f);
+
+        Drawable drawablePhone = getResources().getDrawable(R.mipmap.dc_nav_contact);
+        drawablePhone.setBounds(0, 0, (int) (drawablePhone.getIntrinsicWidth() * 0.7),
+                (int) (drawablePhone.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd3 = new ScaleDrawable(drawablePhone, 0, 1f, 1f);
 
         customerName = (TextView)rootview.findViewById(R.id.fragment_profile_textview1);
         customerEmail = (TextView)rootview.findViewById(R.id.fragment_profile_textview2);
@@ -100,6 +115,10 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         customerName.setTypeface(typeface2);
         customerEmail.setTypeface(typeface2);
         customerPhone.setTypeface(typeface2);
+
+        customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
+        customerEmail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
+        customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
         ProfileDetail profileDetail = profileDatabase.getProfile();
 
@@ -242,29 +261,6 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
-    }
-
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
     }
 
 }

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_back_button"
-            android:background="@drawable/button_style" />
+            android:background="@drawable/ripple_button" />
         <!-- </RelativeLayout>-->
 
         <TextView
@@ -32,7 +32,7 @@
             android:id="@+id/fragment_about_us_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="DrugCorner  version 1.0.0" />
+            android:text="Drugcorner  version 1.0.0" />
 
 
     </android.support.v7.widget.Toolbar>

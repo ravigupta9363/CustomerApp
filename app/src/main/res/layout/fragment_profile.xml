@@ -14,7 +14,15 @@
         android:background="?attr/colorPrimary"
         android:elevation="0dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:contentInsetStart="0dp">
+
+       <!-- <com.andexert.library.RippleView
+            android:id="@+id/more"
+            android:layout_width="?android:actionBarSize"
+            android:layout_height="?android:actionBarSize"
+            android:layout_toLeftOf="@+id/more2"
+            rv_centered="true">-->
 
         <ImageButton
             android:paddingRight="4dp"
@@ -22,8 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_back_button"
-            android:background="@drawable/button_style" />
-        <!-- </RelativeLayout>-->
+            android:background="@drawable/ripple_button" />
+
+       <!-- </com.andexert.library.RippleView>-->
 
         <TextView
             android:padding="2dp"
