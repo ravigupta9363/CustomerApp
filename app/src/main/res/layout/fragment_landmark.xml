@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.LandmarkFragment"
-    android:background="@drawable/dc_background">
+    android:background="#f9f9f7">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_back_button"
-            android:background="@drawable/button_style" />
+            android:background="@drawable/ripple_button" />
         <!-- </RelativeLayout>-->
 
         <TextView
@@ -59,35 +59,55 @@
         android:orientation="vertical"
         android:paddingRight="15dp" android:paddingTop="20dp">
 
-   <TextView
+  <!-- <TextView
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="Flat Number"
-       android:id="@+id/fragment_landmark_textview1"/>
+       android:id="@+id/fragment_landmark_textview1"/>-->
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:id="@+id/fragment_landmark_edittext1"
-        android:textSize="14sp"
-        android:layout_marginBottom="20dp"
-        android:drawableLeft="@mipmap/dc_flat"/>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_landmark_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp">
 
-    <TextView
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_landmark_edittext1"
+                android:textSize="14sp"
+                android:layout_marginBottom="0dp"
+                android:maxLines="1"
+                android:hint="Flat Number"
+                android:ellipsize="end"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+   <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Landmark"
-        android:id="@+id/fragment_landmark_textview2"/>
+        android:id="@+id/fragment_landmark_textview2"/>-->
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:textSize="14sp"
-        android:id="@+id/fragment_landmark_edittext2"
-        android:drawableLeft="@mipmap/dc_landmark"/>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_landmark_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/fragment_landmark_edittext2"
+                android:hint="Landmark"
+                android:maxLines="1"
+                android:singleLine="true"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <CheckBox
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:id="@+id/fragment_landmark_checkbox1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,6 +126,17 @@
         android:paddingRight="15dp"
         android:textAllCaps="false"
         android:id="@+id/fragment_landmark_button1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Just one more step to go !!"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:textColor="#333"
+            android:layout_gravity="center"
+            android:textSize="28sp"
+            android:id="@+id/fragment_landmark_textview4"/>
 
     </LinearLayout>
 

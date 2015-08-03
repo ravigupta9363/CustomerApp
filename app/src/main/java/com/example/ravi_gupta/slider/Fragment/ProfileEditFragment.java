@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -91,7 +90,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
-        Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
+        /*Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
         drawableProfile.setBounds(0, 0, (int) (drawableProfile.getIntrinsicWidth() * 0.7),
                 (int) (drawableProfile.getIntrinsicHeight() * 0.7));
         ScaleDrawable sd1 = new ScaleDrawable(drawableProfile, 0, 1f, 1f);
@@ -104,20 +103,26 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         Drawable drawablePhone = getResources().getDrawable(R.mipmap.dc_nav_contact);
         drawablePhone.setBounds(0, 0, (int) (drawablePhone.getIntrinsicWidth() * 0.7),
                 (int) (drawablePhone.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd3 = new ScaleDrawable(drawablePhone, 0, 1f, 1f);
+        ScaleDrawable sd3 = new ScaleDrawable(drawablePhone, 0, 1f, 1f);*/
 
         customerName = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext1);
         customerMail = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext2);
         customerPhone = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext3);
         saveButton = (Button) rootview.findViewById(R.id.fragment_profile_edit_button1);
+        final TextInputLayout nameLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_profile_edit_layout1);
+        final TextInputLayout mailLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_profile_edit_layout2);
+        final TextInputLayout phoneLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_profile_edit_layout3);
+        nameLayout.setErrorEnabled(true);
+        mailLayout.setErrorEnabled(true);
+        phoneLayout.setErrorEnabled(true);
 
         customerName.setTypeface(typeface2);
         customerMail.setTypeface(typeface2);
         customerPhone.setTypeface(typeface2);
 
-        customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
-        customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
-        customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
+        //customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
+        //customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
+        //customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
         ProfileDetail profileDetail = profileDatabase.getProfile();
 
@@ -158,7 +163,15 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 updatedMail = customerMail.getText().toString();
                 updatedPhone = customerPhone.getText().toString();
 
-                Log.v("profile",updatedName+updatedMail+updatedPhone);
+                if(updatedName.matches(""))
+                    nameLayout.setError("This field is mandotary");
+                if(updatedMail.matches(""))
+                    mailLayout.setError("This field is mandotary");
+                if(updatedPhone.matches(""))
+                    phoneLayout.setError("This field is mandotary");
+
+
+                Log.v("profile", updatedName + updatedMail + updatedPhone);
 
                 profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
 
@@ -171,10 +184,12 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
                 hiddenKeyboard(customerPhone);
-                if(fragment.equals("profileFragment"))
-                 mainActivity.onBackPressed();
-                else
-                    mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,null);
+                if(!updatedName.matches("") && !updatedMail.matches("") && !updatedPhone.matches("")) {
+                    if (fragment.equals("profileFragment"))
+                        mainActivity.onBackPressed();
+                    else
+                        mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, null);
+                }
 
 
                /* PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_NAME", updatedName).commit();

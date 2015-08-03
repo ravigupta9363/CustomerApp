@@ -168,7 +168,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:text="Real time tracking coming soon"
-             android:textSize="35sp"
+             android:textSize="25sp"
              android:layout_gravity="center"
              android:textColor="#555"
              android:gravity="center"

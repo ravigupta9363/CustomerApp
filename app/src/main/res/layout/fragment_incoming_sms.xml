@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@mipmap/dc_back_button"
-                android:background="@drawable/button_style" />
+                android:background="@drawable/ripple_button" />
 
 
             <TextView
@@ -45,13 +45,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fragment_incoming_sms_button1"
-                android:text="Next"
+                android:text="NEXT"
                 android:textAllCaps="false"
-                android:background="@drawable/button_style"
+                android:background="@drawable/ripple_button_rectangle"
                 android:textColor="#36B666"
-                android:textSize="18sp"
-                android:gravity="right|center"
-                android:layout_marginRight="10dp"
+                android:textSize="15sp"
+                android:gravity="center"
                 android:layout_gravity="right"
                 android:layout_weight="0.2"/>
 

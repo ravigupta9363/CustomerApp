@@ -2,9 +2,11 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -71,42 +74,61 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_landmark, container, false);
 
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
-        flatNumberTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview1);
-        landmarkTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview2);
+        //flatNumberTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview1);
+        //landmarkTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview2);
         flatNumberEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext1);
         landmarkEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext2);
         placeOrder = (Button) rootview.findViewById(R.id.fragment_landmark_button1);
         requestCallback = (CheckBox)rootview.findViewById(R.id.fragment_landmark_checkbox1);
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_landmark_textview3);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_landmark_imagebutton1);
+        TextView oneMoreStepText = (TextView)rootview.findViewById(R.id.fragment_landmark_textview4);
 
 
         //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
         toolbarTitle.setTypeface(typeface1);
+        oneMoreStepText.setTypeface(typeface4);
         //toolbarButton.setTypeface(typeface);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hiddenKeyboard(flatNumberEditText);
                 mainActivity.onBackPressed();
                 Log.v("hello", "Back Button");
             }
         });
 
-        flatNumberTextView.setTypeface(typeface2);
-        landmarkTextView.setTypeface(typeface2);
+        //flatNumberTextView.setTypeface(typeface2);
+        //landmarkTextView.setTypeface(typeface2);
         flatNumberEditText.setTypeface(typeface2);
         landmarkEditText.setTypeface(typeface2);
         requestCallback.setTypeface(typeface2);
 
+        final TextInputLayout FlatNumberLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout1);
+        final TextInputLayout LandmarkLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout2);
+        FlatNumberLayout.setErrorEnabled(true);
+        //FlatNumberLayout.setError("This field is mandotary");
+        LandmarkLayout.setErrorEnabled(true);
+
+       // http://www.truiton.com/2015/06/android-floating-label-edittext/
+
         placeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
+                hiddenKeyboard(flatNumberEditText);
+                //mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
+                if(flatNumberEditText.getText().toString().matches(""))
+                    FlatNumberLayout.setError("This field is mandotary");
+                if(landmarkEditText.getText().toString().matches(""))
+                    LandmarkLayout.setError("This field is mandotary");
+                if(!flatNumberEditText.getText().toString().matches("") && !landmarkEditText.getText().toString().matches(""))
+                    mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
             }
         });
 
@@ -118,6 +140,11 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    private void hiddenKeyboard(View v) {
+        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override
@@ -149,6 +176,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    hiddenKeyboard(flatNumberEditText);
                     // handle back button's click listener
                     mainActivity.onBackPressed();
                     return true;

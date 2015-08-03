@@ -148,15 +148,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
 
-        if(haveNetworkConnection()) {
+        //if(haveNetworkConnection()) {
             replaceFragment(R.layout.fragment_main, null);
-        }
+      /*  }
         else {
             //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
             getSupportActionBar().hide();
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }
+        }*/
         databaseHelper = new DatabaseHelper(this);
         profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
@@ -498,7 +498,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 if (frag1 == null) {
                     frag1 = MainFragment.newInstance();
                 }
-                ft.replace(R.id.container, frag1, MainFragment.TAG).addToBackStack(MainFragment.TAG);
+                ft.replace(R.id.container, frag1, MainFragment.TAG);
                 //getSupportActionBar().show();
                 ft.commitAllowingStateLoss();
                 break;
@@ -687,7 +687,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     if (frag7 == null) {
                         frag7 = IncomingSmsFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG);
+                    ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
                 }
                 break;
@@ -708,7 +708,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 if (frag9 == null) {
                     frag9 = IncomingSmsFragment.newInstance();
                 }
-                ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG);
+                ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 break;
 
@@ -718,7 +718,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 if (frag10 == null) {
                     frag10 = LandmarkFragment.newInstance();
                 }
-                ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG);
+                ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 break;
 
@@ -961,10 +961,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             super.onBackPressed();
         }
         else {
-            if(count == 2 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
+            if(count == 1 && sendOrderFragment != null && databaseHelper.getPresciptionCount() > 0) {
                 showSettingsAlert();
             } else {
                 getSupportFragmentManager().popBackStack();
+
             }
         }
 
