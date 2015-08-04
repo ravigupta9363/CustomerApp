@@ -44,7 +44,7 @@ public class LocationAddress {
                         result = sb.toString();
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "Unable connect to Geocoder", e);
+                    Log.e(TAG, "Unable to connect", e);
                 } finally {
                     Message message = Message.obtain();
                     message.setTarget(handler);
@@ -59,7 +59,7 @@ public class LocationAddress {
                         message.what = 1;
                         Bundle bundle = new Bundle();
                         result = //"Latitude: " + latitude + " Longitude: " + longitude +
-                                "Unable to get address for this lat-long.";
+                                "Tap to refresh your Address";
                         bundle.putString("address", result);
                         message.setData(bundle);
                     }

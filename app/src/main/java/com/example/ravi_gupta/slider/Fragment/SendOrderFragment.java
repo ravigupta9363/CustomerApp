@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -201,19 +202,28 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         Log.v("Pressed State", "Attached");
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.enableEditText = true;
+                    mainActivity.onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
         new AsyncCaller().execute();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        SpannableString s = new SpannableString(mainActivity.actionbarTitle);
-        mainActivity.enableEditText = true;
-        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
-        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setTitle(s);
+        //mainActivity.enableEditText = true;
     }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
@@ -227,11 +237,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         }
         @Override
         protected Void doInBackground(Void... params) {
-            Log.v("loop","Loop Start");
-            for (int i = 0; i<=1000000000; i++){
-
-            }
-            Log.v("loop","Loop C0mpleted");
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
 

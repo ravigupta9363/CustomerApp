@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,63 +94,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootview = inflater.inflate(R.layout.fragment_main, container, false);
-
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-
-        Drawable drawable = getResources().getDrawable(R.mipmap.dc_location);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.7),
-                (int) (drawable.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
-        //mainActivity.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        //mainActivity.getSupportActionBar().setCustomView(R.layout.actionbar_layout);
-
-
-        sliderItems = new int[]{R.drawable.small_slider3, R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
-        pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
-        viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
-        viewPager.setScrollDurationFactor(0.5);
-        viewPager.setPadding(40, 0, 40, 0);
-        viewPager.setClipToPadding(false);
-        viewPager.setPageMargin(10);
-        //http://stackoverflow.com/questions/7395655/set-default-page-for-viewpager-in-android
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(1, false);
-        viewPager.setScrollDurationFactor(3);
-        pageSwitcher(4);
-
-        disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
-        menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
-        cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
-        cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
-        toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
-        disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
-
-        toolbarTitle.setTypeface(typeface2);
-        String cartItem = databaseHelper.getPresciptionCount()+"";
-
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.mDrawerLayout.openDrawer(mainActivity.mDrawerList);
-            }
-        });
-
-        cartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_main_imagebutton2,null);
-            }
-        });
-
+        sliderItems = new int[]{R.drawable.small_slider3,R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
         appLocationService = new AppLocationService(getActivity());
         Location gpsLocation = appLocationService
                 .getLocation(LocationManager.NETWORK_PROVIDER);
@@ -177,6 +120,61 @@ public class MainFragment extends android.support.v4.app.Fragment {
             showSettingsAlert();
         }
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootview = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
+        Drawable drawable = getResources().getDrawable(R.mipmap.dc_location);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.7),
+                (int) (drawable.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
+
+
+        viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
+        disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
+        menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
+        cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
+        cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
+        toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
+        pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
+
+        viewPager.setPadding(40, 0, 40, 0);
+        viewPager.setClipToPadding(false);
+        viewPager.setPageMargin(10);
+        //http://stackoverflow.com/questions/7395655/set-default-page-for-viewpager-in-android
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1, false);
+        viewPager.setScrollDurationFactor(3);
+        viewPager.setOffscreenPageLimit(3);
+        pageSwitcher(4);
+
+        disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
+
+        toolbarTitle.setTypeface(typeface2);
+        String cartItem = databaseHelper.getPresciptionCount()+"";
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.mDrawerLayout.openDrawer(mainActivity.mDrawerList);
+            }
+        });
+
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.replaceFragment(R.id.fragment_main_imagebutton2,null);
+            }
+        });
+
         disabledocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,10 +194,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // milliseconds
     }
 
-
     // this is an inner class...
     class RemindTask extends TimerTask {
-
         @Override
         public void run() {
 
@@ -215,19 +211,16 @@ public class MainFragment extends android.support.v4.app.Fragment {
                         // Showing a toast for just testing purpose
                     } else {
                         if (page == 0) {
-                            viewPager.setCurrentItem(3);
-                            Log.v("dc", "dc  1");
+                            viewPager.setCurrentItem(sliderItems.length-2);
                         }
 
                         // skip fake page (last), go to first page
-                        if (page == 4) {
-                            Log.v("dc", "dc  2");
+                        if (page == sliderItems.length-1) {
                             viewPager.setCurrentItem(0);
                             //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                         } else {
-                            Log.v("dc", "dc  3");
                             viewPager.setCurrentItem(page++);
-                            if (page == 4)
+                            if (page == sliderItems.length-1)
                                 page = 1;
                         }
                     }
@@ -302,7 +295,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
                 default:
                     locationAddress = null;
             }
-            Log.v("Result",mainActivity.updateLocation+"");
             switch (mainActivity.updateLocation) {
 
                 case 0 :  disabledocationEditText.setText(locationAddress);
@@ -379,7 +371,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    Log.v("hello", "close" + mainActivity.getSupportFragmentManager().getBackStackEntryCount());
                     mainActivity.onBackPressed();
                     return true;
                 }
