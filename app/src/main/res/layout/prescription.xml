@@ -6,24 +6,25 @@
             android:layout_height="wrap_content"
             android:background="#f9f9f7"
             android:paddingBottom="10dp"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="130dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/imageview_border"
             android:id="@+id/prescription_imageview1"/>
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/dc_grey_cancel"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/dc_cross"
             android:textAllCaps="false"
             android:textColor="#36B666"
             android:textSize="15sp"
-            android:background="@drawable/button_style"
-            android:layout_marginLeft="75dp"
+            android:background="@drawable/circular_cross_button1"
+            android:layout_marginLeft="81dp"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:id="@+id/prescription_button1"/>

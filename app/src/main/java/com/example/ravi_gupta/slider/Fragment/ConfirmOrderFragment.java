@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,9 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView orderConfirmText;
+    TextView thankYouText;
     Button orderStatusButton;
+    Button orderHomeButton;
     MainActivity mainActivity;
     public static String TAG = "ConfirmOrderFragment";
 
@@ -61,20 +64,38 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_confirm_order, container, false);
 
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         orderConfirmText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview1);
+        thankYouText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview2);
         orderStatusButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button1);
+        orderHomeButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button2);
 
         orderConfirmText.setTypeface(typeface2);
         orderStatusButton.setTypeface(typeface2);
+        orderHomeButton.setTypeface(typeface2);
+        thankYouText.setTypeface(typeface4);
 
         orderStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_confirm_order_button1,null);
+                mainActivity.replaceFragment(R.id.fragment_confirm_order_button1, null);
+            }
+        });
+
+        orderHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = mainActivity.getSupportFragmentManager();
+                int count = fm.getBackStackEntryCount();
+                for(int i = 0; i < count; ++i) {
+                    fm.popBackStack();
+                }
+                mainActivity.replaceFragment(R.id.fragment_confirm_order_button2,null);
+
             }
         });
 

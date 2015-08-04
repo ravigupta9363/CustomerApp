@@ -106,13 +106,27 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <CheckBox
-            android:layout_marginTop="0dp"
-            android:id="@+id/fragment_landmark_checkbox1"
+        <RadioGroup
+            android:id="@+id/fragment_landmark_radio_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Request callback for order confirmation"/>
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/fragment_landmark_radio_button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#AAA"
+                android:text="" />
+
+            <RadioButton
+                android:id="@+id/fragment_landmark_radio_button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#AAA"
+                android:text="" />
+
+        </RadioGroup>
 
     <Button
         android:layout_marginTop="30dp"
@@ -132,7 +146,7 @@
             android:layout_height="match_parent"
             android:text="Just one more step to go !!"
             android:gravity="center"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="75dp"
             android:textColor="#333"
             android:layout_gravity="center"
             android:textSize="28sp"

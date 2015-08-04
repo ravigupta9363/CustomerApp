@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.ConfirmOrderFragment"
-    android:background="@drawable/slider_background">
+    android:background="#f9f9f7">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent"
@@ -14,17 +14,44 @@
         android:id="@+id/fragment_confirm_order_textview1"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fragment_confirm_order_textview1"
         android:background="@drawable/round_button"
-        android:text="Go to Status Page"
+        android:text="Status"
         android:textColor="#FFF"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
         android:id="@+id/fragment_confirm_order_button1"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fragment_confirm_order_button1"
+        android:layout_below="@+id/fragment_confirm_order_textview1"
+        android:background="@drawable/round_button"
+        android:text="Home"
+        android:textColor="#FFF"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="50dp"
+        android:id="@+id/fragment_confirm_order_button2"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Thank You"
+        android:gravity="center"
+        android:layout_marginTop="2dp"
+        android:textColor="#333"
+        android:layout_gravity="center"
+        android:textSize="28sp"
+        android:id="@+id/fragment_confirm_order_textview2"
+        android:layout_below="@+id/fragment_confirm_order_button2"/>
+
 
 </RelativeLayout>

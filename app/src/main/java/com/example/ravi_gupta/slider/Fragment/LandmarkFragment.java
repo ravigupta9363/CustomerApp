@@ -3,6 +3,7 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,9 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
@@ -43,7 +45,9 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     EditText landmarkEditText;
     Button placeOrder;
     MainActivity mainActivity;
-    CheckBox requestCallback;
+    RadioGroup requestCallback;
+    RadioButton callBack;
+    RadioButton notCallBack;
     public static String TAG = "LandmarkFragment";
 
     // TODO: Rename and change types of parameters
@@ -84,10 +88,15 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         flatNumberEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext1);
         landmarkEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext2);
         placeOrder = (Button) rootview.findViewById(R.id.fragment_landmark_button1);
-        requestCallback = (CheckBox)rootview.findViewById(R.id.fragment_landmark_checkbox1);
+        requestCallback = (RadioGroup)rootview.findViewById(R.id.fragment_landmark_radio_group);
+        callBack = (RadioButton)rootview.findViewById(R.id.fragment_landmark_radio_button1);
+        notCallBack = (RadioButton)rootview.findViewById(R.id.fragment_landmark_radio_button2);
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_landmark_textview3);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_landmark_imagebutton1);
         TextView oneMoreStepText = (TextView)rootview.findViewById(R.id.fragment_landmark_textview4);
+
+        callBack.setText("Send all medicines as prescribed");
+        notCallBack.setText("Call me to confirm prescription");
 
 
         //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
@@ -104,11 +113,26 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        requestCallback.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int id = group.getCheckedRadioButtonId();
+                if(id == R.id.fragment_landmark_radio_button1) {
+                    callBack.setTextColor(Color.rgb(54, 182, 102));
+                    notCallBack.setTextColor(Color.rgb(170, 170, 170));
+                }
+                else if(id == R.id.fragment_landmark_radio_button2) {
+                    notCallBack.setTextColor(Color.rgb(54, 182, 102));
+                    callBack.setTextColor(Color.rgb(170, 170, 170));
+                }
+            }
+        });
+
         //flatNumberTextView.setTypeface(typeface2);
         //landmarkTextView.setTypeface(typeface2);
         flatNumberEditText.setTypeface(typeface2);
         landmarkEditText.setTypeface(typeface2);
-        requestCallback.setTypeface(typeface2);
+        callBack.setTypeface(typeface2);
+        notCallBack.setTypeface(typeface2);
 
         final TextInputLayout FlatNumberLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout1);
         final TextInputLayout LandmarkLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout2);

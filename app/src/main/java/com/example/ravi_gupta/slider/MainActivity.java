@@ -627,6 +627,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 prescriptionId++;
                 String cartItems = databaseHelper.getPresciptionCount()+"";
                 mainFragment.cartItems.setText(cartItems);
+                mainFragment.cartItems.setBackgroundColor(Color.rgb(242,121,53));
                 Log.v("camera", databaseHelper.getPresciptionCount() + "");
                 break;
 
@@ -665,6 +666,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 prescriptionId++;
                 String cartItem = databaseHelper.getPresciptionCount()+"";
                 mainFragment.cartItems.setText(cartItem);
+                mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
                 break;
 
             case R.id.nextButton :
@@ -803,6 +805,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     frag14 = OrderStatusFragment.newInstance();
                 }
                 ft.replace(R.id.fragment_main_container, frag14, OrderStatusFragment.TAG).addToBackStack(null);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.id.fragment_confirm_order_button2:
+                MainFragment frag15 = (MainFragment) getSupportFragmentManager().
+                        findFragmentByTag(MainFragment.TAG);
+                if (frag15 == null) {
+                    frag15 = MainFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag15, MainFragment.TAG).addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 break;
         }
@@ -984,6 +996,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
                         mainFragment.cartItems.setText(cartItems);
+                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204,204,204));
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -1017,6 +1030,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
                         mainFragment.cartItems.setText(cartItems);
+                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204, 204, 204));
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
