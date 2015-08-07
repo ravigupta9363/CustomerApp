@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.MainFragment"
     android:background="#f9f9f7"
-    android:id="@+id/fragment_main_container">
+    android:id="@+id/fragment_main_container" android:clickable="true">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar

@@ -347,36 +347,39 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        switch (position) {
+        if (!haveNetworkConnection()) {
+            position = 99;
+        }
 
-            case 0:
+            switch (position) {
+
+                case 0:
                /* new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {*/
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
-                                .commitAllowingStateLoss();
-                  //  }
-               // },250);
-                //mDrawerLayout.closeDrawer(mDrawerList);
-                break;
-            case 1:
-                //mDrawerLayout.closeDrawer(mDrawerList);
-                if(databaseHelper.getPresciptionCount() > 0) {
-                    showOpenPastOrderAlert();
-                }
-                else {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
+                            .commitAllowingStateLoss();
+                    //  }
+                    // },250);
+                    //mDrawerLayout.closeDrawer(mDrawerList);
+                    break;
+                case 1:
+                    //mDrawerLayout.closeDrawer(mDrawerList);
+                    if (databaseHelper.getPresciptionCount() > 0) {
+                        showOpenPastOrderAlert();
+                    } else {
                    /* new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {*/
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
-                                    .commitAllowingStateLoss();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
+                                .commitAllowingStateLoss();
                      /*   }
                     }, 250);*/
-                }
-                break;
-            case 2:
+                    }
+                    break;
+                case 2:
                /* mDrawerLayout.closeDrawer(mDrawerList);
                new Handler().postDelayed(new Runnable() {
                @Override
@@ -386,91 +389,103 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                             .commitAllowingStateLoss();
               /* }
                },250);*/
-                break;
-            case 3:
+                    break;
+                case 3:
                     /*mDrawerLayout.closeDrawer(mDrawerList);
                    new Handler().postDelayed(new Runnable() {
                        @Override
                        public void run() {*/
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
-                                    .commitAllowingStateLoss();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
+                            .commitAllowingStateLoss();
                       /* }
                    },250);*/
-                break;
-            case 4:
+                    break;
+                case 4:
                /* mDrawerLayout.closeDrawer(mDrawerList);*/
-                Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree" );// this.getPackageName()
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" +  "com.cubeactive.qnotelistfree")));
-                }
-                break;
-            case 5:
-                //mDrawerLayout.closeDrawer(mDrawerList);
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody = "Here is the share content body";
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share Via"));
-                break;
-            case 6:
+                    Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree");// this.getPackageName()
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    try {
+                        startActivity(goToMarket);
+                    } catch (ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.cubeactive.qnotelistfree")));
+                    }
+                    break;
+                case 5:
+                    //mDrawerLayout.closeDrawer(mDrawerList);
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    String shareBody = "Here is the share content body";
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                    startActivity(Intent.createChooser(sharingIntent, "Share Via"));
+                    break;
+                case 6:
                 /*mDrawerLayout.closeDrawer(mDrawerList);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {*/
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
-                                .commitAllowingStateLoss();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
+                            .commitAllowingStateLoss();
                    /* }
                 }, 250);*/
-                break;
-            case 7:
+                    break;
+                case 7:
                  /*mDrawerLayout.closeDrawer(mDrawerList);
                   new Handler().postDelayed(new Runnable() {
                       @Override
                       public void run() {*/
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
-                                .commitAllowingStateLoss();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
+                            .commitAllowingStateLoss();
 
                      /* }
                   },250);*/
-                break;
-            case 8:
+                    break;
+                case 8:
                 /*mDrawerLayout.closeDrawer(mDrawerList);
                new Handler().postDelayed(new Runnable() {
                    @Override
                     public void run() {*/
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
-                                .commitAllowingStateLoss();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
+                            .commitAllowingStateLoss();
                   /* }
                },250);*/
-                break;
+                    break;
 
-            default:
-                break;
-        }
+                case 99:
+                /*mDrawerLayout.closeDrawer(mDrawerList);
+               new Handler().postDelayed(new Runnable() {
+                   @Override
+                    public void run() {*/
+                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new NoInternetConnectionFragment()).addToBackStack(NoInternetConnectionFragment.TAG)
+                            .commitAllowingStateLoss();
 
-        if (fragment != null) {
-            //FragmentManager fragmentManager = getFragmentManager();
-            //fragmentManager.beginTransaction()
-              //      .replace(R.id.frame_container, fragment).commit();
+                default:
+                    break;
+            }
 
-            // update selected item and title, then close the drawer
-            mDrawerList.setItemChecked(position, true);
-            mDrawerList.setSelection(position);
-            setTitle(navMenuTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
+            if (fragment != null) {
+                //FragmentManager fragmentManager = getFragmentManager();
+                //fragmentManager.beginTransaction()
+                //      .replace(R.id.frame_container, fragment).commit();
 
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-        }
+                // update selected item and title, then close the drawer
+                mDrawerList.setItemChecked(position, true);
+                mDrawerList.setSelection(position);
+                setTitle(navMenuTitles[position]);
+                mDrawerLayout.closeDrawer(mDrawerList);
+
+            } else {
+                // error in creating fragment
+                Log.e("MainActivity", "Error in creating fragment");
+            }
+
     }
 
     @Override
@@ -548,51 +563,55 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        switch (id) {
+        if(!haveNetworkConnection()) {
+            id = R.layout.fragment_no_internet_connection;
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+            switch (id) {
 
-            case R.layout.fragment_main :
-                MainFragment frag1 = (MainFragment) getSupportFragmentManager().
-                        findFragmentByTag(MainFragment.TAG);
-                if (frag1 == null) {
-                    frag1 = MainFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag1, MainFragment.TAG);
-                //getSupportActionBar().show();
-                ft.commitAllowingStateLoss();
-                break;
+                case R.layout.fragment_main:
+                    MainFragment frag1 = (MainFragment) getSupportFragmentManager().
+                            findFragmentByTag(MainFragment.TAG);
+                    if (frag1 == null) {
+                        frag1 = MainFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag1, MainFragment.TAG);
+                    //getSupportActionBar().show();
+                    ft.commitAllowingStateLoss();
+                    break;
 
-            case R.id.shopListview :
-                Fragment newFragment1 = new SendOrderFragment();
-                mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-                //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
-                ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
-                ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
-                ft.commit();
-                //getSupportFragmentManager().executePendingTransactions();
-                break;
+                case R.id.shopListview:
+                    Fragment newFragment1 = new SendOrderFragment();
+                    mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+                    //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                    ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
+                    ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
+                    ft.commit();
+                    //getSupportFragmentManager().executePendingTransactions();
+                    break;
 
-            case R.id.fragment_main_edittext1 :
-                changeLocationFragment frag2 = (changeLocationFragment) getSupportFragmentManager().
-                        findFragmentByTag(changeLocationFragment.TAG);
-                ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
-                if (frag2 == null) {
-                    frag2 = changeLocationFragment.newInstance();
-                }
-                ft.replace(R.id.fragment_main_container, frag2, changeLocationFragment.TAG).addToBackStack(null);
-                Log.v("Result", "Called2");
-                ft.commitAllowingStateLoss();
-                break;
+                case R.id.fragment_main_edittext1:
+                    changeLocationFragment frag2 = (changeLocationFragment) getSupportFragmentManager().
+                            findFragmentByTag(changeLocationFragment.TAG);
+                    ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                    if (frag2 == null) {
+                        frag2 = changeLocationFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag2, changeLocationFragment.TAG).addToBackStack(null);
+                    Log.v("Result", "Called2");
+                    ft.commitAllowingStateLoss();
+                    break;
 
-            case R.id.fragment_change_location_button2 :
-                MainFragment frag3 = (MainFragment) getSupportFragmentManager().
-                        findFragmentByTag(MainFragment.TAG);
-                updateLocation = 3;
-                if (frag3 == null) {
-                    frag3 = MainFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag3, MainFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
+                case R.id.fragment_change_location_button2:
+                    MainFragment frag3 = (MainFragment) getSupportFragmentManager().
+                            findFragmentByTag(MainFragment.TAG);
+                    updateLocation = 3;
+                    if (frag3 == null) {
+                        frag3 = MainFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag3, MainFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                    break;
 
            /* case R.id.fragment_change_location_edittext:
                 GeoSearchResult result = (GeoSearchResult)object;
@@ -622,205 +641,202 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 ft.commit();
                 break;*/
 
-            case R.id.fragment_past_order_listview1:
-                OrderStatusFragment frag4 = (OrderStatusFragment) getSupportFragmentManager().
-                        findFragmentByTag(OrderStatusFragment.TAG);
-                if (frag4 == null) {
-                    frag4 = OrderStatusFragment.newInstance();
-                }
-                ft.replace(R.id.fragment_main_container, frag4, OrderStatusFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
-
-            case R.id.fragment_main_imagebutton2:
-                if(databaseHelper.getPresciptionCount() == 0){
-                    CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
-                            findFragmentByTag(CartNoOrdersFragment.TAG);
-                    if (frag5 == null) {
-                        frag5 = CartNoOrdersFragment.newInstance();
+                case R.id.fragment_past_order_listview1:
+                    OrderStatusFragment frag4 = (OrderStatusFragment) getSupportFragmentManager().
+                            findFragmentByTag(OrderStatusFragment.TAG);
+                    if (frag4 == null) {
+                        frag4 = OrderStatusFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag5, CartNoOrdersFragment.TAG).addToBackStack(null);
+                    ft.replace(R.id.fragment_main_container, frag4, OrderStatusFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
-                }
-                else {
-                    CartFragment frag5 = (CartFragment) getSupportFragmentManager().
+                    break;
+
+                case R.id.fragment_main_imagebutton2:
+                    if (databaseHelper.getPresciptionCount() == 0) {
+                        CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
+                                findFragmentByTag(CartNoOrdersFragment.TAG);
+                        if (frag5 == null) {
+                            frag5 = CartNoOrdersFragment.newInstance();
+                        }
+                        ft.replace(R.id.fragment_main_container, frag5, CartNoOrdersFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    } else {
+                        CartFragment frag5 = (CartFragment) getSupportFragmentManager().
+                                findFragmentByTag(CartFragment.TAG);
+                        if (frag5 == null) {
+                            frag5 = CartFragment.newInstance();
+                        }
+                        ft.replace(R.id.fragment_main_container, frag5, CartFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    }
+                    break;
+
+                case R.id.fragment_send_order_button1:
+                    SendPrescriptionDialog dialog = new SendPrescriptionDialog();
+                    dialog.show(getSupportFragmentManager(), SendPrescriptionDialog.TAG);
+                    break;
+
+                case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CartFragment frag6 = (CartFragment) getSupportFragmentManager().
                             findFragmentByTag(CartFragment.TAG);
-                    if (frag5 == null) {
-                        frag5 = CartFragment.newInstance();
+                    //Thumbnail is being saved
+                    Calendar calendar = Calendar.getInstance();
+                    File dir = getPicStorageDir("prescription_thumbnails");
+                    File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
+
+                    File oldFile = new File(fileUri.getPath());
+                    Uri thumbnailUri = Uri.fromFile(imageFile);
+                    Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile.getPath()),
+                            100, 130);
+                    try {
+                        FileOutputStream out = new FileOutputStream(imageFile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    ft.replace(R.id.fragment_main_container, frag5, CartFragment.TAG).addToBackStack(null);
-                    ft.commitAllowingStateLoss();
-                }
-                break;
+                    Log.v("camera", fileUri.toString());
+                    Log.v("camera", thumbnailUri.toString());
+                    Log.v("delete", "Id  Camera = " + prescriptionId);
+                    databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri));
+                    prescriptionId++;
+                    String cartItems = databaseHelper.getPresciptionCount() + "";
+                    mainFragment.cartItems.setText(cartItems);
+                    mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
+                    Log.v("camera", databaseHelper.getPresciptionCount() + "");
+                    break;
 
-            case R.id.fragment_send_order_button1:
-                SendPrescriptionDialog dialog = new SendPrescriptionDialog();
-                dialog.show(getSupportFragmentManager(), SendPrescriptionDialog.TAG);
-            break;
+                case R.id.prescription_imageview1:
+                    Bundle bundle4 = new Bundle();
+                    //bundle2.pu("prescription",medicineListAdapter);
+                    Uri image = (Uri) object;
+                    bundle4.putParcelable("prescription", image);
+                    ImageZoomDialog imageZoomDialog = new ImageZoomDialog();
+                    imageZoomDialog.setArguments(bundle4);
+                    imageZoomDialog.show(getFragmentManager(), ImageZoomDialog.TAG);
+                    Log.v("signin", "image  " + image);
+                    break;
 
-            case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
-                CartFragment frag6 = (CartFragment) getSupportFragmentManager().
-                        findFragmentByTag(CartFragment.TAG);
-                //Thumbnail is being saved
-                Calendar calendar = Calendar.getInstance();
-                File dir = getPicStorageDir("prescription_thumbnails");
-                File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
+                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
+                    //Thumbnail is being saved
+                    String path = getRealPathFromURI(this, fileUri);
 
-                File oldFile = new File(fileUri.getPath());
-                Uri thumbnailUri = Uri.fromFile(imageFile);
-                Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile.getPath()),
-                        100, 130);
-                try {
-                    FileOutputStream out = new FileOutputStream(imageFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.v("camera", fileUri.toString());
-                Log.v("camera", thumbnailUri.toString());
-                Log.v("delete", "Id  Camera = " + prescriptionId);
-                databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri));
-                prescriptionId++;
-                String cartItems = databaseHelper.getPresciptionCount()+"";
-                mainFragment.cartItems.setText(cartItems);
-                mainFragment.cartItems.setBackgroundColor(Color.rgb(242,121,53));
-                Log.v("camera", databaseHelper.getPresciptionCount() + "");
-                break;
-
-            case R.id.prescription_imageview1:
-                Bundle bundle4 = new Bundle();
-                //bundle2.pu("prescription",medicineListAdapter);
-                Uri image = (Uri) object;
-                bundle4.putParcelable("prescription", image);
-                ImageZoomDialog imageZoomDialog = new ImageZoomDialog();
-                imageZoomDialog.setArguments(bundle4);
-                imageZoomDialog.show(getFragmentManager(), ImageZoomDialog.TAG);
-                Log.v("signin","image  "+image);
-                break;
-
-            case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
-                //Thumbnail is being saved
-                String path = getRealPathFromURI(this,fileUri);
-
-                Calendar calendar1 = Calendar.getInstance();
-                File dir1 = getPicStorageDir("prescription_thumbnails");
-                File imageFile1 = new File(dir1, calendar1.getTimeInMillis() + ".jpeg");
-                File oldFile1 = new File(path);
-                Uri thumbnailUri1 = Uri.fromFile(imageFile1);
-                Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile1.getAbsolutePath()),
-                        100, 130);
-                try {
-                    FileOutputStream out = new FileOutputStream(imageFile1);
-                    bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.v("delete","Id Gallery= "+prescriptionId);
-                databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId,fileUri, thumbnailUri1));
-                prescriptionId++;
-                String cartItem = databaseHelper.getPresciptionCount()+"";
-                mainFragment.cartItems.setText(cartItem);
-                mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
-                break;
-
-            case R.id.nextButton :
-                ProfileDetail profileDetail = profileDatabase.getProfile();
-                if(profileDetail.getPhone() == null){
-                    ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
-                            findFragmentByTag(ProfileEditFragment.TAG);
-                    if (frag7 == null) {
-                        frag7 = ProfileEditFragment.newInstance();
+                    Calendar calendar1 = Calendar.getInstance();
+                    File dir1 = getPicStorageDir("prescription_thumbnails");
+                    File imageFile1 = new File(dir1, calendar1.getTimeInMillis() + ".jpeg");
+                    File oldFile1 = new File(path);
+                    Uri thumbnailUri1 = Uri.fromFile(imageFile1);
+                    Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile1.getAbsolutePath()),
+                            100, 130);
+                    try {
+                        FileOutputStream out = new FileOutputStream(imageFile1);
+                        bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    Bundle bundle5 = new Bundle();
-                    bundle5.putString("fragment","cartFragment");
-                    frag7.setArguments(bundle5);
-                    ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
+                    Log.v("delete", "Id Gallery= " + prescriptionId);
+                    databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri1));
+                    prescriptionId++;
+                    String cartItem = databaseHelper.getPresciptionCount() + "";
+                    mainFragment.cartItems.setText(cartItem);
+                    mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
+                    break;
+
+                case R.id.nextButton:
+                    ProfileDetail profileDetail = profileDatabase.getProfile();
+                    if (profileDetail.getPhone() == null) {
+                        ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
+                                findFragmentByTag(ProfileEditFragment.TAG);
+                        if (frag7 == null) {
+                            frag7 = ProfileEditFragment.newInstance();
+                        }
+                        Bundle bundle5 = new Bundle();
+                        bundle5.putString("fragment", "cartFragment");
+                        frag7.setArguments(bundle5);
+                        ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    } else {
+                        IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
+                                findFragmentByTag(IncomingSmsFragment.TAG);
+                        if (frag7 == null) {
+                            frag7 = IncomingSmsFragment.newInstance();
+                        }
+                        ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    }
+                    break;
+
+                case R.layout.fragment_no_internet_connection:
+                    NoInternetConnectionFragment frag8 = (NoInternetConnectionFragment) getSupportFragmentManager().
+                            findFragmentByTag(NoInternetConnectionFragment.TAG);
+                    if (frag8 == null) {
+                        frag8 = NoInternetConnectionFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag8, NoInternetConnectionFragment.TAG);
                     ft.commitAllowingStateLoss();
-                }
-                else {
-                    IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
+                    break;
+
+                case R.id.fragment_profile_edit_button1:
+                    IncomingSmsFragment frag9 = (IncomingSmsFragment) getSupportFragmentManager().
                             findFragmentByTag(IncomingSmsFragment.TAG);
-                    if (frag7 == null) {
-                        frag7 = IncomingSmsFragment.newInstance();
+                    if (frag9 == null) {
+                        frag9 = IncomingSmsFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+                    ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
-                }
-                break;
+                    break;
 
-            case R.layout.fragment_no_internet_connection :
-                NoInternetConnectionFragment frag8 = (NoInternetConnectionFragment) getSupportFragmentManager().
-                        findFragmentByTag(NoInternetConnectionFragment.TAG);
-                if (frag8 == null) {
-                    frag8 = NoInternetConnectionFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag8, NoInternetConnectionFragment.TAG);
-                ft.commitAllowingStateLoss();
-                break;
-
-            case R.id.fragment_profile_edit_button1:
-                IncomingSmsFragment frag9 = (IncomingSmsFragment) getSupportFragmentManager().
-                        findFragmentByTag(IncomingSmsFragment.TAG);
-                if (frag9 == null) {
-                    frag9 = IncomingSmsFragment.newInstance();
-                }
-                ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
-
-            case R.id.fragment_incoming_sms_button1:
-                LandmarkFragment frag10 = (LandmarkFragment) getSupportFragmentManager().
-                        findFragmentByTag(LandmarkFragment.TAG);
-                if (frag10 == null) {
-                    frag10 = LandmarkFragment.newInstance();
-                }
-                ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
-
-            case R.id.fragment_send_order_button2:
-                if(databaseHelper.getPresciptionCount() > 0) {
-                    showOpenPastOrderAlert();
-                }
-                else {
-                    PastOrderFragment frag11 = (PastOrderFragment) getSupportFragmentManager().
-                            findFragmentByTag(PastOrderFragment.TAG);
-                    if (frag11 == null) {
-                        frag11 = PastOrderFragment.newInstance();
+                case R.id.fragment_incoming_sms_button1:
+                    LandmarkFragment frag10 = (LandmarkFragment) getSupportFragmentManager().
+                            findFragmentByTag(LandmarkFragment.TAG);
+                    if (frag10 == null) {
+                        frag10 = LandmarkFragment.newInstance();
                     }
-                    Bundle bundle5 = new Bundle();
-                    bundle5.putString("fragment", "repeatOrder");
-                    frag11.setArguments(bundle5);
-                    ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG).addToBackStack(null);
+                    ft.replace(R.id.fragment_main_container, frag10, LandmarkFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
-                }
-                break;
+                    break;
 
-            case R.id.fragment_confirm_order_button1:
-                OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
-                        findFragmentByTag(OrderStatusFragment.TAG);
-                if (frag12 == null) {
-                    frag12 = OrderStatusFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
+                case R.id.fragment_send_order_button2:
+                    if (databaseHelper.getPresciptionCount() > 0) {
+                        showOpenPastOrderAlert();
+                    } else {
+                        PastOrderFragment frag11 = (PastOrderFragment) getSupportFragmentManager().
+                                findFragmentByTag(PastOrderFragment.TAG);
+                        if (frag11 == null) {
+                            frag11 = PastOrderFragment.newInstance();
+                        }
+                        Bundle bundle5 = new Bundle();
+                        bundle5.putString("fragment", "repeatOrder");
+                        frag11.setArguments(bundle5);
+                        ft.replace(R.id.fragment_main_container, frag11, PastOrderFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    }
+                    break;
 
-            case R.id.fragment_landmark_button1:
-                ConfirmOrderFragment frag13 = (ConfirmOrderFragment) getSupportFragmentManager().
-                        findFragmentByTag(ConfirmOrderFragment.TAG);
-                if (frag13 == null) {
-                    frag13 = ConfirmOrderFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag13, ConfirmOrderFragment.TAG);
-                ft.commitAllowingStateLoss();
-                break;
+                case R.id.fragment_confirm_order_button1:
+                    OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
+                            findFragmentByTag(OrderStatusFragment.TAG);
+                    if (frag12 == null) {
+                        frag12 = OrderStatusFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                    break;
 
-            case R.id.past_order_layout_imageview1:
+                case R.id.fragment_landmark_button1:
+                    ConfirmOrderFragment frag13 = (ConfirmOrderFragment) getSupportFragmentManager().
+                            findFragmentByTag(ConfirmOrderFragment.TAG);
+                    if (frag13 == null) {
+                        frag13 = ConfirmOrderFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag13, ConfirmOrderFragment.TAG);
+                    ft.commitAllowingStateLoss();
+                    break;
+
+                case R.id.past_order_layout_imageview1:
                /* Bundle bundle6 = new Bundle();
                 //bundle2.pu("prescription",medicineListAdapter);
                 Uri image2 = (Uri) object;
@@ -829,64 +845,62 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 imageZoomDialog2.setArguments(bundle6);
                 imageZoomDialog2.show(getFragmentManager(), ImageZoomDialog.TAG);
                 Log.v("signin", "image  " + image2);*/
-                break;
+                    break;
 
-            case R.id.past_order_layout_button2:
-                ProfileDetail profileDetail2 = profileDatabase.getProfile();
-                if(profileDetail2.getPhone() == null){
-                    ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
-                            findFragmentByTag(ProfileEditFragment.TAG);
-                    if (frag7 == null) {
-                        frag7 = ProfileEditFragment.newInstance();
+                case R.id.past_order_layout_button2:
+                    ProfileDetail profileDetail2 = profileDatabase.getProfile();
+                    if (profileDetail2.getPhone() == null) {
+                        ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
+                                findFragmentByTag(ProfileEditFragment.TAG);
+                        if (frag7 == null) {
+                            frag7 = ProfileEditFragment.newInstance();
+                        }
+                        Bundle bundle6 = new Bundle();
+                        bundle6.putString("fragment", "pastOrderFragment");
+                        frag7.setArguments(bundle6);
+                        ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
+                    } else {
+                        IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
+                                findFragmentByTag(IncomingSmsFragment.TAG);
+                        if (frag7 == null) {
+                            frag7 = IncomingSmsFragment.newInstance();
+                        }
+                        ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+                        ft.commitAllowingStateLoss();
                     }
-                    Bundle bundle6 = new Bundle();
-                    bundle6.putString("fragment","pastOrderFragment");
-                    frag7.setArguments(bundle6);
-                    ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
-                    ft.commitAllowingStateLoss();
-                }
-                else {
-                    IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
-                            findFragmentByTag(IncomingSmsFragment.TAG);
-                    if (frag7 == null) {
-                        frag7 = IncomingSmsFragment.newInstance();
+                    break;
+
+                case R.id.past_order_layout_button1:
+                    OrderStatusFragment frag14 = (OrderStatusFragment) getSupportFragmentManager().
+                            findFragmentByTag(OrderStatusFragment.TAG);
+                    if (frag14 == null) {
+                        frag14 = OrderStatusFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+                    ft.replace(R.id.fragment_main_container, frag14, OrderStatusFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
-                }
-                break;
+                    break;
 
-            case R.id.past_order_layout_button1:
-                OrderStatusFragment frag14 = (OrderStatusFragment) getSupportFragmentManager().
-                        findFragmentByTag(OrderStatusFragment.TAG);
-                if (frag14 == null) {
-                    frag14 = OrderStatusFragment.newInstance();
-                }
-                ft.replace(R.id.fragment_main_container, frag14, OrderStatusFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
+                case R.id.fragment_confirm_order_button2:
+                    MainFragment frag15 = (MainFragment) getSupportFragmentManager().
+                            findFragmentByTag(MainFragment.TAG);
+                    if (frag15 == null) {
+                        frag15 = MainFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag15, MainFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
+                    break;
 
-            case R.id.fragment_confirm_order_button2:
-                MainFragment frag15 = (MainFragment) getSupportFragmentManager().
-                        findFragmentByTag(MainFragment.TAG);
-                if (frag15 == null) {
-                    frag15 = MainFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag15, MainFragment.TAG).addToBackStack(null);
-                ft.commitAllowingStateLoss();
-                break;
-
-            case R.layout.fragment_no_address_found:
-                NoAddressFoundFragment frag16 = (NoAddressFoundFragment) getSupportFragmentManager().
-                        findFragmentByTag(NoAddressFoundFragment.TAG);
-                if (frag16 == null) {
-                    frag16 = NoAddressFoundFragment.newInstance();
-                }
-                ft.replace(R.id.container, frag16, NoAddressFoundFragment.TAG);
-                ft.commitAllowingStateLoss();
-                break;
-        }
-
+                case R.layout.fragment_no_address_found:
+                    NoAddressFoundFragment frag16 = (NoAddressFoundFragment) getSupportFragmentManager().
+                            findFragmentByTag(NoAddressFoundFragment.TAG);
+                    if (frag16 == null) {
+                        frag16 = NoAddressFoundFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag16, NoAddressFoundFragment.TAG);
+                    ft.commitAllowingStateLoss();
+                    break;
+            }
     }
 
     @Override

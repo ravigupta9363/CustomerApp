@@ -108,7 +108,9 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(manuallyEntryText.getText() != null)
                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                //validate data from server
             }
         });
 

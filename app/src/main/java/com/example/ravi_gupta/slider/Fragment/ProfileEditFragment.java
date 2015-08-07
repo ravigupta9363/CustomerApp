@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,6 +164,18 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 updatedMail = customerMail.getText().toString();
                 updatedPhone = customerPhone.getText().toString();
 
+                if(!updatedName.matches("[a-zA-Z ]{3,30}"))
+                    nameLayout.setError("Enter correct name");
+                if(!isEmailValid(updatedMail))
+                    mailLayout.setError("Enter correct email");
+                if(!isPhoneValid(updatedPhone))
+                    phoneLayout.setError("Enter correct number");
+                if(updatedName.matches("[a-zA-Z ]{3,30}"))
+                    nameLayout.setError("");
+                if(isEmailValid(updatedMail))
+                    mailLayout.setError("");
+                if(isPhoneValid(updatedPhone))
+                    phoneLayout.setError("");
                 if(updatedName.matches(""))
                     nameLayout.setError("This field is mandotary");
                 if(updatedMail.matches(""))
@@ -173,20 +186,21 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
 
                 Log.v("profile", updatedName + updatedMail + updatedPhone);
 
-                profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
-
-                ProfileDetail profileDetail = profileDatabase.getProfile();
+               /* ProfileDetail profileDetail = profileDatabase.getProfile();
 
                     updatedName = profileDetail.getName();
                     updatedMail = profileDetail.getEmail();
-                    updatedPhone = profileDetail.getPhone();
+                    updatedPhone = profileDetail.getPhone();*/
 
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-                Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
+                //Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
                 hiddenKeyboard(customerPhone);
-                if(!updatedName.matches("") && !updatedMail.matches("") && !updatedPhone.matches("")) {
-                    if (fragment.equals("profileFragment"))
+                //http://stackoverflow.com/questions/15805555/java-regex-to-validate-full-name-allow-only-spaces-and-letters
+                if(updatedName.matches("[a-zA-Z ]{3,30}") && isEmailValid(updatedMail) && isPhoneValid(updatedPhone)) {
+                    if (fragment.equals("profileFragment")) {
+                        profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                         mainActivity.onBackPressed();
+                    }
                     else
                         mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, null);
                 }
@@ -216,6 +230,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hiddenKeyboard(customerPhone);
                 mainActivity.onBackPressed();
             }
         });
@@ -228,6 +243,15 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    //http://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    boolean isPhoneValid(CharSequence email) {
+        return Patterns.PHONE.matcher(email).matches();
     }
 
     @Override
@@ -266,6 +290,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
+                    hiddenKeyboard(customerPhone);
                     mainActivity.onBackPressed();
 
                     return true;

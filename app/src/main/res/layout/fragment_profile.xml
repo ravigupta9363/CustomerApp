@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@drawable/dc_background"
     tools:context="com.example.ravi_gupta.slider.Fragment.ProfileFragment"
-    android:orientation="vertical" android:id="@+id/fragment_profile_layout">
+    android:orientation="vertical" android:id="@+id/fragment_profile_layout" android:clickable="true">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
