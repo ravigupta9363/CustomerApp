@@ -8,7 +8,7 @@
                 android:id="@+id/cameraButton"
                 android:scaleType="fitCenter"
                 android:padding="20dp"
-                android:text="Camera"
+                android:text="@string/dialog_send_prescription_camera_button"
                 android:textAllCaps="false"
                 android:drawableLeft="@mipmap/dc_camera"
                 android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:background="@drawable/button_style"
                 android:drawableLeft="@mipmap/dc_gallery2"
-                android:text="Gallery"
+                android:text="@string/dialog_send_prescription_gallery_button"
                 android:textAllCaps="false"
                 android:layout_height="match_parent"
                 android:textSize="18sp"/>

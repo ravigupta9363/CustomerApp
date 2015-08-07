@@ -32,7 +32,7 @@
             android:id="@+id/fragment_about_us_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Drugcorner  version 1.0.0" />
+            android:text="@string/fragment_about_us_textview4" />
 
 
     </android.support.v7.widget.Toolbar>

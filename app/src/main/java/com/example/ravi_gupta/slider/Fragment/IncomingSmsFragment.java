@@ -2,11 +2,16 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +23,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ravi_gupta.slider.IncomingSms;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class IncomingSmsFragment extends android.support.v4.app.Fragment {
@@ -42,12 +49,12 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     TextView phoneNumber;
     TextView orText;
     TextView manuallyEntryText;
-    public EditText otpEdittext;
+    public static EditText otpEdittext;
     Button resendCode;
     MainActivity mainActivity;
     IncomingSms incomingSms;
-    ProgressBar progressBar;
-    public String OTP;
+    public static ProgressBar progressBar;
+    public static String OTP;
     private BroadcastReceiver receiver;
 
 
@@ -94,6 +101,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         orText.setTypeface(typeface2);
         manuallyEntryText.setTypeface(typeface2);
         resendCode.setTypeface(typeface2);
+        otpEdittext.setTypeface(typeface2);
         progressBar.setVisibility(View.VISIBLE);
 
 
@@ -108,6 +116,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Sent", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -117,9 +126,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                 mainActivity.onBackPressed();
             }
         });
-
-        //incomingSms.onReceive(getActivity(),null);
-
 
         return rootview;
     }
@@ -168,6 +174,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
+
         new AsyncCaller().execute();
     }
 
@@ -186,9 +193,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void setOTP(String OTP) {
-        this.OTP = OTP;
-    }
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
@@ -200,8 +204,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         }
         @Override
         protected Void doInBackground(Void... params) {
-                //Log.v("SmsReceiver", "Hello Fragment" + OTP);
-               // otpEdittext.setText(OTP);
 
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
@@ -213,6 +215,59 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             //this method will be running on UI thread
+        }
+
+    }
+
+    public static class IncomingSms extends BroadcastReceiver {
+
+        // Get the object of SmsManager
+        final SmsManager sms = SmsManager.getDefault();
+        public Matcher m;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // Retrieves a map of extended data from the intent.
+            final Bundle bundle = intent.getExtras();
+
+            try {
+
+                if (bundle != null) {
+
+                    final Object[] pdusObj = (Object[]) bundle.get("pdus");
+
+                    for (int i = 0; i < pdusObj.length; i++) {
+
+                        SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+                        String phoneNumber = currentMessage.getDisplayOriginatingAddress();
+
+                        String senderNum = phoneNumber;
+                        String message = currentMessage.getDisplayMessageBody();
+
+                        //Log.v("SmsReceiver", "senderNum: " + senderNum + "; message: " + message);
+
+                        Pattern p = Pattern.compile("\\b\\d{4}\\b");
+                        m = p.matcher(message);
+                        while (m.find()) {
+                            //Log.v("SmsReceiver","Hello "+m.group());
+                            OTP = m.group().toString();
+                            otpEdittext.setText(OTP);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                        // Show Alert
+                        //int duration = Toast.LENGTH_LONG;
+                        //Toast toast = Toast.makeText(context,
+                                //"senderNum: "+ senderNum + ", message: " + message, duration);
+                        //toast.show();
+
+                    } // end for loop
+                } // bundle is null
+
+            } catch (Exception e) {
+                Log.e("SmsReceiver", "Exception smsReceiver" +e);
+
+            }
         }
 
     }

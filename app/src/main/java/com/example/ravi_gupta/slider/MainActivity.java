@@ -18,6 +18,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -71,6 +75,7 @@ import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
 import com.example.ravi_gupta.slider.Fragment.LandmarkFragment;
 import com.example.ravi_gupta.slider.Fragment.ListFragment;
 import com.example.ravi_gupta.slider.Fragment.MainFragment;
+import com.example.ravi_gupta.slider.Fragment.NoAddressFoundFragment;
 import com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment;
 import com.example.ravi_gupta.slider.Fragment.NotificationFragment;
 import com.example.ravi_gupta.slider.Fragment.OrderStatusFragment;
@@ -81,12 +86,18 @@ import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
+import com.example.ravi_gupta.slider.Location.AppLocationService;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -98,7 +109,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         OrderStatusShopDetailFragment.OnFragmentInteractionListener, PastOrderFragment.OnFragmentInteractionListener,
         CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
-        IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener{
+        IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
+        NoAddressFoundFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     public boolean updateUserInfo = false;
@@ -120,6 +132,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public boolean enableEditText = true;
     public String actionbarTitle = "DRUGCORNER";
     MainFragment mainFragment;
+    AppLocationService appLocationService;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -135,6 +148,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private NavDrawerListAdapter adapter;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
+    String[] latlong = {"323001","122002","302033"};
+    String matchPincode;
+    String pincode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,15 +163,60 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
 
-        //if(haveNetworkConnection()) {
+        appLocationService = new AppLocationService(this);
+        Location location = appLocationService
+                .getLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            String result = null;
+            try {
+                List<Address> addressList = geocoder.getFromLocation(
+                        latitude, longitude, 1);
+                if (addressList != null && addressList.size() > 0) {
+                    Address address = addressList.get(0);
+                    Log.v("locality", address + "");
+                    final Pattern p = Pattern.compile( "(\\d{6})" );
+                    final Matcher m = p.matcher( address.toString() );
+                    if ( m.find() ) {
+                        pincode =  m.group(0);
+                        Log.v("raviPincode", pincode);
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(address.getPostalCode());
+                }
+            }catch (IOException e) {
+            }
+        } else {
+            showSettingsAlert();
+        }
+
+        for(int i = 0; i < latlong.length-1 ; i++) {
+            if(latlong[i].equals(pincode)){
+                matchPincode = pincode;
+                break;
+            }
+            else {
+                matchPincode = null;
+            }
+
+        }
+
+        if(haveNetworkConnection() && matchPincode != null) {
             replaceFragment(R.layout.fragment_main, null);
-      /*  }
+       }
+        else if(haveNetworkConnection() && matchPincode == null) {
+            //replaceFragment(R.layout.fragment_);
+            Log.v("raviPincode","We are not serving in your area");
+            replaceFragment(R.layout.fragment_no_address_found, null);
+        }
         else {
             //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
             getSupportActionBar().hide();
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }*/
+        }
         databaseHelper = new DatabaseHelper(this);
         profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
@@ -270,8 +331,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
-
-
 
 
     private class SlideMenuClickListener implements
@@ -814,6 +873,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     frag15 = MainFragment.newInstance();
                 }
                 ft.replace(R.id.container, frag15, MainFragment.TAG).addToBackStack(null);
+                ft.commitAllowingStateLoss();
+                break;
+
+            case R.layout.fragment_no_address_found:
+                NoAddressFoundFragment frag16 = (NoAddressFoundFragment) getSupportFragmentManager().
+                        findFragmentByTag(NoAddressFoundFragment.TAG);
+                if (frag16 == null) {
+                    frag16 = NoAddressFoundFragment.newInstance();
+                }
+                ft.replace(R.id.container, frag16, NoAddressFoundFragment.TAG);
                 ft.commitAllowingStateLoss();
                 break;
         }

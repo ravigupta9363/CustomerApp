@@ -40,4 +40,10 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="dialog_send_prescription_camera_button">Camera</string>
+    <string name="dialog_send_prescription_gallery_button">Gallery</string>
+    <string name="drawer_list_item_textview1">Contact</string>
+    <string name="fragment_about_us_textview4">Drugcorner  version 1.0.0</string>
+    <string name="fragment_cart_textview1">Cart</string>
 </resources>

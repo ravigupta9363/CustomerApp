@@ -20,6 +20,7 @@ import com.example.ravi_gupta.slider.Adapter.MyRecyclerViewAdapter;
 import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.SwipeableRecyclerViewTouchListener;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
     private static String LOG_TAG = "CardViewActivity";
     MainActivity mainActivity;
     public static String TAG = "NotificationFragment";
+    ArrayList notificationItemDetails;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -88,6 +90,35 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyRecyclerViewAdapter(getDataSet());
         mRecyclerView.setAdapter(mAdapter);
+
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(mRecyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    notificationItemDetails.remove(position);
+                                    mAdapter.notifyItemRemoved(position);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    notificationItemDetails.remove(position);
+                                    mAdapter.notifyItemRemoved(position);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+        mRecyclerView.addOnItemTouchListener(swipeTouchListener);//https://github.com/brnunes/SwipeableRecyclerView/blob/master/lib/src/main/java/com/github/brnunes/swipeablerecyclerview/SwipeableRecyclerViewTouchListener.java
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_notification_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_notification_imagebutton1);
@@ -152,7 +183,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
     }
 
     private ArrayList<NotificationItemDetail> getDataSet() {
-        ArrayList notificationItemDetails = new ArrayList<NotificationItemDetail>();
+        notificationItemDetails = new ArrayList<NotificationItemDetail>();
         notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
         notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
         notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));

@@ -103,7 +103,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
             double longitude = gpsLocation.getLongitude();
             // String result = "Latitude: " + gpsLocation.getLatitude() +
             //    " Longitude: " + gpsLocation.getLongitude();
-            //fragment_change_location_edittext.setText(result);
+    //fragment_change_location_edittext.setText(result);
         } else {
             showSettingsAlert();
         }

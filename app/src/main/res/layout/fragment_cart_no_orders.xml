@@ -32,7 +32,7 @@
             android:id="@+id/fragment_cart_no_orders_textview2"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Cart" />
+            android:text="@string/fragment_cart_textview1" />
 
 
     </android.support.v7.widget.Toolbar>
@@ -48,7 +48,6 @@
        android:layout_below="@+id/view"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="Add Prescription First"
        android:textAlignment="gravity"
        android:layout_centerHorizontal="true"
        android:layout_marginTop="120dp"
@@ -61,7 +60,6 @@
         android:layout_below="@+id/fragment_cart_no_orders_textview1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Prescription First"
         android:textAlignment="gravity"
         android:padding="20dp"
         android:layout_centerHorizontal="true"
