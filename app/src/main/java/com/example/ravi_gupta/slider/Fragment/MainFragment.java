@@ -233,7 +233,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void showLocationAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 getActivity());
-        alertDialog.setTitle("Change Location");
         alertDialog.setMessage("Use my location from google maps?");
         alertDialog.setPositiveButton("Update",
                 new DialogInterface.OnClickListener() {

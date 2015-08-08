@@ -395,9 +395,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                    new Handler().postDelayed(new Runnable() {
                        @Override
                        public void run() {*/
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(OrderStatusFragment.TAG)
-                            .commitAllowingStateLoss();
+
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    OrderStatusFragment orderStatusFragment = (OrderStatusFragment) getSupportFragmentManager().
+                            findFragmentByTag(OrderStatusFragment.TAG);
+                    if (orderStatusFragment == null) {
+                        orderStatusFragment = OrderStatusFragment.newInstance();
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putString("fragment", "StatusFragment");
+                    orderStatusFragment.setArguments(bundle);
+                    ft.replace(R.id.fragment_main_container, orderStatusFragment, OrderStatusFragment.TAG).addToBackStack(null);
+                    ft.commitAllowingStateLoss();
                       /* }
                    },250);*/
                     break;
@@ -556,6 +565,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             if(resultCode == RESULT_OK){
                 fileUri = data.getData();
                 replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE,null);
+            }
+        }
+        else if (requestCode == 1) {
+            Log.v("gps","gps");
+            appLocationService = new AppLocationService(this);
+            Location location = appLocationService
+                    .getLocation(LocationManager.NETWORK_PROVIDER);
+            Log.v("gps",location+"");
+            if (location != null) {
+                Log.v("gps","gps2");
+                replaceFragment(R.layout.fragment_main,null);
             }
         }
     }
@@ -1072,13 +1092,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void showLocationAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 this);
-        alertDialog.setTitle("Change Location Setting");
         alertDialog.setMessage("Enable Location?");
         alertDialog.setPositiveButton("Setting",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String action = "com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS";
                         Intent settings = new Intent(action);
+                        startActivityForResult(settings, 1);
                         startActivity(settings);
                     }
                 });
@@ -1092,10 +1112,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
+
+
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 this);
-        alertDialog.setTitle("Order Confirmation");
+
         alertDialog.setMessage("Discard Prescription?");
         alertDialog.setPositiveButton("Discard",
                 new DialogInterface.OnClickListener() {
@@ -1120,7 +1142,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void showOpenPastOrderAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 this);
-        alertDialog.setTitle("Order Confirmation");
+
         alertDialog.setMessage("Discard Prescription?");
         alertDialog.setPositiveButton("Discard",
                 new DialogInterface.OnClickListener() {
