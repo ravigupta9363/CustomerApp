@@ -5,7 +5,7 @@
     android:background="#f9f9f7" android:clickable="true">
 
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Unable to find your current location right now"
+        android:text=""
         android:layout_centerInParent="true"
         android:gravity="center"
         android:scrollbarSize="18sp"
@@ -18,12 +18,12 @@
         android:text="Exit App"
         android:textColor="#FFF"
         android:background="@drawable/round_button"
-        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
         android:id="@+id/fragment_no_addres_found_button1"
+        android:layout_marginLeft="75dp"
         android:layout_below="@+id/fragment_no_addres_found_textview1"/>
 
     <Button
-        android:visibility="gone"
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

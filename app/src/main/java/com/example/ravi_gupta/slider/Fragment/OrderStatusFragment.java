@@ -3,6 +3,8 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -10,10 +12,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +58,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
     MainActivity mainActivity;
     String fragment;
+    Button cancelOrder;
 
 
     // TODO: Rename and change types of parameters
@@ -102,6 +107,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         totalText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview9);
         total = (TextView) rootview.findViewById(R.id.fragment_order_status_textview10);
         orderStatusImage = (ImageView) rootview.findViewById(R.id.fragment_order_status_imageview1);
+        cancelOrder = (Button) rootview.findViewById(R.id.fragment_order_status_button1);
 
         date.setTypeface(typeface2);
         time.setTypeface(typeface2);
@@ -113,6 +119,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         subTotal.setTypeface(typeface2);
         serviceCharge.setTypeface(typeface2);
         total.setTypeface(typeface2);
+        cancelOrder.setTypeface(typeface2);
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_order_status_textview11);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_order_status_imagebutton1);
@@ -120,16 +127,32 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         toolbarTitle.setTypeface(typeface1);
         realTimeSystemText.setTypeface(typeface4);
 
+        final Drawable drawable = getResources().getDrawable(R.mipmap.dc_cancel_order);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.4),
+                (int) (drawable.getIntrinsicHeight() * 0.4));
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
+
+        cancelOrder.setCompoundDrawables(sd.getDrawable(), null, null, null);
+
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (fragment.equals("HomeFragment")) {
-                }
-                else {
+                } else {
                     mainActivity.onBackPressed();
                 }
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
+            }
+        });
+
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("cancelOrder","Your Order has been cancelled");
+                orderStatusText.setText("Your Order has been cancelled as per your request");
+                cancelOrder.setVisibility(View.GONE);
+                orderStatusImage.setImageResource(R.drawable.dc_order_cancelled);
             }
         });
 
