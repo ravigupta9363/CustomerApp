@@ -91,21 +91,6 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
-        /*Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
-        drawableProfile.setBounds(0, 0, (int) (drawableProfile.getIntrinsicWidth() * 0.7),
-                (int) (drawableProfile.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd1 = new ScaleDrawable(drawableProfile, 0, 1f, 1f);
-
-        Drawable drawableEmail = getResources().getDrawable(R.mipmap.dc_about);
-        drawableEmail.setBounds(0, 0, (int) (drawableEmail.getIntrinsicWidth() * 0.7),
-                (int) (drawableEmail.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd2 = new ScaleDrawable(drawableEmail, 0, 1f, 1f);
-
-        Drawable drawablePhone = getResources().getDrawable(R.mipmap.dc_nav_contact);
-        drawablePhone.setBounds(0, 0, (int) (drawablePhone.getIntrinsicWidth() * 0.7),
-                (int) (drawablePhone.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd3 = new ScaleDrawable(drawablePhone, 0, 1f, 1f);*/
-
         customerName = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext1);
         customerMail = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext2);
         customerPhone = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext3);
@@ -135,23 +120,6 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerName.setText(updatedName);
         customerMail.setText(updatedMail);
         customerPhone.setText(updatedPhone);
-
-       /* if(mainActivity.updateUserInfoProfileEditFragment == true) {
-            /*customerName.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));
-            customerMail.setText(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_MAIL", "defaultStringIfNothingFound"));
-            customerPhone.setText( PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_PHONE", "defaultStringIfNothingFound"));
-            Log.v("profile","Bye Bye "+customerName.getText());
-            List<ProfileDetail> profile = profileDatabase.getProfile();
-            for (ProfileDetail profileDetail : profile) {
-                String log = "Id: "+ profileDetail.getName() +" Name: " + profileDetail.getEmail() + " ,Phone: " +
-                        profileDetail.getPhone();
-                updatedName = profileDetail.getName();
-                updatedMail = profileDetail.getEmail();
-                updatedPhone = profileDetail.getPhone();
-                // Writing Contacts to log
-                Log.v("camera ", log);
-            }
-        }*/
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -201,8 +169,10 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                         profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                         mainActivity.onBackPressed();
                     }
-                    else
+                    else {
+                        profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                         mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, null);
+                    }
                 }
 
 

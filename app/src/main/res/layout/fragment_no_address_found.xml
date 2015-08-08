@@ -18,9 +18,21 @@
         android:text="Exit App"
         android:textColor="#FFF"
         android:background="@drawable/round_button"
-        android:gravity="center"
-        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
         android:id="@+id/fragment_no_addres_found_button1"
+        android:layout_marginLeft="75dp"
+        android:layout_below="@+id/fragment_no_addres_found_textview1"/>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:textColor="#FFF"
+        android:background="@drawable/round_button"
+        android:id="@+id/fragment_no_addres_found_button2"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="75dp"
         android:layout_below="@+id/fragment_no_addres_found_textview1"/>
 
 </RelativeLayout>

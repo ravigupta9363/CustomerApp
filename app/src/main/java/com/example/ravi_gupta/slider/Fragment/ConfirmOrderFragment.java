@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,11 +71,11 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
         orderConfirmText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview1);
         thankYouText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview2);
         orderStatusButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button1);
-        orderHomeButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button2);
+        //orderHomeButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button2);
 
         orderConfirmText.setTypeface(typeface2);
         orderStatusButton.setTypeface(typeface2);
-        orderHomeButton.setTypeface(typeface2);
+        //orderHomeButton.setTypeface(typeface2);
         thankYouText.setTypeface(typeface4);
 
         orderStatusButton.setOnClickListener(new View.OnClickListener() {
@@ -86,18 +85,13 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        orderHomeButton.setOnClickListener(new View.OnClickListener() {
+        /*orderHomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = mainActivity.getSupportFragmentManager();
-                int count = fm.getBackStackEntryCount();
-                for(int i = 0; i < count; ++i) {
-                    fm.popBackStack();
-                }
                 mainActivity.replaceFragment(R.id.fragment_confirm_order_button2,null);
 
             }
-        });
+        });*/
 
         return rootview;
     }

@@ -53,6 +53,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     ImageView orderStatusImage;
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
     MainActivity mainActivity;
+    String fragment;
 
 
     // TODO: Rename and change types of parameters
@@ -88,6 +89,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
+        fragment = getArguments().getString("fragment");
+
         date = (TextView) rootview.findViewById(R.id.fragment_order_status_textview1);
         time = (TextView) rootview.findViewById(R.id.fragment_order_status_textview2);
         orderId = (TextView) rootview.findViewById(R.id.fragment_order_status_textview3);
@@ -120,7 +123,11 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.onBackPressed();
+                if (fragment.equals("HomeFragment")) {
+                }
+                else {
+                    mainActivity.onBackPressed();
+                }
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             }
@@ -226,7 +233,11 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
-                    mainActivity.onBackPressed();
+                    if (fragment.equals("HomeFragment")) {
+                    }
+                    else {
+                        mainActivity.onBackPressed();
+                    }
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     return true;
                 }

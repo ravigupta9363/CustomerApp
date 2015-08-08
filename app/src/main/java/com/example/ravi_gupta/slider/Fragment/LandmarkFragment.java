@@ -147,12 +147,17 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 hiddenKeyboard(flatNumberEditText);
                 //mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
+                if(!flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                    FlatNumberLayout.setError("Enter correct format");
+                if(!landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                    LandmarkLayout.setError("Enter correct format");
                 if(flatNumberEditText.getText().toString().matches(""))
                     FlatNumberLayout.setError("This field is mandotary");
                 if(landmarkEditText.getText().toString().matches(""))
                     LandmarkLayout.setError("This field is mandotary");
-                if(!flatNumberEditText.getText().toString().matches("") && !landmarkEditText.getText().toString().matches(""))
-                    mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
+                if(flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$") && landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$")) {
+                    mainActivity.replaceFragment(R.id.fragment_landmark_button1, null);
+                }
             }
         });
 

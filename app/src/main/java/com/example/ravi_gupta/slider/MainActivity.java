@@ -189,7 +189,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }catch (IOException e) {
             }
         } else {
-            showSettingsAlert();
+            showLocationAlert();
         }
 
         for(int i = 0; i < latlong.length-1 ; i++) {
@@ -747,6 +747,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
                 case R.id.nextButton:
                     ProfileDetail profileDetail = profileDatabase.getProfile();
+                    Log.v("home","Phone"+profileDetail.getPhone());
                     if (profileDetail.getPhone() == null) {
                         ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                                 findFragmentByTag(ProfileEditFragment.TAG);
@@ -822,6 +823,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     if (frag12 == null) {
                         frag12 = OrderStatusFragment.newInstance();
                     }
+                    Bundle bundle7 = new Bundle();
+                    bundle7.putString("fragment", "HomeFragment");
+                    frag12.setArguments(bundle7);
                     ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
                     break;
@@ -881,7 +885,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     ft.commitAllowingStateLoss();
                     break;
 
-                case R.id.fragment_confirm_order_button2:
+               /* case R.id.fragment_confirm_order_button2:
                     MainFragment frag15 = (MainFragment) getSupportFragmentManager().
                             findFragmentByTag(MainFragment.TAG);
                     if (frag15 == null) {
@@ -889,7 +893,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     }
                     ft.replace(R.id.container, frag15, MainFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
-                    break;
+                    break;*/
 
                 case R.layout.fragment_no_address_found:
                     NoAddressFoundFragment frag16 = (NoAddressFoundFragment) getSupportFragmentManager().
@@ -1065,6 +1069,28 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     }
 
+    public void showLocationAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                this);
+        alertDialog.setTitle("Change Location Setting");
+        alertDialog.setMessage("Enable Location?");
+        alertDialog.setPositiveButton("Setting",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String action = "com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS";
+                        Intent settings = new Intent(action);
+                        startActivity(settings);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
+    }
+
 
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
@@ -1089,6 +1115,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 });
         alertDialog.show();
     }
+
 
     public void showOpenPastOrderAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(

@@ -3,14 +3,18 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
@@ -29,7 +33,9 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
     TextView text;
     Button exitButton;
+    Button refreshButton;
     MainActivity mainActivity;
+    AppLocationService appLocationService;
     public static String TAG = "NoAddressFoundFragment";
 
 
@@ -66,14 +72,29 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
 
         text = (TextView) rootview.findViewById(R.id.fragment_no_addres_found_textview1);
         exitButton = (Button) rootview.findViewById(R.id.fragment_no_addres_found_button1);
+        refreshButton = (Button) rootview.findViewById(R.id.fragment_no_addres_found_button2);
 
         text.setTypeface(typeface2);
         exitButton.setTypeface(typeface2);
+        refreshButton.setTypeface(typeface2);
 
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainActivity.onBackPressed();
+            }
+        });
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appLocationService = new AppLocationService(mainActivity);
+                Location location = appLocationService
+                        .getLocation(LocationManager.NETWORK_PROVIDER);
+                if (location != null) {
+                    mainActivity.replaceFragment(R.layout.fragment_main, null);
+                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                }
             }
         });
 

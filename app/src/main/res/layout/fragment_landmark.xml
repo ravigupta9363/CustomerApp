@@ -116,8 +116,9 @@
                 android:id="@+id/fragment_landmark_radio_button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#AAA"
-                android:text="" />
+                android:textColor="#36B666"
+                android:text=""
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/fragment_landmark_radio_button2"
