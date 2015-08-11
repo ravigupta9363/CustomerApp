@@ -43,7 +43,62 @@
 
     <string name="dialog_send_prescription_camera_button">Camera</string>
     <string name="dialog_send_prescription_gallery_button">Gallery</string>
+
     <string name="drawer_list_item_textview1">Contact</string>
+
     <string name="fragment_about_us_textview4">Drugcorner  version 1.0.0</string>
+
     <string name="fragment_cart_textview1">Cart</string>
+    <string name="fragment_cart_button1">NEXT</string>
+
+    <string name="fragment_confirm_order_textview1">Your Order has been Placed</string>
+    <string name="fragment_confirm_order_button1">Status</string>
+    <string name="fragment_confirm_order_textview2">Thank You</string>
+
+    <string name="fragment_contact_us_textview1">Contact us</string>
+    <string name="fragment_contact_us_button1">Mail Us</string>
+    <string name="fragment_contact_us_button2">Call Us</string>
+
+    <string name="fragment_faq_textview1">FAQs</string>
+
+    <string name="fragment_incoming_sms_textview1">Verify Phone</string>
+    <string name="fragment_incoming_sms_textview2">Detecting Verification Code</string>
+    <string name="fragment_incoming_sms_textview3">9873046993</string>
+    <string name="fragment_incoming_sms_textview4">OR</string>
+    <string name="fragment_incoming_sms_textview5">Enter Manually</string>
+    <string name="fragment_incoming_sms_button1">Resend verification code</string>
+
+    <string name="fragment_landmark_textview1">Place Order</string>
+    <string name="fragment_landmark_button1">Place</string>
+    <string name="fragment_landmark_edittext1">Flat Number</string>
+    <string name="fragment_landmark_edittext2">Landmark</string>
+
+    <string name="fragment_main_textview1">DRUGCORNER</string>
+
+    <string name="fragment_no_address_found_button1">Exit App</string>
+    <string name="fragment_no_address_found_button2">Refresh</string>
+
+    <string name="fragment_no_internet_connection_textview1">Please check your Internet connection</string>
+    <string name="fragment_no_internet_connection_button1">Retry</string>
+
+    <string name="fragment_notification_textview1">Notifications</string>
+
+    <string name="fragment_order_status_textview1">Order Status</string>
+    <string name="fragment_order_status_textview12">Real time tracking coming soon</string>
+
+    <string name="fragment_past_orders_textview1">Past Orders</string>
+
+    <string name="fragment_profile_textview1">Profile</string>
+    <string name="fragment_profile_textview2">Username</string>
+    <string name="fragment_profile_textview3">Email Id</string>
+    <string name="fragment_profile_textview4">Mobile Number</string>
+    <string name="fragment_profile_button1">Edit</string>
+
+    <string name="fragment_edit_profile_textview1">Edit Profile</string>
+    <string name="fragment_edit_profile_edittext1">Username</string>
+    <string name="fragment_edit_profile_edittext2">Email Id</string>
+    <string name="fragment_edit_profile_edittext3">Mobile Number</string>
+    <string name="fragment_edit_profile_button1">Save</string>
+
+
 </resources>

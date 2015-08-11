@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please check your Internet connection"
+        android:text="@string/fragment_no_internet_connection_textview1"
         android:textColor="#36B666"
         android:id="@+id/fragment_no_internet_connection_textview1"
         android:layout_centerHorizontal="true"
@@ -24,7 +24,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Retry"
+        android:text="@string/fragment_no_internet_connection_button1"
         android:textAllCaps="false"
         android:background="@drawable/round_button"
         android:id="@+id/fragment_no_internet_connection_button1"

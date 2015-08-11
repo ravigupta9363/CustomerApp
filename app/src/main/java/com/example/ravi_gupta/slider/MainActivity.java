@@ -203,7 +203,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         }
 
-        if(haveNetworkConnection() && matchPincode != null) {
+        String status = "Delivered";
+        if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
             replaceFragment(R.layout.fragment_main, null);
        }
         else if(haveNetworkConnection() && matchPincode == null) {
@@ -1092,7 +1093,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void showLocationAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 this);
-        alertDialog.setMessage("Enable Location?");
+        alertDialog.setMessage("This app requires google location to be enabled");
         alertDialog.setPositiveButton("Setting",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

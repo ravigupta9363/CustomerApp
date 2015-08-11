@@ -32,7 +32,7 @@
             android:id="@+id/fragment_faq_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="FAQs" />
+            android:text="@string/fragment_faq_textview1" />
 
 
     </android.support.v7.widget.Toolbar>

@@ -35,7 +35,7 @@
             android:id="@+id/fragment_notification_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Notifications" />
+            android:text="@string/fragment_notification_textview1" />
 
 
     </android.support.v7.widget.Toolbar>

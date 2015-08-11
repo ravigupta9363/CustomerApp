@@ -7,7 +7,7 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your Order has been Placed"
+        android:text="@string/fragment_confirm_order_textview1"
         android:gravity="center|top"
         android:layout_marginTop="120dp"
         android:textSize="15sp"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/fragment_confirm_order_textview1"
         android:background="@drawable/round_button"
-        android:text="Status"
+        android:text="@string/fragment_confirm_order_button1"
         android:textColor="#FFF"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Thank You"
+        android:text="@string/fragment_confirm_order_textview2"
         android:gravity="center"
         android:layout_marginTop="2dp"
         android:textColor="#333"

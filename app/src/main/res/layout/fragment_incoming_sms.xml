@@ -38,14 +38,14 @@
                 android:textSize="20sp"
                 android:layout_weight="3"
                 android:textColor="#999"
-                android:text="Verify Phone"
+                android:text="@string/fragment_incoming_sms_textview1"
                 android:gravity="center|left"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fragment_incoming_sms_button1"
-                android:text="NEXT"
+                android:text="@string/fragment_cart_button1"
                 android:textAllCaps="false"
                 android:background="@drawable/ripple_button_rectangle"
                 android:textColor="#36B666"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_incoming_sms_textview2"
-            android:text="Detecting Verification Code"
+            android:text="@string/fragment_incoming_sms_textview2"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginBottom="15dp"/>
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_incoming_sms_textview3"
-            android:text="+91 9873046993"
+            android:text="@string/fragment_incoming_sms_textview3"
             android:gravity="center"
             android:textSize="21sp"
             android:layout_marginBottom="30dp"/>
@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_incoming_sms_textview4"
-            android:text="OR"
+            android:text="@string/fragment_incoming_sms_textview4"
             android:gravity="center"
             android:layout_marginBottom="30dp"/>
 
@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_incoming_sms_textview5"
-            android:text="Enter Manually"
+            android:text="@string/fragment_incoming_sms_textview5"
             android:gravity="center"
             android:layout_marginBottom="15dp"/>
 

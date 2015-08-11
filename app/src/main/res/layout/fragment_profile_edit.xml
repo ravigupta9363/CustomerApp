@@ -31,7 +31,7 @@
             android:id="@+id/fragment_profile_edit_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Edit Profile" />
+            android:text="@string/fragment_edit_profile_textview1" />
 
 
     </android.support.v7.widget.Toolbar>
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_edit_edittext1"
-            android:hint="Username"
+            android:hint="@string/fragment_edit_profile_edittext1"
             android:layout_marginBottom="0dp"
             android:gravity="center|left"
             android:textSize="15sp"
@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_edit_edittext2"
-            android:hint="Email Id"
+            android:hint="@string/fragment_landmark_edittext2"
             android:gravity="center|left"
             android:layout_marginBottom="0dp"
             android:textSize="15sp"
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_edit_edittext3"
-            android:hint="Mobile Number"
+            android:hint="@string/fragment_edit_profile_edittext3"
             android:gravity="center|left"
             android:textSize="15sp"
             android:inputType="phone"
@@ -112,7 +112,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Save"
+            android:text="@string/fragment_edit_profile_button1"
             android:textColor="#FFF"
             android:background="@drawable/round_button"
             android:id="@+id/fragment_profile_edit_button1"

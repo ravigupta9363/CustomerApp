@@ -41,7 +41,7 @@
             android:id="@+id/fragment_profile_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Profile" />
+            android:text="@string/fragment_profile_textview1" />
 
 
     </android.support.v7.widget.Toolbar>
@@ -66,7 +66,7 @@
            android:layout_height="wrap_content"
            android:id="@+id/fragment_profile_textview1"
            android:drawableLeft="@mipmap/dc_profile"
-           android:hint="Username"
+           android:hint="@string/fragment_profile_textview2"
            android:layout_marginBottom="5dp"
            android:gravity="center|left"
            android:textSize="15sp"/>
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_textview2"
             android:drawableLeft="@mipmap/dc_about"
-            android:hint="Email Id"
+            android:hint="@string/fragment_profile_textview3"
             android:gravity="center|left"
             android:layout_marginBottom="5dp"
             android:textSize="15sp"/>
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_textview3"
             android:drawableLeft="@mipmap/dc_nav_contact"
-            android:hint="Mobile Number"
+            android:hint="@string/fragment_profile_textview4"
             android:gravity="center|left"
             android:textSize="15sp"/>
 
@@ -95,7 +95,7 @@
             android:layout_marginTop="40dp"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Edit"
+            android:text="@string/fragment_profile_button1"
             android:textColor="#FFF"
             android:background="@drawable/round_button"
             android:id="@+id/fragment_profile_button1"

@@ -153,6 +153,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 orderStatusText.setText("Your Order has been cancelled as per your request");
                 cancelOrder.setVisibility(View.GONE);
                 orderStatusImage.setImageResource(R.drawable.dc_order_cancelled);
+                //Open Main Fragment when order has been cancelled or delivered
             }
         });
 

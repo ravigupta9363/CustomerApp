@@ -32,7 +32,7 @@
             android:id="@+id/fragment_contact_us_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Contact us" />
+            android:text="@string/fragment_contact_us_textview1" />
 
 
     </android.support.v7.widget.Toolbar>

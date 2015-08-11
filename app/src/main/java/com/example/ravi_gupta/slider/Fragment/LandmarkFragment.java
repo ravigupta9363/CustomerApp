@@ -133,6 +133,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         landmarkEditText.setTypeface(typeface2);
         callBack.setTypeface(typeface2);
         notCallBack.setTypeface(typeface2);
+        placeOrder.setTypeface(typeface2);
 
         final TextInputLayout FlatNumberLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout1);
         final TextInputLayout LandmarkLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_landmark_layout2);

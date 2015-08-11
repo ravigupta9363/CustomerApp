@@ -33,7 +33,7 @@
              android:id="@+id/fragment_order_status_textview11"
              android:textSize="20sp"
              android:textColor="#999"
-             android:text="Order Status" />
+             android:text="@string/fragment_order_status_textview1" />
 
 
      </android.support.v7.widget.Toolbar>
@@ -199,7 +199,7 @@
          <TextView
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:text="Real time tracking coming soon"
+             android:text="@string/fragment_order_status_textview12"
              android:textSize="25sp"
              android:layout_gravity="center"
              android:textColor="#555"

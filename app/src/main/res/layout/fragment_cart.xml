@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/dc_back_button"
-            android:background="@drawable/ripple_button" />
+            android:background="@drawable/ripple_button_rectangle" />
         <!-- </RelativeLayout>-->
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_cart_button1"
-            android:text="NEXT"
+            android:text="@string/fragment_cart_button1"
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_rectangle"
             android:textColor="#36B666"

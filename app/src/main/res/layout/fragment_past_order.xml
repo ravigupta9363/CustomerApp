@@ -32,7 +32,7 @@
             android:id="@+id/fragment_past_order_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="Past Orders" />
+            android:text="@string/fragment_past_orders_textview1" />
 
 
     </android.support.v7.widget.Toolbar>
