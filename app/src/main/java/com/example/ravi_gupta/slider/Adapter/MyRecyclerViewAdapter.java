@@ -2,7 +2,6 @@ package com.example.ravi_gupta.slider.Adapter;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,13 @@ import java.util.ArrayList;
 /**
  * Created by Ravi-Gupta on 7/11/2015.
  */
-public class MyRecyclerViewAdapter extends RecyclerView
-        .Adapter<MyRecyclerViewAdapter
-        .DataObjectHolder> {
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.DataObjectHolder> {
+
     private static String LOG_TAG = "MyRecyclerViewAdapter";
     private ArrayList<NotificationItemDetail> mDataset;
     private static MyClickListener myClickListener;
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder
-            implements View
-            .OnClickListener {
+    public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView heading;
         TextView details;
 
@@ -34,11 +30,11 @@ public class MyRecyclerViewAdapter extends RecyclerView
             Typeface typeface1 = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/gothic.ttf");
             Typeface typeface2 = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/OpenSans-Regular.ttf");
             Typeface typeface3 = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Lato-Regular.ttf");
+
             heading = (TextView) itemView.findViewById(R.id.fragment_notification_textView1);
             details = (TextView) itemView.findViewById(R.id.fragment_notification_textView2);
             heading.setTypeface(typeface2);
             details.setTypeface(typeface2);
-            Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
         }
 
@@ -61,10 +57,9 @@ public class MyRecyclerViewAdapter extends RecyclerView
     }
 
     @Override
-    public DataObjectHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.notification_card_view, parent, false);
+    public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_card_view, parent, false);
 
         DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
         return dataObjectHolder;

@@ -108,6 +108,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //db.execSQL(DELETEPASSCODE_DETAIL);
     }
 
-
-
 }

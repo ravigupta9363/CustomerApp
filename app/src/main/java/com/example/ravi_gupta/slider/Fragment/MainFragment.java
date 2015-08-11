@@ -262,7 +262,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 getActivity());
-        alertDialog.setTitle("SETTINGS");
         alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
         alertDialog.setPositiveButton("Settings",
                 new DialogInterface.OnClickListener() {

@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,8 +159,6 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             }
             mainActivity.updateUserInfo  = false;
         }*/
-
-        Log.v(TAG, "Data passed from Child fragment = " + customerEmail.getText());
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override

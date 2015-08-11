@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
@@ -110,7 +109,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             @Override
             public void onClick(View v) {
                 mainActivity.replaceFragment(R.id.past_order_layout_imageview1,null);//Open Dialog
-                Toast.makeText(getContext(),"Image Dialog will appear",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"Image Dialog will appear",Toast.LENGTH_SHORT).show();
             }
         });
 

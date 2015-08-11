@@ -6,11 +6,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -52,7 +49,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
 
@@ -71,14 +67,9 @@ public class CartFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
        // setHasOptionsMenu(true);
-        Log.v("camera", " Count = " + databaseHelper.getPresciptionCount());
         List<PrescriptionDetail> contacts = databaseHelper.getAllPrescription();
         for (PrescriptionDetail cn : contacts) {
-            String log = "Id: "+ cn.getID() +" Name: " + cn.getImageUri() + " ,Phone: " +
-                    cn.getThumbnailUri();
             prescriptionDetails.add(new PrescriptionDetail(cn.getID(),cn.getImageUri(),cn.getThumbnailUri()));
-            // Writing Contacts to log
-            Log.v("camera ", log);
         }
     }
 
@@ -87,9 +78,6 @@ public class CartFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_cart, container, false);
-        Uri imageuri = null;
-        Uri thumbnailUri = null;
-
 
         gridView = (GridView) rootview.findViewById(R.id.fragment_cart_gridview1);
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
@@ -116,21 +104,8 @@ public class CartFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        //pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,"Delivered"));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-        //prescriptionDetails.add(new PrescriptionDetail(imageuri,thumbnailUri));
-
-        //addNewPrescription();
-        //if(this.imagePath!=null)
-            //prescriptionDetails.add(new PrescriptionDetail(this.imagePath,this.thumbnail));
-
-
         prescriptionAdapter = new PrescriptionAdapter(getActivity(),R.layout.prescription,prescriptionDetails);
         gridView.setAdapter(prescriptionAdapter);
-
-
         return rootview;
     }
 
@@ -195,18 +170,5 @@ public class CartFragment extends android.support.v4.app.Fragment {
             }
         });
     }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item= menu.findItem(R.id.cart);
-        MenuItem item2 = menu.findItem(R.id.nextButton);
-        item.setEnabled(false);
-        item.setVisible(false);
-        item2.setEnabled(true);
-        item2.setVisible(true);
-
-    }
-
 
 }

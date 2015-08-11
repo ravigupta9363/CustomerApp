@@ -117,7 +117,6 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         return row;
     }
 
-
     static class ShopListHolder {
         TextView shopName;
         TextView discount;

@@ -109,7 +109,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 hiddenKeyboard(flatNumberEditText);
                 mainActivity.onBackPressed();
-                Log.v("hello", "Back Button");
             }
         });
 

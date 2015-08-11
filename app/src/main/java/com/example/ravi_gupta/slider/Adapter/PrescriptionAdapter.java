@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,9 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+
         mainFragment = (MainFragment) mainActivity.getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+
         if(row == null)
         {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -103,11 +104,9 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
 
             @Override
             public void onClick(View v) {
-                Log.v("signup", "not available");
                         prescriptionDetails.remove(position);
                         notifyDataSetChanged();
 
-                        Log.v("count", "Id = " + databaseHelper.getPresciptionCount() + "");
                         if(databaseHelper.getPresciptionCount() == 1) {
                             //Toast.makeText(context,"No Prescription",Toast.LENGTH_SHORT).show();
                             mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

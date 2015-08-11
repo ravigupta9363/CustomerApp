@@ -62,19 +62,14 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(final ViewGroup container, int position) {
 
-        layoutInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View itemView = layoutInflater.inflate(R.layout.viewpager_item, container,
-                false);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View itemView = layoutInflater.inflate(R.layout.viewpager_item, container, false);
 
         // Locate the ImageView in viewpager_item.xml
         ImageView sliderItem = (ImageView) itemView.findViewById(R.id.viewpagerImageView1);
 
         // Capture position and set to the ImageView
         sliderItem.setImageResource(sliderItems[position]);
-
-
 
         // Add viewpager_item.xml to ViewPager
         ((ViewPager) container).addView(itemView);

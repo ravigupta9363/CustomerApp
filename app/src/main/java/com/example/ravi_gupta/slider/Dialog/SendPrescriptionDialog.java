@@ -24,8 +24,6 @@ public class SendPrescriptionDialog extends DialogFragment {
 
     Button cameraButton;
     Button galleryButton;
-
-
     Callback callBack;
 
     public static String TAG = "SendPrescriptionDialog";
@@ -34,13 +32,10 @@ public class SendPrescriptionDialog extends DialogFragment {
         super();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         callBack = (Callback)getActivity();
-
     }
 
     @NonNull
@@ -59,10 +54,8 @@ public class SendPrescriptionDialog extends DialogFragment {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-
         super.onStart();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

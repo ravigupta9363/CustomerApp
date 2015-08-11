@@ -34,12 +34,13 @@ public class OrderStatusDetailAdapter extends ArrayAdapter<OrderStatusDetail> {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View row = convertView;
         OrderStatusHolder holder = null;
+
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+
         if(row == null)
         {
-
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             row = layoutInflater.inflate(resource,parent,false);
             holder = new OrderStatusHolder();

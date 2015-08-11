@@ -38,9 +38,12 @@ public class AddressAdapter extends ArrayAdapter<AddressDetails> {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View row = convertView;
         AddressHolder holder = null;
+
+        //Define Typeface
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+
         if(row == null)
         {
             LayoutInflater layoutInflater = LayoutInflater.from(context);

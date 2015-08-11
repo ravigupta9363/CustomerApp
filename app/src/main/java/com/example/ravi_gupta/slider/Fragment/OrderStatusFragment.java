@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,7 +148,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("cancelOrder","Your Order has been cancelled");
                 orderStatusText.setText("Your Order has been cancelled as per your request");
                 cancelOrder.setVisibility(View.GONE);
                 orderStatusImage.setImageResource(R.drawable.dc_order_cancelled);
@@ -292,6 +290,5 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             }
         }
     }
-
 
 }

@@ -85,6 +85,4 @@ public class ProfileDatabase extends SQLiteOpenHelper {
         db.delete(TABLE_PROFILE, null, null);
         //db.execSQL(DELETEPASSCODE_DETAIL);
     }
-
-
 }

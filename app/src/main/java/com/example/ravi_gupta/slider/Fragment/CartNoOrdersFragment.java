@@ -15,11 +15,8 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -66,7 +63,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         //((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
     }
 
     @Override
@@ -74,9 +70,11 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_cart_no_orders, container, false);
+
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
+
         TextView text = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview1);
         TextView text2 = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview3);
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview2);
@@ -122,7 +120,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 mainActivity.onBackPressed();
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                Log.v("hello", "Back Button");
             }
         });
         return rootview;
@@ -195,15 +192,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
-    }
-
-        @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item = menu.findItem(R.id.cart);
-        item.setEnabled(false);
-        item.setVisible(false);
-
     }
 
 }

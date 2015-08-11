@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -129,14 +127,4 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item= menu.findItem(R.id.cart);
-        item.setEnabled(false);
-        item.setVisible(false);
-
-    }
-
 }

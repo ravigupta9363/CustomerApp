@@ -3,17 +3,12 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,7 +20,6 @@ import android.widget.Button;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
-import com.example.ravi_gupta.slider.TypefaceSpan;
 
 
 /**
@@ -66,12 +60,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
-        SpannableString s = new SpannableString("SEND PRESCRIPTION");
-        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        s.setSpan(new RelativeSizeSpan(0.9f),0,17, 0);
-        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setTitle(s);
     }
 
 
@@ -201,7 +189,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.v("Pressed State", "Attached");
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {

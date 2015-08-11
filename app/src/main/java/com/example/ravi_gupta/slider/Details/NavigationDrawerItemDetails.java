@@ -25,7 +25,6 @@ public class NavigationDrawerItemDetails {
         return this.icon;
     }
 
-
     public void setTitle(String title){
         this.title = title;
     }

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -150,9 +149,6 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                     mailLayout.setError("This field is mandotary");
                 if(updatedPhone.matches(""))
                     phoneLayout.setError("This field is mandotary");
-
-
-                Log.v("profile", updatedName + updatedMail + updatedPhone);
 
                /* ProfileDetail profileDetail = profileDatabase.getProfile();
 

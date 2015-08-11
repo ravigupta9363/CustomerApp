@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +46,6 @@ public class ImageZoomDialog extends DialogFragment {
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-
-
     }
 
     @Override
@@ -57,7 +54,6 @@ public class ImageZoomDialog extends DialogFragment {
         //setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.MY_DIALOG);
         this.image = getArguments().getParcelable("prescription");
-        Log.v("camera","Big View = "+this.image);
     }
 
     @Override
