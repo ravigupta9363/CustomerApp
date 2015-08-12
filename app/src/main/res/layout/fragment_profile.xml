@@ -24,6 +24,11 @@
             android:layout_toLeftOf="@+id/more2"
             rv_centered="true">-->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
         <ImageButton
             android:paddingRight="4dp"
             android:id="@+id/fragment_profile_imagebutton1"
@@ -41,8 +46,24 @@
             android:id="@+id/fragment_profile_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="@string/fragment_profile_textview1" />
+            android:text="@string/fragment_profile_textview1"
+            android:gravity="center|left"
+            android:layout_weight="3"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_profile_button1"
+            android:textColor="#36B666"
+            android:background="@drawable/ripple_button_rectangle"
+            android:id="@+id/fragment_profile_button1"
+            android:layout_gravity="right"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:layout_weight="0.2"/>
+
+        </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
@@ -89,20 +110,6 @@
             android:hint="@string/fragment_profile_textview4"
             android:gravity="center|left"
             android:textSize="15sp"/>
-
-        <Button
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/fragment_profile_button1"
-            android:textColor="#FFF"
-            android:background="@drawable/round_button"
-            android:id="@+id/fragment_profile_button1"
-            android:textStyle="bold"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_gravity="center"/>
 
     </LinearLayout>
 

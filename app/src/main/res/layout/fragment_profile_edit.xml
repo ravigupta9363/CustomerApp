@@ -15,6 +15,11 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
         <ImageButton
             android:paddingRight="4dp"
             android:id="@+id/fragment_profile_edit_imagebutton1"
@@ -31,7 +36,24 @@
             android:id="@+id/fragment_profile_edit_textview4"
             android:textSize="20sp"
             android:textColor="#999"
-            android:text="@string/fragment_edit_profile_textview1" />
+            android:gravity="center|left"
+            android:text="@string/fragment_edit_profile_textview1"
+            android:layout_weight="3"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_edit_profile_button1"
+            android:background="@drawable/ripple_button_rectangle"
+            android:id="@+id/fragment_profile_edit_button1"
+            android:textColor="#36B666"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:layout_gravity="right"
+            android:layout_weight="0.2"/>
+
+        </LinearLayout>
 
 
     </android.support.v7.widget.Toolbar>
@@ -81,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_edit_edittext2"
-            android:hint="@string/fragment_landmark_edittext2"
+            android:hint="@string/fragment_edit_profile_edittext2"
             android:gravity="center|left"
             android:layout_marginBottom="0dp"
             android:textSize="15sp"
@@ -107,19 +129,6 @@
             android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/fragment_edit_profile_button1"
-            android:textColor="#FFF"
-            android:background="@drawable/round_button"
-            android:id="@+id/fragment_profile_edit_button1"
-            android:textStyle="bold"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_gravity="center"/>
 
     </LinearLayout>
 

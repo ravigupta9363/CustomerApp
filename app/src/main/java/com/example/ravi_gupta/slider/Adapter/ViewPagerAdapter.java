@@ -21,6 +21,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
+    int page = 0;
 
     public ViewPagerAdapter(Context context, final int[] sliderItems, final ViewPagerCustomDuration viewPager) {
         this.context = context;
@@ -49,10 +50,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
         //return sliderItems.length;
-        return 5;
+        return sliderItems.length;
     }
-
-
 
     @Override
     public boolean isViewFromObject(View view, Object o) {
@@ -85,11 +84,11 @@ public class ViewPagerAdapter extends PagerAdapter {
             public void onPageSelected(int position) {
                 // skip fake page (first), go to last page
                 if (position == 0) {
-                    ((ViewPager) container).setCurrentItem(3);
+                    ((ViewPager) container).setCurrentItem(sliderItems.length-2);
                 }
 
                 // skip fake page (last), go to first page
-                if (position == 4) {
+                if (position == sliderItems.length-1) {
                     ((ViewPager) container).setCurrentItem(1); //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                 }
 

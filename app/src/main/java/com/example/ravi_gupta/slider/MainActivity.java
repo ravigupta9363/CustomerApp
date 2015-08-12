@@ -113,14 +113,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NoAddressFoundFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
-    public boolean updateUserInfo = false;
-    public boolean updateUserInfoProfileEditFragment = false;
-    public boolean addedToList = false;
+    //public boolean updateUserInfo = false;
+    //public boolean updateUserInfoProfileEditFragment = false;
+    //public boolean addedToList = false;
     public DrawerLayout mDrawerLayout;
     public ListView mDrawerList;
     public ActionBarDrawerToggle mDrawerToggle;
-    public int FRAGMENT_CODE = 0;
-    private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
+    //public int FRAGMENT_CODE = 0;
+    //private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
     private Uri fileUri;
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
@@ -128,22 +128,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
     public TextView tv;
-    public String OTP;
+    //public String OTP;
     public boolean enableEditText = true;
     public String actionbarTitle = "DRUGCORNER";
     MainFragment mainFragment;
     AppLocationService appLocationService;
-
-    // nav drawer title
-    private CharSequence mDrawerTitle;
-
-    // used to store app title
+    //private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-
-    // slide menu items
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
-
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
     int mNotificationId1 = 001;
@@ -154,10 +147,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v("Notifications", getIntent().getAction().equals("OpenNotificationFragment") + "Hello");
         getSupportActionBar().hide();
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -176,12 +169,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         latitude, longitude, 1);
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);
-                    Log.v("locality", address + "");
                     final Pattern p = Pattern.compile( "(\\d{6})" );
                     final Matcher m = p.matcher( address.toString() );
                     if ( m.find() ) {
                         pincode =  m.group(0);
-                        Log.v("raviPincode", pincode);
                     }
                     StringBuilder sb = new StringBuilder();
                     sb.append(address.getPostalCode());
@@ -209,7 +200,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
        }
         else if(haveNetworkConnection() && matchPincode == null) {
             //replaceFragment(R.layout.fragment_);
-            Log.v("raviPincode","We are not serving in your area");
             replaceFragment(R.layout.fragment_no_address_found, null);
         }
         else {
@@ -277,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
-        mTitle = mDrawerTitle = s.toString();
+        mTitle = s.toString();
 
 
         // setting the nav drawer list adapter
@@ -619,7 +609,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         frag2 = changeLocationFragment.newInstance();
                     }
                     ft.replace(R.id.fragment_main_container, frag2, changeLocationFragment.TAG).addToBackStack(null);
-                    Log.v("Result", "Called2");
                     ft.commitAllowingStateLoss();
                     break;
 
@@ -717,15 +706,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Log.v("camera", fileUri.toString());
-                    Log.v("camera", thumbnailUri.toString());
-                    Log.v("delete", "Id  Camera = " + prescriptionId);
+
                     databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri));
                     prescriptionId++;
                     String cartItems = databaseHelper.getPresciptionCount() + "";
                     mainFragment.cartItems.setText(cartItems);
                     mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
-                    Log.v("camera", databaseHelper.getPresciptionCount() + "");
                     break;
 
                 case R.id.prescription_imageview1:
@@ -736,7 +722,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     ImageZoomDialog imageZoomDialog = new ImageZoomDialog();
                     imageZoomDialog.setArguments(bundle4);
                     imageZoomDialog.show(getFragmentManager(), ImageZoomDialog.TAG);
-                    Log.v("signin", "image  " + image);
                     break;
 
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
@@ -758,7 +743,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Log.v("delete", "Id Gallery= " + prescriptionId);
                     databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri1));
                     prescriptionId++;
                     String cartItem = databaseHelper.getPresciptionCount() + "";
@@ -768,7 +752,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
                 case R.id.nextButton:
                     ProfileDetail profileDetail = profileDatabase.getProfile();
-                    Log.v("home","Phone"+profileDetail.getPhone());
                     if (profileDetail.getPhone() == null) {
                         ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                                 findFragmentByTag(ProfileEditFragment.TAG);
@@ -953,7 +936,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("cart","Clicked");
                 //replaceFragment(R.id.shoppingCart, null);
             }
         });
@@ -1236,7 +1218,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId1, mBuilder.build());
-        Log.v("notification","Notification");
     }
 
     public void showStatusNotification() {
@@ -1266,7 +1247,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId2, mBuilder.build());
-        Log.v("notification","Notification");
     }
 
 

@@ -216,8 +216,8 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    boolean isPhoneValid(CharSequence email) {
-        return Patterns.PHONE.matcher(email).matches();
+    boolean isPhoneValid(CharSequence phone) {
+        return Patterns.PHONE.matcher(phone).matches();
     }
 
     @Override
