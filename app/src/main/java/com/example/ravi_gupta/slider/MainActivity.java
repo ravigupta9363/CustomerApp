@@ -87,6 +87,7 @@ import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.strongloop.android.loopback.RestAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -144,6 +145,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     String[] latlong = {"323001","122002","302033"};
     String matchPincode;
     String pincode;
+    public RestAdapter restAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+
+        //Making Server Call
+        restAdapter = new RestAdapter(getApplicationContext(), "http://api.drugcorner.co.in/api");
+        //ModelRepository shopListRepository = restAdapter.createRepository("shopList");
+        //Model shopList = shopListRepository.createObject( ImmutableMap.of("shopName", "Gurgaon Pharmacy") );
 
         appLocationService = new AppLocationService(this);
         Location location = appLocationService
@@ -263,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         SpannableString s = new SpannableString(actionbarTitle);
         s.setSpan(new TypefaceSpan(this, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(Color.rgb(51, 51, 51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);

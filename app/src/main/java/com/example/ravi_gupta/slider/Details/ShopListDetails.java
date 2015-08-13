@@ -3,7 +3,7 @@ package com.example.ravi_gupta.slider.Details;
 /**
  * Created by Ravi-Gupta on 7/2/2015.
  */
-public class ShopListDetails {
+public class ShopListDetails{
     public String shopName;
     public int discount;
     public String address;
@@ -18,7 +18,7 @@ public class ShopListDetails {
         super();
     }
 
-    public ShopListDetails(String shopName, int discount, String address, boolean Isopen, boolean Isreturn, int deliveryTime, int orderFulfilment) {
+    public ShopListDetails(String shopName, int discount, String address, boolean Isopen, boolean Isreturn, int orderFulfilment) {
         this.shopName = shopName;
         this.discount = discount;
         this.address = address;

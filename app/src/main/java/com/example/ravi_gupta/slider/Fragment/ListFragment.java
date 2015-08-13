@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,14 @@ import android.widget.ProgressBar;
 import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.RetailerRepository;
+import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,6 +45,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
     ArrayList<ShopListDetails> shopListDetailses = new ArrayList<ShopListDetails>();
     MainActivity mainActivity;
     ProgressBar spinner;
+    RetailerRepository retailerRepository;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -75,7 +82,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_shop_list, container, false);
         mainActivity = (MainActivity) getActivity();
-
+        retailerRepository = mainActivity.restAdapter.createRepository(RetailerRepository.class);
         mListview = (ListView) rootview.findViewById(R.id.shopListview);
         spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
         new AsyncCaller().execute();
@@ -83,6 +90,26 @@ public class ListFragment extends android.support.v4.app.Fragment {
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
 
+        retailerRepository.findAll(new ListCallback<Retailer>() {
+
+            @Override
+            public void onSuccess(List<Retailer> retailerModelList) {
+                //Retailer retailerModel = (Retailer) retailerModelList;
+                //Log.v("server","Name = "+ retailerModel.getName() + "Name");
+                for(Retailer retailerModel : retailerModelList) {
+                    Map<String, Integer> discount = retailerModel.getDiscount();
+                    Object allitems = "allitems";
+
+                    shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                }
+            }
+
+            public void onError(Throwable t) {
+                // handle the error
+                Log.v("server","Error");
+                Log.v("server",t+"");
+            }
+        });
 
         return rootview;
     }
@@ -160,10 +187,23 @@ public class ListFragment extends android.support.v4.app.Fragment {
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
 
-            shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,60,99));
-            shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,90,84));
-            shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,120,45));
-            shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 120, 33));
+            /*retailerRepository.findAll(new ListCallback<Retailer>() {
+
+                @Override
+                public void onSuccess(List<Retailer> objects) {
+                    Log.v("server",objects+"");
+                }
+
+                public void onError(Throwable t) {
+                    // handle the error
+                }
+            });
+            */
+            shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,99));
+            shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,84));
+            shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,45));
+            shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 33));
+
 
             mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
