@@ -1,6 +1,7 @@
 package com.example.ravi_gupta.slider.Details;
 
-import android.graphics.drawable.Drawable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ravi-Gupta on 7/13/2015.
@@ -10,10 +11,11 @@ public class PastOrdersDetail {
     public String date;
     public String time;
     public String orderId;
-    public int price;
+    //public int price;
     public String address;
-    public Drawable drawable;
+    public List<Map<String, String>> drawable;
     public boolean isDelivered;
+
 
     public PastOrdersDetail() {
         super();
@@ -22,13 +24,12 @@ public class PastOrdersDetail {
     public PastOrdersDetail(String date,
             String time,
             String orderId,
-            int price,
-            String address,Drawable drawable,
+            String address,List<Map<String, String>> drawable,
             boolean isDelivered){
         this.date = date;
         this.time = time;
         this.orderId = orderId;
-        this.price = price;
+        //this.price = price;
         this.address = address;
         this.drawable = drawable;
         this.isDelivered = isDelivered;

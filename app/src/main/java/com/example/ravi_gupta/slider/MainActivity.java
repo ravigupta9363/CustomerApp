@@ -36,12 +36,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,6 +60,7 @@ import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.Dialog.ImageZoomDialog;
 import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
+import com.example.ravi_gupta.slider.Dialog.ServerImageZoomDialog;
 import com.example.ravi_gupta.slider.Fragment.AboutUsFragment;
 import com.example.ravi_gupta.slider.Fragment.CartFragment;
 import com.example.ravi_gupta.slider.Fragment.CartNoOrdersFragment;
@@ -84,6 +80,7 @@ import com.example.ravi_gupta.slider.Fragment.PastOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
+import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
@@ -92,11 +89,12 @@ import com.strongloop.android.loopback.RestAdapter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -111,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
-        NoAddressFoundFragment.OnFragmentInteractionListener{
+        NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -142,10 +140,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private NavDrawerListAdapter adapter;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
-    String[] latlong = {"323001","122002","302033"};
+    String[] latlong = {"323001","122002","302033","122010","122008"};
     String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
+    public String baseURL = "http://192.168.1.100:3001";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,10 +158,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
 
         //Making Server Call
-        restAdapter = new RestAdapter(getApplicationContext(), "http://api.drugcorner.co.in/api");
+        restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
         //ModelRepository shopListRepository = restAdapter.createRepository("shopList");
         //Model shopList = shopListRepository.createObject( ImmutableMap.of("shopName", "Gurgaon Pharmacy") );
 
+        //Checking Pincode lies within area
         appLocationService = new AppLocationService(this);
         Location location = appLocationService
                 .getLocation(LocationManager.NETWORK_PROVIDER);
@@ -202,6 +202,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
 
         String status = "Delivered";
+        //Checking if Network is connected or Serving in area
         if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
             replaceFragment(R.layout.fragment_main, null);
        }
@@ -219,21 +220,31 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
 
+        //Opening fragments from notifications
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if(getIntent().getAction().equals("OpenNotificationFragment")) {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(PastOrderFragment.TAG)
                     .commitAllowingStateLoss();
         }
         else if(getIntent().getAction().equals("OpenStatusFragment")){
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_main_container, new OrderStatusFragment()).addToBackStack(PastOrderFragment.TAG)
-                    .commitAllowingStateLoss();
+            OrderStatusFragment orderStatusFragment = (OrderStatusFragment) getSupportFragmentManager().
+                    findFragmentByTag(OrderStatusFragment.TAG);
+            if (orderStatusFragment == null) {
+                orderStatusFragment = OrderStatusFragment.newInstance();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putString("fragment", "StatusFragment");
+            orderStatusFragment.setArguments(bundle);
+            ft.replace(R.id.fragment_main_container, orderStatusFragment, OrderStatusFragment.TAG).addToBackStack(null);
+            ft.commitAllowingStateLoss();
         }
 
 
 
         // HACK: "steal" the first child of decor view
+        //Making navigation drawer full screen
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
         View child = decor.getChildAt(0);
         decor.removeView(child);
@@ -243,6 +254,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         decor.addView(mDrawerLayout);
         getSupportActionBar().setElevation(0);//Removing Shaodow
 
+
+        //Putting childs in Navigation drawer
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.sections_title);
 
@@ -254,8 +267,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerList = (ListView) findViewById(R.id.drawerListView);
 
         navDrawerItems = new ArrayList<NavigationDrawerItemDetails>();
-
-        navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        for(int i = 0; i<=9; i++){
+            navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+        }
+        /*navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
@@ -263,18 +278,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
         navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
-        navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[8], navMenuIcons.getResourceId(8, -1)));
+        navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[8], navMenuIcons.getResourceId(8, -1)));*/
 
         // Recycle the typed array
-        navMenuIcons.recycle();
+        navMenuIcons.recycle(); // For Menu Icons
 
-        SpannableString s = new SpannableString(actionbarTitle);
+        /*SpannableString s = new SpannableString(actionbarTitle);
         s.setSpan(new TypefaceSpan(this, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         s.setSpan(new ForegroundColorSpan(Color.rgb(51, 51, 51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
-        mTitle = s.toString();
+        mTitle = s.toString();*///Setting Custom fonts in Action Bar
 
 
         // setting the nav drawer list adapter
@@ -308,12 +323,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         if (savedInstanceState == null) {
         }
-
-
-
     }
 
-    public boolean haveNetworkConnection() {
+    public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 
@@ -331,7 +343,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
-    private class SlideMenuClickListener implements
+    private class SlideMenuClickListener implements //Naviagation menu class
             ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -348,9 +360,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (!haveNetworkConnection()) {
             position = 99;
         }
-
             switch (position) {
-
                 case 0:
                /* new Handler().postDelayed(new Runnable() {
                     @Override
@@ -462,6 +472,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                },250);*/
                     break;
 
+                case 9:
+                /*mDrawerLayout.closeDrawer(mDrawerList);
+               new Handler().postDelayed(new Runnable() {
+                   @Override
+                    public void run() {*/
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_main_container, new TermsAndConditionFragment()).addToBackStack(TermsAndConditionFragment.TAG)
+                            .commitAllowingStateLoss();
+                  /* }
+               },250);*/
+                    break;
+
                 case 99:
                 /*mDrawerLayout.closeDrawer(mDrawerList);
                new Handler().postDelayed(new Runnable() {
@@ -566,13 +588,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         }
         else if (requestCode == 1) {
-            Log.v("gps","gps");
             appLocationService = new AppLocationService(this);
             Location location = appLocationService
                     .getLocation(LocationManager.NETWORK_PROVIDER);
-            Log.v("gps",location+"");
             if (location != null) {
-                Log.v("gps","gps2");
                 replaceFragment(R.layout.fragment_main,null);
             }
         }
@@ -594,24 +613,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         frag1 = MainFragment.newInstance();
                     }
                     ft.replace(R.id.container, frag1, MainFragment.TAG);
-                    //getSupportActionBar().show();
                     ft.commitAllowingStateLoss();
                     break;
 
                 case R.id.shopListview:
                     Fragment newFragment1 = new SendOrderFragment();
                     mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-                    //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                     ft.replace(R.id.ListFragment, newFragment1, SendOrderFragment.TAG);
                     ft.addToBackStack(SendOrderFragment.TAG); // Ads FirstFragment to the back-stack
                     ft.commit();
-                    //getSupportFragmentManager().executePendingTransactions();
                     break;
 
                 case R.id.fragment_main_edittext1:
                     changeLocationFragment frag2 = (changeLocationFragment) getSupportFragmentManager().
                             findFragmentByTag(changeLocationFragment.TAG);
-                    ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+                    //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
                     if (frag2 == null) {
                         frag2 = changeLocationFragment.newInstance();
                     }
@@ -852,14 +868,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     break;
 
                 case R.id.past_order_layout_imageview1:
-               /* Bundle bundle6 = new Bundle();
+                Bundle bundle8 = new Bundle();
                 //bundle2.pu("prescription",medicineListAdapter);
-                Uri image2 = (Uri) object;
-                bundle6.putParcelable("prescription", image2);
-                ImageZoomDialog imageZoomDialog2 = new ImageZoomDialog();
-                imageZoomDialog2.setArguments(bundle6);
-                imageZoomDialog2.show(getFragmentManager(), ImageZoomDialog.TAG);
-                Log.v("signin", "image  " + image2);*/
+                List<Map<String, String>> mapList = (List<Map<String, String>>) object;
+                bundle8.putSerializable("prescription", (Serializable) mapList);
+                ServerImageZoomDialog serverImageZoomDialog = new ServerImageZoomDialog();
+                serverImageZoomDialog.setArguments(bundle8);
+                serverImageZoomDialog.show(getFragmentManager(), ServerImageZoomDialog.TAG);
+                Log.v("signin", "image  " + mapList);
                     break;
 
                 case R.id.past_order_layout_button2:
@@ -980,37 +996,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return super.onOptionsItemSelected(item);
     }
 
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
-    }
-
-
-
-
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-
         new AsyncCaller().execute();
 
     }
@@ -1036,8 +1025,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             //this method will be running on UI thread
-
-            pdLoading.dismiss();
         }
 
     }
@@ -1064,7 +1051,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
         SendOrderFragment sendOrderFragment = (SendOrderFragment)getSupportFragmentManager().findFragmentByTag(SendOrderFragment.TAG);
-        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+        //MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
         if (count == 0) {
             super.onBackPressed();
         }
@@ -1100,8 +1087,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 });
         alertDialog.show();
     }
-
-
 
 
     public void showSettingsAlert() {
@@ -1189,10 +1174,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void showImageNotification() {
 
         Drawable d = getResources().getDrawable(R.drawable.pills1);
-
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
-
-
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.dc_feedback)
@@ -1205,9 +1187,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         bigPicStyle.setBigContentTitle("Drug Corner");
         bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
         mBuilder.setStyle(bigPicStyle);
-
-
-
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.setAction("OpenNotificationFragment");
         PendingIntent resultPendingIntent =
@@ -1217,18 +1196,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
-
         mBuilder.setContentIntent(resultPendingIntent);
-
-
-
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId1, mBuilder.build());
     }
 
-    public void showStatusNotification() {
 
+    public void showStatusNotification() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.dc_feedback)
@@ -1250,12 +1225,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mBuilder.setContentIntent(resultPendingIntent);
         mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
 
-
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId2, mBuilder.build());
     }
-
-
-
 }

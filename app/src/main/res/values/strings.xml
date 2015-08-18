@@ -20,6 +20,7 @@
         <item>@mipmap/dc_nav_contact</item>
         <item>@mipmap/dc_about</item>
         <item>@mipmap/dc_faq</item>
+        <item>@mipmap/dc_landmark</item>
     </string-array>
 
     <string-array name="sections_title">
@@ -32,6 +33,7 @@
         <item>  Contact</item>
         <item>  About</item>
         <item>  FAQs</item>
+        <item>  Terms &amp; Conditions</item>
     </string-array>
 
     <string name="title_section1">Section 1</string>
@@ -99,6 +101,8 @@
     <string name="fragment_edit_profile_edittext2">Email Id</string>
     <string name="fragment_edit_profile_edittext3">Mobile Number</string>
     <string name="fragment_edit_profile_button1">SAVE</string>
+
+    <string name="fragment_terms_and_conditions_textview1">Terms and Conditions</string>
 
 
 </resources>

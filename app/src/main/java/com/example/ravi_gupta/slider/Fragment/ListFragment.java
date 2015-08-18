@@ -91,15 +91,11 @@ public class ListFragment extends android.support.v4.app.Fragment {
         mListview.setAdapter(shopListAdapter);
 
         retailerRepository.findAll(new ListCallback<Retailer>() {
-
             @Override
             public void onSuccess(List<Retailer> retailerModelList) {
-                //Retailer retailerModel = (Retailer) retailerModelList;
-                //Log.v("server","Name = "+ retailerModel.getName() + "Name");
                 for(Retailer retailerModel : retailerModelList) {
-                    Map<String, Integer> discount = retailerModel.getDiscount();
+                    Map<String, Double> discount = retailerModel.getDiscount();
                     Object allitems = "allitems";
-
                     shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
                 }
             }

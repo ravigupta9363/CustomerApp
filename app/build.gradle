@@ -27,5 +27,7 @@ dependencies {
     compile 'com.github.traex.rippleeffect:library:1.3'
     compile 'com.android.support:design:22.2.1'
     compile 'com.strongloop:loopback-sdk-android:1.5.+'
+    compile 'com.squareup.picasso:picasso:2.3.3'
+    compile 'me.relex:circleindicator:1.1.5@aar'
 
 }

@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,18 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Adapter.PastOrderAdapter;
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.strongloop.android.loopback.callbacks.ListCallback;
 
-import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +52,8 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     MainActivity mainActivity;
     public static String TAG = "PastOrderFragment";
     String fragment;
+    OrderRepository orderRepository;
+    List<Map<String, String>> prescriptionStatic = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -64,13 +75,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String address= "36, Galli No 2, U Block, DLF Phase 3, Sector 24, Gurgaon, Haryana";
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),true));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),true));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016","02:25 PM","DC1245",320,address,getResources().getDrawable(R.drawable.prescrption_image),true));
-        pastOrdersDetails.add(new PastOrdersDetail("25 AUGUST 2016", "02:25 PM", "DC1245", 320, address, getResources().getDrawable(R.drawable.prescrption_image),true));
-
     }
 
     @Override
@@ -78,26 +82,52 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_past_order, container, false);
+        mainActivity = (MainActivity) getActivity();
        // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-
+        new AsyncCaller().execute();
         mListview = (ListView) rootview.findViewById(R.id.fragment_past_order_listview1);
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
-              //  PastOrdersDetail pastOrdersDetail =(PastOrdersDetail) mListview.getItemAtPosition(position);
-                //Log.v("Listview1", "Shop Name = " + shopListDetails.shopName + "");
-               // mainActivity.replaceFragment(R.id.fragment_past_order_listview1, pastOrdersDetail);
-
-            }
-        });
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_past_order_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_past_order_imagebutton1);
         toolbarTitle.setTypeface(typeface1);
+
+        pastOrderAdapter = new PastOrderAdapter(getActivity(),R.layout.past_order_layout,pastOrdersDetails);
+        mListview.setAdapter(pastOrderAdapter);
+
+        orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
+        orderRepository.findAll(new ListCallback<Order>() {
+            @Override
+            public void onSuccess(List<Order> orderList) {
+                for (Order order : orderList) {
+                    List<Map<String, String>> prescription = order.getPrescription();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                    format.setTimeZone(TimeZone.getTimeZone("IST"));
+                    java.util.Date date = null;
+                    try {
+                        date = format.parse(order.getDate());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String time = date.toString().substring(12,19);
+                    String orderDay = date.toString().substring(8,10);
+                    String orderMonth = date.toString().substring(4,7);
+                    String orderYear = date.toString().substring(30,34);
+                    String actualDate = orderDay+" "+orderMonth.toUpperCase()+" "+orderYear;
+
+                    pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
+                }
+                pastOrderAdapter.notifyDataSetChanged();
+            }
+
+            public void onError(Throwable t) {
+                // handle the error
+                Log.v("server", "Error");
+                Log.v("server", t + "");
+            }
+        });
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,8 +138,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        pastOrderAdapter = new PastOrderAdapter(getActivity(),R.layout.past_order_layout,pastOrdersDetails);
-        mListview.setAdapter(pastOrderAdapter);
 
         return rootview;
     }
@@ -124,7 +152,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -179,27 +206,37 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
-    }
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //spinner.setVisibility(View.VISIBLE);
+            //this method will be running on UI thread
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+
+            mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                }
+            });
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //this method will be running on UI thread
+            //spinner.setVisibility(View.GONE);
+        }
+
+    }
 }

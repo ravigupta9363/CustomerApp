@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,7 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
 
         final PrescriptionDetail prescriptionDetail = prescriptionDetails.get(position);
         holder.prescriptionImage.setImageURI(prescriptionDetail.getThumbnailUri());
+        Log.v("server2",prescriptionDetail.getThumbnailUri()+"");
         holder.prescriptionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
