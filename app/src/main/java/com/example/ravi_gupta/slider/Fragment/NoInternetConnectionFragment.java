@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
@@ -63,6 +64,7 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
 
         TextView textView = (TextView)rootview.findViewById(R.id.fragment_no_internet_connection_textview1);
         Button retryButton = (Button)rootview.findViewById(R.id.fragment_no_internet_connection_button1);
+        final ProgressBar progressBar = (ProgressBar)rootview.findViewById(R.id.fragment_no_internet_connection_progressbar1);
 
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
 
@@ -72,9 +74,14 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mainActivity.haveNetworkConnection()) {
+                if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
                     mainActivity.replaceFragment(R.layout.fragment_main, null);
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+                else if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode == null) {
+                    //replaceFragment(R.layout.fragment_);
+                    mainActivity.replaceFragment(R.layout.fragment_no_address_found, null);
                 }
                 else {
                     //mainActivity.getSupportActionBar().hide();
@@ -83,7 +90,6 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
                 }
             }
         });
-
 
         return rootview;
     }

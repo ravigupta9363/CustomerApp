@@ -94,7 +94,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess(List<Retailer> retailerModelList) {
                 for(Retailer retailerModel : retailerModelList) {
-                    Map<String, Double> discount = retailerModel.getDiscount();
+                    Map<String, Integer> discount = retailerModel.getDiscount();
                     Object allitems = "allitems";
                     shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
                 }

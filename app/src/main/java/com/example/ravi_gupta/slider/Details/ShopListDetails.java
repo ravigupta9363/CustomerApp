@@ -5,7 +5,7 @@ package com.example.ravi_gupta.slider.Details;
  */
 public class ShopListDetails{
     public String shopName;
-    public double discount;
+    public int discount;
     public String address;
     public boolean Isreturn;
     public int deliveryTime;
@@ -18,7 +18,7 @@ public class ShopListDetails{
         super();
     }
 
-    public ShopListDetails(String shopName, double discount, String address, boolean Isopen, boolean Isreturn, int orderFulfilment) {
+    public ShopListDetails(String shopName, int discount, String address, boolean Isopen, boolean Isreturn, int orderFulfilment) {
         this.shopName = shopName;
         this.discount = discount;
         this.address = address;

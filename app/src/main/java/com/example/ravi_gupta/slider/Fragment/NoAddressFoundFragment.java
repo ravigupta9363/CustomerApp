@@ -3,8 +3,6 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -70,9 +68,9 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
-        text = (TextView) rootview.findViewById(R.id.fragment_no_addres_found_textview1);
-        exitButton = (Button) rootview.findViewById(R.id.fragment_no_addres_found_button1);
-        refreshButton = (Button) rootview.findViewById(R.id.fragment_no_addres_found_button2);
+        text = (TextView) rootview.findViewById(R.id.fragment_no_address_found_textview1);
+        exitButton = (Button) rootview.findViewById(R.id.fragment_no_address_found_button1);
+        refreshButton = (Button) rootview.findViewById(R.id.fragment_no_address_found_button2);
 
         text.setTypeface(typeface2);
         exitButton.setTypeface(typeface2);
@@ -88,12 +86,17 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                appLocationService = new AppLocationService(mainActivity);
-                Location location = appLocationService
-                        .getLocation(LocationManager.NETWORK_PROVIDER);
-                if (location != null) {
+
+                if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
                     mainActivity.replaceFragment(R.layout.fragment_main, null);
-                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                }
+                else if(!mainActivity.haveNetworkConnection()) {
+                    //replaceFragment(R.layout.fragment_);
+                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    mainActivity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+                }
+                else {
+
                 }
             }
         });

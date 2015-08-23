@@ -17,7 +17,7 @@ public class Retailer extends Model {
     private String name;
     private int fulfillement;
     private String area;
-    private Map<String, Double> discount;
+    private Map<String, Integer> discount;
     private boolean isReturn;
     private String ownerName;
     private String ownerContact;
@@ -60,11 +60,11 @@ public class Retailer extends Model {
         this.area = area;
     }
 
-    public Map<String, Double> getDiscount() {
+    public Map<String, Integer> getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Map<String, Double> discount) {
+    public void setDiscount(Map<String, Integer> discount) {
         this.discount = discount;
     }
 

@@ -84,6 +84,9 @@ import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
 
 import java.io.File;
@@ -140,11 +143,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private NavDrawerListAdapter adapter;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
-    String[] latlong = {"323001","122002","302033","122010","122008"};
-    String matchPincode;
+    String[] latlong = {"323001","122002","302033","122010","122008","154875"};
+    public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
     public String baseURL = "http://192.168.1.100:3001";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public String status;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +167,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
         //ModelRepository shopListRepository = restAdapter.createRepository("shopList");
         //Model shopList = shopListRepository.createObject( ImmutableMap.of("shopName", "Gurgaon Pharmacy") );
+
+      /*  if (checkPlayServices()) {
+            updateRegistration();
+        } else {
+            Log.i("server", "No valid Google Play Services APK found.");
+        }*/
 
         //Checking Pincode lies within area
         appLocationService = new AppLocationService(this);
@@ -183,6 +195,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     }
                     StringBuilder sb = new StringBuilder();
                     sb.append(address.getPostalCode());
+                    Log.v("pincode",pincode+"");
                 }
             }catch (IOException e) {
             }
@@ -190,7 +203,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             showLocationAlert();
         }
 
-        for(int i = 0; i < latlong.length-1 ; i++) {
+        for(int i = 0; i < latlong.length ; i++) {
             if(latlong[i].equals(pincode)){
                 matchPincode = pincode;
                 break;
@@ -201,13 +214,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         }
 
-        String status = "Delivered";
+        status = "Delivered";
         //Checking if Network is connected or Serving in area
         if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
             replaceFragment(R.layout.fragment_main, null);
        }
         else if(haveNetworkConnection() && matchPincode == null) {
             //replaceFragment(R.layout.fragment_);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_address_found, null);
         }
         else {
@@ -325,12 +339,46 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("server", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void updateRegistration() {
+        final LocalInstallation installation = new LocalInstallation(this, restAdapter);
+
+        // Substitute the real ID of the LoopBack application as created by the server
+        installation.setAppId("loopback-app-id");
+
+        // Substitute a real ID of the user logged in to the application
+        installation.setUserId("loopback-android");
+
+        installation.setSubscriptions(new String[] { "all" });
+
+        if (installation.getDeviceToken() != null) {
+           // saveInstallation(installation);
+        } else {
+            //registerInBackground(installation);
+        }
+    }
+
+
     public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected())
@@ -341,7 +389,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
-
 
     private class SlideMenuClickListener implements //Naviagation menu class
             ListView.OnItemClickListener {
@@ -1177,7 +1224,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.dc_feedback)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setAutoCancel(true)
                         .setContentTitle("Drug Corner")
                         .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
@@ -1206,7 +1253,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void showStatusNotification() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.dc_feedback)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setAutoCancel(true)
                         .setContentTitle("Order Id DC256649")
                         .setContentText("Your Order has been cancelled as per your request");
