@@ -143,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private NavDrawerListAdapter adapter;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
-    String[] latlong = {"323001","122002","302033","122010","122008","154875"};
+    String[] latlong = {"323001","122002","302033","122010","122008","512272"};
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -92,7 +93,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_past_order_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_past_order_imagebutton1);
+        final ImageView noPastOrder = (ImageView)rootview.findViewById(R.id.fragment_past_order_imageview1);
+        final TextView noPastOrderText = (TextView)rootview.findViewById(R.id.fragment_past_order_textview1);
         toolbarTitle.setTypeface(typeface1);
+        noPastOrderText.setTypeface(typeface2);
 
         pastOrderAdapter = new PastOrderAdapter(getActivity(),R.layout.past_order_layout,pastOrdersDetails);
         mListview.setAdapter(pastOrderAdapter);
@@ -101,7 +105,15 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         orderRepository.findAll(new ListCallback<Order>() {
             @Override
             public void onSuccess(List<Order> orderList) {
+                if (orderList == null) {
+                    noPastOrder.setVisibility(View.VISIBLE);
+                    noPastOrderText.setVisibility(View.VISIBLE);
+                    mListview.setVisibility(View.GONE);
+                }
                 for (Order order : orderList) {
+                    noPastOrder.setVisibility(View.GONE);
+                    noPastOrderText.setVisibility(View.GONE);
+                    mListview.setVisibility(View.VISIBLE);
                     List<Map<String, String>> prescription = order.getPrescription();
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                     format.setTimeZone(TimeZone.getTimeZone("IST"));
@@ -111,11 +123,11 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    String time = date.toString().substring(12,19);
-                    String orderDay = date.toString().substring(8,10);
-                    String orderMonth = date.toString().substring(4,7);
-                    String orderYear = date.toString().substring(30,34);
-                    String actualDate = orderDay+" "+orderMonth.toUpperCase()+" "+orderYear;
+                    String time = date.toString().substring(12, 19);
+                    String orderDay = date.toString().substring(8, 10);
+                    String orderMonth = date.toString().substring(4, 7);
+                    String orderYear = date.toString().substring(30, 34);
+                    String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
 
                     pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
                 }
@@ -124,6 +136,10 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
             public void onError(Throwable t) {
                 // handle the error
+                noPastOrderText.setText("Unable to connect to server");
+                noPastOrder.setVisibility(View.VISIBLE);
+                noPastOrderText.setVisibility(View.VISIBLE);
+                mListview.setVisibility(View.GONE);
                 Log.v("server", "Error");
                 Log.v("server", t + "");
             }
@@ -137,7 +153,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
             }
         });
-
 
         return rootview;
     }

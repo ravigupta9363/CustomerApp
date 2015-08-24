@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="@drawable/dc_background"
+    android:layout_height="match_parent" android:background="#f9f9f7"
     tools:context="com.example.ravi_gupta.slider.Fragment.ProfileFragment"
     android:orientation="vertical" android:id="@+id/fragment_profile_layout" android:clickable="true">
-
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,55 +16,57 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:contentInsetStart="0dp">
 
-       <!-- <com.andexert.library.RippleView
-            android:id="@+id/more"
-            android:layout_width="?android:actionBarSize"
-            android:layout_height="?android:actionBarSize"
-            android:layout_toLeftOf="@+id/more2"
-            rv_centered="true">-->
+        <!-- <com.andexert.library.RippleView
+             android:id="@+id/more"
+             android:layout_width="?android:actionBarSize"
+             android:layout_height="?android:actionBarSize"
+             android:layout_toLeftOf="@+id/more2"
+             rv_centered="true">-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-        <ImageButton
-            android:paddingRight="4dp"
-            android:id="@+id/fragment_profile_imagebutton1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/dc_back_button"
-            android:background="@drawable/ripple_button" />
+            <ImageButton
+                android:paddingRight="4dp"
+                android:id="@+id/fragment_profile_imagebutton1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/dc_back_button"
+                android:background="@drawable/ripple_button" />
 
-       <!-- </com.andexert.library.RippleView>-->
+            <!-- </com.andexert.library.RippleView>-->
 
-        <TextView
-            android:padding="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_profile_textview4"
-            android:textSize="20sp"
-            android:textColor="#999"
-            android:text="@string/fragment_profile_textview1"
-            android:gravity="center|left"
-            android:layout_weight="3"/>
+            <TextView
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/fragment_profile_textview4"
+                android:textSize="20sp"
+                android:textColor="#999"
+                android:text="@string/fragment_profile_textview1"
+                android:gravity="center|left"
+                android:layout_weight="3"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fragment_profile_button1"
-            android:textColor="#36B666"
-            android:background="@drawable/ripple_button_rectangle"
-            android:id="@+id/fragment_profile_button1"
-            android:layout_gravity="right"
-            android:textAllCaps="false"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:layout_weight="0.2"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_profile_button1"
+                android:textColor="#36B666"
+                android:background="@drawable/ripple_button_rectangle"
+                android:id="@+id/fragment_profile_button1"
+                android:layout_gravity="right"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:layout_weight="0.2"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
+
+
 
     <View
         android:layout_width="match_parent"
@@ -76,39 +77,55 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="20dp"
         android:paddingLeft="30dp"
-        android:layout_below="@+id/view">
+        android:layout_below="@+id/view"
+        android:id="@+id/fragment_profile_linear_layout1">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:src="@drawable/profile"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="75dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/fragment_profile_linear_layout1"
+            android:layout_marginBottom="20dp"/>
 
        <TextView
-           android:layout_width="match_parent"
+           android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/fragment_profile_textview1"
            android:drawableLeft="@mipmap/dc_profile"
            android:hint="@string/fragment_profile_textview2"
-           android:layout_marginBottom="5dp"
+           android:layout_marginLeft="30dp"
+           android:layout_marginRight="30dp"
            android:gravity="center|left"
            android:textSize="15sp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_textview2"
             android:drawableLeft="@mipmap/dc_about"
             android:hint="@string/fragment_profile_textview3"
             android:gravity="center|left"
-            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:textSize="15sp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_textview3"
-            android:drawableLeft="@mipmap/dc_nav_contact"
+            android:drawableLeft="@mipmap/dc_about"
             android:hint="@string/fragment_profile_textview4"
             android:gravity="center|left"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:textSize="15sp"/>
 
     </LinearLayout>

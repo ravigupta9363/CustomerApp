@@ -33,8 +33,6 @@
             android:textSize="20sp"
             android:textColor="#999"
             android:text="@string/fragment_cart_textview1" />
-
-
     </android.support.v7.widget.Toolbar>
 
     <View
@@ -44,29 +42,44 @@
         android:id="@+id/view"
         android:layout_below="@+id/toolbar"/>
 
-   <TextView
-       android:layout_below="@+id/view"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textAlignment="gravity"
-       android:layout_centerHorizontal="true"
-       android:layout_marginTop="120dp"
-       android:gravity="center|top"
-       android:textSize="25sp"
-       android:textColor="#555"
-       android:id="@+id/fragment_cart_no_orders_textview1"/>
-
-    <TextView
-        android:layout_below="@+id/fragment_cart_no_orders_textview1"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="gravity"
-        android:padding="20dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center|top"
-        android:textSize="15sp"
-        android:textColor="#555"
-        android:id="@+id/fragment_cart_no_orders_textview3"/>
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:src="@drawable/no_prescription"/>
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textAlignment="gravity"
+           android:layout_centerHorizontal="true"
+           android:gravity="center"
+           android:layout_gravity="center"
+           android:textSize="13sp"
+           android:textColor="#555"
+           android:layout_marginTop="5dp"
+           android:id="@+id/fragment_cart_no_orders_textview1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="gravity"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center|top"
+            android:textSize="15sp"
+            android:textColor="#555"
+            android:layout_marginBottom="50dp"
+            android:id="@+id/fragment_cart_no_orders_textview3"/>
 
 
+    </LinearLayout>
 </RelativeLayout>

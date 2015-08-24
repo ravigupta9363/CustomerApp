@@ -37,7 +37,6 @@
             android:textColor="#999"
             android:text="@string/fragment_notification_textview1" />
 
-
     </android.support.v7.widget.Toolbar>
 
     <View
@@ -47,12 +46,42 @@
         android:id="@+id/view"
         android:layout_below="@id/toolbar"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:src="@drawable/no_notification"
+            android:id="@+id/fragment_notification_imageview1"
+            android:layout_marginLeft="75dp"
+            android:layout_marginRight="75dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You have no notification yet !!"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:layout_marginTop="20dp"
+            android:textColor="#999"
+            android:id="@+id/fragment_notification_textview1"
+            android:layout_marginBottom="50dp"/>
+
+    </LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_notification_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:background="#EEE"
+        android:visibility="gone"
         android:scrollbars="vertical"
         android:layout_below="@id/view"/>
 

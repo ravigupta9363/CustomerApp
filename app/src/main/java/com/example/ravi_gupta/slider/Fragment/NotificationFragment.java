@@ -14,10 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.ravi_gupta.slider.Adapter.MyRecyclerViewAdapter;
-import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.SwipeableRecyclerViewTouchListener;
@@ -88,7 +87,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapter(getDataSet());
+      //  mAdapter = new MyRecyclerViewAdapter(getDataSet());
         mRecyclerView.setAdapter(mAdapter);
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
@@ -122,7 +121,13 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_notification_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_notification_imagebutton1);
+        TextView noNotificationText = (TextView)rootview.findViewById(R.id.fragment_notification_textview1);
+        ImageView noNotification = (ImageView)rootview.findViewById(R.id.fragment_notification_imageview1);
         toolbarTitle.setTypeface(typeface1);
+        noNotificationText.setTypeface(typeface2);
+
+        noNotification.setVisibility(View.VISIBLE);
+        noNotificationText.setVisibility(View.VISIBLE);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,15 +187,15 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private ArrayList<NotificationItemDetail> getDataSet() {
+    /*private ArrayList<NotificationItemDetail> getDataSet() {
         notificationItemDetails = new ArrayList<NotificationItemDetail>();
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!", "Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+       // notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+       // notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+       // notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+      //  notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+       // notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!", "Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
         return notificationItemDetails;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this

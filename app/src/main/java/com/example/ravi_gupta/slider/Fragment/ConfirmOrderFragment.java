@@ -29,7 +29,6 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView orderConfirmText;
-    TextView thankYouText;
     Button orderStatusButton;
     Button orderHomeButton;
     MainActivity mainActivity;
@@ -69,14 +68,12 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
         Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         orderConfirmText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview1);
-        thankYouText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview2);
         orderStatusButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button1);
         //orderHomeButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button2);
 
         orderConfirmText.setTypeface(typeface2);
         orderStatusButton.setTypeface(typeface2);
         //orderHomeButton.setTypeface(typeface2);
-        thankYouText.setTypeface(typeface4);
 
         orderStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override

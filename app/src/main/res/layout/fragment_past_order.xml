@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.PastOrderFragment"
-    android:background="#FFF" android:orientation="vertical" android:clickable="true">
+    android:background="#f9f9f7" android:orientation="vertical" android:clickable="true">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -43,6 +43,35 @@
         android:background="#EEE"
         android:id="@+id/view"
         android:layout_below="@+id/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:src="@drawable/past_order"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="90dp"
+            android:visibility="gone"
+            android:id="@+id/fragment_past_order_imageview1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No orders in the bag !!"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="13sp"
+            android:textColor="#999"
+            android:id="@+id/fragment_past_order_textview1"
+            android:layout_marginBottom="50dp"/>
+
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"

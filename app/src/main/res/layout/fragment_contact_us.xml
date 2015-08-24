@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.ContactUsFragment"
-     android:background="@drawable/dc_background" android:clickable="true">
+     android:background="#f9f9f7" android:clickable="true">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -37,6 +37,8 @@
 
     </android.support.v7.widget.Toolbar>
 
+
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -44,15 +46,23 @@
         android:id="@+id/view"
         android:layout_below="@id/toolbar"/>
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:weightSum="5"
-        android:layout_below="@+id/view">
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:src="@drawable/contacts"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_below="@+id/view"
+            android:id="@+id/fragment_contact_us_imageview1"/>
 
    <TextView
-       android:layout_weight="1"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:id="@+id/fragment_contact_us_textview1"
@@ -66,8 +76,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1"
-        android:layout_gravity="center"
         android:gravity="center|top">
 
         <Button

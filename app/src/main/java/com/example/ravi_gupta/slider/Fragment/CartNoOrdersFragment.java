@@ -112,7 +112,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         text.setText((Html.fromHtml(string1)));
         text2.setText(ss);
         text2.setMovementMethod(LinkMovementMethod.getInstance());
-        text.setTypeface(typeface4);
+        text.setTypeface(typeface1);
         text2.setTypeface(typeface1);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {

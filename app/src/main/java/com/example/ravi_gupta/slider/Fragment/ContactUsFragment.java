@@ -101,7 +101,7 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
         mailUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "ravigupta9363@gmail.com"));
+                Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "admin@drugcorner.co.in"));
                 startActivity(intent);
             }
         });
@@ -110,7 +110,7 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:91-9460109363"));
+                callIntent.setData(Uri.parse("tel:+91-9953473059"));
                 startActivity(callIntent);
             }
         });
