@@ -97,7 +97,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         sliderItems = new int[]{R.drawable.small_slider3,R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
         appLocationService = new AppLocationService(getActivity());
         Location gpsLocation = appLocationService
-                .getLocation(LocationManager.NETWORK_PROVIDER);
+                .getLocation(LocationManager.GPS_PROVIDER);
         if (gpsLocation != null) {
             double latitude = gpsLocation.getLatitude();
             double longitude = gpsLocation.getLongitude();

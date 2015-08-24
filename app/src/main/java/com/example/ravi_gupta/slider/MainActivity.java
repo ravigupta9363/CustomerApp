@@ -150,6 +150,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String baseURL = "http://192.168.1.100:3001";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public String status;
+    double longitude;
+    double latitude;
 
 
     @Override
@@ -176,11 +178,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         //Checking Pincode lies within area
         appLocationService = new AppLocationService(this);
-        Location location = appLocationService
-                .getLocation(LocationManager.NETWORK_PROVIDER);
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
+        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+        if (gpsLocation != null || networkLocation != null) {
+            if(gpsLocation != null) {
+                 latitude = gpsLocation.getLatitude();
+                 longitude = gpsLocation.getLongitude();
+                 Log.v("pincode","GPS");
+            }
+            else {
+                 latitude = networkLocation.getLatitude();
+                 longitude = networkLocation.getLongitude();
+                 Log.v("pincode","Network");
+            }
             Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
             String result = null;
             try {
@@ -237,7 +247,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         //Opening fragments from notifications
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if(getIntent().getAction().equals("OpenNotificationFragment")) {
+    /*    if(getIntent().getAction().equals("OpenNotificationFragment")) {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(PastOrderFragment.TAG)
                     .commitAllowingStateLoss();
@@ -253,7 +263,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             orderStatusFragment.setArguments(bundle);
             ft.replace(R.id.fragment_main_container, orderStatusFragment, OrderStatusFragment.TAG).addToBackStack(null);
             ft.commitAllowingStateLoss();
-        }
+        }*/
 
 
 
@@ -822,7 +832,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
                 case R.id.nextButton:
                     ProfileDetail profileDetail = profileDatabase.getProfile();
-                    if (profileDetail.getPhone() == null) {
+                    if (profileDetail.getPhone() == null && profileDetail.getName() == null && profileDetail.getEmail() == null) {
                         ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                                 findFragmentByTag(ProfileEditFragment.TAG);
                         if (frag7 == null) {

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
@@ -42,6 +43,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
     MainActivity mainActivity;
     DatabaseHelper databaseHelper;
     public static String TAG = "SendOrderFragment";
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,7 +90,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);
 
 
-
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Lato-Regular.ttf");
@@ -108,7 +109,12 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         sendPrescriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_send_order_button1,null);
+                if(databaseHelper.getPresciptionCount() == 3) {
+                    Toast.makeText(getActivity(),"Cannot add more than 3 Prescription",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mainActivity.replaceFragment(R.id.fragment_send_order_button1, null);
+                }
             }
         });
 
@@ -116,7 +122,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.replaceFragment(R.id.fragment_send_order_button2,null);
-                Log.v("click","click");
             }
         });
 
@@ -124,7 +129,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:91-9460109363"));
+                callIntent.setData(Uri.parse("tel:91-9953473059"));
                 startActivity(callIntent);
             }
         });

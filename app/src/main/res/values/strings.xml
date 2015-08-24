@@ -20,7 +20,7 @@
         <item>@mipmap/dc_nav_contact</item>
         <item>@mipmap/dc_about</item>
         <item>@mipmap/dc_faq</item>
-        <item>@mipmap/dc_landmark</item>
+        <item>@mipmap/dc_tandc</item>
     </string-array>
 
     <string-array name="sections_title">
@@ -104,6 +104,7 @@
     <string name="fragment_edit_profile_button1">SAVE</string>
 
     <string name="fragment_terms_and_conditions_textview1">Terms and Conditions</string>
+    <string name="title_activity_splash">Drugcorner</string>
 
 
 </resources>

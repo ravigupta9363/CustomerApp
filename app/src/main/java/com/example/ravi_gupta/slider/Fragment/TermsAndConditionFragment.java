@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_terms_and_conditions_imagebutton1);
-        TextView termsAndCOndition = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview1);
+        TextView termsAndCondition = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview1);
         toolbarTitle.setTypeface(typeface1);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +117,27 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    // handle back button's click listener
+                    mainActivity.onBackPressed();
+                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 }

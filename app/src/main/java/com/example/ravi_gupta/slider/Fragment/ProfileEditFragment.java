@@ -56,6 +56,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     ProfileDatabase profileDatabase;
     MainFragment mainFragment;
     String fragment;
+    String previousNumber;
 
     private OnFragmentInteractionListener mListener;
 
@@ -114,6 +115,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
             updatedName = profileDetail.getName();
             updatedMail = profileDetail.getEmail();
             updatedPhone = profileDetail.getPhone();
+            previousNumber = updatedPhone;
 
 
         customerName.setText(updatedName);
