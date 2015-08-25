@@ -35,9 +35,7 @@
              android:textColor="#999"
              android:text="@string/fragment_order_status_textview1" />
 
-
      </android.support.v7.widget.Toolbar>
-
 
      <View
          android:layout_width="match_parent"
@@ -171,13 +169,6 @@
             android:layout_marginTop="30dp"
             android:id="@+id/fragment_order_status_imageview1"/>
 
-         <View
-             android:layout_width="match_parent"
-             android:layout_height="1dp"
-             android:background="#EEE"
-             android:id="@+id/view2"
-             android:paddingLeft="10dp"
-             android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -186,15 +177,9 @@
             android:gravity="center"
             android:id="@+id/fragment_order_status_textview4"
             android:padding="20dp"
-            android:textColor="#36B666"
+            android:textColor="#888"
             android:textSize="15sp"/>
 
-         <View
-             android:layout_width="match_parent"
-             android:layout_height="1dp"
-             android:background="#EEE"
-             android:id="@+id/view3"
-             android:paddingLeft="10dp"/>
 
          <TextView
              android:layout_width="match_parent"

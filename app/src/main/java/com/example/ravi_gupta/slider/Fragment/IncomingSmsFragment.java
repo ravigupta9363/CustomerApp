@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,6 +63,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     private BroadcastReceiver receiver;
     ProfileDatabase profileDatabase;
     String fragment;
+    int sum = 0;
 
 
 
@@ -85,7 +89,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_incoming_sms, container, false);
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         fragment = getArguments().getString("fragment");
         ProfileDetail profileDetail = profileDatabase.getProfile();
@@ -112,6 +116,34 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         phoneNumber.setText(profileDetail.getPhone());
+
+        otpEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                sum = sum + count;
+                Log.v("server", sum + "");
+                if(manuallyEntryText.getText() != null && sum == 4) {
+                    hiddenKeyboard(manuallyEntryText);
+                    if(fragment.equals("ProfileFragment")) {
+                        mainActivity.onBackPressed();
+                    }
+                    else if(fragment.equals("CartFragment")) {
+                        mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                    }
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +241,10 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+    private void hiddenKeyboard(View v) {
+        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
 
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
@@ -268,9 +304,10 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                         m = p.matcher(message);
                         while (m.find()) {
                             //Log.v("SmsReceiver","Hello "+m.group());
+                            progressBar.setVisibility(View.GONE);
                             OTP = m.group().toString();
                             otpEdittext.setText(OTP);
-                            progressBar.setVisibility(View.GONE);
+
                         }
                         // Show Alert
                         //int duration = Toast.LENGTH_LONG;
