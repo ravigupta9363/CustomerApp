@@ -103,6 +103,9 @@
     <string name="fragment_edit_profile_edittext3">Mobile Number</string>
     <string name="fragment_edit_profile_button1">SAVE</string>
 
+    <string name="fragment_order_status_cancel_order">Cancel Order</string>
+    <string name="fragment_order_status_home">Home</string>
+
     <string name="fragment_terms_and_conditions_textview1">Terms and Conditions</string>
     <string name="title_activity_splash">Drugcorner</string>
 

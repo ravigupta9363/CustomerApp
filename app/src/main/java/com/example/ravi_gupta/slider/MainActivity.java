@@ -112,7 +112,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartFragment.OnFragmentInteractionListener, SendPrescriptionDialog.Callback, LandmarkFragment.OnFragmentInteractionListener,
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
-        NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener{
+        NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
+        VerifyingOrderFragment.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -921,12 +922,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     break;
 
                 case R.id.fragment_landmark_button1:
-                    ConfirmOrderFragment frag13 = (ConfirmOrderFragment) getSupportFragmentManager().
-                            findFragmentByTag(ConfirmOrderFragment.TAG);
+                    VerifyingOrderFragment frag13 = (VerifyingOrderFragment) getSupportFragmentManager().
+                            findFragmentByTag(VerifyingOrderFragment.TAG);
                     if (frag13 == null) {
-                        frag13 = ConfirmOrderFragment.newInstance();
+                        frag13 = VerifyingOrderFragment.newInstance();
                     }
-                    ft.replace(R.id.container, frag13, ConfirmOrderFragment.TAG);
+                    ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG);
                     ft.commitAllowingStateLoss();
                     break;
 
@@ -1005,6 +1006,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     Bundle bundle10 = new Bundle();
                     bundle10.putString("fragment","profileFragment");
                     frag17.setArguments(bundle10);
+                    ft.commitAllowingStateLoss();
+                    break;
+
+                case R.id.fragment_verifying_order_textview1:
+                    ConfirmOrderFragment frag18 = (ConfirmOrderFragment) getSupportFragmentManager().
+                            findFragmentByTag(ConfirmOrderFragment.TAG);
+                    if (frag18 == null) {
+                        frag18 = ConfirmOrderFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG);
                     ft.commitAllowingStateLoss();
                     break;
             }

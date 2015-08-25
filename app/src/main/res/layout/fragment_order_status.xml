@@ -146,15 +146,29 @@
                  <Button
                      android:layout_width="wrap_content"
                      android:layout_height="30dp"
-                     android:text="Cancel"
+                     android:text="@string/fragment_order_status_cancel_order"
                      android:textAllCaps="false"
                      android:textColor="#36B666"
-                     android:drawableLeft="@mipmap/dc_cancel_order"
                      android:id="@+id/fragment_order_status_button1"
+                     android:background="@drawable/button_style"
+                     android:textSize="14sp"
+                     android:visibility="gone"
+                     android:layout_marginRight="0dp"
+                     android:gravity="right|center"
+                     android:layout_gravity="right|center"/>
+
+                 <Button
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:text="@string/fragment_order_status_home"
+                     android:textAllCaps="false"
+                     android:textColor="#36B666"
+                     android:id="@+id/fragment_order_status_button2"
                      android:background="@drawable/button_style"
                      android:textSize="14sp"
                      android:layout_marginRight="0dp"
                      android:gravity="right|center"
+                     android:visibility="gone"
                      android:layout_gravity="right|center"/>
 
              </LinearLayout>
