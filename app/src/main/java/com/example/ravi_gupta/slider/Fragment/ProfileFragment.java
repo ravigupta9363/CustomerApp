@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -163,15 +162,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                android.support.v4.app.Fragment newFragment4 = new ProfileEditFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("fragment","profileFragment");
-                newFragment4.setArguments(bundle);
-                //newFragment4.setTargetFragment(profileFragment, mainActivity.FRAGMENT_CODE);
-                ft.replace(R.id.fragment_main_container, newFragment4);
-                ft.addToBackStack(null); // Ads FirstFragment to the back-stack
-                ft.commit();
+                mainActivity.replaceFragment(R.id.fragment_profile_button1,profileFragment);
             }
         });
 

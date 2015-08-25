@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     ProfileDatabase profileDatabase;
     MainFragment mainFragment;
     String fragment;
-    String previousNumber;
+    String previousNumber = "100.00";
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,8 +84,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_profile_edit, container, false);
         fragment = getArguments().getString("fragment");
-
-
+        Log.v("ProfileFrgament",fragment);
         //Bundle bundle = getArguments();
         //ArrayList<String> infoUser = bundle.getStringArrayList("infoUser");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
@@ -115,7 +115,8 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
             updatedName = profileDetail.getName();
             updatedMail = profileDetail.getEmail();
             updatedPhone = profileDetail.getPhone();
-            previousNumber = updatedPhone;
+            if(updatedPhone != null)
+             previousNumber = updatedPhone;
 
 
         customerName.setText(updatedName);
@@ -164,13 +165,27 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 //http://stackoverflow.com/questions/15805555/java-regex-to-validate-full-name-allow-only-spaces-and-letters
                 if(updatedName.matches("[a-zA-Z ]{3,30}") && isEmailValid(updatedMail) && isPhoneValid(updatedPhone)) {
                     if (fragment.equals("profileFragment")) {
-                        profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
-                        mainActivity.onBackPressed();
+                        if(previousNumber.equals(updatedPhone)){
+                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+                            mainActivity.onBackPressed();
+                        }
+                        else {
+                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+                            mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "ProfileFragment");
+                        }
+
                     }
                     else {
-                        profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
-                        mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, null);
+                        if(previousNumber.equals(updatedPhone)){
+
+                        }
+                        else {
+                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+                            mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "CartFragment");
+                        }
+
                     }
+
                 }
 
 

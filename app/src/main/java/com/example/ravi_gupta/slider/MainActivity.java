@@ -844,12 +844,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
                         ft.commitAllowingStateLoss();
                     } else {
-                        IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
-                                findFragmentByTag(IncomingSmsFragment.TAG);
+                        LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
+                                findFragmentByTag(LandmarkFragment.TAG);
                         if (frag7 == null) {
-                            frag7 = IncomingSmsFragment.newInstance();
+                            frag7 = LandmarkFragment.newInstance();
                         }
-                        ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+                        ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
                         ft.commitAllowingStateLoss();
                     }
                     break;
@@ -865,16 +865,22 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     break;
 
                 case R.id.fragment_profile_edit_button1:
+                    onBackPressed();
                     IncomingSmsFragment frag9 = (IncomingSmsFragment) getSupportFragmentManager().
                             findFragmentByTag(IncomingSmsFragment.TAG);
                     if (frag9 == null) {
                         frag9 = IncomingSmsFragment.newInstance();
                     }
+                    String fragment = (String) object;
+                    Bundle bundle9 = new Bundle();
+                    bundle9.putString("fragment", fragment);
+                    frag9.setArguments(bundle9);
                     ft.replace(R.id.fragment_main_container, frag9, IncomingSmsFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
                     break;
 
                 case R.id.fragment_incoming_sms_button1:
+                    onBackPressed();
                     LandmarkFragment frag10 = (LandmarkFragment) getSupportFragmentManager().
                             findFragmentByTag(LandmarkFragment.TAG);
                     if (frag10 == null) {
@@ -986,6 +992,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         frag16 = NoAddressFoundFragment.newInstance();
                     }
                     ft.replace(R.id.container, frag16, NoAddressFoundFragment.TAG);
+                    ft.commitAllowingStateLoss();
+                    break;
+
+                case R.id.fragment_profile_button1:
+                    ProfileEditFragment frag17 = (ProfileEditFragment) getSupportFragmentManager().
+                            findFragmentByTag(ProfileEditFragment.TAG);
+                    if (frag17 == null) {
+                        frag17 = ProfileEditFragment.newInstance();
+                    }
+                    ft.replace(R.id.fragment_main_container, frag17, ProfileEditFragment.TAG).addToBackStack(null);
+                    Bundle bundle10 = new Bundle();
+                    bundle10.putString("fragment","profileFragment");
+                    frag17.setArguments(bundle10);
                     ft.commitAllowingStateLoss();
                     break;
             }

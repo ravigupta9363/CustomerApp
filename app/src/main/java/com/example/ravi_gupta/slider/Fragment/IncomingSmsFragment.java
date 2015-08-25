@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ravi_gupta.slider.Database.ProfileDatabase;
+import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
@@ -56,6 +58,8 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     public static ProgressBar progressBar;
     public static String OTP;
     private BroadcastReceiver receiver;
+    ProfileDatabase profileDatabase;
+    String fragment;
 
 
 
@@ -72,6 +76,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        profileDatabase = new ProfileDatabase(getActivity());
     }
 
     @Override
@@ -79,9 +84,11 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_incoming_sms, container, false);
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        fragment = getArguments().getString("fragment");
+        ProfileDetail profileDetail = profileDatabase.getProfile();
 
         titlebarBackButton = (ImageButton)rootview.findViewById(R.id.fragment_incoming_sms_imagebutton1);
         titlebarTitle = (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview1);
@@ -104,12 +111,20 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         otpEdittext.setTypeface(typeface2);
         progressBar.setVisibility(View.VISIBLE);
 
+        phoneNumber.setText(profileDetail.getPhone());
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(manuallyEntryText.getText() != null)
-                mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                if(manuallyEntryText.getText() != null) {
+                    if(fragment.equals("ProfileFragment")) {
+                        mainActivity.onBackPressed();
+                    }
+                    else if(fragment.equals("CartFragment")) {
+                        mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                    }
+
+                }
                 //validate data from server
             }
         });
