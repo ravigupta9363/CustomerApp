@@ -37,6 +37,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,7 +87,9 @@ import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
+import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.RestAdapter;
 
 import java.io.File;
@@ -148,11 +151,41 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.100:3001";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public String baseURL = "http://192.168.1.102:3001";
     public String status;
     double longitude;
     double latitude;
+
+
+
+    /*Push Implementation*/
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    /**
+     * Substitute you own sender ID here. This is the project number you got
+     * from the API Console, as described in "Getting Started."
+     */
+    String SENDER_ID = "999371974017";
+
+    /**
+     * Substitute your own application ID here. This is the id of the
+     * application you registered in your LoopBack server by calling
+     * Application.register().
+     * This is the IMEI NUMBER
+     */
+    String LOOPBACK_APP_ID = "loopback-component-push-app";
+
+    /**
+     * Tag used on log messages.
+     */
+    static final String TAG = "GCM Demo";
+
+    GoogleCloudMessaging gcm;
+    Context context;
+
+    String regid;
+    String deviceId;
+
 
 
     @Override
@@ -163,19 +196,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        context = getApplicationContext();
+
+        // Check device for Play Services APK.
+        // If check succeeds, proceed with GCM registration.
+        if (checkPlayServices()) {
+            updateRegistration();
+        } else {
+            Log.i(TAG, "No valid Google Play Services APK found.");
+        }
+
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
 
         //Making Server Call
         restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
-        //ModelRepository shopListRepository = restAdapter.createRepository("shopList");
-        //Model shopList = shopListRepository.createObject( ImmutableMap.of("shopName", "Gurgaon Pharmacy") );
 
-      /*  if (checkPlayServices()) {
-            updateRegistration();
-        } else {
-            Log.i("server", "No valid Google Play Services APK found.");
-        }*/
 
         //Checking Pincode lies within area
         appLocationService = new AppLocationService(this);
@@ -350,14 +387,54 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+
+    /**
+     * Updates the registration for push notifications.
+     */
+    private void updateRegistration() {
+        gcm = GoogleCloudMessaging.getInstance(this);
+
+        // 1. Grab the shared RestAdapter instance.
+        final MyApplication app = (MyApplication) getApplication();
+        final RestAdapter adapter = app.getLoopBackAdapter();
+
+        // 2. Create LocalInstallation instance
+        final LocalInstallation installation =  new LocalInstallation(context, adapter);
+
+        // 3. Update Installation properties that were not pre-filled
+        /*TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        LOOPBACK_APP_ID = mngr.getDeviceId();*/
+        // Enter the id of the LoopBack Application
+        installation.setAppId(LOOPBACK_APP_ID);
+       /* Log.i(TAG, LOOPBACK_APP_ID);*/
+        // Substitute a real id of the user logged in this application
+        installation.setUserId("loopback-android");
+
+        // 4. Check if we have a valid GCM registration id
+        if (installation.getDeviceToken() != null) {
+            // 5a. We have a valid GCM token, all we need to do now
+            //     is to save the installation to the server
+            saveInstallation(installation);
+        } else {
+            // 5b. We don't have a valid GCM token. Get one from GCM
+            // and save the installation afterwards.
+            registerInBackground(installation);
+        }
+    }
+
+    /**
+     * Checks the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
     private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i("server", "This device is not supported.");
+                Log.i(TAG, "This device is not supported.");
                 finish();
             }
             return false;
@@ -365,23 +442,60 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return true;
     }
 
-    private void updateRegistration() {
-        final LocalInstallation installation = new LocalInstallation(this, restAdapter);
+    /**
+     * Registers the application with GCM servers asynchronously.
+     * <p>
+     * Stores the registration ID in the provided LocalInstallation
+     */
+    private void registerInBackground(final LocalInstallation installation) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(final Void... params) {
+                try {
+                    final String regid = gcm.register(SENDER_ID);
+                    installation.setDeviceToken(regid);
+                    return "Device registered, registration ID=" + regid;
+                } catch (final IOException ex) {
+                    Log.e(TAG, "GCM registration failed.", ex);
+                    return "Cannot register with GCM:" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+            }
 
-        // Substitute the real ID of the LoopBack application as created by the server
-        installation.setAppId("loopback-app-id");
+            @Override
+            protected void onPostExecute(final String msg) {
 
-        // Substitute a real ID of the user logged in to the application
-        installation.setUserId("loopback-android");
-
-        installation.setSubscriptions(new String[] { "all" });
-
-        if (installation.getDeviceToken() != null) {
-           // saveInstallation(installation);
-        } else {
-            //registerInBackground(installation);
-        }
+                saveInstallation(installation);
+            }
+        }.execute(null, null, null);
     }
+
+    /**
+     * Saves the Installation to the LoopBack server and reports the result.
+     * @param installation
+     */
+    void saveInstallation(final LocalInstallation installation) {
+        installation.save(new Model.Callback() {
+
+            @Override
+            public void onSuccess() {
+                final Object id = installation.getId();
+                final String msg = "Installation saved with id " + id;
+                Log.i(TAG, msg);
+
+            }
+
+            @Override
+            public void onError(final Throwable t) {
+                Log.e(TAG, "Cannot save Installation", t);
+
+            }
+        });
+    }
+
+
 
 
     public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
@@ -1097,7 +1211,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        // Check device for Play Services APK.
+        checkPlayServices();
         new AsyncCaller().execute();
+
 
     }
 
@@ -1198,7 +1315,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
                         mainFragment.cartItems.setText(cartItems);
-                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204,204,204));
+                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204, 204, 204));
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -1325,5 +1442,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId2, mBuilder.build());
+    }
+
+
+
+    // Send an upstream message.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
