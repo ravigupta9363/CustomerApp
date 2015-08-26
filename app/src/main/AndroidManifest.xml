@@ -14,6 +14,10 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
+    <!--Getting permission for IMEI number-->
+    <!--<uses-permission
+        android:name="android.permission.READ_PHONE_STATE" />-->
+
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 

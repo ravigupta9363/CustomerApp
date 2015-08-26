@@ -37,6 +37,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -150,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.100:3001";
+    public String baseURL = "http://192.168.1.102:3001";
     public String status;
     double longitude;
     double latitude;
@@ -170,6 +171,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * Substitute your own application ID here. This is the id of the
      * application you registered in your LoopBack server by calling
      * Application.register().
+     * This is the IMEI NUMBER
      */
     String LOOPBACK_APP_ID = "loopback-component-push-app";
 
@@ -177,7 +179,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * Tag used on log messages.
      */
     static final String TAG = "GCM Demo";
-
 
     GoogleCloudMessaging gcm;
     Context context;
@@ -401,10 +402,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         final LocalInstallation installation =  new LocalInstallation(context, adapter);
 
         // 3. Update Installation properties that were not pre-filled
-
+        /*TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        LOOPBACK_APP_ID = mngr.getDeviceId();*/
         // Enter the id of the LoopBack Application
         installation.setAppId(LOOPBACK_APP_ID);
-
+       /* Log.i(TAG, LOOPBACK_APP_ID);*/
         // Substitute a real id of the user logged in this application
         installation.setUserId("loopback-android");
 
