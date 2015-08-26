@@ -125,8 +125,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_order_status_textview11);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_order_status_imagebutton1);
         TextView realTimeSystemText = (TextView)rootview.findViewById(R.id.fragment_order_status_textview12);
+        TextView onlyOneOrder = (TextView)rootview.findViewById(R.id.fragment_order_status_textview13);
         toolbarTitle.setTypeface(typeface1);
-        realTimeSystemText.setTypeface(typeface4);
+        realTimeSystemText.setTypeface(typeface2);
+        onlyOneOrder.setTypeface(typeface2);
 
         if (fragment.equals("HomeFragment")) {
             cancelOrder.setVisibility(View.VISIBLE);
@@ -137,14 +139,12 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.4),
                 (int) (drawable.getIntrinsicHeight() * 0.4));
         ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
-
         cancelOrder.setCompoundDrawables(sd.getDrawable(), null, null, null);*/
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (fragment.equals("HomeFragment")) {
-
                 } else {
                     mainActivity.onBackPressed();
                 }
@@ -159,7 +159,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 orderStatusText.setText("Your Order has been cancelled as per your request");
                 cancelOrder.setVisibility(View.GONE);
                 home.setVisibility(View.VISIBLE);
-                orderStatusImage.setImageResource(R.drawable.dc_order_cancelled);
+                orderStatusImage.setImageResource(R.drawable.order_cancelled);
                 //Open Main Fragment when order has been cancelled or delivered
             }
         });
@@ -168,6 +168,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(),"Redirect to home",Toast.LENGTH_SHORT).show();
+                mainActivity.replaceFragment(R.id.fragment_order_status_button2,null);
             }
         });
 

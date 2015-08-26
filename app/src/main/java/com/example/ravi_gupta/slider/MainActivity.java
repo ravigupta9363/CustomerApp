@@ -1018,6 +1018,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG);
                     ft.commitAllowingStateLoss();
                     break;
+
+                case R.id.fragment_order_status_button2:
+                    MainFragment frag19 = (MainFragment) getSupportFragmentManager().
+                            findFragmentByTag(MainFragment.TAG);
+                    if (frag19 == null) {
+                        frag19 = MainFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag19, MainFragment.TAG);
+                    ft.commitAllowingStateLoss();
+                    break;
             }
     }
 

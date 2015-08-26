@@ -138,6 +138,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                 // handle the error
                 noPastOrderText.setText("Unable to connect to server");
                 noPastOrder.setVisibility(View.VISIBLE);
+                noPastOrder.setImageResource(R.drawable.order_cancelled);
                 noPastOrderText.setVisibility(View.VISIBLE);
                 mListview.setVisibility(View.GONE);
                 Log.v("server", "Error");
