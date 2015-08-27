@@ -29,22 +29,24 @@ import android.widget.Toast;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.CustomerRepository;
+import com.strongloop.android.loopback.AccessToken;
+import com.strongloop.android.loopback.UserRepository;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class IncomingSmsFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    public static String TAG = "IncomingSmsFragment";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static String TAG = "drugcorner";
+
+
 
     private OnFragmentInteractionListener mListener;
     ImageButton titlebarBackButton;
@@ -64,7 +66,10 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     ProfileDatabase profileDatabase;
     String fragment;
     int sum = 0;
-
+    /*Getting the profile details*/
+    private String number;
+    private String email;
+    private String name;
 
 
     // TODO: Rename and change types and number of parameters
@@ -117,6 +122,27 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
 
         phoneNumber.setText(profileDetail.getPhone());
 
+        /*Setting the profile details*/
+        number = profileDetail.getPhone();
+        email  = profileDetail.getEmail();
+        name   = profileDetail.getName();
+
+        //================Now sending the request to server for sending the otp=====================
+        CustomerRepository customerRepo = new CustomerRepository();
+        customerRepo.requestCode(number, new VoidCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "OTP Request send to the server");
+            }
+        });
+
+
+
         otpEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,15 +152,33 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 sum = sum + count;
-                Log.v("server", sum + "");
-                if(manuallyEntryText.getText() != null && sum == 4) {
+                if (manuallyEntryText.getText() != null && sum == 4) {
                     hiddenKeyboard(manuallyEntryText);
-                    if(fragment.equals("ProfileFragment")) {
-                        mainActivity.onBackPressed();
-                    }
-                    else if(fragment.equals("CartFragment")) {
-                        mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
-                    }
+                    HashMap<String, String> credentials = new HashMap<String, String>();
+                    credentials.put("number", number);
+                    credentials.put("email", email);
+                    credentials.put("name", name);
+
+                    CustomerRepository customerRepo = new CustomerRepository();
+                    //Now registering the customer with OTP verification code given..
+                    customerRepo.registerWithOTP(credentials, (String)manuallyEntryText.getText(), new UserRepository.LoginCallback<Customer>(){
+                        @Override
+                        public void onSuccess(AccessToken token, Customer currentUser) {
+                            //Registration done successfully.
+                            if (fragment.equals("ProfileFragment")) {
+                                mainActivity.onBackPressed();
+                            } else if (fragment.equals("CartFragment")) {
+                                mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            //If OTP validation fails..
+
+                        }
+                    });
+
 
                 }
             }
@@ -145,7 +189,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        /*nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(manuallyEntryText.getText() != null) {
@@ -159,7 +203,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                 }
                 //validate data from server
             }
-        });
+        });*/
 
         resendCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +248,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -227,6 +272,8 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         new AsyncCaller().execute();
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -241,20 +288,32 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
     private void hiddenKeyboard(View v) {
         InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 
+
+
+
+
+
+    /*AsyncCaller class for sending the OTP request message to the server*/
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
+        ProfileDetail profileDetail = profileDatabase.getProfile();
+        String phoneNumber = profileDetail.getPhone();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             //this method will be running on UI thread
+
         }
+
         @Override
         protected Void doInBackground(Void... params) {
 

@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PRESCRIPTION_TABLE = "CREATE TABLE " + TABLE_PRESCRIPTION + "("
+        String CREATE_PRESCRIPTION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_PRESCRIPTION + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IMAGEPATH + " TEXT,"
                 + KEY_THUMBNAIL_URI + " TEXT" + ")";
         db.execSQL(CREATE_PRESCRIPTION_TABLE);

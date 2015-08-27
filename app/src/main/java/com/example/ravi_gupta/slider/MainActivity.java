@@ -151,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.102:3001";
+    public String baseURL = "http://192.168.1.101:3001";
     public String status;
     double longitude;
     double latitude;

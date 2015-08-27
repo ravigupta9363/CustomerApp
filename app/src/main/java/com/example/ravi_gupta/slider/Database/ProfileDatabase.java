@@ -27,7 +27,7 @@ public class ProfileDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PROFILE_TABLE = "CREATE TABLE " + TABLE_PROFILE + "("
+        String CREATE_PROFILE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_PROFILE + "("
                  + NAME + " TEXT," + EMAIL_ID + " TEXT,"
                 + PHONE_NUMBER + " TEXT" + ")";
         db.execSQL(CREATE_PROFILE_TABLE);
