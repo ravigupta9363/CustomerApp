@@ -81,8 +81,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_cart_no_orders_imagebutton1);
         //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
 
-        mainActivity.showStatusNotification();
-        mainActivity.showImageNotification();
 
         toolbarTitle.setTypeface(typeface2);
         //toolbarButton.setTypeface(typeface);

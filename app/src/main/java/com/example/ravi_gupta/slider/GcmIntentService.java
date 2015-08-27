@@ -3,18 +3,23 @@ package com.example.ravi_gupta.slider;
 /**
  * Created by robins on 26/8/15.
  */
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -27,11 +32,15 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+    private static int verificationCode;
+    public Matcher m;
+    int mNotificationId1 = 001;
+    int mNotificationId2 = 002;
 
     public GcmIntentService() {
         super("GcmIntentService");
     }
-    public static final String TAG = "GCM Demo";
+    public static final String TAG = "drugcorner";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -53,19 +62,35 @@ public class GcmIntentService extends IntentService {
                 sendNotification("Deleted messages on server: " + extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                String message = (String)extras.getString("message");
+                Log.i(TAG, "Message is: " + message);
 
+                //checking if the message was verification code
+                Pattern p = Pattern.compile("\\s?Verification\\s?code\\s?:\\s?(\\d+)",  Pattern.CASE_INSENSITIVE);
+                m = p.matcher(message);
+                if(m.find()){
+                    //Now parse the code from message
+                    Log.i(TAG, "The code is " + m.group(1));
+                    verificationCode = Integer.parseInt(m.group(1));
+                }else {
+                    //The push message found was of notification type
+                    //display notification
+                    // Post notification of received message.
+                    Log.i(TAG, "The  " + m);
+                    sendNotification("Received: " + extras.toString());
+                    Log.v("Notification",extras.toString());
 
-                // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
-                //Log.i(TAG, "Received: " + extras.toString());
-
-                /*Toast.makeText(getApplicationContext(), "Received: " + extras.toString(),
-                        Toast.LENGTH_LONG).show();
-*/
+                    showStatusNotification();
+                    showImageNotification();
+                }
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
+    }
+
+    public static int getVerificationCode() {
+        return verificationCode;
     }
 
     // Put the message into a notification and post it.
@@ -91,6 +116,63 @@ public class GcmIntentService extends IntentService {
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
 
+    }
+    public void showImageNotification() {
+
+        Drawable d = getResources().getDrawable(R.drawable.pills1);
+        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true)
+                        .setContentTitle("Drug Corner")
+                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+
+        NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
+        bigPicStyle.bigPicture(bitmap);
+        bigPicStyle.setBigContentTitle("Drug Corner");
+        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+        mBuilder.setStyle(bigPicStyle);
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction("OpenNotificationFragment");
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId1, mBuilder.build());
+    }
+
+    public void showStatusNotification() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setAutoCancel(true)
+                        .setContentTitle("Order Id DC256649")
+                        .setContentText("Your Order has been cancelled as per your request");
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction("OpenStatusFragment");
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId2, mBuilder.build());
     }
 }
 
