@@ -116,11 +116,11 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 int id = group.getCheckedRadioButtonId();
                 if(id == R.id.fragment_landmark_radio_button1) {
-                    callBack.setTextColor(Color.rgb(54, 182, 102));
+                    callBack.setTextColor(Color.rgb(20, 100, 159));
                     notCallBack.setTextColor(Color.rgb(170, 170, 170));
                 }
                 else if(id == R.id.fragment_landmark_radio_button2) {
-                    notCallBack.setTextColor(Color.rgb(54, 182, 102));
+                    notCallBack.setTextColor(Color.rgb(20, 100, 159));
                     callBack.setTextColor(Color.rgb(170, 170, 170));
                 }
             }

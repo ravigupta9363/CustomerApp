@@ -87,18 +87,18 @@
     <string name="fragment_notification_textview1">Notifications</string>
 
     <string name="fragment_order_status_textview1">Order Status</string>
-    <string name="fragment_order_status_textview12">Real time tracking coming soon</string>
+    <string name="fragment_order_status_textview12">**Real time tracking coming soon</string>
 
     <string name="fragment_past_orders_textview1">Past Orders</string>
 
     <string name="fragment_profile_textview1">Profile</string>
-    <string name="fragment_profile_textview2">Username</string>
+    <string name="fragment_profile_textview2">Name</string>
     <string name="fragment_profile_textview3">Email Id</string>
     <string name="fragment_profile_textview4">Mobile Number</string>
     <string name="fragment_profile_button1">EDIT</string>
 
     <string name="fragment_edit_profile_textview1">Edit Profile</string>
-    <string name="fragment_edit_profile_edittext1">Username</string>
+    <string name="fragment_edit_profile_edittext1">Name</string>
     <string name="fragment_edit_profile_edittext2">Email Id</string>
     <string name="fragment_edit_profile_edittext3">Mobile Number</string>
     <string name="fragment_edit_profile_button1">SAVE</string>

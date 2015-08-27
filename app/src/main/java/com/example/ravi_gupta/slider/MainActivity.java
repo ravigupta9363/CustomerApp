@@ -1,9 +1,6 @@
 package com.example.ravi_gupta.slider;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -16,8 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,11 +28,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -145,8 +138,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private TypedArray navMenuIcons;
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
-    int mNotificationId1 = 001;
-    int mNotificationId2 = 002;
     String[] latlong = {"323001","122002","302033","122010","122008","512272"};
     public String matchPincode;
     String pincode;
@@ -178,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "GCM Demo";
+    static final String TAG = "drugcorner";
 
     GoogleCloudMessaging gcm;
     Context context;
@@ -1132,6 +1123,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG);
                     ft.commitAllowingStateLoss();
                     break;
+
+                case R.id.fragment_order_status_button2:
+                    MainFragment frag19 = (MainFragment) getSupportFragmentManager().
+                            findFragmentByTag(MainFragment.TAG);
+                    if (frag19 == null) {
+                        frag19 = MainFragment.newInstance();
+                    }
+                    ft.replace(R.id.container, frag19, MainFragment.TAG);
+                    ft.commitAllowingStateLoss();
+                    break;
             }
     }
 
@@ -1375,64 +1376,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
-    public void showImageNotification() {
-
-        Drawable d = getResources().getDrawable(R.drawable.pills1);
-        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setAutoCancel(true)
-                        .setContentTitle("Drug Corner")
-                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
-
-        NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
-        bigPicStyle.bigPicture(bitmap);
-        bigPicStyle.setBigContentTitle("Drug Corner");
-        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
-        mBuilder.setStyle(bigPicStyle);
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.setAction("OpenNotificationFragment");
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId1, mBuilder.build());
-    }
-
-
-    public void showStatusNotification() {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setAutoCancel(true)
-                        .setContentTitle("Order Id DC256649")
-                        .setContentText("Your Order has been cancelled as per your request");
-
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.setAction("OpenStatusFragment");
-
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        mBuilder.setContentIntent(resultPendingIntent);
-        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
-
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId2, mBuilder.build());
-    }
 
 
 

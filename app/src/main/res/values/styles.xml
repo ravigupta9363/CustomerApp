@@ -3,7 +3,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FFF</item>
         <item name="colorPrimaryDark">#000</item>//#2E9C58
-        <item name="colorAccent">#74C291</item>
+        <item name="colorAccent">#14649F</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowTitleSize">0dp</item>

@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.Date;
 
 
 /**
@@ -27,6 +32,9 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     MainActivity mainActivity;
+    Button retryButton;
+    ProgressBar progressBar;
+    TextView textView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,15 +69,23 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
+        new AsyncCaller().execute();
 
-        TextView textView = (TextView) rootview.findViewById(R.id.fragment_verifying_order_textview1);
+        textView = (TextView) rootview.findViewById(R.id.fragment_verifying_order_textview1);
+        retryButton = (Button) rootview.findViewById(R.id.fragment_verifying_order_button1);
+        progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_verifying_order_progressbar1);
         textView.setTypeface(typeface2);
-        new Handler().postDelayed(new Runnable() {
+        retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run () {
-                mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1,null);
+            public void onClick(View v) {
+                sendRequest();
+                progressBar.setVisibility(View.VISIBLE);
+                textView.setText("Verifying your order");
+                retryButton.setVisibility(View.GONE);
             }
-        },1000);
+        });
+        //Requesting Verification code from server
+        sendRequest();
 
         return rootview;
     }
@@ -97,6 +113,14 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void sendRequest() {
+
+    }
+
+    public boolean checkVerificationCode(int code) {
+        return true;
     }
 
     /**
@@ -131,4 +155,69 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             }
         });
     }
+
+
+
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
+        private int code;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //this method will be running on UI thread
+
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+            Date date       = new Date();
+            long initialTime = date.getTime();
+            int till = 10;
+            //Loop till 5 sec is completed
+            while (true ) {
+                Date date2 = new Date();
+                long curTime = date2.getTime();
+                long diff = curTime - initialTime;
+                //Getting the difference in seconds..
+                diff = diff / 1000 % 60;
+                Log.i("drugcorner",diff+"");
+                if (diff > (long) till) {
+                    break;
+                }
+                //Checking if the verification code is obtained..
+                code = GcmIntentService.getVerificationCode();
+                if (code != 0) {
+                    break;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //this method will be running on UI thread
+            if (code != 0) {
+                if(checkVerificationCode(code)) {
+                    mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+                }
+                Log.i("drugcorner", "Verification code found from fragment interface " + code);
+                //add the code to the verification and follow the next step
+            }else {
+                //Timeout occurs retry the process..
+                //If code isn't found then time out occurs..
+                //Repeat the verification process in this case by showing a retry button..
+                retryButton.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                textView.setText("Tap to Retry");
+                //And recall this async class..
+            }
+
+        }
+
+    }
+
 }
