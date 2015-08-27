@@ -44,11 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_gravity="center"
-
             android:background="@drawable/round_button"
             android:text="Retry"
             android:textColor="#FFF"
-            android:layout_below="@+id/linear_layout"
             android:layout_centerHorizontal="true"
             android:visibility="gone"
             android:id="@+id/fragment_verifying_order_button1"/>

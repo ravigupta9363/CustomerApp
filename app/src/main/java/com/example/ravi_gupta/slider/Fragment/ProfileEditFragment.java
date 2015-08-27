@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -91,6 +93,21 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
+        Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
+        drawableProfile.setBounds(0, 0, (int) (drawableProfile.getIntrinsicWidth() * 0.7),
+                (int) (drawableProfile.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd1 = new ScaleDrawable(drawableProfile, 0, 1f, 1f);
+
+        Drawable drawableEmail = getResources().getDrawable(R.mipmap.dc_about);
+        drawableEmail.setBounds(0, 0, (int) (drawableEmail.getIntrinsicWidth() * 0.7),
+                (int) (drawableEmail.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd2 = new ScaleDrawable(drawableEmail, 0, 1f, 1f);
+
+        Drawable drawablePhone = getResources().getDrawable(R.mipmap.dc_nav_contact);
+        drawablePhone.setBounds(0, 0, (int) (drawablePhone.getIntrinsicWidth() * 0.7),
+                (int) (drawablePhone.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd3 = new ScaleDrawable(drawablePhone, 0, 1f, 1f);
+
         customerName = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext1);
         customerMail = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext2);
         customerPhone = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext3);
@@ -106,9 +123,9 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerMail.setTypeface(typeface2);
         customerPhone.setTypeface(typeface2);
 
-        //customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
-        //customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
-        //customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
+        customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
+        customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
+        customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
         ProfileDetail profileDetail = profileDatabase.getProfile();
 
