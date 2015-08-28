@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,9 @@ import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,6 +78,9 @@ public class MainFragment extends android.support.v4.app.Fragment {
     String cartNumber;
     public static String TAG = "MainFragment";
     DatabaseHelper databaseHelper;
+    double latitude;
+    double longitude;
+    String result;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,27 +104,60 @@ public class MainFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
         sliderItems = new int[]{R.drawable.small_slider3,R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
-        appLocationService = new AppLocationService(getActivity());
-        Location gpsLocation = appLocationService
-                .getLocation(LocationManager.GPS_PROVIDER);
+
+        /*appLocationService = new AppLocationService(getActivity());
+        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
         if (gpsLocation != null) {
             double latitude = gpsLocation.getLatitude();
             double longitude = gpsLocation.getLongitude();
-            // String result = "Latitude: " + gpsLocation.getLatitude() +
-            //    " Longitude: " + gpsLocation.getLongitude();
-    //fragment_change_location_edittext.setText(result);
+
         } else {
             showSettingsAlert();
-        }
+        }*/
 
-        Location location = appLocationService
-                .getLocation(LocationManager.NETWORK_PROVIDER);
-        if (location != null) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            LocationAddress locationAddress = new LocationAddress();
-            locationAddress.getAddressFromLocation(latitude, longitude,
-                    getActivity().getApplicationContext(), new GeocoderHandler());
+        appLocationService = new AppLocationService(getActivity());
+        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+        if (gpsLocation != null || networkLocation != null) {
+            if(gpsLocation != null) {
+                latitude = gpsLocation.getLatitude();
+                longitude = gpsLocation.getLongitude();
+            }
+            else {
+                latitude = networkLocation.getLatitude();
+                longitude = networkLocation.getLongitude();
+            }
+            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(
+                        latitude, longitude, 1);
+                if (addressList != null && addressList.size() > 0) {
+                    Address address = addressList.get(0);
+                    try {
+                        List<Address> updatedAddressList = geocoder.getFromLocation(
+                                address.getLatitude(), address.getLongitude(), 1);
+                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
+                            Address updatedAddress = addressList.get(0);
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                                sb.append(address.getAddressLine(i)).append("\n");
+                                Log.v("locality", "Address = " + address.getAddressLine(i) + "");
+                            }
+                            sb.append(address.getLocality()).append("\n");
+                            Log.v("locality", address.getPostalCode() + "");
+                            sb.append(address.getPostalCode()).append("\n");
+                            sb.append(address.getCountryName());
+                            result = sb.toString();
+
+                        }
+                    }
+                    catch (IOException e) {
+
+                    }
+                }
+            }catch (IOException e) {
+            }
         } else {
             showSettingsAlert();
         }
@@ -157,6 +199,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         pageSwitcher(4);
 
         disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
+        disabledocationEditText.setText(result);
+        Log.v("address","Display Address = "+result);
 
         toolbarTitle.setTypeface(typeface2);
         String cartItem = databaseHelper.getPresciptionCount()+"";
@@ -237,17 +281,43 @@ public class MainFragment extends android.support.v4.app.Fragment {
         alertDialog.setPositiveButton("Update",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Location location = appLocationService
-                                .getLocation(LocationManager.NETWORK_PROVIDER);
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            LocationAddress locationAddress = new LocationAddress();
-                            locationAddress.getAddressFromLocation(latitude, longitude,
-                                    getActivity().getApplicationContext(), new GeocoderHandler());
+                        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+                        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+                        if (gpsLocation != null || networkLocation != null) {
+                            if(gpsLocation != null) {
+                                latitude = gpsLocation.getLatitude();
+                                longitude = gpsLocation.getLongitude();
+                            }
+                            else {
+                                latitude = networkLocation.getLatitude();
+                                longitude = networkLocation.getLongitude();
+                            }
+                            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                            try {
+                                List<Address> addressList = geocoder.getFromLocation(
+                                        latitude, longitude, 1);
+                                if (addressList != null && addressList.size() > 0) {
+                                    Address address = addressList.get(0);
+                                    try {
+                                        List<Address> updatedAddressList = geocoder.getFromLocation(
+                                                address.getLatitude(), address.getLongitude(), 1);
+                                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
+                                            Address updatedAddress = addressList.get(0);
+                                            LocationAddress locationAddress = new LocationAddress();
+                                            locationAddress.getAddressFromLocation(updatedAddress.getLatitude(), updatedAddress.getLongitude(),
+                                                    getActivity().getApplicationContext(), new GeocoderHandler());
+                                        }
+                                    }
+                                    catch (IOException e) {
+
+                                    }
+                                }
+                            }catch (IOException e) {
+                            }
                         } else {
-                            //showSettingsAlert();
+                            showSettingsAlert();
                         }
+
                     }
                 });
         alertDialog.setNegativeButton("Cancel",

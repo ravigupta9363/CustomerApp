@@ -142,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.102:3001";
+    public String baseURL = "http://192.168.1.101:3001";
     public String status;
     double longitude;
     double latitude;
@@ -173,7 +173,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     GoogleCloudMessaging gcm;
     Context context;
-
+    public Address updatedAddress;
     String regid;
     String deviceId;
 
@@ -213,28 +213,36 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             if(gpsLocation != null) {
                  latitude = gpsLocation.getLatitude();
                  longitude = gpsLocation.getLongitude();
-                 Log.v("pincode","GPS");
             }
             else {
                  latitude = networkLocation.getLatitude();
                  longitude = networkLocation.getLongitude();
-                 Log.v("pincode","Network");
             }
             Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            String result = null;
             try {
                 List<Address> addressList = geocoder.getFromLocation(
                         latitude, longitude, 1);
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);
+
+                    try {
+                        List<Address> updatedAddressList = geocoder.getFromLocation(
+                                address.getLatitude(), address.getLongitude(), 1);
+                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
+                            updatedAddress = updatedAddressList.get(0);
+                            Log.v("address","Updated Address = "+updatedAddress+"");
+                        }
+                    }
+                    catch (Exception e) {
+
+                    }
                     final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher( address.toString() );
+                    final Matcher m = p.matcher(updatedAddress.toString() );
                     if ( m.find() ) {
                         pincode =  m.group(0);
                     }
                     StringBuilder sb = new StringBuilder();
                     sb.append(address.getPostalCode());
-                    Log.v("pincode",pincode+"");
                 }
             }catch (IOException e) {
             }
@@ -1032,7 +1040,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     if (frag13 == null) {
                         frag13 = VerifyingOrderFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG);
+                    ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
                     break;
 
@@ -1120,18 +1128,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     if (frag18 == null) {
                         frag18 = ConfirmOrderFragment.newInstance();
                     }
-                    ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG);
+                    ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG).addToBackStack(null);
                     ft.commitAllowingStateLoss();
                     break;
 
                 case R.id.fragment_order_status_button2:
-                    MainFragment frag19 = (MainFragment) getSupportFragmentManager().
-                            findFragmentByTag(MainFragment.TAG);
-                    if (frag19 == null) {
-                        frag19 = MainFragment.newInstance();
-                    }
-                    ft.replace(R.id.container, frag19, MainFragment.TAG);
-                    ft.commitAllowingStateLoss();
+                    getSupportFragmentManager().popBackStackImmediate();
                     break;
             }
     }
