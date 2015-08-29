@@ -27,9 +27,7 @@ public class Order extends Model {
     private String prototypeStatusCode;
     private String prototypeOrderCancelReason;
 
-    public int getOrderId() {
-        return _id;
-    }
+
 
     public void setOrderId(int id) {
         this._id = _id;

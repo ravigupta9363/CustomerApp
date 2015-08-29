@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.SmsManager;
@@ -30,11 +30,17 @@ import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Customer;
+import com.example.ravi_gupta.slider.Models.Token;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.strongloop.android.loopback.AccessToken;
+import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.UserRepository;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
+
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +76,8 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     private String number;
     private String email;
     private String name;
+    private CustomerRepository repository;
+
 
 
     // TODO: Rename and change types and number of parameters
@@ -128,8 +136,12 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         name   = profileDetail.getName();
 
         //================Now sending the request to server for sending the otp=====================
-        CustomerRepository customerRepo = new CustomerRepository();
-        customerRepo.requestCode(number, new VoidCallback() {
+
+
+        RestAdapter adapter = mainActivity.restAdapter;
+        repository = adapter.createRepository(CustomerRepository.class);
+        //CustomerRepository customerRepo = new CustomerRepository();
+        repository.requestCode(number, new VoidCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.e(TAG, t.toString());
@@ -152,36 +164,61 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 sum = sum + count;
-                if (manuallyEntryText.getText() != null && sum == 4) {
-                    hiddenKeyboard(manuallyEntryText);
-                    HashMap<String, String> credentials = new HashMap<String, String>();
-                    credentials.put("number", number);
-                    credentials.put("email", email);
-                    credentials.put("name", name);
+                String code = otpEdittext.getText().toString().trim();
+                if (sum == 4) {
+                    hiddenKeyboard(otpEdittext);
 
-                    CustomerRepository customerRepo = new CustomerRepository();
+                    Log.i(TAG, "Sending login data to the server");
+                    /*//Now registering the customer with OTP verification code given..
+                    repository.OtpLogin(number, email, name, code, new ObjectCallback<Customer>() {
+
+                        public void onSuccess(Customer customer) {
+                            // found!
+                            Log.i(TAG, "Success");
+                            try {
+
+                               *//* Map<String, String> map = customer.getUser();
+                                for (Map.Entry<String, String> entry : map.entrySet()) {
+                                    Log.i(TAG, entry.getKey() + " : " + entry.getValue());
+                                }*//*
+                            }catch (Exception e) {
+                                Log.i(TAG, "Error Occured");
+                                Log.i(TAG, e.toString());
+                            }
+                        }
+
+                        public void onError(Throwable t) {
+                            // handle the error
+                            Log.i(TAG, "Error");
+                            Log.i(TAG, t.toString());
+                        }
+                    });*/
+
                     //Now registering the customer with OTP verification code given..
-                    customerRepo.registerWithOTP(credentials, (String)manuallyEntryText.getText(), new UserRepository.LoginCallback<Customer>(){
+                    repository.OtpLogin(number, email, name, code, new UserRepository.LoginCallback<Customer>() {
                         @Override
                         public void onSuccess(AccessToken token, Customer currentUser) {
-                            //Registration done successfully.
-                            if (fragment.equals("ProfileFragment")) {
-                                mainActivity.onBackPressed();
-                            } else if (fragment.equals("CartFragment")) {
-                                mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                            Log.i(TAG, "Success");
+                            try {
+                                //Registration done successfully.
+                                if (fragment.equals("ProfileFragment")) {
+                                    mainActivity.onBackPressed();
+                                } else if (fragment.equals("CartFragment")) {
+                                    mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                                }
+                            }catch (Exception e){
+                                Log.i(TAG, "Error Occured in catch ");
                             }
                         }
 
                         @Override
                         public void onError(Throwable t) {
                             //If OTP validation fails..
-
+                            Log.i(TAG, "Error occured");
                         }
                     });
-
-
                 }
-            }
+            }//onTextChanged
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -269,7 +306,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        new AsyncCaller().execute();
+
     }
 
 
@@ -301,35 +338,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
 
 
 
-    /*AsyncCaller class for sending the OTP request message to the server*/
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-        ProfileDetail profileDetail = profileDatabase.getProfile();
-        String phoneNumber = profileDetail.getPhone();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //this method will be running on UI thread
-        }
-
-    }
 
     public static class IncomingSms extends BroadcastReceiver {
 
