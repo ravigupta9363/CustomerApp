@@ -48,7 +48,7 @@
             android:text="@string/fragment_cart_button1"
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_rectangle"
-            android:textColor="#36B666"
+            android:textColor="#14649F"
             android:textSize="15sp"
             android:gravity="center"
             android:layout_gravity="right"

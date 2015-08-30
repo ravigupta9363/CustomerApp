@@ -39,7 +39,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
     TextView customerName;
     TextView customerPhone;
     TextView customerEmail;
-    Button editButton;
+    Button clearButton;
     MainActivity mainActivity;
     ArrayList<String> infoList = new ArrayList<String>();
     public static String TAG = "ProfileFragment";
@@ -100,7 +100,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         customerName = (TextView)rootview.findViewById(R.id.fragment_profile_textview1);
         customerEmail = (TextView)rootview.findViewById(R.id.fragment_profile_textview2);
         customerPhone = (TextView)rootview.findViewById(R.id.fragment_profile_textview3);
-        editButton = (Button)rootview.findViewById(R.id.fragment_profile_button1);
+        clearButton = (Button)rootview.findViewById(R.id.fragment_profile_button1);
 
         customerName.setTypeface(typeface2);
         customerEmail.setTypeface(typeface2);
@@ -151,9 +151,10 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             mainActivity.updateUserInfo  = false;
         }*/
 
-        editButton.setOnClickListener(new View.OnClickListener() {
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                profileDatabase.deleteProfile();
                 mainActivity.replaceFragment(R.id.fragment_profile_button1,profileFragment);
             }
         });

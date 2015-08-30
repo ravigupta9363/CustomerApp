@@ -1,7 +1,6 @@
 package com.example.ravi_gupta.slider;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -86,7 +85,6 @@ import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.RestAdapter;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -144,10 +142,14 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.101:3001";
+    public String baseURL = "http://192.168.1.100:3001";
     public String status;
     double longitude;
     double latitude;
+    public String tempName;
+    public String tempEmail;
+    public String tempPhone;
+    public boolean invalidEmail = false;
 
 
 
@@ -530,10 +532,24 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
             switch (position) {
                 case 0:
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
-                            .commitAllowingStateLoss();
+                    if(profileDatabase.getProfile().getName() == null && profileDatabase.getProfile().getEmail() == null && profileDatabase.getProfile().getPhone() == null) {
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
+                                findFragmentByTag(ProfileEditFragment.TAG);
+                        if (profileEditFragment == null) {
+                            profileEditFragment = ProfileEditFragment.newInstance();
+                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString("fragment", "directHomeFragment");
+                        profileEditFragment.setArguments(bundle);
+                        ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
+                        ft.commitAllowingStateLoss();
+                    }
+                    else {
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
+                                .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
+                                .commitAllowingStateLoss();
+                    }
 
                     break;
                 case 1:
@@ -833,6 +849,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 case R.id.fragment_order_status_button2:
                     orderStatusFragment();
                     break;
+
+                case R.id.fragment_incoming_sms_textview4:
+                    invalidEmail(ft,object);
             }
     }
 
@@ -1093,7 +1112,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     private void pastOrderLayoutButton2Fragment(FragmentTransaction ft){
         ProfileDetail profileDetail2 = profileDatabase.getProfile();
-        if (profileDetail2.getPhone() == null) {
+        if (profileDetail2.getPhone() == null && profileDetail2.getEmail() == null && profileDetail2.getName() == null) {
             ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                     findFragmentByTag(ProfileEditFragment.TAG);
             if (frag7 == null) {
@@ -1105,12 +1124,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
             ft.commitAllowingStateLoss();
         } else {
-            IncomingSmsFragment frag7 = (IncomingSmsFragment) getSupportFragmentManager().
-                    findFragmentByTag(IncomingSmsFragment.TAG);
+            LandmarkFragment frag7 = (LandmarkFragment) getSupportFragmentManager().
+                    findFragmentByTag(LandmarkFragment.TAG);
             if (frag7 == null) {
-                frag7 = IncomingSmsFragment.newInstance();
+                frag7 = LandmarkFragment.newInstance();
             }
-            ft.replace(R.id.fragment_main_container, frag7, IncomingSmsFragment.TAG).addToBackStack(null);
+            ft.replace(R.id.fragment_main_container, frag7, LandmarkFragment.TAG).addToBackStack(null);
             ft.commitAllowingStateLoss();
         }
     }
@@ -1159,7 +1178,29 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void orderStatusFragment(){
-        getSupportFragmentManager().popBackStackImmediate();
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+    }
+
+    private void invalidEmail(FragmentTransaction ft, Object object){
+        onBackPressed();
+        ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
+                findFragmentByTag(ProfileEditFragment.TAG);
+        if (profileEditFragment == null) {
+            profileEditFragment = ProfileEditFragment.newInstance();
+        }
+        String fragment = (String) object;
+        Bundle bundle = new Bundle();
+        bundle.putString("fragment", fragment);
+        profileEditFragment.setArguments(bundle);
+        invalidEmail = true;
+        ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
+        ft.commitAllowingStateLoss();
     }
 
     /*=================REPLACE FRAGMENT METHOD AREA ENDS==========================*/

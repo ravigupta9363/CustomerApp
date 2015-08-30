@@ -103,7 +103,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(getActivity());
-        sliderItems = new int[]{R.drawable.small_slider3,R.drawable.small_slider1, R.drawable.small_slider2, R.drawable.small_slider3, R.drawable.small_slider1};
+        sliderItems = new int[]{R.drawable.slider_three,R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
 
         /*appLocationService = new AppLocationService(getActivity());
         Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);

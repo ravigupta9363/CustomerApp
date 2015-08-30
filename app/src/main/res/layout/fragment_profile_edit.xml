@@ -46,7 +46,7 @@
             android:text="@string/fragment_edit_profile_button1"
             android:background="@drawable/ripple_button_rectangle"
             android:id="@+id/fragment_profile_edit_button1"
-            android:textColor="#36B666"
+            android:textColor="#14649F"
             android:textSize="15sp"
             android:gravity="center"
             android:textAllCaps="false"
@@ -87,6 +87,7 @@
             android:id="@+id/fragment_profile_edit_edittext1"
             android:layout_marginBottom="0dp"
             android:gravity="center|left"
+            android:hint="@string/fragment_edit_profile_edittext1"
             android:drawableLeft="@mipmap/dc_profile"
             android:textSize="15sp"
             android:singleLine="true"/>
@@ -107,6 +108,7 @@
             android:layout_marginBottom="0dp"
             android:drawableLeft="@mipmap/dc_about"
             android:textSize="15sp"
+            android:hint="@string/fragment_edit_profile_edittext2"
             android:inputType="textEmailAddress"
             android:singleLine="true"/>
 
@@ -125,6 +127,7 @@
             android:gravity="center|left"
             android:textSize="15sp"
             android:inputType="phone"
+            android:hint="@string/fragment_edit_profile_edittext3"
             android:drawableLeft="@mipmap/dc_nav_contact"
             android:singleLine="true"/>
 

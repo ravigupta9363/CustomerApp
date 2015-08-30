@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.SmsManager;
@@ -30,20 +29,13 @@ import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Customer;
-import com.example.ravi_gupta.slider.Models.Token;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.strongloop.android.loopback.AccessToken;
 import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.UserRepository;
-import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,6 +62,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     public static String OTP;
     private BroadcastReceiver receiver;
     ProfileDatabase profileDatabase;
+    ProfileEditFragment profileEditFragment;
     String fragment;
     int sum = 0;
     /*Getting the profile details*/
@@ -94,6 +87,9 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         profileDatabase = new ProfileDatabase(getActivity());
+      //  profileEditFragment = (ProfileEditFragment)getActivity().getSupportFragmentManager().findFragmentByTag(ProfileEditFragment.TAG);
+        Log.v("Data",profileEditFragment+"");
+
     }
 
     @Override
@@ -105,7 +101,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         fragment = getArguments().getString("fragment");
-        ProfileDetail profileDetail = profileDatabase.getProfile();
+        final ProfileDetail profileDetail = profileDatabase.getProfile();
 
         titlebarBackButton = (ImageButton)rootview.findViewById(R.id.fragment_incoming_sms_imagebutton1);
         titlebarTitle = (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview1);
@@ -128,12 +124,13 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         otpEdittext.setTypeface(typeface2);
         progressBar.setVisibility(View.VISIBLE);
 
-        phoneNumber.setText(profileDetail.getPhone());
+        phoneNumber.setText("+91 " + mainActivity.tempPhone);
 
         /*Setting the profile details*/
-        number = profileDetail.getPhone();
-        email  = profileDetail.getEmail();
-        name   = profileDetail.getName();
+        number = mainActivity.tempPhone;
+        email  = mainActivity.tempEmail;
+        name   = mainActivity.tempName;
+        //Log.v("Data",profileEditFragment.getTempEmail());
 
         //================Now sending the request to server for sending the otp=====================
 
@@ -141,10 +138,12 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         RestAdapter adapter = mainActivity.restAdapter;
         repository = adapter.createRepository(CustomerRepository.class);
         //CustomerRepository customerRepo = new CustomerRepository();
-        repository.requestCode(number, new VoidCallback() {
+        repository.requestCode(mainActivity.tempPhone, new VoidCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.e(TAG, t.toString());
+                progressBar.setVisibility(View.GONE);
+                resendCode.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -199,11 +198,12 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                         @Override
                         public void onSuccess(AccessToken token, Customer currentUser) {
                             Log.i(TAG, "Success");
+                            profileDatabase.addProfileData(new ProfileDetail( mainActivity.tempName,  mainActivity.tempEmail, mainActivity.tempPhone));
                             try {
                                 //Registration done successfully.
-                                if (fragment.equals("ProfileFragment")) {
+                                if (fragment.equals("ProfileFragment") || fragment.equals("DirectHomeFragment")) {
                                     mainActivity.onBackPressed();
-                                } else if (fragment.equals("CartFragment")) {
+                                } else if (fragment.equals("CartFragment") || fragment.equals("PastOrderFragment")) {
                                     mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
                                 }
                             }catch (Exception e){
@@ -214,7 +214,11 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                         @Override
                         public void onError(Throwable t) {
                             //If OTP validation fails..
+                            //Email exists or internet connection not avail..
                             Log.i(TAG, "Error occured");
+                            resendCode.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                            mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4,fragment);
                         }
                     });
                 }
@@ -247,6 +251,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Sent", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.VISIBLE);
+                resendCode.setVisibility(View.GONE);
             }
         });
 

@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fragment_profile_button1"
-                android:textColor="#36B666"
+                android:textColor="#14649F"
                 android:background="@drawable/ripple_button_rectangle"
                 android:id="@+id/fragment_profile_button1"
                 android:layout_gravity="right"

@@ -129,17 +129,16 @@
             android:id="@+id/fragment_incoming_sms_button2"
             android:background="@drawable/button_style"
             android:text="Resend verification code"
-            android:layout_marginBottom="30dp"
             android:textAllCaps="false"
             android:layout_gravity="center"
-            android:textColor="#36B666"/>
+            android:textColor="#36B666"
+            android:visibility="gone"/>
 
         <ProgressBar
             android:id="@+id/fragment_incoming_sms_loading_indicator"
             style="?android:attr/progressBarStyle"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
