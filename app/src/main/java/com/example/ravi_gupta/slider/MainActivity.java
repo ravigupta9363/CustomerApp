@@ -85,6 +85,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 
 import java.io.File;
@@ -144,7 +145,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String matchPincode;
     String pincode;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.101:3001";
+    public String baseURL = "http://192.168.1.100:3001";
     public String status;
     double longitude;
     double latitude;
@@ -468,7 +469,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * @param installation
      */
     void saveInstallation(final LocalInstallation installation) {
-        installation.save(new Model.Callback() {
+        installation.save(new VoidCallback() {
 
             @Override
             public void onSuccess() {
@@ -480,7 +481,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             @Override
             public void onError(final Throwable t) {
-                Log.e(TAG, "Cannot save Installation", t);
+                Log.e(TAG, "Error saving Installation.", t);
 
             }
         });
