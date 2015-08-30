@@ -151,8 +151,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String tempEmail;
     public String tempPhone;
     public boolean invalidEmail = false;
+    private static LocalInstallation installation;
 
 
+    public static LocalInstallation getInstallation() {
+        return installation;
+    }
 
     /*Push Implementation*/
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -181,6 +185,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public Address updatedAddress;
     String regid;
     String deviceId;
+
 
 
 
@@ -468,14 +473,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     /**
      * Saves the Installation to the LoopBack server and reports the result.
-     * @param installation
+     * @param installation_
      */
-    void saveInstallation(final LocalInstallation installation) {
-        installation.save(new VoidCallback() {
+    void saveInstallation(final LocalInstallation installation_) {
+        installation_.save(new VoidCallback() {
 
             @Override
             public void onSuccess() {
-                final Object id = installation.getId();
+                final Object id = installation_.getId();
+                installation = installation_;
                 final String msg = "Installation saved with id " + id;
                 Log.i(TAG, msg);
 

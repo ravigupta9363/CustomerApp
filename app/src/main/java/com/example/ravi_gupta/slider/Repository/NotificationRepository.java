@@ -26,6 +26,7 @@ public class NotificationRepository extends ModelRepository<Notification> {
         return contract;
     }
 
+
     /**
      * Request server to send an OTP Code for login/register
      * @param registrationId

@@ -132,9 +132,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         name   = mainActivity.tempName;
         //Log.v("Data",profileEditFragment.getTempEmail());
 
-        //================Now sending the request to server for sending the otp=====================
-
-
+        //================Now sending the request to server for sending the otp====================
         RestAdapter adapter = mainActivity.restAdapter;
         repository = adapter.createRepository(CustomerRepository.class);
         //CustomerRepository customerRepo = new CustomerRepository();
@@ -168,30 +166,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                     hiddenKeyboard(otpEdittext);
 
                     Log.i(TAG, "Sending login data to the server");
-                    /*//Now registering the customer with OTP verification code given..
-                    repository.OtpLogin(number, email, name, code, new ObjectCallback<Customer>() {
 
-                        public void onSuccess(Customer customer) {
-                            // found!
-                            Log.i(TAG, "Success");
-                            try {
-
-                               *//* Map<String, String> map = customer.getUser();
-                                for (Map.Entry<String, String> entry : map.entrySet()) {
-                                    Log.i(TAG, entry.getKey() + " : " + entry.getValue());
-                                }*//*
-                            }catch (Exception e) {
-                                Log.i(TAG, "Error Occured");
-                                Log.i(TAG, e.toString());
-                            }
-                        }
-
-                        public void onError(Throwable t) {
-                            // handle the error
-                            Log.i(TAG, "Error");
-                            Log.i(TAG, t.toString());
-                        }
-                    });*/
 
                     //Now registering the customer with OTP verification code given..
                     repository.OtpLogin(number, email, name, code, new UserRepository.LoginCallback<Customer>() {

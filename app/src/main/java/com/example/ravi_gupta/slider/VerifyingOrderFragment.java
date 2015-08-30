@@ -15,6 +15,12 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
+import com.example.ravi_gupta.slider.Repository.NotificationRepository;
+import com.strongloop.android.loopback.LocalInstallation;
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
+
 import java.util.Date;
 
 
@@ -35,6 +41,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     Button retryButton;
     ProgressBar progressBar;
     TextView textView;
+    private NotificationRepository repository;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -115,7 +122,28 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
+
+    /*Method for sending verification request to the server*/
     public void sendRequest() {
+        //================Now sending the request to server for sending the otp====================
+        RestAdapter adapter = mainActivity.restAdapter;
+        repository = adapter.createRepository(NotificationRepository.class);
+
+        LocalInstallation installation = MainActivity.getInstallation();
+        String id = (String)installation.getId();
+
+        repository.requestCode(id, new VoidCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, "Error sending OTP Push request to the server.");
+                Log.e(TAG, t.toString());
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "OTP Request send to the server");
+            }
+        });
 
     }
 
