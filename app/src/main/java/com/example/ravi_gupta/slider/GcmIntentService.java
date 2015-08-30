@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ravi_gupta.slider.Fragment.IncomingSmsFragment;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.regex.Matcher;
@@ -36,6 +37,7 @@ public class GcmIntentService extends IntentService {
     public Matcher m;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
+
 
     public GcmIntentService() {
         super("GcmIntentService");

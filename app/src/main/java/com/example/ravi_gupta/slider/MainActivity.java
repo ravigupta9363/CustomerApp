@@ -78,12 +78,14 @@ import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.example.ravi_gupta.slider.Service.databaseService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.RestAdapter;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -203,63 +205,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         //Making Server Call
         restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
+        //Now starting the database service..
+        //this.startService();
 
 
-        //Checking Pincode lies within area
-        appLocationService = new AppLocationService(this);
-        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-        if (gpsLocation != null || networkLocation != null) {
-            if(gpsLocation != null) {
-                 latitude = gpsLocation.getLatitude();
-                 longitude = gpsLocation.getLongitude();
-            }
-            else {
-                 latitude = networkLocation.getLatitude();
-                 longitude = networkLocation.getLongitude();
-            }
-            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            try {
-                List<Address> addressList = geocoder.getFromLocation(
-                        latitude, longitude, 1);
-                if (addressList != null && addressList.size() > 0) {
-                    Address address = addressList.get(0);
+        findNetwork();
 
-                    try {
-                        List<Address> updatedAddressList = geocoder.getFromLocation(
-                                address.getLatitude(), address.getLongitude(), 1);
-                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                            updatedAddress = updatedAddressList.get(0);
-                            Log.v("address","Updated Address = "+updatedAddress+"");
-                        }
-                    }
-                    catch (Exception e) {
-
-                    }
-                    final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher(updatedAddress.toString() );
-                    if ( m.find() ) {
-                        pincode =  m.group(0);
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(address.getPostalCode());
-                }
-            }catch (IOException e) {
-            }
-        } else {
-            showLocationAlert();
-        }
-
-        for(int i = 0; i < latlong.length ; i++) {
-            if(latlong[i].equals(pincode)){
-                matchPincode = pincode;
-                break;
-            }
-            else {
-                matchPincode = null;
-            }
-
-        }
 
         status = "Delivered";
         //Checking if Network is connected or Serving in area
@@ -384,6 +335,80 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         if (savedInstanceState == null) {
         }
+    }
+
+
+
+
+
+    public void findNetwork(){
+        //Checking Pincode lies within area
+        appLocationService = new AppLocationService(this);
+        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+        if (gpsLocation != null || networkLocation != null) {
+            if(gpsLocation != null) {
+                latitude = gpsLocation.getLatitude();
+                longitude = gpsLocation.getLongitude();
+            }
+            else {
+                latitude = networkLocation.getLatitude();
+                longitude = networkLocation.getLongitude();
+            }
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(
+                        latitude, longitude, 1);
+                if (addressList != null && addressList.size() > 0) {
+                    Address address = addressList.get(0);
+
+                    try {
+                        List<Address> updatedAddressList = geocoder.getFromLocation(
+                                address.getLatitude(), address.getLongitude(), 1);
+                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
+                            updatedAddress = updatedAddressList.get(0);
+                            Log.v("address","Updated Address = "+updatedAddress+"");
+                        }
+                    }
+                    catch (Exception e) {
+
+                    }
+                    final Pattern p = Pattern.compile( "(\\d{6})" );
+                    final Matcher m = p.matcher(updatedAddress.toString() );
+                    if ( m.find() ) {
+                        pincode =  m.group(0);
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(address.getPostalCode());
+                }
+            }catch (IOException e) {
+            }
+        } else {
+            showLocationAlert();
+        }
+
+        for(int i = 0; i < latlong.length ; i++) {
+            if(latlong[i].equals(pincode)){
+                matchPincode = pincode;
+                break;
+            }
+            else {
+                matchPincode = null;
+            }
+
+        }
+    }
+
+
+    // Method to start the service
+    public void startService() {
+        startService(new Intent(getBaseContext(), databaseService.class));
+
+    }
+
+    // Method to stop the service
+    public void stopService() {
+        stopService(new Intent(getBaseContext(), databaseService.class));
     }
 
 

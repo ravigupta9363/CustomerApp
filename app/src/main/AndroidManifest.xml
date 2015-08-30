@@ -86,7 +86,9 @@
                 <category android:name="com.google.android.gcm.demo.app" />
             </intent-filter>
         </receiver>
+
         <service android:name=".GcmIntentService" />
+        <service android:name=".Service.databaseService" />
 
         <!--
           Embed the version of Google Play services that the application
