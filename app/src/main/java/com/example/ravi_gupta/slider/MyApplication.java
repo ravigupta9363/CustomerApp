@@ -19,7 +19,9 @@ public class MyApplication extends Application {
             // server - create as many Adapters as you need.
             adapter = new RestAdapter(
                     getApplicationContext(),
+
                     "http://192.168.1.100:3001/api/");
+
         }
         return adapter;
     }

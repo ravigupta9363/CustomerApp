@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,6 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     ProfileDatabase profileDatabase;
     MainFragment mainFragment;
     String fragment;
-    String previousNumber = "100.00";
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,6 +77,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         profileDatabase = new ProfileDatabase(getActivity());
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,13 +131,19 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
             updatedName = profileDetail.getName();
             updatedMail = profileDetail.getEmail();
             updatedPhone = profileDetail.getPhone();
-            if(updatedPhone != null)
-             previousNumber = updatedPhone;
+
+        if(mainActivity.invalidEmail) {
+            customerName.setText(mainActivity.tempName);
+            customerPhone.setText(mainActivity.tempPhone);
+            customerMail.setText(mainActivity.tempEmail);
+            mailLayout.setError("Email already exists");
+            mainActivity.invalidEmail = false;
+        }
 
 
-        customerName.setText(updatedName);
-        customerMail.setText(updatedMail);
-        customerPhone.setText(updatedPhone);
+        //customerName.setText(updatedName);
+        //customerMail.setText(updatedMail);
+        //customerPhone.setText(updatedPhone);
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -150,14 +155,17 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 updatedName = customerName.getText().toString();
                 updatedMail = customerMail.getText().toString();
                 updatedPhone = customerPhone.getText().toString();
+                mainActivity.tempName = updatedName;
+                mainActivity.tempEmail = updatedMail;
+                mainActivity.tempPhone = updatedPhone;
 
-                if(!updatedName.matches("[a-zA-Z ]{3,30}"))
+                if(!isNameValid(updatedName))
                     nameLayout.setError("Enter correct name");
                 if(!isEmailValid(updatedMail))
                     mailLayout.setError("Enter correct email");
                 if(!isPhoneValid(updatedPhone))
                     phoneLayout.setError("Enter correct number");
-                if(updatedName.matches("[a-zA-Z ]{3,30}"))
+                if(isNameValid(updatedName))
                     nameLayout.setError("");
                 if(isEmailValid(updatedMail))
                     mailLayout.setError("");
@@ -170,56 +178,28 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 if(updatedPhone.matches(""))
                     phoneLayout.setError("This field is mandotary");
 
-               /* ProfileDetail profileDetail = profileDatabase.getProfile();
-
-                    updatedName = profileDetail.getName();
-                    updatedMail = profileDetail.getEmail();
-                    updatedPhone = profileDetail.getPhone();*/
 
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 //Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
                 hiddenKeyboard(customerPhone);
                 //http://stackoverflow.com/questions/15805555/java-regex-to-validate-full-name-allow-only-spaces-and-letters
-                if(updatedName.matches("[a-zA-Z ]{3,30}") && isEmailValid(updatedMail) && isPhoneValid(updatedPhone)) {
+                if(isNameValid(updatedName) && isEmailValid(updatedMail) && isPhoneValid(updatedPhone)) {
                     if (fragment.equals("profileFragment")) {
-                        if(previousNumber.equals(updatedPhone)){
-                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
-                            mainActivity.onBackPressed();
-                        }
-                        else {
-                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+                           // profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                             mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "ProfileFragment");
-                        }
-
+                    }
+                    else if(fragment.equals("cartFragment")) {
+                            mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,"CartFragment");
+                    }
+                    else if(fragment.equals("pastOrderFragment")) {
+                        mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,"PastOrderFragment");
                     }
                     else {
-                        if(previousNumber.equals(updatedPhone)){
-
-                        }
-                        else {
-                            profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
-                            mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "CartFragment");
-                        }
-
+                           // profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
+                            mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "DirectHomeFragment");
                     }
 
                 }
-
-
-               /* PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_NAME", updatedName).commit();
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_MAIL", updatedMail).commit();
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString("UPDATED_PHONE", updatedPhone).commit();
-
-                updatedArrayList.add(0, updatedName);
-                updatedArrayList.add(1,updatedMail);
-                updatedArrayList.add(2, updatedPhone);
-
-                Log.v("profile","Hello "+PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("UPDATED_NAME", "defaultStringIfNothingFound"));*/
-
-                //Intent intent = new Intent();
-                //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
-                //
-
 
             }
         });
@@ -250,8 +230,14 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    boolean isPhoneValid(CharSequence phone) {
-        return Patterns.PHONE.matcher(phone).matches();
+    boolean isPhoneValid(String phone) {
+        boolean i = phone.matches("^//d{10,10}$");
+        Log.v("Data",i+"");
+        return phone.matches("^\\d{10,10}$");
+    }
+
+    boolean isNameValid(String name) {
+        return name.matches("^[a-zA-Z ]{3,30}$");
     }
 
     @Override
@@ -314,5 +300,4 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 }

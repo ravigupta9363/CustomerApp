@@ -84,6 +84,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="Flat Number"
+       android:visibility="gone"
        android:id="@+id/fragment_landmark_textview1"/>
 
         <android.support.design.widget.TextInputLayout
@@ -99,6 +100,7 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="0dp"
                 android:maxLines="1"
+                android:hint="@string/fragment_landmark_edittext1"
                 android:ellipsize="end"
                 android:singleLine="true" />
 
@@ -108,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Landmark"
+        android:visibility="gone"
         android:id="@+id/fragment_landmark_textview2"/>
 
         <android.support.design.widget.TextInputLayout
@@ -121,6 +124,7 @@
                 android:textSize="14sp"
                 android:id="@+id/fragment_landmark_edittext2"
                 android:maxLines="1"
+                android:hint="@string/fragment_landmark_edittext2"
                 android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>

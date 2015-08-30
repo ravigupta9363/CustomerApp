@@ -54,7 +54,8 @@ public class NavDrawerListAdapter extends BaseAdapter {
         ImageView drawerIcon = (ImageView) convertView.findViewById(R.id.drawer_list_item_imageview1);
         TextView drawerText = (TextView) convertView.findViewById(R.id.drawer_list_item_textview1);
         Typeface typeFace=Typeface.createFromAsset(drawerText.getContext().getAssets(), "fonts/gothic.ttf");
-        drawerText.setTypeface(typeFace);
+        Typeface typeface2 = Typeface.createFromAsset(drawerText.getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+        drawerText.setTypeface(typeface2);
 
         drawerIcon.setImageResource(navigationDrawerItemDetailses.get(position).getIcon());
         drawerText.setText(navigationDrawerItemDetailses.get(position).getTitle());

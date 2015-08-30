@@ -97,7 +97,7 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
             }
         };
         ss.setSpan(clickableSpan, 47, 57, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(54, 182, 102));
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(20, 100, 159));
 
         //http://stackoverflow.com/questions/4897349/android-coloring-part-of-a-string-using-textview-settext
         //http://stackoverflow.com/questions/10696986/how-to-set-the-part-of-the-text-view-is-clickable
