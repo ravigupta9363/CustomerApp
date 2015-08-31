@@ -77,13 +77,14 @@ import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
-import com.example.ravi_gupta.slider.Service.databaseService;
+import com.example.ravi_gupta.slider.Models.Customer;
+import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
-import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.File;
@@ -154,6 +155,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private static LocalInstallation installation;
 
 
+    private CustomerRepository customerRepo;
+
+    /**
+     *
+     * @return CustomerRepository instance
+     */
+    public CustomerRepository getCustomerRepo() {
+        return customerRepo;
+    }
+
+
     public static LocalInstallation getInstallation() {
         return installation;
     }
@@ -199,13 +211,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         context = getApplicationContext();
 
-        // Check device for Play Services APK.
-        // If check succeeds, proceed with GCM registration.
-        if (checkPlayServices()) {
-            updateRegistration();
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
-        }
+
 
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -213,12 +219,26 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
         //Making Server Call
         restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
-        //Now starting the database service..
-        //this.startService();
-
-
         findNetwork();
 
+
+
+        //Now fetching the current logged in user ..
+        customerRepo = restAdapter.createRepository(CustomerRepository.class);
+        customerRepo.findCurrentUser(new ObjectCallback<Customer>() {
+            @Override
+            public void onSuccess(Customer customer) {
+                // Check device for Play Services APK.
+                // If check succeeds, proceed with GCM registration.
+                registerInstallation(customer);
+            }
+
+            public void onError(Throwable t) {
+                Log.i(TAG, "Error fetching data from the server");
+                Log.e(TAG, t.toString());
+                registerInstallation(null);
+            }
+        });
 
         status = "Delivered";
         //Checking if Network is connected or Serving in area
@@ -307,6 +327,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
+    private void registerInstallation(Customer customer){
+        if (checkPlayServices()) {
+            if (customer != null) {
+                // logged in
+                Log.d(TAG, "User logged in successfully");
+                updateRegistration((String) customer.getId());
+            } else {
+                // anonymous user
+                Log.d(TAG, "User not logged in ");
+                updateRegistration(null);
+            }
+        } else {
+            Log.e(TAG, "No valid Google Play Services APK found.");
+        }
+    }
+
+
 
 
 
@@ -369,22 +406,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
-    // Method to start the service
-    public void startService() {
-        startService(new Intent(getBaseContext(), databaseService.class));
-
-    }
-
-    // Method to stop the service
-    public void stopService() {
-        stopService(new Intent(getBaseContext(), databaseService.class));
-    }
 
 
     /**
      * Updates the registration for push notifications.
      */
-    private void updateRegistration() {
+    private void updateRegistration(String userId) {
         gcm = GoogleCloudMessaging.getInstance(this);
 
         // 1. Grab the shared RestAdapter instance.
@@ -401,7 +428,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         installation.setAppId(LOOPBACK_APP_ID);
        /* Log.i(TAG, LOOPBACK_APP_ID);*/
         // Substitute a real id of the user logged in this application
-        installation.setUserId("loopback-android");
+        installation.setUserId( userId );
 
         // 4. Check if we have a valid GCM registration id
         if (installation.getDeviceToken() != null) {
@@ -539,7 +566,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
             switch (position) {
                 case 0:
-                    if(profileDatabase.getProfile().getName() == null && profileDatabase.getProfile().getEmail() == null && profileDatabase.getProfile().getPhone() == null) {
+                    Customer user = customerRepo.getCachedCurrentUser();
+                    Log.i(TAG, "Getting current id");
+                    //Log.i(TAG, user.getEmail());
+                    if(user == null) {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
                                 findFragmentByTag(ProfileEditFragment.TAG);
@@ -1006,8 +1036,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void fragmentNextButton(FragmentTransaction ft){
-        ProfileDetail profileDetail = profileDatabase.getProfile();
-        if (profileDetail.getPhone() == null && profileDetail.getName() == null && profileDetail.getEmail() == null) {
+        Customer customer = getCustomerRepo().getCachedCurrentUser();
+        if (customer == null) {
             ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                     findFragmentByTag(ProfileEditFragment.TAG);
             if (frag7 == null) {
@@ -1118,8 +1148,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void pastOrderLayoutButton2Fragment(FragmentTransaction ft){
-        ProfileDetail profileDetail2 = profileDatabase.getProfile();
-        if (profileDetail2.getPhone() == null && profileDetail2.getEmail() == null && profileDetail2.getName() == null) {
+        Customer customer = getCustomerRepo().getCachedCurrentUser();
+        if (customer == null) {
             ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
                     findFragmentByTag(ProfileEditFragment.TAG);
             if (frag7 == null) {

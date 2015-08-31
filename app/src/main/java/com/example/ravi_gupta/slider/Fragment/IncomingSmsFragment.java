@@ -54,6 +54,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     TextView phoneNumber;
     TextView orText;
     TextView manuallyEntryText;
+    TextView validationFailed;
     public static EditText otpEdittext;
     Button resendCode;
     MainActivity mainActivity;
@@ -70,6 +71,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     private String email;
     private String name;
     private CustomerRepository repository;
+    //boolean errorOccured = false;
 
 
 
@@ -110,6 +112,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         phoneNumber = (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview3);
         orText = (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview4);
         manuallyEntryText = (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview5);
+        validationFailed =  (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview6);
         otpEdittext = (EditText)rootview.findViewById(R.id.fragment_incoming_sms_edittext1);
         resendCode = (Button)rootview.findViewById(R.id.fragment_incoming_sms_button2);
         progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_incoming_sms_loading_indicator);
@@ -132,101 +135,22 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         name   = mainActivity.tempName;
         //Log.v("Data",profileEditFragment.getTempEmail());
 
-        //================Now sending the request to server for sending the otp====================
-        RestAdapter adapter = mainActivity.restAdapter;
-        repository = adapter.createRepository(CustomerRepository.class);
-        //CustomerRepository customerRepo = new CustomerRepository();
-        repository.requestCode(mainActivity.tempPhone, new VoidCallback() {
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, t.toString());
-                progressBar.setVisibility(View.GONE);
-                resendCode.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onSuccess() {
-                Log.i(TAG, "OTP Request send to the server");
-            }
-        });
+        //Request code..
+        requestCodeOTP();
 
 
+        addChangeListener();
 
-        otpEdittext.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                sum = sum + count;
-                String code = otpEdittext.getText().toString().trim();
-                if (sum == 4) {
-                    hiddenKeyboard(otpEdittext);
-
-                    Log.i(TAG, "Sending login data to the server");
-
-
-                    //Now registering the customer with OTP verification code given..
-                    repository.OtpLogin(number, email, name, code, new UserRepository.LoginCallback<Customer>() {
-                        @Override
-                        public void onSuccess(AccessToken token, Customer currentUser) {
-                            Log.i(TAG, "Success");
-                            profileDatabase.addProfileData(new ProfileDetail( mainActivity.tempName,  mainActivity.tempEmail, mainActivity.tempPhone));
-                            try {
-                                //Registration done successfully.
-                                if (fragment.equals("ProfileFragment") || fragment.equals("DirectHomeFragment")) {
-                                    mainActivity.onBackPressed();
-                                } else if (fragment.equals("CartFragment") || fragment.equals("PastOrderFragment")) {
-                                    mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
-                                }
-                            }catch (Exception e){
-                                Log.i(TAG, "Error Occured in catch ");
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable t) {
-                            //If OTP validation fails..
-                            //Email exists or internet connection not avail..
-                            Log.i(TAG, "Error occured");
-                            resendCode.setVisibility(View.GONE);
-                            progressBar.setVisibility(View.GONE);
-                            mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4,fragment);
-                        }
-                    });
-                }
-            }//onTextChanged
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        /*nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(manuallyEntryText.getText() != null) {
-                    if(fragment.equals("ProfileFragment")) {
-                        mainActivity.onBackPressed();
-                    }
-                    else if(fragment.equals("CartFragment")) {
-                        mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
-                    }
-
-                }
-                //validate data from server
-            }
-        });*/
 
         resendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Sent", Toast.LENGTH_SHORT).show();
+                //removeChangeListener();
+                //otpEdittext.setText("");
+                requestCodeOTP();
                 progressBar.setVisibility(View.VISIBLE);
                 resendCode.setVisibility(View.GONE);
+                validationFailed.setVisibility(View.GONE);
             }
         });
 
@@ -239,6 +163,39 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
 
         return rootview;
     }
+
+
+
+
+    /**
+     * Now sending the request to server for sending the otp
+     */
+    public void requestCodeOTP(){
+        otpEdittext.setText("");
+        repository = mainActivity.getCustomerRepo();
+        //CustomerRepository customerRepo = new CustomerRepository();
+        repository.requestCode(mainActivity.tempPhone, new VoidCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, t.toString());
+                Toast.makeText(getActivity(), "ERROR REQUESTING", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess()
+            {
+                Log.i(TAG, "OTP Request send to the server");
+
+
+                Toast.makeText(getActivity(), "REQUEST SEND", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -312,8 +269,82 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
+    public TextWatcher getTextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int codeLength = start + count;
+                Log.i("drugcorner", codeLength + "");
+                String code = otpEdittext.getText().toString().trim();
+                if (codeLength == 4) {
+                    hiddenKeyboard(otpEdittext);
+
+                    Log.i(TAG, "Sending login data to the server");
 
 
+                    //Now registering the customer with OTP verification code given..
+                    repository.OtpLogin(number, email, name, code, new UserRepository.LoginCallback<Customer>() {
+                        @Override
+                        public void onSuccess(AccessToken token, Customer currentUser) {
+                            Log.d(TAG, "Success saved data..");
+                            //errorOccured = false;
+                            //Registration done successfully.
+                            if (fragment.equals("ProfileFragment") || fragment.equals("DirectHomeFragment")) {
+                                mainActivity.onBackPressed();
+                            } else if (fragment.equals("CartFragment") || fragment.equals("PastOrderFragment")) {
+                                mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+
+                            //If OTP validation fails..
+                            //Email exists or internet connection not avail..
+                            Log.d(TAG, "Error occured in File IncomingSmsFragment");
+                            Log.d(TAG, t.getMessage());
+                            if (t.getMessage().equals("Unprocessable Entity")) {
+                                resendCode.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
+                                mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4, fragment);
+                            } else if (t.getMessage().equals("Unauthorized")) {
+                                //errorOccured = true;
+                                progressBar.setVisibility(View.GONE);
+                                resendCode.setVisibility(View.VISIBLE);
+                                validationFailed.setVisibility(View.VISIBLE);
+                            } else {
+                                //errorOccured = true;
+                                progressBar.setVisibility(View.GONE);
+                                resendCode.setVisibility(View.VISIBLE);
+                            }
+
+                        }
+                    });
+                }
+            }//onTextChanged
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        return textWatcher;
+    }
+
+    public void addChangeListener() {
+        otpEdittext.addTextChangedListener(getTextWatcher());
+    }
+
+    public void removeChangeListener() {
+        otpEdittext.removeTextChangedListener(getTextWatcher());
+        otpEdittext.setText("");
+    }
 
 
 

@@ -69,6 +69,7 @@
     <string name="fragment_incoming_sms_textview4">OR</string>
     <string name="fragment_incoming_sms_textview5">Enter Manually</string>
     <string name="fragment_incoming_sms_button1">Resend verification code</string>
+    <string name="fragment_incoming_sms_textview6">Validation Failed</string>
 
     <string name="fragment_landmark_textview1">Place Order</string>
     <string name="fragment_landmark_button1">Place</string>

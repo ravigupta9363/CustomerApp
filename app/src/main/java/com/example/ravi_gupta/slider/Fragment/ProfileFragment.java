@@ -8,6 +8,7 @@ import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,10 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.CustomerRepository;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.util.ArrayList;
 
@@ -69,7 +73,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        profileDatabase = new ProfileDatabase(getActivity());
+        //profileDatabase = new ProfileDatabase(getActivity());
     }
 
     @Override
@@ -110,16 +114,15 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         customerEmail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
         customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
-        ProfileDetail profileDetail = profileDatabase.getProfile();
+        //ProfileDetail profileDetail = profileDatabase.getProfile();
 
-        updatedName = profileDetail.getName();
+        /*updatedName = profileDetail.getName();
         updatedMail = profileDetail.getEmail();
-        updatedPhone = profileDetail.getPhone();
+        updatedPhone = profileDetail.getPhone();*/
+        setProfileData();
 
 
-        customerName.setText(updatedName);
-        customerEmail.setText(updatedMail);
-        customerPhone.setText(updatedPhone);
+
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_profile_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_profile_imagebutton1);
@@ -134,33 +137,62 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             }
         });
 
-     /*   if(mainActivity.updateUserInfo) {
-           /* customerName.setText(value.get(0));
-            customerEmail.setText(value.get(1));
-            customerPhone.setText(value.get(2));
-            List<ProfileDetail> profile = profileDatabase.getProfile();
-            for (ProfileDetail profileDetail : profile) {
-                String log = "Id: "+ profileDetail.getName() +" Name: " + profileDetail.getEmail() + " ,Phone: " +
-                        profileDetail.getPhone();
-                customerName.setText(profileDetail.getName());
-                customerEmail.setText(profileDetail.getEmail());
-                customerPhone.setText(profileDetail.getPhone());
-                // Writing Contacts to log
-                Log.v("camera ", log);
-            }
-            mainActivity.updateUserInfo  = false;
-        }*/
-
+        /**
+         * On Clicking of the clear button
+         */
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileDatabase.deleteProfile();
-                mainActivity.replaceFragment(R.id.fragment_profile_button1,profileFragment);
+                //profileDatabase.deleteProfile();
+                logout();
+                mainActivity.replaceFragment(R.id.fragment_profile_button1, profileFragment);
             }
         });
-
         return rootview;
     }
+
+
+    private void setProfileData(){
+        MainActivity activity = (MainActivity)getActivity();
+        CustomerRepository repository = activity.getCustomerRepo();
+        Customer customer = repository.getCachedCurrentUser();
+        Log.i(TAG, "Setting the profile data");
+
+        if(customer != null) {
+            updatedMail = customer.getEmail();
+            updatedPhone = customer.getContactNo();
+            updatedName = customer.getName();
+            customerName.setText(updatedName);
+            customerEmail.setText(updatedMail);
+            customerPhone.setText(updatedPhone);
+        }else{
+            /*Dont do anything*/
+        }
+    }
+
+
+    private void logout(){
+        /*Fill blank strings value first for fast transaction*/
+        customerName.setText("");
+        customerEmail.setText("");
+        customerPhone.setText("");
+
+        MainActivity activity = (MainActivity)getActivity();
+        CustomerRepository repository = activity.getCustomerRepo();
+        repository.logout(new VoidCallback(){
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "User successfully logout from the system..");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, "Error getting logging out from the server..");
+            }
+        });
+    }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -168,6 +200,9 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -181,6 +216,8 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {

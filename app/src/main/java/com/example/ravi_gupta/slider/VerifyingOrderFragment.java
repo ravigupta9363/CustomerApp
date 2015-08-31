@@ -211,7 +211,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 long diff = curTime - initialTime;
                 //Getting the difference in seconds..
                 diff = diff / 1000 % 60;
-                Log.i("drugcorner",diff+"");
+               // Log.i("drugcorner",diff+"");
                 if (diff > (long) till) {
                     break;
                 }

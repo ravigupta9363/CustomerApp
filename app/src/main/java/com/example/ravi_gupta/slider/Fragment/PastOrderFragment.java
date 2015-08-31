@@ -105,7 +105,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         orderRepository.findAll(new ListCallback<Order>() {
             @Override
             public void onSuccess(List<Order> orderList) {
-                /*if (orderList == null) {
+                if (orderList == null) {
                     noPastOrder.setVisibility(View.VISIBLE);
                     noPastOrderText.setVisibility(View.VISIBLE);
                     mListview.setVisibility(View.GONE);
@@ -131,7 +131,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
                     pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
                 }
-                pastOrderAdapter.notifyDataSetChanged();*/
+                pastOrderAdapter.notifyDataSetChanged();
             }
 
             public void onError(Throwable t) {

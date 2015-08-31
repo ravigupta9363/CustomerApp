@@ -88,7 +88,6 @@
         </receiver>
 
         <service android:name=".GcmIntentService" />
-        <service android:name=".Service.databaseService" />
 
         <!--
           Embed the version of Google Play services that the application

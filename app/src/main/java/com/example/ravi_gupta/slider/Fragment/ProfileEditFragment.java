@@ -24,7 +24,9 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 
 import java.util.ArrayList;
 
@@ -55,7 +57,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     String updatedName;
     String updatedMail;
     String updatedPhone;
-    ProfileDatabase profileDatabase;
+    //ProfileDatabase profileDatabase;
     MainFragment mainFragment;
     String fragment;
 
@@ -75,7 +77,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        profileDatabase = new ProfileDatabase(getActivity());
+        //profileDatabase = new ProfileDatabase(getActivity());
     }
 
 
@@ -126,11 +128,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
         customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
 
-        ProfileDetail profileDetail = profileDatabase.getProfile();
+        //ProfileDetail profileDetail = profileDatabase.getProfile();
 
-            updatedName = profileDetail.getName();
-            updatedMail = profileDetail.getEmail();
-            updatedPhone = profileDetail.getPhone();
+        //    updatedName = profileDetail.getName();
+        //    updatedMail = profileDetail.getEmail();
+        //    updatedPhone = profileDetail.getPhone();
 
         if(mainActivity.invalidEmail) {
             customerName.setText(mainActivity.tempName);
@@ -144,6 +146,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         //customerName.setText(updatedName);
         //customerMail.setText(updatedMail);
         //customerPhone.setText(updatedPhone);
+        setProfileData();
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -172,11 +175,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 if(isPhoneValid(updatedPhone))
                     phoneLayout.setError("");
                 if(updatedName.matches(""))
-                    nameLayout.setError("This field is mandotary");
+                    nameLayout.setError("This field is mandatary");
                 if(updatedMail.matches(""))
-                    mailLayout.setError("This field is mandotary");
+                    mailLayout.setError("This field is mandatary");
                 if(updatedPhone.matches(""))
-                    phoneLayout.setError("This field is mandotary");
+                    phoneLayout.setError("This field is mandatary");
 
 
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
@@ -216,6 +219,25 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         });
 
         return rootview;
+    }
+
+
+    private void setProfileData(){
+        MainActivity activity = (MainActivity)getActivity();
+        CustomerRepository repository = activity.getCustomerRepo();
+        Customer customer = repository.getCachedCurrentUser();
+        Log.i(TAG, "Setting the profile data in edit profile fragment");
+
+        if(customer != null) {
+            updatedMail = customer.getEmail();
+            updatedPhone = customer.getContactNo();
+            updatedName = customer.getName();
+            customerName.setText(updatedName);
+            customerMail.setText(updatedMail);
+            customerPhone.setText(updatedPhone);
+        }else{
+            /*Dont do anything*/
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

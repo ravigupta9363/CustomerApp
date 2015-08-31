@@ -17,6 +17,7 @@ import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 import com.strongloop.android.remoting.JsonUtil;
 import com.strongloop.android.remoting.adapters.Adapter;
+import com.strongloop.android.loopback.RestAdapter;
 
 import com.strongloop.android.remoting.adapters.RestContract;
 import com.strongloop.android.remoting.adapters.RestContractItem;
@@ -54,7 +55,60 @@ public class CustomerRepository extends UserRepository<Customer> {
     }
 
 
+    /**
+     * Logs the current user out of the server and removes the access
+     * token from the system.
+     * <p>
+     * @param callback The callback to be executed when finished.
+     */
 
+    public void logout(final VoidCallback callback) {
+        Log.i("drugcorner", "LOGOUT IS GETTING CALLED. PAGE: CUSTOMER-REPOSITORY");
+        cachedCurrentUser = null;
+        invokeStaticMethod("logout", null, new Adapter.Callback() {
+
+            @Override
+            public void onError(Throwable t) {
+                callback.onError(t);
+            }
+
+            @Override
+            public void onSuccess(String response) {
+                RestAdapter radapter = getRestAdapter();
+                radapter.clearAccessToken();
+                setCurrentUserId(null);
+                callback.onSuccess();
+            }
+        });
+    }
+
+
+
+    /**
+     * Fetch the data of the currently logged in user. Invokes
+     * {@code callback.onSuccess(null)} when no user is logged in.
+     * The data is cached, see {@link #getCachedCurrentUser()}
+     * @param callback success/error callback
+     */
+    public void findCurrentUser(final ObjectCallback<Customer> callback) {
+        if (getCurrentUserId() == null) {
+            callback.onSuccess(null);
+            return;
+        }
+
+        this.findById(getCurrentUserId(), new ObjectCallback<Customer>() {
+            @Override
+            public void onSuccess(Customer user) {
+                cachedCurrentUser = user;
+                callback.onSuccess(user);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 
 
 
@@ -72,15 +126,16 @@ public class CustomerRepository extends UserRepository<Customer> {
         return contract;
     }
 
+
+
+
     /**
      * Request server to send an OTP Code for login/register
      * @param number
      * @param callback
      */
     public void requestCode(String number, final VoidCallback callback) {
-
         invokeStaticMethod("requestCode", ImmutableMap.of("number", number), new Adapter.Callback() {
-
             @Override
             public void onError(Throwable t) {
                 callback.onError(t);
@@ -119,14 +174,15 @@ public class CustomerRepository extends UserRepository<Customer> {
             @Override
             public void onSuccess(JSONObject response) {
                 Log.i("drugcorner", "Success ");
-                Log.i("drugcorner", response.toString());
                 JSONObject tokenJson = response.optJSONObject("token");
                 AccessToken token = getAccessTokenRepository()
                         .createObject(JsonUtil.fromJson(tokenJson));
-                Log.i("drugcorner", "I am also here..");
+
                 getRestAdapter().setAccessToken(token.getId().toString());
-                Log.i("drugcorner", "I am here..");
+
                 JSONObject userJson = tokenJson.optJSONObject("user");
+                Log.i("drugcorner", userJson.toString());
+
                 Customer user = userJson != null
                         ? createObject(JsonUtil.fromJson(userJson))
                         : null;
