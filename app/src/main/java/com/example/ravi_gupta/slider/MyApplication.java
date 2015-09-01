@@ -7,16 +7,27 @@ import android.app.Application;
 
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
+import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.RestAdapter;
 
 import java.util.List;
 
 public class MyApplication extends Application {
 
-    RestAdapter adapter;
-    Office office;
-    List<Retailer> retailerList;
+    private RestAdapter adapter;
+    private Office office;
+    private List<Retailer> retailerList;
 
+    private List<RequestCreator> imageList;
+
+
+    public List<RequestCreator> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<RequestCreator> imageList) {
+        this.imageList = imageList;
+    }
 
     public List<Retailer> getRetailerList() {
         return retailerList;

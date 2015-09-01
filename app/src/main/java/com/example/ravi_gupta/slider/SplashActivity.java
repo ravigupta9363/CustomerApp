@@ -77,6 +77,8 @@ public class SplashActivity extends AppCompatActivity {
         /* Create an Intent that will start the Menu-Activity. */
         mainIntent = new Intent(SplashActivity.this, MainActivity.class);
         orderStatusDataBase = new OrderStatusDataBase(this);
+        AsyncCaller asyncCaller = new AsyncCaller();
+        asyncCaller.execute();
 
     }
 
@@ -102,6 +104,8 @@ public class SplashActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
@@ -118,6 +122,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
+
 
     public String findNetwork(){
         String pincode = "";
@@ -165,7 +170,6 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             showLocationAlert();
         }
-
         return pincode;
     }
 
@@ -206,14 +210,18 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+
+
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
+        AsyncCaller asyncCaller = this;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             //this method will be running on UI thread
 
         }
+
 
         /**
          * Keywords
@@ -230,9 +238,9 @@ public class SplashActivity extends AppCompatActivity {
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
             internetConnection = haveNetworkConnection();
             pincode = findNetwork();
-
             return null;
         }//doInBackground
+
 
         @Override
         protected void onPostExecute(Void result) {
@@ -255,6 +263,7 @@ public class SplashActivity extends AppCompatActivity {
                             officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                                 @Override
                                 public void onSuccess(List<Retailer> retailerArray) {
+                                    Log.i(TAG, "Successfully fetched retailer data from the server");
                                     retailerListFetched = true;
                                     app.setRetailerList(retailerArray);
                                     if(imageDownloaded && retailerListFetched){
@@ -354,8 +363,16 @@ public class SplashActivity extends AppCompatActivity {
                 super.onPostExecute(result);
                 //this method will be running on UI thread
                 //Adding the imageFetchvalue to the true..
-                Log.d(TAG, "All images downloaded sucessfully..");
+                Log.d(TAG, "All images downloaded successfully..");
                 imageDownloaded = true;
+                //Now saving the images to the application ..
+                final MyApplication app = (MyApplication) getApplication();
+                app.setImageList(imageList);
+                if(imageDownloaded && retailerListFetched){
+                    //Go to main fragment
+                    //Now resolving the route..
+                    asyncCaller.resolveRoute();
+                }
             }
 
         }
