@@ -1,18 +1,19 @@
 package com.example.ravi_gupta.slider.Repository;
 
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.ravi_gupta.slider.Models.Customer;
-import com.example.ravi_gupta.slider.Models.Token;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.AccessToken;
 import com.strongloop.android.loopback.AccessTokenRepository;
-import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.UserRepository;
 
 
-import com.strongloop.android.loopback.callbacks.JsonObjectParser;
+
+import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 import com.strongloop.android.remoting.JsonUtil;
@@ -22,13 +23,20 @@ import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.remoting.adapters.RestContract;
 import com.strongloop.android.remoting.adapters.RestContractItem;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by robins on 28/8/15.
  */
 public class CustomerRepository extends UserRepository<Customer> {
 
+    private String TAG = "drugcorner";
 
 
     private AccessTokenRepository accessTokenRepository;
@@ -63,7 +71,7 @@ public class CustomerRepository extends UserRepository<Customer> {
      */
 
     public void logout(final VoidCallback callback) {
-        Log.i("drugcorner", "LOGOUT IS GETTING CALLED. PAGE: CUSTOMER-REPOSITORY");
+        Log.i(TAG, "LOGOUT IS GETTING CALLED. PAGE: CUSTOMER-REPOSITORY");
         cachedCurrentUser = null;
         invokeStaticMethod("logout", null, new Adapter.Callback() {
 
@@ -122,9 +130,47 @@ public class CustomerRepository extends UserRepository<Customer> {
         contract.addItem(new RestContractItem("/" + getNameForRestUrl() + "/registerWithOTP", "POST"),
                 getClassName() + ".registerWithOTP");
 
+        contract.addItem(new RestContractItem("/" + getNameForRestUrl() + "/:id/orders", "GET"), getClassName() + ".prototype.__get__orders");
 
         return contract;
     }
+
+
+
+
+
+    public void getOrders(Object id,final ListCallback<Order> callback) {
+
+        invokeStaticMethod("prototype.__get__orders", ImmutableMap.of("id", id), new Adapter.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JSONArray response) {
+                Log.d(TAG, "Order fetched for customer wise" );
+                Log.d(TAG, response.toString());
+                //Now converting jsonObject to list
+                List<Map<String, Object>> objList = (List)JsonUtil.fromJson(response);
+                List<Order> orderList = new ArrayList<Order>();
+
+                OrderRepository orderRepo = getRestAdapter().createRepository(OrderRepository.class);
+                for (Map<String, Object> obj : objList) {
+                    Order order = orderRepo.createObject(obj);
+                    orderList.add(order);
+                }
+
+                //List<Order> orderList ;
+                callback.onSuccess(orderList);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "An Error occured while fetching customer order");
+                Log.d(TAG, t.toString());
+                callback.onError(t);
+            }
+        });
+
+
+    }
+
 
 
 
@@ -173,7 +219,7 @@ public class CustomerRepository extends UserRepository<Customer> {
 
             @Override
             public void onSuccess(JSONObject response) {
-                Log.i("drugcorner", "Success ");
+                Log.i(TAG, "Success ");
                 JSONObject tokenJson = response.optJSONObject("token");
                 AccessToken token = getAccessTokenRepository()
                         .createObject(JsonUtil.fromJson(tokenJson));
@@ -181,7 +227,7 @@ public class CustomerRepository extends UserRepository<Customer> {
                 getRestAdapter().setAccessToken(token.getId().toString());
 
                 JSONObject userJson = tokenJson.optJSONObject("user");
-                Log.i("drugcorner", userJson.toString());
+                Log.i(TAG, userJson.toString());
 
                 Customer user = userJson != null
                         ? createObject(JsonUtil.fromJson(userJson))

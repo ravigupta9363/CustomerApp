@@ -13,6 +13,7 @@ public class Customer extends User  {
     private String username;
     private String email;
     private String name;
+    private String created;
 
 
 

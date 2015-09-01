@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -55,6 +56,8 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     String fragment;
     OrderRepository orderRepository;
     List<Map<String, String>> prescriptionStatic = null;
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -83,7 +86,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_past_order, container, false);
-        mainActivity = (MainActivity) getActivity();
+
        // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
@@ -101,7 +104,56 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         pastOrderAdapter = new PastOrderAdapter(getActivity(),R.layout.past_order_layout,pastOrdersDetails);
         mListview.setAdapter(pastOrderAdapter);
 
-        orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
+        Object userId = mainActivity.getCustomerRepo().getCurrentUserId();
+        mainActivity.getCustomerRepo().getOrders(userId, new ListCallback<Order>() {
+            @Override
+            public void onSuccess(List<Order> orderList) {
+//                Move to async task
+                if (orderList == null) {
+                    noPastOrder.setVisibility(View.VISIBLE);
+                    noPastOrderText.setVisibility(View.VISIBLE);
+                    mListview.setVisibility(View.GONE);
+                }
+
+
+                for (Order order : orderList) {
+                    noPastOrder.setVisibility(View.GONE);
+                    noPastOrderText.setVisibility(View.GONE);
+                    mListview.setVisibility(View.VISIBLE);
+                    List<Map<String, String>> prescription = order.getPrescription();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                    format.setTimeZone(TimeZone.getTimeZone("IST"));
+                    java.util.Date date = null;
+                    try {
+                        date = format.parse(order.getDate());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String time = date.toString().substring(12, 16);
+                    String orderDay = date.toString().substring(8, 10);
+                    String orderMonth = date.toString().substring(4, 7);
+                    String orderYear = date.toString().substring(30, 34);
+                    String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
+
+                    pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
+                }
+                pastOrderAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+                Log.d(TAG, "Error fetching order for customer");
+
+                noPastOrderText.setText("Unable to connect to server");
+                noPastOrder.setVisibility(View.VISIBLE);
+                noPastOrder.setImageResource(R.drawable.order_cancelled);
+                noPastOrderText.setVisibility(View.VISIBLE);
+                mListview.setVisibility(View.GONE);
+            }
+        });
+
+        /*orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
         orderRepository.findAll(new ListCallback<Order>() {
             @Override
             public void onSuccess(List<Order> orderList) {
@@ -135,17 +187,17 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             }
 
             public void onError(Throwable t) {
-                /*// handle the error
+
                 noPastOrderText.setText("Unable to connect to server");
                 noPastOrder.setVisibility(View.VISIBLE);
                 noPastOrder.setImageResource(R.drawable.order_cancelled);
                 noPastOrderText.setVisibility(View.VISIBLE);
                 mListview.setVisibility(View.GONE);
                 Log.v("server", "Error");
-                Log.v("server", t + "");*/
+                Log.v("server", t + "");
             }
         });
-
+*/
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +220,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -237,12 +290,12 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             //this method will be running on background thread so don't update UI frome here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
 
-            mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 }
-            });
+            });*/
 
             return null;
         }
