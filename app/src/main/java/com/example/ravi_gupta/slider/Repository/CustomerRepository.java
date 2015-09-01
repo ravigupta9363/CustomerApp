@@ -144,20 +144,23 @@ public class CustomerRepository extends UserRepository<Customer> {
         invokeStaticMethod("prototype.__get__orders", ImmutableMap.of("id", id), new Adapter.JsonArrayCallback() {
             @Override
             public void onSuccess(JSONArray response) {
-                Log.d(TAG, "Order fetched for customer wise" );
+                Log.d(TAG, "Order fetched for customer " );
                 Log.d(TAG, response.toString());
-                //Now converting jsonObject to list
-                List<Map<String, Object>> objList = (List)JsonUtil.fromJson(response);
-                List<Order> orderList = new ArrayList<Order>();
+                if(response != null) {
+                    //Now converting jsonObject to list
+                    List<Map<String, Object>> objList = (List) JsonUtil.fromJson(response);
+                    List<Order> orderList = new ArrayList<Order>();
+                    OrderRepository orderRepo = getRestAdapter().createRepository(OrderRepository.class);
+                    for (Map<String, Object> obj : objList) {
+                        Order order = orderRepo.createObject(obj);
+                        orderList.add(order);
+                    }
 
-                OrderRepository orderRepo = getRestAdapter().createRepository(OrderRepository.class);
-                for (Map<String, Object> obj : objList) {
-                    Order order = orderRepo.createObject(obj);
-                    orderList.add(order);
+
+                    callback.onSuccess(orderList);
+                }else{
+                    callback.onSuccess(null);
                 }
-
-                //List<Order> orderList ;
-                callback.onSuccess(orderList);
             }
 
             @Override
