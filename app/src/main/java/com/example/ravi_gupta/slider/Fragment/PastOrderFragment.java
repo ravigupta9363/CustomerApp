@@ -153,51 +153,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        /*orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
-        orderRepository.findAll(new ListCallback<Order>() {
-            @Override
-            public void onSuccess(List<Order> orderList) {
-                if (orderList == null) {
-                    noPastOrder.setVisibility(View.VISIBLE);
-                    noPastOrderText.setVisibility(View.VISIBLE);
-                    mListview.setVisibility(View.GONE);
-                }
-                for (Order order : orderList) {
-                    noPastOrder.setVisibility(View.GONE);
-                    noPastOrderText.setVisibility(View.GONE);
-                    mListview.setVisibility(View.VISIBLE);
-                    List<Map<String, String>> prescription = order.getPrescription();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-                    format.setTimeZone(TimeZone.getTimeZone("IST"));
-                    java.util.Date date = null;
-                    try {
-                        date = format.parse(order.getDate());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    String time = date.toString().substring(12, 19);
-                    String orderDay = date.toString().substring(8, 10);
-                    String orderMonth = date.toString().substring(4, 7);
-                    String orderYear = date.toString().substring(30, 34);
-                    String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
 
-                    pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
-                }
-                pastOrderAdapter.notifyDataSetChanged();
-            }
-
-            public void onError(Throwable t) {
-
-                noPastOrderText.setText("Unable to connect to server");
-                noPastOrder.setVisibility(View.VISIBLE);
-                noPastOrder.setImageResource(R.drawable.order_cancelled);
-                noPastOrderText.setVisibility(View.VISIBLE);
-                mListview.setVisibility(View.GONE);
-                Log.v("server", "Error");
-                Log.v("server", t + "");
-            }
-        });
-*/
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

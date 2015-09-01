@@ -1,6 +1,19 @@
 package com.example.ravi_gupta.slider.Models;
 
+import android.util.Log;
+
 import com.strongloop.android.loopback.Model;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by robins on 1/9/15.
@@ -10,25 +23,57 @@ public class Office extends Model {
     private String id;
     private String name;
     private String address;
-    //Array of strings..
-    private Object allowedPincodes;
-    private Object geoLocation;
     private String OfficeSettingsId;
-    private Object timings;
 
+    //Array of strings..
+    private List<String> allowedPincodes;
+    private Map<String, String> geoLocation;
+    private Map<String, String> timings;
 
-    public Object getTimings() {
+    private String timeFormat = "HH:mm a";
+
+    public Map<String, String> getTimings() {
         return timings;
     }
 
-    public void setTimings(Object timings) {
+    public void setTimings(Map<String, String> timings) {
         this.timings = timings;
     }
 
 
     public boolean isClosed(){
-        /*Needs to be implemented*/
-        return false;
+        SimpleDateFormat format = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
+        format.setTimeZone(TimeZone.getTimeZone("IST"));
+        java.util.Date date = null;
+        java.util.Date currentDate = getTodayDate();
+        try {
+            Log.d("drugcorner", "Getting the timings object");
+            String closedTime = timings.get("closedTime");
+            date = format.parse(closedTime);
+
+
+        } catch (ParseException e) {
+            Log.d("drugcorner", "Error occured parsing date");
+            e.printStackTrace();
+        }
+
+        return date.before(currentDate);
+    }
+
+
+
+    private Date getTodayDate(){
+        SimpleDateFormat dateStamp = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
+        String timeStamp = dateStamp.format(Calendar.getInstance().getTime());
+
+        java.util.Date  date = null;
+        try {
+            date = dateStamp.parse(timeStamp);
+        } catch (ParseException e) {
+            Log.d("drugcorner", "Error occured parsing date");
+            e.printStackTrace();
+        }
+        return date;
     }
 
 
@@ -48,19 +93,19 @@ public class Office extends Model {
         this.address = address;
     }
 
-    public Object getAllowedPincodes() {
+    public List<String> getAllowedPincodes() {
         return allowedPincodes;
     }
 
-    public void setAllowedPincodes(Object allowedPincodes) {
+    public void setAllowedPincodes(List<String> allowedPincodes) {
         this.allowedPincodes = allowedPincodes;
     }
 
-    public Object getGeoLocation() {
+    public Map<String, String> getGeoLocation() {
         return geoLocation;
     }
 
-    public void setGeoLocation(Object geoLocation) {
+    public void setGeoLocation(Map<String, String> geoLocation) {
         this.geoLocation = geoLocation;
     }
 
