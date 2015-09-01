@@ -255,7 +255,7 @@ public class SplashActivity extends AppCompatActivity {
                             officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                                 @Override
                                 public void onSuccess(List<Retailer> retailerArray) {
-                                    imageDownloaded = true;
+                                    retailerListFetched = true;
                                     app.setRetailerList(retailerArray);
                                     if(imageDownloaded && retailerListFetched){
                                         //Go to main fragment
@@ -284,7 +284,6 @@ public class SplashActivity extends AppCompatActivity {
                 //Show no internet connection..
                 mainIntent.putExtra("keyFragment", 3);
             }
-
 
             //Start the main activity
             SplashActivity.this.startActivity(mainIntent);
@@ -319,16 +318,19 @@ public class SplashActivity extends AppCompatActivity {
             });
         }
 
+
         public RequestCreator downloadImages(File remoteFile) {
             String baseURL = Constants.baseURL;
-            Uri imageUri = Uri.parse(baseURL +"/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
+            Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
             return Picasso.with(that).load(imageUri);
         }
+
 
 
         private class GetAllImages extends AsyncTask<Void, Void, Void>
         {
             public List<File> files;
+            public List<RequestCreator> imageList;
             public GetAllImages(List<File> files){
                 this.files = files;
             }
@@ -341,8 +343,9 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... params) {
-                //this method will be running on background thread so don't update UI frome here
-                //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+                for(File file : files){
+                    imageList.add(downloadImages(file));
+                }
                 return null;
             }
 
@@ -350,6 +353,9 @@ public class SplashActivity extends AppCompatActivity {
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
                 //this method will be running on UI thread
+                //Adding the imageFetchvalue to the true..
+                Log.d(TAG, "All images downloaded sucessfully..");
+                imageDownloaded = true;
             }
 
         }
