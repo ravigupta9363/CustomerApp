@@ -5,10 +5,35 @@ package com.example.ravi_gupta.slider;
  */
 import android.app.Application;
 
+import com.example.ravi_gupta.slider.Models.Office;
+import com.example.ravi_gupta.slider.Models.Retailer;
 import com.strongloop.android.loopback.RestAdapter;
 
+import java.util.List;
+
 public class MyApplication extends Application {
+
     RestAdapter adapter;
+    Office office;
+    List<Retailer> retailerList;
+
+
+    public List<Retailer> getRetailerList() {
+        return retailerList;
+    }
+
+    public void setRetailerList(List<Retailer> retailerList) {
+        this.retailerList = retailerList;
+    }
+
+
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
+    }
 
     public RestAdapter getLoopBackAdapter() {
         if (adapter == null) {

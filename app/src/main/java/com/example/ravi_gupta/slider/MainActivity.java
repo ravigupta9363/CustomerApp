@@ -145,7 +145,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     String pincode;
     public RestAdapter restAdapter;
     public String baseURL = "http://192.168.1.100:3001";
-    public String status;
+    public String status = "Delivered";
     double longitude;
     double latitude;
     public String tempName;
@@ -221,6 +221,28 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
         findNetwork();
 
+        Bundle bundle = getIntent().getExtras();
+        int keyFragment = bundle.getInt("keyFragment");
+
+        if(keyFragment == 1) {
+            replaceFragment(R.layout.fragment_order_status,null);
+        }
+        else if(keyFragment == 0) {
+            replaceFragment(R.layout.fragment_main, null);
+        }
+        else if(keyFragment == 2) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            replaceFragment(R.layout.fragment_no_address_found, null);
+        }
+        else if(keyFragment == 3) {
+            getSupportActionBar().hide();
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            replaceFragment(R.layout.fragment_no_internet_connection, null);
+        }
+        else {
+
+        }
+
 
 
         //Now fetching the current logged in user ..
@@ -240,24 +262,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         });
 
-        status = "Delivered";
-        //Checking if Network is connected or Serving in area
-        if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
-            replaceFragment(R.layout.fragment_main, null);
-       }
-        else if(haveNetworkConnection() && matchPincode == null) {
-            //replaceFragment(R.layout.fragment_);
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_address_found, null);
-        }
-        else {
-            //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
-            getSupportActionBar().hide();
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }
+
         databaseHelper = new DatabaseHelper(this);
-        profileDatabase = new ProfileDatabase(this);
         databaseHelper.deleteAllPrescription();
 
         //Opening fragments from notifications
@@ -344,6 +350,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
+    public void onInit() {
+        //Checking if Network is connected or Serving in area
+        if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
+            replaceFragment(R.layout.fragment_main, null);
+        }
+        else if(haveNetworkConnection() && matchPincode == null) {
+            //replaceFragment(R.layout.fragment_);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            replaceFragment(R.layout.fragment_no_address_found, null);
+        }
+        else {
+            //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
+            getSupportActionBar().hide();
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            replaceFragment(R.layout.fragment_no_internet_connection, null);
+        }
+    }
 
 
 
@@ -1137,7 +1160,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void FragmentLandmarkButton1Fragment(FragmentTransaction ft){
-
         VerifyingOrderFragment frag13 = (VerifyingOrderFragment) getSupportFragmentManager().
                 findFragmentByTag(VerifyingOrderFragment.TAG);
         if (frag13 == null) {

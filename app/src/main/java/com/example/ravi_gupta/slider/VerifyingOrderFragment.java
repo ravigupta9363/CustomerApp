@@ -215,6 +215,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 if (diff > (long) till) {
                     break;
                 }
+
                 //Checking if the verification code is obtained..
                 code = GcmIntentService.getVerificationCode();
                 if (code != 0) {
@@ -232,7 +233,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 if(checkVerificationCode(code)) {
                     mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
                 }
-                Log.i("drugcorner", "Verification code found from fragment interface " + code);
+                Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step
             }else {
                 //Timeout occurs retry the process..
@@ -247,5 +248,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         }
 
     }
+
+
 
 }
