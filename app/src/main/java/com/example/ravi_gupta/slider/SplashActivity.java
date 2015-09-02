@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Your code to run in GUI thread here
-
+                startSplashActivity();
             }//public void run() {
         });
 
@@ -216,6 +216,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     /**
      * Keywords
      * Fragment codes 1 = Order Status Fragment
@@ -243,7 +246,6 @@ public class SplashActivity extends AppCompatActivity {
                         endActivity();
                     } else {
                         app.setOffice(officeObj);
-
                         officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                             @Override
                             public void onSuccess(List<Retailer> retailerArray) {
@@ -284,15 +286,12 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-
-
-
-
     public void endActivity(){
         //Start the main activity
         SplashActivity.this.startActivity(mainIntent);
         SplashActivity.this.finish();
     }
+
 
 
     public void fetchAllImages(RestAdapter adapter){
@@ -322,6 +321,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
+
+
     public RequestCreator downloadImages(File remoteFile) {
         String baseURL = Constants.baseURL;
         Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
@@ -330,12 +331,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
+
     private class GetAllImages extends AsyncTask<Void, Void, Void>
     {
         public List<File> files;
         public List<RequestCreator> imageList;
-        public GetAllImages(List<File> files){
-            this.files = files;
+        public GetAllImages(List<File> files_){
+            files = files_;
         }
 
         @Override
