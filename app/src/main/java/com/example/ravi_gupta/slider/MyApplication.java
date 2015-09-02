@@ -9,26 +9,39 @@ import android.net.Uri;
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.squareup.picasso.RequestCreator;
+import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.RestAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyApplication extends Application {
 
     private RestAdapter adapter;
     private Office office;
-    private List<Retailer> retailerList;
+    private List<Retailer> retailerList = new ArrayList<>();
 
-    private List<Uri> imageList;
+    public List<File> getImageFiles() {
+        return imageFiles;
+    }
+
+    public void setImageFiles(List<File> imageFiles) {
+        this.imageFiles = imageFiles;
+    }
+
+    private List<File> imageFiles = new ArrayList<>();
+
+    //private List<RequestCreator> imageList = new ArrayList<>();
 
 
-    public List<Uri> getImageList() {
+
+    /*public List<RequestCreator> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<Uri> imageList) {
+    public void setImageList(List<RequestCreator> imageList) {
         this.imageList = imageList;
-    }
+    }*/
 
     public List<Retailer> getRetailerList() {
         return retailerList;

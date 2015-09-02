@@ -25,6 +25,7 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
+import com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Office;
@@ -40,13 +41,14 @@ import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements NoInternetConnectionFragment.OnFragmentInteractionListener {
 
     private final int SPLASH_DISPLAY_LENGTH = 1500;
     AppLocationService appLocationService;
@@ -64,6 +66,7 @@ public class SplashActivity extends AppCompatActivity {
     boolean imageDownloaded = false;
     boolean retailerListFetched = false;
     SplashActivity that;
+    final MyApplication app = (MyApplication) getApplication();
 
 
 
@@ -72,6 +75,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         getSupportActionBar().hide();
         that = this;
         /* Create an Intent that will start the Menu-Activity. */
@@ -271,6 +275,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onError(Throwable t) {
                     Log.e(TAG, "Error loading office settings from server");
+                    //TODO LOAD THE ELEMENT FROM THE START ON RETRY
                     //Show no internet connection..
                     mainIntent.putExtra("keyFragment", 3);
                     endActivity();
@@ -278,6 +283,7 @@ public class SplashActivity extends AppCompatActivity {
             }); //SearchOfficePincode method
         }else{
             //Show no internet connection..
+            //TODO LOAD THE ELEMENT FROM THE START ON RETRY
             mainIntent.putExtra("keyFragment", 3);
             endActivity();
         }
@@ -302,8 +308,24 @@ public class SplashActivity extends AppCompatActivity {
                 container.getAllFiles(new ListCallback<File>() {
                     @Override
                     public void onSuccess(List<File> objects) {
-                        GetAllImages getAllImages = new GetAllImages(objects);
-                        getAllImages.execute();
+                        imageDownloaded = true;
+                        //Now saving the images to the application ..
+                        final MyApplication app = (MyApplication) getApplication();
+                        String baseURL = Constants.baseURL;
+                        List<RequestCreator> requestCreators = new ArrayList<RequestCreator>();
+                        for(File file : objects){
+                            Uri imageUri = Uri.parse(baseURL + "/api/containers/" + file.getContainer() + "/download/" + file.getName());
+                            RequestCreator requestCreator = Picasso.with(SplashActivity.this).load(imageUri);
+                            requestCreators.add(requestCreator);
+                        }
+
+                        app.setImageFiles(objects);
+                        //app.setImageList(imageList);
+                        if(imageDownloaded && retailerListFetched){
+                            //Go to main fragment
+                            //Now resolving the route..
+                            resolveRoute();
+                        }
                     }
 
                     @Override
@@ -323,19 +345,19 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-    public Uri getImageUri(File remoteFile) {
+    /*public RequestCreator getImageUri(File remoteFile) {
         String baseURL = Constants.baseURL;
         Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
-        return imageUri;
-    }
+        return Picasso.with(SplashActivity.this).load(imageUri);
+        //return imageUri;
+    }*/
 
 
 
 
-    private class GetAllImages extends AsyncTask<Void, Void, Void>
+  /*  private class GetAllImages extends AsyncTask<Void, Void, Void>
     {
-        public List<File> files;
-        public List<Uri> imageList;
+        public List<File> files = new ArrayList<>();
         public GetAllImages(List<File> files_){
             files = files_;
         }
@@ -348,10 +370,8 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            for(File file : files){
-                Uri requestCreator = getImageUri(file);
-                imageList.add(requestCreator);
-            }
+
+            app.setImageFiles(files);
             return null;
         }
 
@@ -359,12 +379,13 @@ public class SplashActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             //this method will be running on UI thread
-            //Adding the imageFetchvalue to the true..
-            Log.d(TAG, "All images downloaded successfully..");
+            //Adding the imageFetchValue to be true..
+            Log.d(TAG, "All Images downloaded successfully..");
+
             imageDownloaded = true;
             //Now saving the images to the application ..
             final MyApplication app = (MyApplication) getApplication();
-            app.setImageList(imageList);
+            //app.setImageList(imageList);
             if(imageDownloaded && retailerListFetched){
                 //Go to main fragment
                 //Now resolving the route..
@@ -372,7 +393,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 
 
 
@@ -380,8 +401,8 @@ public class SplashActivity extends AppCompatActivity {
         //On success
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();
-        Log.d(TAG, "Checking value of pending delivery =  " + pendingDelivery);
-        if (pendingDelivery == null) {
+        Log.d(TAG, "Checking value of pending delivery =  " );
+        if (pendingDelivery == "") {
             //Go to main fragment
             mainIntent.putExtra("keyFragment", 0);
         } else {
@@ -395,8 +416,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-
-
-
+    }
 }
