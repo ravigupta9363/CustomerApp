@@ -140,20 +140,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private TypedArray navMenuIcons;
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
-    String[] latlong = {"323001","122002","302033","122010","122008","512272"};
-    public String matchPincode;
-    String pincode;
     public RestAdapter restAdapter;
     public String baseURL = "http://192.168.1.100:3001";
-    public String status = "Delivered";
-    double longitude;
-    double latitude;
     public String tempName;
     public String tempEmail;
     public String tempPhone;
     public boolean invalidEmail = false;
     private static LocalInstallation installation;
-    final MyApplication app = (MyApplication) getApplication();
+
+
 
     public ActivityHelper getActivityHelper() {
         return activityHelper;
@@ -264,7 +259,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
-
+        final MyApplication app = (MyApplication) getApplication();
         activityHelper = new ActivityHelper(this, app);
     }
 
@@ -1152,13 +1147,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         item2.setEnabled(false);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/OpenSans-Regular.ttf");
         nextButton.setTypeface(typeface);
-
-        ib.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //replaceFragment(R.id.shoppingCart, null);
-            }
-        });
 
         return super.onCreateOptionsMenu(menu);
     }

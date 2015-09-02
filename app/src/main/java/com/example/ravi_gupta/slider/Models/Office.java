@@ -57,13 +57,15 @@ public class Office extends Model {
             e.printStackTrace();
         }
 
-        return date.before(currentDate);
+        boolean value =  date.before(currentDate);
+        return value;
     }
 
 
 
     private Date getTodayDate(){
         SimpleDateFormat dateStamp = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
+        dateStamp.setTimeZone(TimeZone.getTimeZone("IST"));
         String timeStamp = dateStamp.format(Calendar.getInstance().getTime());
 
         java.util.Date  date = null;

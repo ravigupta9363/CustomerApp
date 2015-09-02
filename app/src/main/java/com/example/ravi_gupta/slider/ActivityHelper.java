@@ -239,7 +239,7 @@ public class ActivityHelper {
             officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
                 @Override
                 public void onSuccess(Office officeObj) {
-                    if (officeObj == null) {
+                    if (officeObj.getName() == null) {
                         Log.i(Constants.TAG, "We are not providing service in your area.");
                         //We are not providing service in your area..
                         activity.replaceFragment(R.layout.fragment_no_address_found, null);

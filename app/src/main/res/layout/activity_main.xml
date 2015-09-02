@@ -7,14 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:id="@+id/linear_layout">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="85dp"
             android:src="@drawable/logo"
             android:id="@+id/activity_splash_logo"/>
-
+    </LinearLayout>
 
         <ProgressBar
             android:layout_centerInParent="true"
@@ -23,9 +24,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/progressBar"
             android:layout_gravity="center"
+            android:layout_below="@+id/linear_layout"
             android:layout_marginTop="50dp"/>
 
-    </LinearLayout>
+
 </RelativeLayout>
 
 

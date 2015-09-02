@@ -19,7 +19,7 @@ public class MyApplication extends Application {
 
     private RestAdapter adapter;
     private Office office;
-    private List<Retailer> retailerList = new ArrayList<>();
+    private List<Retailer> retailerList;
 
     /*public List<File> getImageFiles() {
         return imageFiles;

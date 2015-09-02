@@ -133,6 +133,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setScrollDurationFactor(3);
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
+        Log.v("images",requestCreatorList.size()+"");
 
         disabledocationEditText.setText(result);
         Log.d("address", "Display Address = " + result);
@@ -190,16 +191,16 @@ public class MainFragment extends android.support.v4.app.Fragment {
                         // Showing a toast for just testing purpose
                     } else {
                         if (page == 0) {
-                            viewPager.setCurrentItem(sliderItems.length-2);
+                            viewPager.setCurrentItem(requestCreatorList.size()-2);
                         }
 
                         // skip fake page (last), go to first page
-                        if (page == sliderItems.length-1) {
+                        if (page == requestCreatorList.size()-1) {
                             viewPager.setCurrentItem(0);
                             //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                         } else {
                             viewPager.setCurrentItem(page++);
-                            if (page == sliderItems.length-1)
+                            if (page == requestCreatorList.size()-1)
                                 page = 1;
                         }
                     }

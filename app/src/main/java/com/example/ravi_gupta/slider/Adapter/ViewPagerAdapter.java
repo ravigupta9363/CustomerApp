@@ -14,6 +14,7 @@ import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 import com.squareup.picasso.RequestCreator;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Ravi-Gupta on 6/30/2015.
@@ -24,12 +25,14 @@ public class ViewPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
-    int page = 0;
+    ListIterator<RequestCreator> requestCreatorListIterator;
+
 
     public ViewPagerAdapter(Context context, final List<RequestCreator> sliderItems, final ViewPagerCustomDuration viewPager) {
         this.context = context;
         this.sliderItems = sliderItems;
         this.viewPager = viewPager;
+        requestCreatorListIterator = sliderItems.listIterator();
         enabled = true;
 
        /* viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -73,37 +76,40 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView sliderItem = (ImageView) itemView.findViewById(R.id.viewpagerImageView1);
 
         // Capture position and set to the ImageView
-        sliderItems.get(position).into(sliderItem);
+        if(requestCreatorListIterator.hasNext()) {
+            requestCreatorListIterator.next().into(sliderItem);
 
-        // Add viewpager_item.xml to ViewPager
-        ((ViewPager) container).addView(itemView);
 
-        //http://stackoverflow.com/questions/21368693/how-to-do-circular-scrolling-on-viewpager
-        ((ViewPager) container).addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            // Add viewpager_item.xml to ViewPager
+            ((ViewPager) container).addView(itemView);
 
-            }
+            //http://stackoverflow.com/questions/21368693/how-to-do-circular-scrolling-on-viewpager
+            ((ViewPager) container).addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            @Override
-            public void onPageSelected(int position) {
-                // skip fake page (first), go to last page
-                if (position == 0) {
-                    ((ViewPager) container).setCurrentItem(sliderItems.size()-2);
                 }
 
-                // skip fake page (last), go to first page
-                if (position == sliderItems.size()-1) {
-                    ((ViewPager) container).setCurrentItem(1); //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
+                @Override
+                public void onPageSelected(int position) {
+                    // skip fake page (first), go to last page
+                    if (position == 0) {
+                        ((ViewPager) container).setCurrentItem(sliderItems.size() - 2);
+                    }
+
+                    // skip fake page (last), go to first page
+                    if (position == sliderItems.size() - 1) {
+                        ((ViewPager) container).setCurrentItem(1); //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
+                    }
+
                 }
 
-            }
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+                }
+            });
+        }
 
             return itemView;
     }

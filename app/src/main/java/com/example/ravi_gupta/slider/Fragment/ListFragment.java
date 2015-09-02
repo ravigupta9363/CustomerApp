@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
@@ -70,17 +71,21 @@ public class ListFragment extends android.support.v4.app.Fragment {
         spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShopListDetails shopListDetails = (ShopListDetails) mListview.getItemAtPosition(position);
-                if (shopListDetails.Isopen)
-                    mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
-            }
-        });
-
-
         application = (MyApplication)getActivity().getApplication();
+        //TODO NEEDS TO BE CHECKED FOR FURTHER INSPECTION
+        if(application.getOffice().isClosed() == false) {
+            mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ShopListDetails shopListDetails = (ShopListDetails) mListview.getItemAtPosition(position);
+
+                    if (shopListDetails.Isopen)
+                        mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
+                }
+            });
+        }else{
+            Toast.makeText(mainActivity,"NOt serving in this particular hour",Toast.LENGTH_SHORT).show();
+        }
         new AsyncCaller().execute();
 
 
@@ -164,28 +169,32 @@ public class ListFragment extends android.support.v4.app.Fragment {
         }
         @Override
         protected Void doInBackground(Void... params) {
-            List<Retailer> retailers = application.getRetailerList();
-            for(Retailer retailerModel : retailers) {
-               Map<String, Integer> discount = retailerModel.getDiscount();
-               Object allitems = "allitems";
-               shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
-            }
-/*
 
+
+/*
             shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,99));
             shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,84));
             shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,45));
             shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 33));
 */
-
-
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            List<Retailer> retailers = application.getRetailerList();
+            for(Retailer retailerModel : retailers) {
+                Map<String, Object> discount = retailerModel.getDiscount();
+                Object allitems = "allitems";
+                try{
+                    shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)((Integer)discount.get(allitems)).intValue() , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                }catch (ClassCastException c){
+                    shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                }
+
+            }
+            shopListAdapter.notifyDataSetChanged();
             //this method will be running on UI thread
             spinner.setVisibility(View.GONE);
         }
