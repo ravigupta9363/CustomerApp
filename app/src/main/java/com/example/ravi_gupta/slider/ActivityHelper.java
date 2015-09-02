@@ -13,11 +13,14 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
+import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -45,16 +48,20 @@ public class ActivityHelper {
     String pincode;
     double longitude;
     double latitude;
-    public Address updatedAddress;
     Intent mainIntent;
     //String status = "Delivered";
-    String TAG = "drugcorner";
     OrderStatusDataBase orderStatusDataBase;
     boolean internetConnection = false;
     boolean imageDownloaded = false;
     boolean retailerListFetched = false;
     MainActivity activity;
     MyApplication application;
+
+    private Address updatedAddress;
+    public Address getUpdatedAddress() {
+        return updatedAddress;
+    }
+
     /**=====================================================*/
 
 
@@ -66,16 +73,47 @@ public class ActivityHelper {
     public ActivityHelper(MainActivity activity, MyApplication application){
         this.activity = activity;
         this.application = application;
-        orderStatusDataBase = new OrderStatusDataBase(activity);
+        
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                checkLogin();
                 //Your code to run in GUI thread here
-                startSplashActivity();
+                startHelperActivity();
             }//public void run() {
         });
     }
+
+
+
+    private void checkLogin(){
+        //Making Server Call
+        activity.restAdapter = new RestAdapter(application, Constants.baseURL + "/api");
+        //Now fetching the current logged in user ..
+        activity.setCustomerRepo(activity.restAdapter.createRepository(CustomerRepository.class));
+        orderStatusDataBase = new OrderStatusDataBase(activity);
+
+        activity.getCustomerRepo().findCurrentUser(new ObjectCallback<Customer>() {
+            @Override
+            public void onSuccess(Customer customer) {
+                // Check device for Play Services APK.
+                // If check succeeds, proceed with GCM registration.
+                activity.registerInstallation(customer);
+            }
+
+            public void onError(Throwable t) {
+                Log.i(Constants.TAG, "Error fetching data from the server");
+                Log.e(Constants.TAG, t.toString());
+                activity.registerInstallation(null);
+            }
+        });
+
+        activity.databaseHelper = new DatabaseHelper(activity);
+        activity.databaseHelper.deleteAllPrescription();
+    }
+
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -191,7 +229,7 @@ public class ActivityHelper {
      *
      * @return
      */
-    private void startSplashActivity(){
+    public void startHelperActivity(){
         internetConnection = haveNetworkConnection();
         pincode = findNetwork();
         if(internetConnection) {
@@ -202,16 +240,16 @@ public class ActivityHelper {
                 @Override
                 public void onSuccess(Office officeObj) {
                     if (officeObj == null) {
-                        Log.i(TAG, "We are not providing service in your area.");
+                        Log.i(Constants.TAG, "We are not providing service in your area.");
                         //We are not providing service in your area..
-                        mainIntent.putExtra("keyFragment", 2);
-                        endActivity();
+                        activity.replaceFragment(R.layout.fragment_no_address_found, null);
+
                     } else {
                         application.setOffice(officeObj);
                         officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                             @Override
                             public void onSuccess(List<Retailer> retailerArray) {
-                                Log.i(TAG, "Successfully fetched retailer data from the server");
+                                Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
                                 retailerListFetched = true;
                                 application.setRetailerList(retailerArray);
                                 if(imageDownloaded && retailerListFetched){
@@ -221,7 +259,7 @@ public class ActivityHelper {
                             }
                             @Override
                             public void onError(Throwable t) {
-                                Log.d(TAG, "No retailer found in this area");
+                                Log.d(Constants.TAG, "No retailer found in this area");
                             }
                         });
 
@@ -232,28 +270,21 @@ public class ActivityHelper {
 
                 @Override
                 public void onError(Throwable t) {
-                    Log.e(TAG, "Error loading office settings from server");
-                    //TODO LOAD THE ELEMENT FROM THE START ON RETRY
+                    Log.e(Constants.TAG, "Error loading office settings from server");
                     //Show no internet connection..
-                    mainIntent.putExtra("keyFragment", 3);
-                    endActivity();
+                    activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
                 }
             }); //SearchOfficePincode method
         }else{
             //Show no internet connection..
-            //TODO LOAD THE ELEMENT FROM THE START ON RETRY
-            mainIntent.putExtra("keyFragment", 3);
-            endActivity();
+            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+
         }
     }
 
 
 
-    public void endActivity(){
-        //Start the main activity
-        activity.startActivity(mainIntent);
-        activity.finish();
-    }
+
 
 
 
@@ -276,7 +307,8 @@ public class ActivityHelper {
                             requestCreators.add(requestCreator);
                         }
 
-                        application.setImageFiles(objects);
+                        application.setImageList(requestCreators);
+
                         //app.setImageList(imageList);
                         if (imageDownloaded && retailerListFetched) {
                             //Go to main fragment
@@ -304,21 +336,17 @@ public class ActivityHelper {
         //On success
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();
-        Log.d(TAG, "Checking value of pending delivery =  " );
+        Log.d(Constants.TAG, "Checking value of pending delivery =  " );
         if (pendingDelivery == "") {
             //Go to main fragment
-            mainIntent.putExtra("keyFragment", 0);
+            activity.replaceFragment(R.layout.fragment_main, null);
+
         } else {
             //TODO CHECK VALUE FROM SERVER
             //Check from server and get the status of main settings
-            Log.d(TAG, "Delivery status pending..");
-            mainIntent.putExtra("keyFragment", 1);
+            Log.d(Constants.TAG, "Delivery status pending..");
+            activity.replaceFragment(R.layout.fragment_order_status,null);
         }
-
-        endActivity();
-    }
-
-
-
+    }//resolveRoute
 
 }

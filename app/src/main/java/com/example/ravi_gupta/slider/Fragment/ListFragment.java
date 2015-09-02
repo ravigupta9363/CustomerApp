@@ -18,6 +18,7 @@ import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Retailer;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.RetailerRepository;
 import com.strongloop.android.loopback.callbacks.ListCallback;
@@ -36,33 +37,15 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class ListFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
     ListView mListview;
     ShopListAdapter shopListAdapter;
     ArrayList<ShopListDetails> shopListDetailses = new ArrayList<ShopListDetails>();
     MainActivity mainActivity;
     ProgressBar spinner;
     RetailerRepository retailerRepository;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance(String param1, String param2) {
+    private MyApplication application;
+    public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
         return fragment;
     }
@@ -85,30 +68,28 @@ public class ListFragment extends android.support.v4.app.Fragment {
         retailerRepository = mainActivity.restAdapter.createRepository(RetailerRepository.class);
         mListview = (ListView) rootview.findViewById(R.id.shopListview);
         spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
-        new AsyncCaller().execute();
-
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
-
-        retailerRepository.findAll(new ListCallback<Retailer>() {
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onSuccess(List<Retailer> retailerModelList) {
-                for(Retailer retailerModel : retailerModelList) {
-                    Map<String, Integer> discount = retailerModel.getDiscount();
-                    Object allitems = "allitems";
-                    shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
-                }
-            }
-
-            public void onError(Throwable t) {
-                // handle the error
-                Log.v("server","Error");
-                Log.v("server",t+"");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ShopListDetails shopListDetails = (ShopListDetails) mListview.getItemAtPosition(position);
+                if (shopListDetails.Isopen)
+                    mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
             }
         });
 
+
+        application = (MyApplication)getActivity().getApplication();
+        new AsyncCaller().execute();
+
+
         return rootview;
     }
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -149,6 +130,8 @@ public class ListFragment extends android.support.v4.app.Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -168,6 +151,9 @@ public class ListFragment extends android.support.v4.app.Fragment {
             }
         });
     }
+
+
+
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
 
@@ -175,41 +161,25 @@ public class ListFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             spinner.setVisibility(View.VISIBLE);
-            //this method will be running on UI thread
         }
         @Override
         protected Void doInBackground(Void... params) {
+            List<Retailer> retailers = application.getRetailerList();
+            for(Retailer retailerModel : retailers) {
+               Map<String, Integer> discount = retailerModel.getDiscount();
+               Object allitems = "allitems";
+               shopListDetailses.add(new ShopListDetails(retailerModel.getName(),discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+            }
+/*
 
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-            /*retailerRepository.findAll(new ListCallback<Retailer>() {
-
-                @Override
-                public void onSuccess(List<Retailer> objects) {
-                    Log.v("server",objects+"");
-                }
-
-                public void onError(Throwable t) {
-                    // handle the error
-                }
-            });
-            */
             shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,99));
             shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,84));
             shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,45));
             shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 33));
+*/
 
 
-            mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //Log.v("Listview1", "List View = " + mListview.getItemAtPosition(position) + "");
-                    ShopListDetails shopListDetails =(ShopListDetails) mListview.getItemAtPosition(position);
-                    if(shopListDetails.Isopen)
-                     mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
-                }
-            });
+
             return null;
         }
 
@@ -221,5 +191,4 @@ public class ListFragment extends android.support.v4.app.Fragment {
         }
 
     }
-
 }

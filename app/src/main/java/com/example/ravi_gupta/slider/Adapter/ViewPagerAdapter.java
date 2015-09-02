@@ -11,19 +11,22 @@ import android.widget.RelativeLayout;
 
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
+import com.squareup.picasso.RequestCreator;
+
+import java.util.List;
 
 /**
  * Created by Ravi-Gupta on 6/30/2015.
  */
 public class ViewPagerAdapter extends PagerAdapter {
     Context context;
-    int[] sliderItems;
+    List<RequestCreator> sliderItems;
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
     int page = 0;
 
-    public ViewPagerAdapter(Context context, final int[] sliderItems, final ViewPagerCustomDuration viewPager) {
+    public ViewPagerAdapter(Context context, final List<RequestCreator> sliderItems, final ViewPagerCustomDuration viewPager) {
         this.context = context;
         this.sliderItems = sliderItems;
         this.viewPager = viewPager;
@@ -50,7 +53,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
         //return sliderItems.length;
-        return sliderItems.length;
+        return sliderItems.size();
     }
 
     @Override
@@ -63,12 +66,14 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = layoutInflater.inflate(R.layout.viewpager_item, container, false);
-
+        /**
+         * Loading the image view
+         */
         // Locate the ImageView in viewpager_item.xml
         ImageView sliderItem = (ImageView) itemView.findViewById(R.id.viewpagerImageView1);
 
         // Capture position and set to the ImageView
-        sliderItem.setImageResource(sliderItems[position]);
+        sliderItems.get(position).into(sliderItem);
 
         // Add viewpager_item.xml to ViewPager
         ((ViewPager) container).addView(itemView);
@@ -84,11 +89,11 @@ public class ViewPagerAdapter extends PagerAdapter {
             public void onPageSelected(int position) {
                 // skip fake page (first), go to last page
                 if (position == 0) {
-                    ((ViewPager) container).setCurrentItem(sliderItems.length-2);
+                    ((ViewPager) container).setCurrentItem(sliderItems.size()-2);
                 }
 
                 // skip fake page (last), go to first page
-                if (position == sliderItems.length-1) {
+                if (position == sliderItems.size()-1) {
                     ((ViewPager) container).setCurrentItem(1); //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                 }
 

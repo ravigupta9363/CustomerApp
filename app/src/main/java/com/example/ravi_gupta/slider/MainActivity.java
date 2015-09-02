@@ -155,6 +155,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private static LocalInstallation installation;
     final MyApplication app = (MyApplication) getApplication();
 
+    public ActivityHelper getActivityHelper() {
+        return activityHelper;
+    }
+
+    ActivityHelper activityHelper;
+
+
+    public void setCustomerRepo(CustomerRepository customerRepo) {
+        this.customerRepo = customerRepo;
+    }
 
     private CustomerRepository customerRepo;
 
@@ -204,73 +214,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
         context = getApplicationContext();
-
-
-
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
-
-        //Making Server Call
-        restAdapter = new RestAdapter(getApplicationContext(), baseURL+"/api");
-        findNetwork();
-
-        Bundle bundle = getIntent().getExtras();
-        int keyFragment = bundle.getInt("keyFragment");
-
-        if(keyFragment == 1) {
-            replaceFragment(R.layout.fragment_order_status,null);
-        }
-        else if(keyFragment == 0) {
-            replaceFragment(R.layout.fragment_main, null);
-        }
-        else if(keyFragment == 2) {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_address_found, null);
-        }
-        else if(keyFragment == 3) {
-            getSupportActionBar().hide();
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }
-        else {
-
-        }
-
-
-
-        //Now fetching the current logged in user ..
-        customerRepo = restAdapter.createRepository(CustomerRepository.class);
-        customerRepo.findCurrentUser(new ObjectCallback<Customer>() {
-            @Override
-            public void onSuccess(Customer customer) {
-                // Check device for Play Services APK.
-                // If check succeeds, proceed with GCM registration.
-                registerInstallation(customer);
-            }
-
-            public void onError(Throwable t) {
-                Log.i(TAG, "Error fetching data from the server");
-                Log.e(TAG, t.toString());
-                registerInstallation(null);
-            }
-        });
-
-
-        databaseHelper = new DatabaseHelper(this);
-        databaseHelper.deleteAllPrescription();
-
-        //Opening fragments from notifications
-        final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
         View child = decor.getChildAt(0);
         decor.removeView(child);
@@ -279,39 +229,26 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // Make the drawer replace the first child
         decor.addView(mDrawerLayout);
         getSupportActionBar().setElevation(0);//Removing Shaodow
-
-
         //Putting childs in Navigation drawer
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.sections_title);
-
         // nav drawer icons from resources
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.sections_icons);
-
+        navMenuIcons = getResources().obtainTypedArray(R.array.sections_icons);
         //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawerListView);
-
-        navDrawerItems = new ArrayList<NavigationDrawerItemDetails>();
+        navDrawerItems = new ArrayList<>();
         for(int i = 0; i<=9; i++){
             navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
         }
-
         // Recycle the typed array
         navMenuIcons.recycle(); // For Menu Icons
-
-
-
         // setting the nav drawer list adapter
         adapter = new NavDrawerListAdapter(getApplicationContext(),
                 navDrawerItems);
         mDrawerList.setAdapter(adapter);
-
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.mipmap.dc_menu, //nav menu toggle icon
                 R.string.app_name, // nav drawer open - description for accessibility
@@ -320,21 +257,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             public void onDrawerClosed(View view) {
                 invalidateOptionsMenu();
             }
-
             public void onDrawerOpened(View drawerView) {
                 invalidateOptionsMenu();
             }
         };
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
-        if (savedInstanceState == null) {
-        }
+
+        activityHelper = new ActivityHelper(this, app);
     }
 
 
-    private void registerInstallation(Customer customer){
+
+
+    public void registerInstallation(Customer customer){
         if (checkPlayServices()) {
             if (customer != null) {
                 // logged in
@@ -351,12 +288,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
-    public void onInit() {
+    /*public void onInit() {
         //Checking if Network is connected or Serving in area
-        if(haveNetworkConnection() && matchPincode != null && status == "Delivered") {
+        if(activityHelper.haveNetworkConnection() && matchPincode != null && status == "Delivered") {
             replaceFragment(R.layout.fragment_main, null);
         }
-        else if(haveNetworkConnection() && matchPincode == null) {
+        else if(activityHelper.haveNetworkConnection() && matchPincode == null) {
             //replaceFragment(R.layout.fragment_);
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_address_found, null);
@@ -367,67 +304,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             replaceFragment(R.layout.fragment_no_internet_connection, null);
         }
-    }
+    }*/
 
 
 
-    public void findNetwork(){
-        //Checking Pincode lies within area
-        appLocationService = new AppLocationService(this);
-        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-        if (gpsLocation != null || networkLocation != null) {
-            if(gpsLocation != null) {
-                latitude = gpsLocation.getLatitude();
-                longitude = gpsLocation.getLongitude();
-            }
-            else {
-                latitude = networkLocation.getLatitude();
-                longitude = networkLocation.getLongitude();
-            }
-            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-            try {
-                List<Address> addressList = geocoder.getFromLocation(
-                        latitude, longitude, 1);
-                if (addressList != null && addressList.size() > 0) {
-                    Address address = addressList.get(0);
 
-                    try {
-                        List<Address> updatedAddressList = geocoder.getFromLocation(
-                                address.getLatitude(), address.getLongitude(), 1);
-                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                            updatedAddress = updatedAddressList.get(0);
-                            Log.v("address","Updated Address = "+updatedAddress+"");
-                        }
-                    }
-                    catch (Exception e) {
-
-                    }
-                    final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher(updatedAddress.toString() );
-                    if ( m.find() ) {
-                        pincode =  m.group(0);
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(address.getPostalCode());
-                }
-            }catch (IOException e) {
-            }
-        } else {
-            showLocationAlert();
-        }
-
-        for(int i = 0; i < latlong.length ; i++) {
-            if(latlong[i].equals(pincode)){
-                matchPincode = pincode;
-                break;
-            }
-            else {
-                matchPincode = null;
-            }
-
-        }
-    }
 
 
 
@@ -435,7 +316,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     /**
      * Updates the registration for push notifications.
      */
-    private void updateRegistration(String userId) {
+    public void updateRegistration(String userId) {
         gcm = GoogleCloudMessaging.getInstance(this);
 
         // 1. Grab the shared RestAdapter instance.
@@ -473,7 +354,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-    private boolean checkPlayServices() {
+    public boolean checkPlayServices() {
         final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
@@ -549,22 +430,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
 
 
-    public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        return haveConnectedWifi || haveConnectedMobile;
-    }
 
 
 
@@ -585,7 +450,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        if (!haveNetworkConnection()) {
+        if (!activityHelper.haveNetworkConnection()) {
             position = 99;
         }
             switch (position) {
@@ -809,7 +674,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if(!haveNetworkConnection()) {
+        if(!activityHelper.haveNetworkConnection()) {
             id = R.layout.fragment_no_internet_connection;
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }

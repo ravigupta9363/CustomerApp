@@ -21,7 +21,7 @@ public class MyApplication extends Application {
     private Office office;
     private List<Retailer> retailerList = new ArrayList<>();
 
-    public List<File> getImageFiles() {
+    /*public List<File> getImageFiles() {
         return imageFiles;
     }
 
@@ -29,19 +29,24 @@ public class MyApplication extends Application {
         this.imageFiles = imageFiles;
     }
 
-    private List<File> imageFiles = new ArrayList<>();
+    private List<File> imageFiles = new ArrayList<>();*/
 
     //private List<RequestCreator> imageList = new ArrayList<>();
 
 
 
-    /*public List<RequestCreator> getImageList() {
+    List<RequestCreator> imageList;
+
+    public List<RequestCreator> getImageList() {
         return imageList;
     }
 
     public void setImageList(List<RequestCreator> imageList) {
         this.imageList = imageList;
-    }*/
+    }
+
+
+
 
     public List<Retailer> getRetailerList() {
         return retailerList;

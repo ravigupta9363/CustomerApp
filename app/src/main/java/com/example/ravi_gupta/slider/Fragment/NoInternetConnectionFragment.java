@@ -74,7 +74,7 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
+                /*if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
                     mainActivity.replaceFragment(R.layout.fragment_main, null);
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     progressBar.setVisibility(View.VISIBLE);
@@ -87,7 +87,8 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
                     //mainActivity.getSupportActionBar().hide();
                     //mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                     //mainActivity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-                }
+                }*/
+                mainActivity.getActivityHelper().startHelperActivity();
             }
         });
 

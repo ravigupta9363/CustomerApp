@@ -35,8 +35,10 @@ import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Location.LocationAddress;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
+import com.squareup.picasso.RequestCreator;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,36 +57,23 @@ import java.util.TimerTask;
  * FFFEFC
  */
 public class MainFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     ViewPagerCustomDuration viewPager;
     PagerAdapter pagerAdapter;
     int[] sliderItems;
     Timer timer;
-    String newAddress;
-    String address1;
-    String address2;
     int page = 1;
-    AppLocationService appLocationService;
     EditText disabledocationEditText;
     ImageButton menuButton;
     ImageButton cartButton;
     TextView toolbarTitle;
     public TextView cartItems;
-    boolean isItemClickable;
     MainActivity mainActivity;
-    String cartNumber;
+    //String cartNumber;
     public static String TAG = "MainFragment";
     DatabaseHelper databaseHelper;
-    double latitude;
-    double longitude;
     String result;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    MyApplication myApplication;
+    List<RequestCreator> requestCreatorList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,67 +91,24 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
+        myApplication = (MyApplication)mainActivity.getApplication();
+        requestCreatorList = myApplication.getImageList();
+
         databaseHelper = new DatabaseHelper(getActivity());
-        sliderItems = new int[]{R.drawable.slider_three,R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
-
-        /*appLocationService = new AppLocationService(getActivity());
-        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-        if (gpsLocation != null) {
-            double latitude = gpsLocation.getLatitude();
-            double longitude = gpsLocation.getLongitude();
-
-        } else {
-            showSettingsAlert();
-        }*/
-
-        appLocationService = new AppLocationService(getActivity());
-        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-        if (gpsLocation != null || networkLocation != null) {
-            if(gpsLocation != null) {
-                latitude = gpsLocation.getLatitude();
-                longitude = gpsLocation.getLongitude();
-            }
-            else {
-                latitude = networkLocation.getLatitude();
-                longitude = networkLocation.getLongitude();
-            }
-            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            try {
-                List<Address> addressList = geocoder.getFromLocation(
-                        latitude, longitude, 1);
-                if (addressList != null && addressList.size() > 0) {
-                    Address address = addressList.get(0);
-                    try {
-                        List<Address> updatedAddressList = geocoder.getFromLocation(
-                                address.getLatitude(), address.getLongitude(), 1);
-                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                            Address updatedAddress = addressList.get(0);
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                                sb.append(address.getAddressLine(i)).append("\n");
-                                Log.v("locality", "Address = " + address.getAddressLine(i) + "");
-                            }
-                            sb.append(address.getLocality()).append("\n");
-                            Log.v("locality", address.getPostalCode() + "");
-                            sb.append(address.getPostalCode()).append("\n");
-                            sb.append(address.getCountryName());
-                            result = sb.toString();
-
-                        }
-                    }
-                    catch (IOException e) {
-
-                    }
-                }
-            }catch (IOException e) {
-            }
-        } else {
-            showSettingsAlert();
+        Address address = mainActivity.getActivityHelper().getUpdatedAddress();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+            sb.append(address.getAddressLine(i)).append("\n");
         }
+        sb.append(address.getLocality()).append("\n");
+        sb.append(address.getPostalCode()).append("\n");
+        sb.append(address.getCountryName());
+        result = sb.toString();
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -170,23 +116,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-
-        Drawable drawable = getResources().getDrawable(R.mipmap.dc_location);
-        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.7),
-                (int) (drawable.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
-
-
         viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
         disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
         menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
         cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
         cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
-        pagerAdapter = new ViewPagerAdapter(getActivity(), sliderItems, viewPager);
+        pagerAdapter = new ViewPagerAdapter(getActivity(), requestCreatorList, viewPager);
 
         viewPager.setPadding(40, 0, 40, 0);
         viewPager.setClipToPadding(false);
@@ -198,12 +134,11 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
 
-        disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
         disabledocationEditText.setText(result);
-        Log.v("address","Display Address = "+result);
+        Log.d("address", "Display Address = " + result);
 
-        toolbarTitle.setTypeface(typeface2);
-        String cartItem = databaseHelper.getPresciptionCount()+"";
+
+        //String cartItem = databaseHelper.getPresciptionCount()+"";
 
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,17 +154,17 @@ public class MainFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        disabledocationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // mainActivity.replaceFragment(R.id.fragment_main_edittext1, null);
-               // Log.v("Result","Called");
-                if(mainActivity.enableEditText == true)
-                showLocationAlert();
-            }
-        });
+
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
+        toolbarTitle.setTypeface(typeface2);
+        Drawable drawable = getResources().getDrawable(R.mipmap.dc_location);
+        drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.7),
+                (int) (drawable.getIntrinsicHeight() * 0.7));
+        ScaleDrawable sd = new ScaleDrawable(drawable, 0, 1f, 1f);
+        disabledocationEditText.setCompoundDrawables(sd.getDrawable(), null, null, null);
         return rootview;
     }
+
 
     public void pageSwitcher(int seconds) {
         timer = new Timer(); // At this line a new Thread will be created
@@ -274,114 +209,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    public void showLocationAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                getActivity());
-        alertDialog.setMessage("Use my location from google maps?");
-        alertDialog.setPositiveButton("Update",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-                        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-                        if (gpsLocation != null || networkLocation != null) {
-                            if(gpsLocation != null) {
-                                latitude = gpsLocation.getLatitude();
-                                longitude = gpsLocation.getLongitude();
-                            }
-                            else {
-                                latitude = networkLocation.getLatitude();
-                                longitude = networkLocation.getLongitude();
-                            }
-                            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                            try {
-                                List<Address> addressList = geocoder.getFromLocation(
-                                        latitude, longitude, 1);
-                                if (addressList != null && addressList.size() > 0) {
-                                    Address address = addressList.get(0);
-                                    try {
-                                        List<Address> updatedAddressList = geocoder.getFromLocation(
-                                                address.getLatitude(), address.getLongitude(), 1);
-                                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                                            Address updatedAddress = addressList.get(0);
-                                            LocationAddress locationAddress = new LocationAddress();
-                                            locationAddress.getAddressFromLocation(updatedAddress.getLatitude(), updatedAddress.getLongitude(),
-                                                    getActivity().getApplicationContext(), new GeocoderHandler());
-                                        }
-                                    }
-                                    catch (IOException e) {
-
-                                    }
-                                }
-                            }catch (IOException e) {
-                            }
-                        } else {
-                            showSettingsAlert();
-                        }
-
-                    }
-                });
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialog.show();
-    }
-
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                getActivity());
-        alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
-        alertDialog.setPositiveButton("Settings",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(
-                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        getActivity().startActivity(intent);
-                    }
-                });
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialog.show();
-    }
-
-    private class GeocoderHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            String locationAddress;
-            switch (message.what) {
-                case 1:
-                    Bundle bundle = message.getData();
-
-                    locationAddress = bundle.getString("address");
-                    break;
-                default:
-                    locationAddress = null;
-            }
-            switch (mainActivity.updateLocation) {
-
-                case 0 :  disabledocationEditText.setText(locationAddress);
-                    break;
-                case 1 : newAddress = getArguments().getString("newAddress");
-                        disabledocationEditText.setText(newAddress);
-                    break;
-                case 2 : address1 = getArguments().getString("newAddress1");
-                         address2 = getArguments().getString("newAddress2");
-                         disabledocationEditText.setText(address1+", "+address2);
-                    break;
-                case 3 : disabledocationEditText.setText(locationAddress);
-                    break;
-            }
-
-        }
-    }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -400,11 +227,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    private void hiddenKeyboard(View v) {
-        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override
@@ -445,45 +267,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
                     return true;
                 }
                 return false;
-                }
+            }
         });
-        new AsyncCaller().execute();
+        //new AsyncCaller().execute();
 
-
-    }
-
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //this method will be running on UI thread
-        }
 
     }
 
 
 }
-
-
-/* SpannableString s = new SpannableString(mainActivity.actionbarTitle);
-        s.setSpan(new TypefaceSpan(mainActivity, "OpenSans-Regular.ttf"), 0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.setSpan(new ForegroundColorSpan(Color.rgb(51,51,51)), 0, s.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        s.setSpan(new RelativeSizeSpan(0.9f), 0,10, 0);
-        android.support.v7.app.ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setTitle(s);*/

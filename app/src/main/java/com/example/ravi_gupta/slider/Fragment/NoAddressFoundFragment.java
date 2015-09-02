@@ -87,7 +87,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
+                /*if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
                     mainActivity.replaceFragment(R.layout.fragment_main, null);
                 }
                 else if(!mainActivity.haveNetworkConnection()) {
@@ -97,7 +97,8 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
                 }
                 else {
 
-                }
+                }*/
+                mainActivity.getActivityHelper().startHelperActivity();
             }
         });
 
