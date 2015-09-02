@@ -153,6 +153,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String tempPhone;
     public boolean invalidEmail = false;
     private static LocalInstallation installation;
+    final MyApplication app = (MyApplication) getApplication();
 
 
     private CustomerRepository customerRepo;

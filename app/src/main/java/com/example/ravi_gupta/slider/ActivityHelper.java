@@ -1,12 +1,9 @@
 package com.example.ravi_gupta.slider;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,18 +11,9 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.ImageView;
 
 import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
-import com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Office;
@@ -47,13 +35,13 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Created by robins on 2/9/15.
+ */
+public class ActivityHelper {
 
-public class SplashActivity extends AppCompatActivity implements NoInternetConnectionFragment.OnFragmentInteractionListener {
-
-    private final int SPLASH_DISPLAY_LENGTH = 1500;
+    /**====================CONSTANTS========================*/
     AppLocationService appLocationService;
-    //String[] latlong = {"323001","122002","302033","122010","122008","512272"};
-    //public String matchPincode;
     String pincode;
     double longitude;
     double latitude;
@@ -65,53 +53,40 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
     boolean internetConnection = false;
     boolean imageDownloaded = false;
     boolean retailerListFetched = false;
-    SplashActivity that;
-    final MyApplication app = (MyApplication) getApplication();
+    MainActivity activity;
+    MyApplication application;
+    /**=====================================================*/
 
 
+    /**
+     * ActivityHelper Constructor
+     * @param activity
+     * @param application
+     */
+    public ActivityHelper(MainActivity activity, MyApplication application){
+        this.activity = activity;
+        this.application = application;
+        orderStatusDataBase = new OrderStatusDataBase(activity);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-
-        getSupportActionBar().hide();
-        that = this;
-        /* Create an Intent that will start the Menu-Activity. */
-        mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-        orderStatusDataBase = new OrderStatusDataBase(this);
-
-        this.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //Your code to run in GUI thread here
                 startSplashActivity();
             }//public void run() {
         });
-
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_splash, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            appLocationService = new AppLocationService(activity);
+            Location location = appLocationService
+                    .getLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                //replaceFragment(R.layout.fragment_main,null);
+            }
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -120,7 +95,7 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
@@ -137,7 +112,7 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
     public String findNetwork(){
         String pincode = "";
         //Checking Pincode lies within area
-        appLocationService = new AppLocationService(this);
+        appLocationService = new AppLocationService(activity);
         Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
         Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
         if (gpsLocation != null || networkLocation != null) {
@@ -149,7 +124,7 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
                 latitude = networkLocation.getLatitude();
                 longitude = networkLocation.getLongitude();
             }
-            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            Geocoder geocoder = new Geocoder(activity.getApplicationContext(), Locale.getDefault());
             try {
                 List<Address> addressList = geocoder.getFromLocation(
                         latitude, longitude, 1);
@@ -186,16 +161,15 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
 
 
     public void showLocationAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
         alertDialog.setMessage("This app requires google location to be enabled");
         alertDialog.setPositiveButton("Setting",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String action = "com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS";
                         Intent settings = new Intent(action);
-                        startActivityForResult(settings, 1);
-                        startActivity(settings);
+                        activity.startActivityForResult(settings, 1);
+                        activity.startActivity(settings);
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -206,21 +180,6 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
                 });
         alertDialog.show();
     }
-
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            appLocationService = new AppLocationService(this);
-            Location location = appLocationService
-                    .getLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                //replaceFragment(R.layout.fragment_main,null);
-            }
-        }
-    }
-
-
 
 
     /**
@@ -236,8 +195,7 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
         internetConnection = haveNetworkConnection();
         pincode = findNetwork();
         if(internetConnection) {
-            final MyApplication app = (MyApplication) getApplication();
-            final RestAdapter adapter = app.getLoopBackAdapter();
+            final RestAdapter adapter = application.getLoopBackAdapter();
 
             final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
             officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
@@ -249,13 +207,13 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
                         mainIntent.putExtra("keyFragment", 2);
                         endActivity();
                     } else {
-                        app.setOffice(officeObj);
+                        application.setOffice(officeObj);
                         officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                             @Override
                             public void onSuccess(List<Retailer> retailerArray) {
                                 Log.i(TAG, "Successfully fetched retailer data from the server");
                                 retailerListFetched = true;
-                                app.setRetailerList(retailerArray);
+                                application.setRetailerList(retailerArray);
                                 if(imageDownloaded && retailerListFetched){
                                     //Go to main fragment
                                     resolveRoute();
@@ -291,11 +249,10 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
 
 
 
-
     public void endActivity(){
         //Start the main activity
-        SplashActivity.this.startActivity(mainIntent);
-        SplashActivity.this.finish();
+        activity.startActivity(mainIntent);
+        activity.finish();
     }
 
 
@@ -310,18 +267,18 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
                     public void onSuccess(List<File> objects) {
                         imageDownloaded = true;
                         //Now saving the images to the application ..
-                        final MyApplication app = (MyApplication) getApplication();
+
                         String baseURL = Constants.baseURL;
                         List<RequestCreator> requestCreators = new ArrayList<RequestCreator>();
-                        for(File file : objects){
+                        for (File file : objects) {
                             Uri imageUri = Uri.parse(baseURL + "/api/containers/" + file.getContainer() + "/download/" + file.getName());
-                            RequestCreator requestCreator = Picasso.with(SplashActivity.this).load(imageUri);
+                            RequestCreator requestCreator = Picasso.with(activity).load(imageUri);
                             requestCreators.add(requestCreator);
                         }
 
-                        app.setImageFiles(objects);
+                        application.setImageFiles(objects);
                         //app.setImageList(imageList);
-                        if(imageDownloaded && retailerListFetched){
+                        if (imageDownloaded && retailerListFetched) {
                             //Go to main fragment
                             //Now resolving the route..
                             resolveRoute();
@@ -343,60 +300,6 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
     }
 
 
-
-
-    /*public RequestCreator getImageUri(File remoteFile) {
-        String baseURL = Constants.baseURL;
-        Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
-        return Picasso.with(SplashActivity.this).load(imageUri);
-        //return imageUri;
-    }*/
-
-
-
-
-  /*  private class GetAllImages extends AsyncTask<Void, Void, Void>
-    {
-        public List<File> files = new ArrayList<>();
-        public GetAllImages(List<File> files_){
-            files = files_;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread..
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            app.setImageFiles(files);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //this method will be running on UI thread
-            //Adding the imageFetchValue to be true..
-            Log.d(TAG, "All Images downloaded successfully..");
-
-            imageDownloaded = true;
-            //Now saving the images to the application ..
-            final MyApplication app = (MyApplication) getApplication();
-            //app.setImageList(imageList);
-            if(imageDownloaded && retailerListFetched){
-                //Go to main fragment
-                //Now resolving the route..
-                resolveRoute();
-            }
-        }
-
-    }*/
-
-
-
     public void resolveRoute(){
         //On success
         //Getting the value of delivery status..
@@ -416,8 +319,6 @@ public class SplashActivity extends AppCompatActivity implements NoInternetConne
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
+
 }

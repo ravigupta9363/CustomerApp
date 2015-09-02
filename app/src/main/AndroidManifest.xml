@@ -50,6 +50,10 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver android:name=".Fragment.IncomingSmsFragment$IncomingSms" >
@@ -59,17 +63,14 @@
         </receiver>
 
 
-        <activity
+       <!-- <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash"
             android:screenOrientation="portrait">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
-        </activity>
+
+        </activity>-->
 
         <!--
           WakefulBroadcastReceiver that will receive intents from GCM
