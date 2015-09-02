@@ -4,6 +4,7 @@ package com.example.ravi_gupta.slider;
  * Created by robins on 26/8/15.
  */
 import android.app.Application;
+import android.net.Uri;
 
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
@@ -18,14 +19,14 @@ public class MyApplication extends Application {
     private Office office;
     private List<Retailer> retailerList;
 
-    private List<RequestCreator> imageList;
+    private List<Uri> imageList;
 
 
-    public List<RequestCreator> getImageList() {
+    public List<Uri> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<RequestCreator> imageList) {
+    public void setImageList(List<Uri> imageList) {
         this.imageList = imageList;
     }
 

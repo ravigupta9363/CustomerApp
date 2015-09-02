@@ -323,10 +323,10 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-    public RequestCreator downloadImages(File remoteFile) {
+    public Uri getImageUri(File remoteFile) {
         String baseURL = Constants.baseURL;
         Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
-        return Picasso.with(that).load(imageUri);
+        return imageUri;
     }
 
 
@@ -335,7 +335,7 @@ public class SplashActivity extends AppCompatActivity {
     private class GetAllImages extends AsyncTask<Void, Void, Void>
     {
         public List<File> files;
-        public List<RequestCreator> imageList;
+        public List<Uri> imageList;
         public GetAllImages(List<File> files_){
             files = files_;
         }
@@ -349,7 +349,8 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             for(File file : files){
-                imageList.add(downloadImages(file));
+                Uri requestCreator = getImageUri(file);
+                imageList.add(requestCreator);
             }
             return null;
         }
