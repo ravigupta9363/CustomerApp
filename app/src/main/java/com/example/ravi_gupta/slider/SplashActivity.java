@@ -50,14 +50,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private final int SPLASH_DISPLAY_LENGTH = 1500;
     AppLocationService appLocationService;
-    String[] latlong = {"323001","122002","302033","122010","122008","512272"};
-    public String matchPincode;
+    //String[] latlong = {"323001","122002","302033","122010","122008","512272"};
+    //public String matchPincode;
     String pincode;
     double longitude;
     double latitude;
     public Address updatedAddress;
     Intent mainIntent;
-    String status = "Delivered";
+    //String status = "Delivered";
     String TAG = "drugcorner";
     OrderStatusDataBase orderStatusDataBase;
     boolean internetConnection = false;
@@ -77,8 +77,14 @@ public class SplashActivity extends AppCompatActivity {
         /* Create an Intent that will start the Menu-Activity. */
         mainIntent = new Intent(SplashActivity.this, MainActivity.class);
         orderStatusDataBase = new OrderStatusDataBase(this);
-        AsyncCaller asyncCaller = new AsyncCaller();
-        asyncCaller.execute();
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //Your code to run in GUI thread here
+
+            }//public void run() {
+        });
 
     }
 
@@ -210,192 +216,182 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Keywords
+     * Fragment codes 1 = Order Status Fragment
+     * Fragment codes 0 = Main Fragment.
+     * Fragment codes 2 = No Address found.
+     * Fragment codes 3 = No Internet Access.
+     *
+     * @return
+     */
+    private void startSplashActivity(){
+        internetConnection = haveNetworkConnection();
+        pincode = findNetwork();
+        if(internetConnection) {
+            final MyApplication app = (MyApplication) getApplication();
+            final RestAdapter adapter = app.getLoopBackAdapter();
 
-
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-        AsyncCaller asyncCaller = this;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread
-
-        }
-
-
-        /**
-         * Keywords
-         * Fragment codes 1 = Order Status Fragment
-         * Fragment codes 0 = Main Fragment.
-         * Fragment codes 2 = No Address found.
-         * Fragment codes 3 = No Internet Access.
-         * @param params
-         * @return
-         */
-        @Override
-        protected Void doInBackground(Void... params) {
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-            internetConnection = haveNetworkConnection();
-            pincode = findNetwork();
-            return null;
-        }//doInBackground
-
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            if(internetConnection) {
-                final MyApplication app = (MyApplication) getApplication();
-                final RestAdapter adapter = app.getLoopBackAdapter();
-
-                final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
-                officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
-                    @Override
-                    public void onSuccess(Office officeObj) {
-                        if (officeObj == null) {
-                            Log.i(TAG, "We are not providing service in your area.");
-                            //We are not providing service in your area..
-                            mainIntent.putExtra("keyFragment", 2);
-                        } else {
-                            app.setOffice(officeObj);
-
-                            officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
-                                @Override
-                                public void onSuccess(List<Retailer> retailerArray) {
-                                    Log.i(TAG, "Successfully fetched retailer data from the server");
-                                    retailerListFetched = true;
-                                    app.setRetailerList(retailerArray);
-                                    if(imageDownloaded && retailerListFetched){
-                                        //Go to main fragment
-                                        resolveRoute();
-                                    }
-                                }
-                                @Override
-                                public void onError(Throwable t) {
-                                    Log.d(TAG, "No retailer found in this area");
-                                }
-                            });
-
-                            //Download all the images..
-                            fetchAllImages(adapter);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Log.e(TAG, "Error loading office settings from server");
-                        //Show no internet connection..
-                        mainIntent.putExtra("keyFragment", 3);
-                    }
-                }); //SearchOfficePincode method
-            }else{
-                //Show no internet connection..
-                mainIntent.putExtra("keyFragment", 3);
-            }
-
-            //Start the main activity
-            SplashActivity.this.startActivity(mainIntent);
-            SplashActivity.this.finish();
-            //this method will be running on UI thread
-        }//onPostExecute
-
-
-        public void fetchAllImages(RestAdapter adapter){
-            ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
-            containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
+            final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+            officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
                 @Override
-                public void onSuccess(Container container) {
-                    container.getAllFiles(new ListCallback<File>() {
-                        @Override
-                        public void onSuccess(List<File> objects) {
-                            GetAllImages getAllImages = new GetAllImages(objects);
-                            getAllImages.execute();
-                        }
+                public void onSuccess(Office officeObj) {
+                    if (officeObj == null) {
+                        Log.i(TAG, "We are not providing service in your area.");
+                        //We are not providing service in your area..
+                        mainIntent.putExtra("keyFragment", 2);
+                        endActivity();
+                    } else {
+                        app.setOffice(officeObj);
 
-                        @Override
-                        public void onError(Throwable t) {
-                            Log.e(Constants.TAG, "Error fetching all the offers images.");
-                        }
-                    });
+                        officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+                            @Override
+                            public void onSuccess(List<Retailer> retailerArray) {
+                                Log.i(TAG, "Successfully fetched retailer data from the server");
+                                retailerListFetched = true;
+                                app.setRetailerList(retailerArray);
+                                if(imageDownloaded && retailerListFetched){
+                                    //Go to main fragment
+                                    resolveRoute();
+                                }
+                            }
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.d(TAG, "No retailer found in this area");
+                            }
+                        });
+
+                        //Download all the images..
+                        fetchAllImages(adapter);
+                    }
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    Log.e(Constants.TAG, "Error founding the containers.");
+                    Log.e(TAG, "Error loading office settings from server");
+                    //Show no internet connection..
+                    mainIntent.putExtra("keyFragment", 3);
+                    endActivity();
                 }
-            });
+            }); //SearchOfficePincode method
+        }else{
+            //Show no internet connection..
+            mainIntent.putExtra("keyFragment", 3);
+            endActivity();
         }
-
-
-        public RequestCreator downloadImages(File remoteFile) {
-            String baseURL = Constants.baseURL;
-            Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
-            return Picasso.with(that).load(imageUri);
-        }
+    }
 
 
 
-        private class GetAllImages extends AsyncTask<Void, Void, Void>
-        {
-            public List<File> files;
-            public List<RequestCreator> imageList;
-            public GetAllImages(List<File> files){
-                this.files = files;
+
+
+
+
+
+    public void endActivity(){
+        //Start the main activity
+        SplashActivity.this.startActivity(mainIntent);
+        SplashActivity.this.finish();
+    }
+
+
+    public void fetchAllImages(RestAdapter adapter){
+        ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
+        containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
+            @Override
+            public void onSuccess(Container container) {
+                container.getAllFiles(new ListCallback<File>() {
+                    @Override
+                    public void onSuccess(List<File> objects) {
+                        GetAllImages getAllImages = new GetAllImages(objects);
+                        getAllImages.execute();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(Constants.TAG, "Error fetching all the offers images.");
+                    }
+                });
             }
 
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                //this method will be running on UI thread..
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "Error founding the containers.");
             }
+        });
+    }
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                for(File file : files){
-                    imageList.add(downloadImages(file));
-                }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                //this method will be running on UI thread
-                //Adding the imageFetchvalue to the true..
-                Log.d(TAG, "All images downloaded successfully..");
-                imageDownloaded = true;
-                //Now saving the images to the application ..
-                final MyApplication app = (MyApplication) getApplication();
-                app.setImageList(imageList);
-                if(imageDownloaded && retailerListFetched){
-                    //Go to main fragment
-                    //Now resolving the route..
-                    asyncCaller.resolveRoute();
-                }
-            }
+    public RequestCreator downloadImages(File remoteFile) {
+        String baseURL = Constants.baseURL;
+        Uri imageUri = Uri.parse(baseURL + "/api/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
+        return Picasso.with(that).load(imageUri);
+    }
 
+
+
+    private class GetAllImages extends AsyncTask<Void, Void, Void>
+    {
+        public List<File> files;
+        public List<RequestCreator> imageList;
+        public GetAllImages(List<File> files){
+            this.files = files;
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //this method will be running on UI thread..
+        }
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            for(File file : files){
+                imageList.add(downloadImages(file));
+            }
+            return null;
+        }
 
-        public void resolveRoute(){
-            //On success
-            //Getting the value of delivery status..
-            String pendingDelivery = orderStatusDataBase.getOrderStatus();
-            Log.d(TAG, "Checking value of pending delivery =  " + pendingDelivery);
-            if (pendingDelivery == null) {
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //this method will be running on UI thread
+            //Adding the imageFetchvalue to the true..
+            Log.d(TAG, "All images downloaded successfully..");
+            imageDownloaded = true;
+            //Now saving the images to the application ..
+            final MyApplication app = (MyApplication) getApplication();
+            app.setImageList(imageList);
+            if(imageDownloaded && retailerListFetched){
                 //Go to main fragment
-                mainIntent.putExtra("keyFragment", 0);
-            } else {
-                //TODO CHECK VALUE FROM SERVER
-                //Check from server and get the status of main settings
-                Log.d(TAG, "Delivery status pending..");
-                mainIntent.putExtra("keyFragment", 1);
+                //Now resolving the route..
+                resolveRoute();
             }
         }
 
-    }//Async task
+    }
+
+
+
+    public void resolveRoute(){
+        //On success
+        //Getting the value of delivery status..
+        String pendingDelivery = orderStatusDataBase.getOrderStatus();
+        Log.d(TAG, "Checking value of pending delivery =  " + pendingDelivery);
+        if (pendingDelivery == null) {
+            //Go to main fragment
+            mainIntent.putExtra("keyFragment", 0);
+        } else {
+            //TODO CHECK VALUE FROM SERVER
+            //Check from server and get the status of main settings
+            Log.d(TAG, "Delivery status pending..");
+            mainIntent.putExtra("keyFragment", 1);
+        }
+
+        endActivity();
+    }
+
+
 
 
 
