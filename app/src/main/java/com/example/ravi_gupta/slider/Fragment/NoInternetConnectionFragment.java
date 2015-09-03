@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -25,17 +28,12 @@ import com.example.ravi_gupta.slider.R;
  * create an instance of this fragment.
  */
 public class NoInternetConnectionFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     MainActivity mainActivity;
+    ProgressBar progressBar;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     public static String TAG = "NoInternetConnectionFragment";
-
+    NoInternetConnectionFragment that;
     private OnFragmentInteractionListener mListener;
 
 
@@ -54,6 +52,7 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        that = this;
     }
 
     @Override
@@ -64,36 +63,51 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
 
         TextView textView = (TextView)rootview.findViewById(R.id.fragment_no_internet_connection_textview1);
         Button retryButton = (Button)rootview.findViewById(R.id.fragment_no_internet_connection_button1);
-        final ProgressBar progressBar = (ProgressBar)rootview.findViewById(R.id.fragment_no_internet_connection_progressbar1);
-
+        progressBar = (ProgressBar)rootview.findViewById(R.id.fragment_no_internet_connection_progressbar1);
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
 
         textView.setTypeface(typeface2);
         retryButton.setTypeface(typeface2);
-
+        progressBar.setVisibility(View.GONE);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
-                    mainActivity.replaceFragment(R.layout.fragment_main, null);
-                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-                else if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode == null) {
-                    //replaceFragment(R.layout.fragment_);
-                    mainActivity.replaceFragment(R.layout.fragment_no_address_found, null);
-                }
-                else {
-                    //mainActivity.getSupportActionBar().hide();
-                    //mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    //mainActivity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-                }*/
-                mainActivity.getActivityHelper().startHelperActivity();
+                runSplashActivityInThread();
             }
         });
 
         return rootview;
     }
+
+
+    private void runSplashActivityInThread() {
+
+        new AsyncTask<Void, Void, Void>()
+        {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+            }
+            @Override
+            protected Void doInBackground(Void... params) {
+                //this method will be running on background thread so don't update UI frome here
+                //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+                mainActivity.getActivityHelper().startHelperActivity();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+            }
+
+        }.execute(null, null, null);
+    }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

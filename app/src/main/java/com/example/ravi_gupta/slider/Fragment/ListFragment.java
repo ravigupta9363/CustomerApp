@@ -42,7 +42,6 @@ public class ListFragment extends android.support.v4.app.Fragment {
     ShopListAdapter shopListAdapter;
     ArrayList<ShopListDetails> shopListDetailses = new ArrayList<ShopListDetails>();
     MainActivity mainActivity;
-    ProgressBar spinner;
     RetailerRepository retailerRepository;
     private OnFragmentInteractionListener mListener;
     private MyApplication application;
@@ -68,7 +67,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
         mainActivity = (MainActivity) getActivity();
         retailerRepository = mainActivity.restAdapter.createRepository(RetailerRepository.class);
         mListview = (ListView) rootview.findViewById(R.id.shopListview);
-        spinner=(ProgressBar)rootview.findViewById(R.id.progressBar);
+
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
         application = (MyApplication)getActivity().getApplication();
@@ -97,7 +96,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
         //new AsyncCaller().execute();
 
-        spinner.setVisibility(View.VISIBLE);
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +113,6 @@ public class ListFragment extends android.support.v4.app.Fragment {
                 }
                 shopListAdapter.notifyDataSetChanged();
                 //this method will be running on UI thread
-                spinner.setVisibility(View.GONE);
             }//public void run() {
         });
 

@@ -31,5 +31,6 @@ dependencies {
     compile 'me.relex:circleindicator:1.1.5@aar'
     compile 'com.strongloop:loopback-sdk-android:1.5.+'
     compile "com.google.android.gms:play-services:7.0.+"
+    compile 'com.pnikosis:materialish-progress:1.5'
 
 }

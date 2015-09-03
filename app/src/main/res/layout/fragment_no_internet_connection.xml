@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:id="@+id/linear_layout">
 
    <ImageView
        android:layout_width="wrap_content"
@@ -45,14 +46,16 @@
         android:textSize="15sp"
         android:layout_marginBottom="50dp"/>
 
-        <ProgressBar
-            android:layout_centerInParent="true"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fragment_no_internet_connection_progressbar1"
-            android:visibility="gone"/>
 
     </LinearLayout>
+
+    <ProgressBar
+        android:layout_centerInParent="true"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout"
+        android:id="@+id/fragment_no_internet_connection_progressbar1"
+        android:layout_gravity="center"/>
 
 </RelativeLayout>

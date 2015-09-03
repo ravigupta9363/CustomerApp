@@ -1,9 +1,11 @@
 package com.example.ravi_gupta.slider;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,7 +13,9 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
@@ -22,6 +26,7 @@ import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
+import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
@@ -37,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * Created by robins on 2/9/15.
@@ -61,7 +67,7 @@ public class ActivityHelper {
     public Address getUpdatedAddress() {
         return updatedAddress;
     }
-
+    public ProgressDialog ringProgressDialog;
     /**=====================================================*/
 
 
@@ -73,7 +79,6 @@ public class ActivityHelper {
     public ActivityHelper(MainActivity activity, MyApplication application){
         this.activity = activity;
         this.application = application;
-        
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -83,6 +88,7 @@ public class ActivityHelper {
                 startHelperActivity();
             }//public void run() {
         });
+
     }
 
 
@@ -129,22 +135,7 @@ public class ActivityHelper {
 
 
 
-    public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        return haveConnectedWifi || haveConnectedMobile;
-    }
 
 
     public String findNetwork(){
@@ -230,56 +221,90 @@ public class ActivityHelper {
      * @return
      */
     public void startHelperActivity(){
-        internetConnection = haveNetworkConnection();
-        pincode = findNetwork();
-        if(internetConnection) {
-            final RestAdapter adapter = application.getLoopBackAdapter();
+        //this method will be running on UI thread
+        /**
+         * Launching dialog.
+         */
+        launchRingDialog(activity);
 
-            final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
-            officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
-                @Override
-                public void onSuccess(Office officeObj) {
-                    if (officeObj.getName() == null) {
-                        Log.i(Constants.TAG, "We are not providing service in your area.");
-                        //We are not providing service in your area..
-                        activity.replaceFragment(R.layout.fragment_no_address_found, null);
+        internetConnection = activity.haveNetworkConnection();
+        runOnUiThread(internetConnection);
+    }
 
-                    } else {
-                        application.setOffice(officeObj);
-                        officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
-                            @Override
-                            public void onSuccess(List<Retailer> retailerArray) {
-                                Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
-                                retailerListFetched = true;
-                                application.setRetailerList(retailerArray);
-                                if(imageDownloaded && retailerListFetched){
-                                    //Go to main fragment
-                                    resolveRoute();
-                                }
+
+    public void launchRingDialog(MainActivity activity) {
+        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...",	"Loading ...", true);
+        ringProgressDialog.setCancelable(true);
+    }
+
+
+    public void closeLoadingBar(){
+        ringProgressDialog.dismiss();
+    }
+
+
+    private void  runOnUiThread(final boolean internetConnection){
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (internetConnection) {
+
+                    pincode = findNetwork();
+                    final RestAdapter adapter = application.getLoopBackAdapter();
+
+                    final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+                    officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
+                        @Override
+                        public void onSuccess(Office officeObj) {
+                            if (officeObj.getName() == null) {
+                                Log.i(Constants.TAG, "We are not providing service in your area.");
+                                closeLoadingBar();
+                                //We are not providing service in your area..
+                                activity.replaceFragment(R.layout.fragment_no_address_found, null);
+
+                            } else {
+                                application.setOffice(officeObj);
+                                officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+                                    @Override
+                                    public void onSuccess(List<Retailer> retailerArray) {
+                                        Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
+                                        retailerListFetched = true;
+                                        application.setRetailerList(retailerArray);
+                                        if (imageDownloaded && retailerListFetched) {
+                                            //Go to main fragment
+                                            resolveRoute();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Log.d(Constants.TAG, "No retailer found in this area");
+                                    }
+                                });
+
+                                //Download all the images..
+                                fetchAllImages(adapter);
                             }
-                            @Override
-                            public void onError(Throwable t) {
-                                Log.d(Constants.TAG, "No retailer found in this area");
-                            }
-                        });
+                        }
 
-                        //Download all the images..
-                        fetchAllImages(adapter);
-                    }
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    Log.e(Constants.TAG, "Error loading office settings from server");
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.e(Constants.TAG, "Error loading office settings from server");
+                            closeLoadingBar();
+                            //Show no internet connection..
+                            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+                        }
+                    }); //SearchOfficePincode method
+                } else {
+                    closeLoadingBar();
                     //Show no internet connection..
                     activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-                }
-            }); //SearchOfficePincode method
-        }else{
-            //Show no internet connection..
-            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
 
-        }
+                }
+            }
+        });
+
     }
 
 
@@ -334,6 +359,7 @@ public class ActivityHelper {
 
     public void resolveRoute(){
         //On success
+        closeLoadingBar();
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();
         Log.d(Constants.TAG, "Checking value of pending delivery =  " );

@@ -10,13 +10,6 @@ android:layout_height="match_parent" tools:context="com.example.ravi_gupta.slide
         android:layout_height="wrap_content"
         android:id="@+id/shopListview" />
 
-    <ProgressBar
-        android:layout_centerInParent="true"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:visibility="gone"/>
 
 
 </RelativeLayout>

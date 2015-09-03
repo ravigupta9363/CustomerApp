@@ -42,6 +42,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -94,10 +95,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -203,6 +202,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public Address updatedAddress;
     String regid;
     String deviceId;
+    ProgressBar mainProgressBar;
 
 
 
@@ -259,8 +259,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
-        final MyApplication app = (MyApplication) getApplication();
-        activityHelper = new ActivityHelper(this, app);
     }
 
 
@@ -275,35 +273,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             } else {
                 // anonymous user
                 Log.d(TAG, "User not logged in ");
-                updateRegistration(null);
+                updateRegistration("anonymous");
             }
         } else {
             Log.e(TAG, "No valid Google Play Services APK found.");
         }
     }
-
-
-    /*public void onInit() {
-        //Checking if Network is connected or Serving in area
-        if(activityHelper.haveNetworkConnection() && matchPincode != null && status == "Delivered") {
-            replaceFragment(R.layout.fragment_main, null);
-        }
-        else if(activityHelper.haveNetworkConnection() && matchPincode == null) {
-            //replaceFragment(R.layout.fragment_);
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_address_found, null);
-        }
-        else {
-            //http://stackoverflow.com/questions/5065039/find-point-in-polygon-php
-            getSupportActionBar().hide();
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }
-    }*/
-
-
-
-
 
 
 
@@ -445,7 +420,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        if (!activityHelper.haveNetworkConnection()) {
+        if (!haveNetworkConnection()) {
             position = 99;
         }
             switch (position) {
@@ -665,11 +640,31 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
+    public boolean haveNetworkConnection() { // Checking internet connection and wifi connection
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = connectivityManager.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
+
+
 
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if(!activityHelper.haveNetworkConnection()) {
+        MyApplication app = (MyApplication)getApplication();
+        //ActivityHelper helper = new ActivityHelper(this, app);
+        if(!haveNetworkConnection()) {
             id = R.layout.fragment_no_internet_connection;
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
@@ -771,8 +766,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     orderStatusFragment();
                     break;
 
+                case R.id.fragment_past_order_button1:
+                    addProfile(ft,object);
+                    break;
+
                 case R.id.fragment_incoming_sms_textview4:
                     invalidEmail(ft,object);
+
             }
     }
 
@@ -1123,6 +1123,20 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.commitAllowingStateLoss();
     }
 
+    private void addProfile(FragmentTransaction ft,Object object) {
+        ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
+                findFragmentByTag(ProfileEditFragment.TAG);
+        if (profileEditFragment == null) {
+            profileEditFragment = ProfileEditFragment.newInstance();
+        }
+        String fragment = (String) object;
+        Bundle bundle = new Bundle();
+        bundle.putString("fragment", fragment);
+        profileEditFragment.setArguments(bundle);
+        ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
+        ft.commitAllowingStateLoss();
+    }
+
     /*=================REPLACE FRAGMENT METHOD AREA ENDS==========================*/
 
 
@@ -1179,7 +1193,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         super.onResume();
         // Check device for Play Services APK.
         checkPlayServices();
-        new AsyncCaller().execute();
+        final MyApplication app = (MyApplication) getApplication();
+        activityHelper = new ActivityHelper(this, app);
+        //new AsyncCaller().execute();
 
 
     }

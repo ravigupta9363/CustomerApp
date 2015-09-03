@@ -177,12 +177,15 @@ public class ProfileFragment extends android.support.v4.app.Fragment {
         customerEmail.setText("");
         customerPhone.setText("");
 
-        MainActivity activity = (MainActivity)getActivity();
+        final MainActivity activity = (MainActivity)getActivity();
+
         CustomerRepository repository = activity.getCustomerRepo();
         repository.logout(new VoidCallback(){
             @Override
             public void onSuccess() {
+
                 Log.i(TAG, "User successfully logout from the system..");
+                activity.registerInstallation(null);
             }
 
             @Override

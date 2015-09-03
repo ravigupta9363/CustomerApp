@@ -59,7 +59,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
     Button resendCode;
     MainActivity mainActivity;
     IncomingSms incomingSms;
-    public static ProgressBar progressBar;
     public static String OTP;
     private BroadcastReceiver receiver;
     ProfileDatabase profileDatabase;
@@ -115,7 +114,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         validationFailed =  (TextView)rootview.findViewById(R.id.fragment_incoming_sms_textview6);
         otpEdittext = (EditText)rootview.findViewById(R.id.fragment_incoming_sms_edittext1);
         resendCode = (Button)rootview.findViewById(R.id.fragment_incoming_sms_button2);
-        progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_incoming_sms_loading_indicator);
 
         titlebarTitle.setTypeface(typeface1);
         nextButton.setTypeface(typeface2);
@@ -125,7 +123,12 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         manuallyEntryText.setTypeface(typeface2);
         resendCode.setTypeface(typeface2);
         otpEdittext.setTypeface(typeface2);
-        progressBar.setVisibility(View.VISIBLE);
+
+
+        /**
+         * Loading the loading bar
+         */
+        mainActivity.getActivityHelper().launchRingDialog(mainActivity);
 
         phoneNumber.setText("+91 " + mainActivity.tempPhone);
 
@@ -148,7 +151,11 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                 //removeChangeListener();
                 //otpEdittext.setText("");
                 requestCodeOTP();
-                progressBar.setVisibility(View.VISIBLE);
+                /**
+                 * Loading the loading bar
+                 */
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+
                 resendCode.setVisibility(View.GONE);
                 validationFailed.setVisibility(View.GONE);
             }
@@ -279,22 +286,25 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int codeLength = start + count;
-                Log.i("drugcorner", codeLength + "");
+
                 String code = otpEdittext.getText().toString().trim();
                 if (codeLength == 4) {
                     hiddenKeyboard(otpEdittext);
-
-                    Log.i(TAG, "Sending login data to the server");
-
 
                     //Now registering the customer with OTP verification code given..
                     repository.OtpLogin(number, email, name, code, new UserRepository.LoginCallback<Customer>() {
                         @Override
                         public void onSuccess(AccessToken token, Customer currentUser) {
-                            Log.d(TAG, "Success saved data..");
+
+                            mainActivity.registerInstallation(currentUser);
+                            /**
+                             * Close the loading bar
+                             */
+                            mainActivity.getActivityHelper().closeLoadingBar();
+
                             //errorOccured = false;
                             //Registration done successfully.
-                            if (fragment.equals("ProfileFragment") || fragment.equals("DirectHomeFragment")) {
+                            if (fragment.equals("ProfileFragment") || fragment.equals("DirectHomeFragment") || fragment.equals("addProfile")) {
                                 mainActivity.onBackPressed();
                             } else if (fragment.equals("CartFragment") || fragment.equals("PastOrderFragment")) {
                                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
@@ -308,18 +318,21 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                             //Email exists or internet connection not avail..
                             Log.d(TAG, "Error occured in File IncomingSmsFragment");
                             Log.d(TAG, t.getMessage());
+                            /**
+                             * Close the loading bar
+                             */
+                            mainActivity.getActivityHelper().closeLoadingBar();
+
                             if (t.getMessage().equals("Unprocessable Entity")) {
                                 resendCode.setVisibility(View.GONE);
-                                progressBar.setVisibility(View.GONE);
                                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4, fragment);
                             } else if (t.getMessage().equals("Unauthorized")) {
                                 //errorOccured = true;
-                                progressBar.setVisibility(View.GONE);
+
                                 resendCode.setVisibility(View.VISIBLE);
                                 validationFailed.setVisibility(View.VISIBLE);
                             } else {
-                                //errorOccured = true;
-                                progressBar.setVisibility(View.GONE);
+
                                 resendCode.setVisibility(View.VISIBLE);
                             }
 
@@ -381,8 +394,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                         Pattern p = Pattern.compile("\\b\\d{4}\\b");
                         m = p.matcher(message);
                         while (m.find()) {
-                            //Log.v("SmsReceiver","Hello "+m.group());
-                            progressBar.setVisibility(View.GONE);
+
                             OTP = m.group().toString();
                             otpEdittext.setText(OTP);
 
