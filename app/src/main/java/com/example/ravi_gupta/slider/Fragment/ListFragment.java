@@ -84,9 +84,31 @@ public class ListFragment extends android.support.v4.app.Fragment {
                 }
             });
         }else{
-            Toast.makeText(mainActivity,"NOt serving in this particular hour",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity,"Not serving in this particular hour",Toast.LENGTH_LONG).show();
         }
-        new AsyncCaller().execute();
+
+        //new AsyncCaller().execute();
+
+        spinner.setVisibility(View.VISIBLE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                List<Retailer> retailers = application.getRetailerList();
+                for(Retailer retailerModel : retailers) {
+                    Map<String, Object> discount = retailerModel.getDiscount();
+                    Object allitems = "allitems";
+                    try{
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)((Integer)discount.get(allitems)).intValue() , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                    }catch (ClassCastException c){
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                    }
+
+                }
+                shopListAdapter.notifyDataSetChanged();
+                //this method will be running on UI thread
+                spinner.setVisibility(View.GONE);
+            }//public void run() {
+        });
 
 
         return rootview;
@@ -159,7 +181,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
 
 
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+   /* private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
 
         @Override
@@ -171,12 +193,12 @@ public class ListFragment extends android.support.v4.app.Fragment {
         protected Void doInBackground(Void... params) {
 
 
-/*
+*//*
             shopListDetailses.add(new ShopListDetails("Apollo Pharmacy",7,"P Block",true,true,99));
             shopListDetailses.add(new ShopListDetails("Gupta Pharmacy",5,"U Block",true,false,84));
             shopListDetailses.add(new ShopListDetails("Jindal Pharmacy",5,"Panchghami",true,true,45));
             shopListDetailses.add(new ShopListDetails("First Pharmacy", 3, "Sector 26", false, true, 33));
-*/
+*//*
             return null;
         }
 
@@ -199,5 +221,5 @@ public class ListFragment extends android.support.v4.app.Fragment {
             spinner.setVisibility(View.GONE);
         }
 
-    }
+    }*/
 }

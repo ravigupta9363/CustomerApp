@@ -11,6 +11,103 @@ import java.util.Map;
 public class Order extends Model {
 
     private int _id;
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
+    }
+
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getFlatNo() {
+        return flatNo;
+    }
+
+    public void setFlatNo(String flatNo) {
+        this.flatNo = flatNo;
+    }
+
+    public Map<String, String> getGeoLocation() {
+        return geoLocation;
+    }
+
+    public void setGeoLocation(Map<String, String> geoLocation) {
+        this.geoLocation = geoLocation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Map<String, Boolean> getCallCustomer() {
+        return callCustomer;
+    }
+
+    public void setCallCustomer(Map<String, Boolean> callCustomer) {
+        this.callCustomer = callCustomer;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getSendNotice() {
+        return sendNotice;
+    }
+
+    public void setSendNotice(String sendNotice) {
+        this.sendNotice = sendNotice;
+    }
+
+    public Map<String, String> getForwardOrder() {
+        return forwardOrder;
+    }
+
+    public void setForwardOrder(Map<String, String> forwardOrder) {
+        this.forwardOrder = forwardOrder;
+    }
+
+    public String getRetailerId() {
+        return retailerId;
+    }
+
+    public void setRetailerId(String retailerId) {
+        this.retailerId = retailerId;
+    }
+
+    public String getPrototypeStatusCode() {
+        return prototypeStatusCode;
+    }
+
+    public void setPrototypeStatusCode(String prototypeStatusCode) {
+        this.prototypeStatusCode = prototypeStatusCode;
+    }
+
+    public String getPrototypeOrderCancelReason() {
+        return prototypeOrderCancelReason;
+    }
+
+    public void setPrototypeOrderCancelReason(String prototypeOrderCancelReason) {
+        this.prototypeOrderCancelReason = prototypeOrderCancelReason;
+    }
+
     private String date;
     private String googleAddr;
     private String landmark;

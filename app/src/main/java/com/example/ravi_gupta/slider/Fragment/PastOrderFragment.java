@@ -44,10 +44,7 @@ import java.util.TimeZone;
  * create an instance of this fragment.
  */
 public class PastOrderFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     ListView mListview;
     PastOrderAdapter pastOrderAdapter;
     ArrayList<PastOrdersDetail> pastOrdersDetails = new ArrayList<PastOrdersDetail>();
@@ -58,10 +55,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     List<Map<String, String>> prescriptionStatic = null;
 
 
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -90,7 +83,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
        // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        //Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         new AsyncCaller().execute();
         mListview = (ListView) rootview.findViewById(R.id.fragment_past_order_listview1);
 
@@ -107,37 +100,44 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         Object userId = mainActivity.getCustomerRepo().getCurrentUserId();
         mainActivity.getCustomerRepo().getOrders(userId, new ListCallback<Order>() {
             @Override
-            public void onSuccess(List<Order> orderList) {
+            public void onSuccess(final List<Order> orderList) {
 //                Move to async task
-                if (orderList == null) {
+                if (orderList.size() == 0) {
                     noPastOrder.setVisibility(View.VISIBLE);
                     noPastOrderText.setVisibility(View.VISIBLE);
                     mListview.setVisibility(View.GONE);
+                }else {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Order order : orderList) {
+
+                                noPastOrder.setVisibility(View.GONE);
+                                noPastOrderText.setVisibility(View.GONE);
+                                mListview.setVisibility(View.VISIBLE);
+
+                                List<Map<String, String>> prescription = order.getPrescription();
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                                format.setTimeZone(TimeZone.getTimeZone("IST"));
+                                java.util.Date date = null;
+                                try {
+                                    date = format.parse(order.getDate());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                String time = date.toString().substring(12, 16);
+                                String orderDay = date.toString().substring(8, 10);
+                                String orderMonth = date.toString().substring(4, 7);
+                                String orderYear = date.toString().substring(30, 34);
+                                String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
+
+                                pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
+                            }
+                            pastOrderAdapter.notifyDataSetChanged();
+                        }//public void run() {
+                    });
                 }
-
-
-                for (Order order : orderList) {
-                    noPastOrder.setVisibility(View.GONE);
-                    noPastOrderText.setVisibility(View.GONE);
-                    mListview.setVisibility(View.VISIBLE);
-                    List<Map<String, String>> prescription = order.getPrescription();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-                    format.setTimeZone(TimeZone.getTimeZone("IST"));
-                    java.util.Date date = null;
-                    try {
-                        date = format.parse(order.getDate());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    String time = date.toString().substring(12, 16);
-                    String orderDay = date.toString().substring(8, 10);
-                    String orderMonth = date.toString().substring(4, 7);
-                    String orderYear = date.toString().substring(30, 34);
-                    String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
-
-                    pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
-                }
-                pastOrderAdapter.notifyDataSetChanged();
             }
 
             @Override
