@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by robins on 1/9/15.
@@ -40,31 +42,82 @@ public class Office extends Model {
         this.timings = timings;
     }
 
-
+    /***
+     *
+     * @return true if office is closed and false is office is closed.
+     */
     public boolean isClosed(){
-        SimpleDateFormat format = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
-        format.setTimeZone(TimeZone.getTimeZone("IST"));
-        java.util.Date date = null;
-        java.util.Date currentDate = getTodayDate();
-        try {
-            Log.d("drugcorner", "Getting the timings object");
-            String closedTime = timings.get("closedTime");
-            date = format.parse(closedTime);
 
+        String parsedDate = getTodayDate();
 
-        } catch (ParseException e) {
-            Log.d("drugcorner", "Error occured parsing date");
-            e.printStackTrace();
+        String closedTime = timings.get("closedTime");
+        closedTime = parseIndianTime(closedTime);
+        boolean result = compareTime(parsedDate, closedTime);
+        return result;
+    }
+
+    //Compare if currentTime is past givenTime
+    private boolean compareTime(String currentTime, String givenTime){
+        String pattern = "\\s?(\\d\\d?):(\\d\\d)\\s(.{2,2})\\s?";
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+
+        int currentTimeHour = 0, givenTimeHour = 0;
+
+        Matcher currTimeMatcher = r.matcher(currentTime);
+        Matcher givenTimeMatcher = r.matcher(givenTime);
+        if(currTimeMatcher.find() && givenTimeMatcher.find()){
+            currentTimeHour = Integer.parseInt( currTimeMatcher.group(1));
+            givenTimeHour = Integer.parseInt( givenTimeMatcher.group(1));
+            if(currentTimeHour >= givenTimeHour){
+                //Show office closed option
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            Log.e(Constants.TAG, "Error parsing time in office closing time in page office.java");
+            //TODO THROW ERROR HERE INSTEAD OF RETURN STATEMENT
+            return false;
         }
 
-        boolean value =  date.before(currentDate);
-        return value;
+    }
+
+
+    private String parseIndianTime(String time){
+        String pattern = "\\s?(\\d\\d?):(\\d\\d)\\s(.{2,2})\\s?";
+        String revisedTime = time;
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+        int hour = 0;
+        // Now create matcher object.
+        Matcher m = r.matcher(time);
+        if (m.find( )) {
+            hour = Integer.parseInt( m.group(1));
+            Log.d(Constants.TAG, m.group(3));
+            String pm =  m.group(3);
+            if(pm.equals("PM")){
+                //Get 24 hour time..
+                int newTime = hour + 12;
+                //Now revised time..
+                revisedTime = newTime + ":" + m.group(2)  + " " + m.group(3);
+                return revisedTime;
+            }else{
+             return time;
+            }
+        }else{
+            return time;
+        }
+
     }
 
 
 
-    private Date getTodayDate(){
-        SimpleDateFormat dateStamp = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
+    private String getTodayDate(){
+        DateFormat dateFormat = new SimpleDateFormat(timeFormat);
+        Date date = new Date();
+        String dateParse = dateFormat.format(date);
+      /*  SimpleDateFormat dateStamp = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
         dateStamp.setTimeZone(TimeZone.getTimeZone("IST"));
         String timeStamp = dateStamp.format(Calendar.getInstance().getTime());
 
@@ -74,8 +127,8 @@ public class Office extends Model {
         } catch (ParseException e) {
             Log.d("drugcorner", "Error occured parsing date");
             e.printStackTrace();
-        }
-        return date;
+        }*/
+        return dateParse;
     }
 
 
