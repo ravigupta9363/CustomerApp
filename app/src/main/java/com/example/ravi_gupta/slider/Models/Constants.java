@@ -8,6 +8,7 @@ public class Constants {
     public static String TAG = "drugcorner";
     public static String imageContainer = "offers";
     public static String baseURL = "http://192.168.1.100:3001";
+    public static String returnDays  = "15 Days Return";
 
 
 }

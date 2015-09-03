@@ -79,12 +79,20 @@ public class ListFragment extends android.support.v4.app.Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ShopListDetails shopListDetails = (ShopListDetails) mListview.getItemAtPosition(position);
 
-                    if (shopListDetails.Isopen)
+                    if (!shopListDetails.IsClosed) {
                         mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
+                    }
                 }
             });
         }else{
-            Toast.makeText(mainActivity,"Not serving in this particular hour",Toast.LENGTH_LONG).show();
+            Toast.makeText(mainActivity, "Not serving in this particular hour", Toast.LENGTH_SHORT).show();
+            mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                 @Override
+                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                     Toast.makeText(mainActivity, "Not serving in this particular hour", Toast.LENGTH_SHORT).show();
+                 }
+            });
+
         }
 
         //new AsyncCaller().execute();
@@ -94,13 +102,13 @@ public class ListFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 List<Retailer> retailers = application.getRetailerList();
-                for(Retailer retailerModel : retailers) {
+                for (Retailer retailerModel : retailers) {
                     Map<String, Object> discount = retailerModel.getDiscount();
                     Object allitems = "allitems";
-                    try{
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)((Integer)discount.get(allitems)).intValue() , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
-                    }catch (ClassCastException c){
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double)discount.get(allitems) , retailerModel.getArea(), true, retailerModel.getReturn(), retailerModel.getFulfillment()));
+                    try {
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double) ((Integer) discount.get(allitems)).intValue(), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
+                    } catch (ClassCastException c) {
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double) discount.get(allitems), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
                     }
 
                 }

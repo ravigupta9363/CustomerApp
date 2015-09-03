@@ -17,6 +17,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * Created by robins on 1/9/15.
  */
@@ -42,6 +43,8 @@ public class Office extends Model {
         this.timings = timings;
     }
 
+
+
     /***
      *
      * @return true if office is closed and false is office is closed.
@@ -49,31 +52,52 @@ public class Office extends Model {
     public boolean isClosed(){
 
         String parsedDate = getTodayDate();
+        //If timings is not provided..
+        if(timings == null){
+            Log.e(Constants.TAG, "Timings property obtained null for office object");
+            return false;
+        }
 
-        String closedTime = timings.get("closedTime");
+        //Now matching if current time past the store closing time..
+        String closedTime = (String)timings.get("closedTime");
+        String openTime   = (String)timings.get("openTime");
         closedTime = parseIndianTime(closedTime);
-        boolean result = compareTime(parsedDate, closedTime);
+        openTime = parseIndianTime(openTime);
+        boolean result = compareTime(parsedDate, closedTime, openTime);
         return result;
     }
 
-    //Compare if currentTime is past givenTime
-    private boolean compareTime(String currentTime, String givenTime){
+
+
+
+    //Compare if currentTime is past closedTime or is earlier than openTime
+    private boolean compareTime(String currentTime, String closedTime, String openTime){
         String pattern = "\\s?(\\d\\d?):(\\d\\d)\\s(.{2,2})\\s?";
         // Create a Pattern object
         Pattern r = Pattern.compile(pattern);
-
-        int currentTimeHour = 0, givenTimeHour = 0;
+        int currentTimeHour = 0, closedTimeHour = 0, openTimeHour = 0;
 
         Matcher currTimeMatcher = r.matcher(currentTime);
-        Matcher givenTimeMatcher = r.matcher(givenTime);
-        if(currTimeMatcher.find() && givenTimeMatcher.find()){
+        Matcher closedTimeMatcher = r.matcher(closedTime);
+        Matcher openTimeMatcher = r.matcher(openTime);
+
+        if(currTimeMatcher.find() && closedTimeMatcher.find() && openTimeMatcher.find()){
             currentTimeHour = Integer.parseInt( currTimeMatcher.group(1));
-            givenTimeHour = Integer.parseInt( givenTimeMatcher.group(1));
-            if(currentTimeHour >= givenTimeHour){
-                //Show office closed option
+            closedTimeHour = Integer.parseInt( closedTimeMatcher.group(1));
+            openTimeHour = Integer.parseInt( openTimeMatcher.group(1) );
+            if(currentTimeHour >= closedTimeHour){
+                //Show office is closed right now closed..
                 return true;
             }else{
-                return false;
+                if(openTimeHour > currentTimeHour){
+                    //Show office is closed right now closed..
+                    return true;
+                }else{
+                    /**
+                     * SHOW OFFICE IS OPEN RIGHT NOW.
+                     */
+                    return false;
+                }
             }
         }else{
             Log.e(Constants.TAG, "Error parsing time in office closing time in page office.java");
@@ -82,6 +106,7 @@ public class Office extends Model {
         }
 
     }
+
 
 
     private String parseIndianTime(String time){
@@ -117,17 +142,6 @@ public class Office extends Model {
         DateFormat dateFormat = new SimpleDateFormat(timeFormat);
         Date date = new Date();
         String dateParse = dateFormat.format(date);
-      /*  SimpleDateFormat dateStamp = new SimpleDateFormat(timeFormat, Locale.ENGLISH);
-        dateStamp.setTimeZone(TimeZone.getTimeZone("IST"));
-        String timeStamp = dateStamp.format(Calendar.getInstance().getTime());
-
-        java.util.Date  date = null;
-        try {
-            date = dateStamp.parse(timeStamp);
-        } catch (ParseException e) {
-            Log.d("drugcorner", "Error occured parsing date");
-            e.printStackTrace();
-        }*/
         return dateParse;
     }
 

@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 import java.util.ArrayList;
@@ -75,11 +76,11 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         holder.address.setText(shopListDetails.address);
 
 
-        if(shopListDetails.Isopen && shopListDetails.Isreturn){
-            holder.isReturn.setText("30 days return");
+        if(!shopListDetails.IsClosed && shopListDetails.Isreturn){
+            holder.isReturn.setText(Constants.returnDays);
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
         }
-        else if(shopListDetails.Isopen && !shopListDetails.Isreturn) {
+        else if(!shopListDetails.IsClosed && !shopListDetails.Isreturn) {
             holder.isReturn.setText("No Return");
             holder.isReturn.setTextColor(Color.parseColor("#AAAAAA"));
             // holder.isReturn.setTextColor(Color.parseColor("#36B666"));
