@@ -80,6 +80,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
                     if (!shopListDetails.IsClosed) {
                         mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
+                        application.getOrder().setRetailerId((String)shopListDetails.id);
                     }
                 }
             });
@@ -105,9 +106,9 @@ public class ListFragment extends android.support.v4.app.Fragment {
                     Map<String, Object> discount = retailerModel.getDiscount();
                     Object allitems = "allitems";
                     try {
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double) ((Integer) discount.get(allitems)).intValue(), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) ((Integer) discount.get(allitems)).intValue(), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
                     } catch (ClassCastException c) {
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getName(), (double) discount.get(allitems), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
+                        shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) discount.get(allitems), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
                     }
 
                 }

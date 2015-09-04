@@ -24,7 +24,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +53,8 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     RadioButton callBack;
     RadioButton notCallBack;
     public static String TAG = "LandmarkFragment";
+    boolean callCustomer = false;
+    Map<String, Boolean> verifyOrder = new HashMap<>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,11 +86,11 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         //flatNumberTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview1);
         //landmarkTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview2);
+        final MyApplication application = (MyApplication)mainActivity.getApplication();
         flatNumberEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext1);
         landmarkEditText = (EditText)rootview.findViewById(R.id.fragment_landmark_edittext2);
         placeOrder = (Button) rootview.findViewById(R.id.fragment_landmark_button1);
@@ -118,10 +124,12 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
                 if(id == R.id.fragment_landmark_radio_button1) {
                     callBack.setTextColor(Color.rgb(20, 100, 159));
                     notCallBack.setTextColor(Color.rgb(170, 170, 170));
+                    callCustomer = false;
                 }
                 else if(id == R.id.fragment_landmark_radio_button2) {
                     notCallBack.setTextColor(Color.rgb(20, 100, 159));
                     callBack.setTextColor(Color.rgb(170, 170, 170));
+                    callCustomer = true;
                 }
             }
         });
@@ -147,19 +155,29 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 hiddenKeyboard(flatNumberEditText);
                 //mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
-                if(!flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                if (!flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
                     FlatNumberLayout.setError("Enter correct format");
-                if(!landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                if (!landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
                     LandmarkLayout.setError("Enter correct format");
-                if(flatNumberEditText.getText().toString().matches(""))
+                if (flatNumberEditText.getText().toString().matches(""))
                     FlatNumberLayout.setError("This field is mandotary");
-                if(landmarkEditText.getText().toString().matches(""))
+                if (landmarkEditText.getText().toString().matches(""))
                     LandmarkLayout.setError("This field is mandotary");
-                if(flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$") && landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$")) {
+                if (flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$") && landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$")) {
                     mainActivity.replaceFragment(R.id.fragment_landmark_button1, null);
                 }
+
+                /**
+                 * Adding data to ORDER Object
+                 */
+                application.getOrder().setLandmark(landmarkEditText.getText().toString());
+                application.getOrder().setFlatNo(flatNumberEditText.getText().toString());
+                verifyOrder.put("call",callCustomer);
+                application.getOrder().setCallCustomer(verifyOrder);
             }
         });
+
+
 
         return rootview;
     }

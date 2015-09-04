@@ -15,6 +15,7 @@ public class ShopListDetails{
     public int deliveryTime;
     public int orderFulfilment;
     public boolean IsClosed;
+    public Object id;
 
     //public Drawable icon;
 
@@ -23,7 +24,8 @@ public class ShopListDetails{
         super();
     }
 
-    public ShopListDetails(String shopName, double discount, String address, boolean IsClosed, boolean Isreturn, int orderFulfilment) {
+    public ShopListDetails(Object id,String shopName, double discount, String address, boolean IsClosed, boolean Isreturn, int orderFulfilment) {
+        this.id = id;
         this.shopName = shopName;
         this.discount = discount;
         this.address = address;

@@ -22,7 +22,9 @@ import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Office;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Repository.NotificationRepository;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
@@ -38,7 +40,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -95,13 +99,12 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
         textView = (TextView) rootview.findViewById(R.id.fragment_verifying_order_textview1);
         retryButton = (Button) rootview.findViewById(R.id.fragment_verifying_order_button1);
-        progressBar = (ProgressBar) rootview.findViewById(R.id.fragment_verifying_order_progressbar1);
         textView.setTypeface(typeface2);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
-                progressBar.setVisibility(View.VISIBLE);
+
                 textView.setText("Verifying your order");
                 retryButton.setVisibility(View.GONE);
             }
@@ -246,8 +249,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
 
-
-    private void uploadToServer(RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
+    //TODO CHECK FOR IMAGE MEMORY OVERFLOW
+    private void uploadToServer(final RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
         final Office office = app.getOffice();
         //RestAdapter adapter_ = mainActivity.restAdapter;
@@ -259,7 +262,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         final String id = (String)installation.getId();
 
         MainActivity activity = (MainActivity)getActivity();
-        Object userId = activity.getCustomerRepo().getCurrentUserId();
+        final Object userId = activity.getCustomerRepo().getCurrentUserId();
 
         ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
         containerRepo.get((String)userId,  new ObjectCallback<Container>() {
@@ -279,10 +282,9 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                                         /**
                                          * Call upload order now to the server..
                                          */
+                                         uploadOrder(adapter, fileList, code, (String)userId);
 
                                         Log.d(Constants.TAG, "Successfully images to the server");
-
-
 
                                     }
                                 }//onSuccess
@@ -306,6 +308,43 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
 
+    private void uploadOrder(RestAdapter adapter, List<String> fileList, int code, String userId){
+
+        MyApplication app =  (MyApplication)mainActivity.getApplication();
+        List<Map<String, String>> prescription = new ArrayList<>();
+        for(String file : fileList ){
+            String presUrl =  "/api/containers/" + userId + "/download/" + file;
+            String thumbUrl =  "/api/containers/thumb/download/" + file;
+            Log.d(Constants.TAG, presUrl);
+            //Adding to the list map
+            Map<String, String> image = new HashMap<>();
+            image.put("image", presUrl);
+            image.put("thumb", thumbUrl);
+            prescription.add(image);
+        }
+        app.getOrder().setPrescription(prescription);
+        Order order  = app.getOrder();
+        order.setCode(code);
+        order.setCustomerId(userId);
+        /**
+         * Now Saving Order finally..
+         */
+        order.save(new VoidCallback() {
+            @Override
+            public void onSuccess() {
+                Log.d(Constants.TAG, "New Order successfully created on the server.");
+                mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+                mainActivity.getActivityHelper().closeLoadingBar();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "Error Saving order to the server.");
+                mainActivity.getActivityHelper().closeLoadingBar();
+            }
+        });
+    }
+
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
@@ -315,6 +354,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             //this method will be running on UI thread
+            mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Order..");
 
         }
         @Override

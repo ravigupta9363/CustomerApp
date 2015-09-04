@@ -80,6 +80,7 @@ import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -261,6 +262,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+        // Check device for Play Services APK.
+        checkPlayServices();
+        final MyApplication app = (MyApplication) getApplication();
+
+        activityHelper = new ActivityHelper(this, app);
 
     }
 
@@ -1195,10 +1202,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        // Check device for Play Services APK.
-        checkPlayServices();
-        final MyApplication app = (MyApplication) getApplication();
-        activityHelper = new ActivityHelper(this, app);
         //new AsyncCaller().execute();
 
 

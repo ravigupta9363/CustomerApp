@@ -26,6 +26,8 @@ import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.google.common.collect.ImmutableMap;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -38,8 +40,10 @@ import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +72,7 @@ public class ActivityHelper {
         return updatedAddress;
     }
     public ProgressDialog ringProgressDialog;
+    public String result;
     /**=====================================================*/
 
 
@@ -96,6 +101,8 @@ public class ActivityHelper {
     private void checkLogin(){
         //Making Server Call
         activity.restAdapter = new RestAdapter(application, Constants.baseURL + "/api");
+        OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
+        application.setOrder( orderRepository.createObject(ImmutableMap.of("code", 0)) );
         //Now fetching the current logged in user ..
         activity.setCustomerRepo(activity.restAdapter.createRepository(CustomerRepository.class));
         orderStatusDataBase = new OrderStatusDataBase(activity);
@@ -140,7 +147,10 @@ public class ActivityHelper {
     public String findNetwork(){
         String pincode = "";
         //Checking Pincode lies within area
+        MyApplication application = (MyApplication)activity.getApplication();
+        Address address = new Address(Locale.ENGLISH);
         appLocationService = new AppLocationService(activity);
+        Map<String, String> latLong = new HashMap<>();
         Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
         Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
         if (gpsLocation != null || networkLocation != null) {
@@ -157,7 +167,7 @@ public class ActivityHelper {
                 List<Address> addressList = geocoder.getFromLocation(
                         latitude, longitude, 1);
                 if (addressList != null && addressList.size() > 0) {
-                    Address address = addressList.get(0);
+                    address = addressList.get(0);
 
                     try {
                         List<Address> updatedAddressList = geocoder.getFromLocation(
@@ -165,6 +175,7 @@ public class ActivityHelper {
                         if (updatedAddressList != null && updatedAddressList.size() > 0) {
                             updatedAddress = updatedAddressList.get(0);
                             Log.v("address", "Updated Address = " + updatedAddress + "");
+                            parseAddress();
                         }
                     }
                     catch (Exception e) {
@@ -183,7 +194,24 @@ public class ActivityHelper {
         } else {
             showLocationAlert();
         }
+        latLong.put("lat",address.getLatitude()+"");
+        latLong.put("lng",address.getLongitude()+"");
+        application.getOrder().setGoogleAddr(result);
+        application.getOrder().setPincode(Integer.parseInt(pincode));
+        application.getOrder().setGeoLocation(latLong);
         return pincode;
+    }
+
+    public void parseAddress() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < updatedAddress.getMaxAddressLineIndex(); i++) {
+            sb.append(updatedAddress.getAddressLine(i)).append("\n");
+        }
+
+        sb.append(updatedAddress.getLocality()).append("\n");
+        sb.append(updatedAddress.getPostalCode()).append("\n");
+        sb.append(updatedAddress.getCountryName());
+        result = sb.toString();
     }
 
 
@@ -232,7 +260,12 @@ public class ActivityHelper {
 
 
     public void launchRingDialog(MainActivity activity) {
-        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...",	"Loading ...", true);
+        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", "Loading ...", true);
+        ringProgressDialog.setCancelable(true);
+    }
+
+    public void launchRingDialog(MainActivity activity, String body) {
+        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", body	, true);
         ringProgressDialog.setCancelable(true);
     }
 

@@ -7,6 +7,7 @@ import android.app.Application;
 import android.net.Uri;
 
 import com.example.ravi_gupta.slider.Models.Office;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.File;
@@ -21,17 +22,16 @@ public class MyApplication extends Application {
     private Office office;
     private List<Retailer> retailerList;
 
-    /*public List<File> getImageFiles() {
-        return imageFiles;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setImageFiles(List<File> imageFiles) {
-        this.imageFiles = imageFiles;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    private List<File> imageFiles = new ArrayList<>();*/
+    private Order order;
 
-    //private List<RequestCreator> imageList = new ArrayList<>();
 
 
 
