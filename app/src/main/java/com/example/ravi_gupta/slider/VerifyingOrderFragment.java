@@ -250,14 +250,24 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     private void uploadToServer(RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
         final Office office = app.getOffice();
+        //RestAdapter adapter_ = mainActivity.restAdapter;
+        //repository = adapter_.createRepository(NotificationRepository.class);
+        /**
+         * Sending verification code + installation code..
+         */
+        LocalInstallation installation = MainActivity.getInstallation();
+        final String id = (String)installation.getId();
+
+        MainActivity activity = (MainActivity)getActivity();
+        Object userId = activity.getCustomerRepo().getCurrentUserId();
 
         ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
-        containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
+        containerRepo.get((String)userId,  new ObjectCallback<Container>() {
             @Override
             public void onSuccess(Container container) {
                 final int listSize = byteArrayList.size();
                 for(byte[] bytes : byteArrayList){
-                    String fileName = String.valueOf(code) + office.getId().toString();
+                    String fileName = String.valueOf(code) + '.' + id;
                     container.upload(fileName, bytes, "image/jpeg",
                             new ObjectCallback<File>() {
                                 @Override
@@ -328,6 +338,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
                 //Checking if the verification code is obtained..
                 code = GcmIntentService.getVerificationCode();
+                
                 if (code != 0) {
                     break;
                 }
