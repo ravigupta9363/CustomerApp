@@ -2,6 +2,8 @@ package com.example.ravi_gupta.slider;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,12 +18,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.example.ravi_gupta.slider.Database.DatabaseHelper;
+import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Repository.NotificationRepository;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.strongloop.android.loopback.Container;
+import com.strongloop.android.loopback.ContainerRepository;
+import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -33,19 +50,17 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     MainActivity mainActivity;
     Button retryButton;
     ProgressBar progressBar;
     TextView textView;
     private NotificationRepository repository;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DatabaseHelper databaseHelper;
+    Bitmap bitmap;
+    byte[] byteArray;
+    List<String> fileList = new ArrayList<>();
+    int totalImageUploaded = 0;
     public static String TAG = "VerifyingOrderFragment";
 
     private OnFragmentInteractionListener mListener;
@@ -64,18 +79,18 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseHelper = new DatabaseHelper(mainActivity);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_verifying_order, container, false);
-
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
+
         new AsyncCaller().execute();
 
         textView = (TextView) rootview.findViewById(R.id.fragment_verifying_order_textview1);
@@ -185,6 +200,101 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
+    private void uploadPrescription(MainActivity activity, final DatabaseHelper databaseHelper, final int code){
+        final List<byte[]> byteArrayList = new ArrayList<>();
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        new  AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //this method will be running on UI thread
+                progressBar.setVisibility(View.VISIBLE);
+                textView.setText("Uploading Prescription..");
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                List<PrescriptionDetail> prescriptionDetails =  databaseHelper.getAllPrescription();
+                for(PrescriptionDetail prescriptionDetail : prescriptionDetails){
+                    try {
+                        bitmap = BitmapFactory.decodeStream(mainActivity.getContentResolver().openInputStream(prescriptionDetail.getImageUri()));
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byteArray = stream.toByteArray();
+                    } catch (FileNotFoundException e) {
+                        Log.e(Constants.TAG, e.getMessage());
+                        e.printStackTrace();
+                    }
+                    byteArrayList.add(byteArray);
+
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                uploadToServer(mainActivity.restAdapter, code, byteArrayList);
+                progressBar.setVisibility(View.GONE);
+            }
+
+        }.execute(null, null, null);
+    }
+
+
+
+
+
+    private void uploadToServer(RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
+        MyApplication app =  (MyApplication)mainActivity.getApplication() ;
+        final Office office = app.getOffice();
+
+        ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
+        containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
+            @Override
+            public void onSuccess(Container container) {
+                final int listSize = byteArrayList.size();
+                for(byte[] bytes : byteArrayList){
+                    String fileName = String.valueOf(code) + office.getId().toString();
+                    container.upload(fileName, bytes, "image/jpeg",
+                            new ObjectCallback<File>() {
+                                @Override
+                                public void onSuccess(File remoteFile) {
+                                    // Update GUI - add remoteFile to the list of documents
+                                    fileList.add(remoteFile.getName());
+                                    totalImageUploaded++;
+                                    if(totalImageUploaded == listSize){
+                                        /**
+                                         * Call upload order now to the server..
+                                         */
+
+                                        Log.d(Constants.TAG, "Successfully images to the server");
+
+
+
+                                    }
+                                }//onSuccess
+
+                                @Override
+                                public void onError(Throwable error) {
+                                    // upload failed
+                                    Log.e(Constants.TAG, "Error uploading images to the server.");
+                                }
+                            }
+                    );
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "Error: Container not found");
+            }
+        });
+    }
+
+
 
 
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
@@ -231,7 +341,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             //this method will be running on UI thread
             if (code != 0) {
                 if(checkVerificationCode(code)) {
-                    mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+                   // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+                    uploadPrescription(mainActivity, databaseHelper, code);
                 }
                 Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step
@@ -244,10 +355,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 textView.setText("Tap to Retry");
                 //And recall this async class..
             }
-
         }
-
-    }
+    }//AsyncCaller
 
 
 

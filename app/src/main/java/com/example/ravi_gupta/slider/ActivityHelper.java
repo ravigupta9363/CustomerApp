@@ -115,8 +115,7 @@ public class ActivityHelper {
             }
         });
 
-        activity.databaseHelper = new DatabaseHelper(activity);
-        activity.databaseHelper.deleteAllPrescription();
+
     }
 
 
@@ -243,6 +242,8 @@ public class ActivityHelper {
     }
 
 
+
+
     private void  runOnUiThread(final boolean internetConnection){
 
         activity.runOnUiThread(new Runnable() {
@@ -311,8 +312,6 @@ public class ActivityHelper {
 
 
 
-
-
     public void fetchAllImages(RestAdapter adapter){
         ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
         containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
@@ -355,6 +354,8 @@ public class ActivityHelper {
             }
         });
     }
+
+
 
 
     public void resolveRoute(){

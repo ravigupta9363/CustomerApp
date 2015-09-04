@@ -149,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
 
 
+
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -216,6 +217,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+        databaseHelper = new DatabaseHelper(this);
+        databaseHelper.deleteAllPrescription();
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
         View child = decor.getChildAt(0);
         decor.removeView(child);
@@ -831,7 +834,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void fragmentMainImageButton2(FragmentTransaction ft){
-        if (databaseHelper.getPresciptionCount() == 0) {
+        int prescriptionCount = databaseHelper.getPresciptionCount();
+        if (prescriptionCount == 0) {
             CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
                     findFragmentByTag(CartNoOrdersFragment.TAG);
             if (frag5 == null) {
