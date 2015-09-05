@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.SystemInfo;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.SystemInfoRepository;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,7 +94,12 @@ public class FAQFragment extends android.support.v4.app.Fragment {
 
         faq.setTypeface(typeface2);
         faq.setMovementMethod(new ScrollingMovementMethod());
-        String faqData = "<p><b>Why is Myntra shutting down its website?</b><br />" +
+        /**
+         * Loading the faq data
+         */
+        loadFaqData();
+
+        /*String faqData = "<p><b>Why is Myntra shutting down its website?</b><br />" +
                 " Myntra has made this move with an eye towards the future," +
                 " where mobiles will outgrow desktops both in terms of computing power and penetration." +
                 " Myntra believes that switching to a mobile platform gives you the freedom to shop anytime," +
@@ -123,9 +133,35 @@ public class FAQFragment extends android.support.v4.app.Fragment {
                 " In case, you don’t have access to the App, don’t worry, your Myntra Points are safe with us," +
                 ", whenever you download the App in future. REFER TO DETAILED COUPON AND CASHBACK POLICY.</p>";
 
-        faq.setText((Html.fromHtml(faqData)));
+        faq.setText((Html.fromHtml(faqData)));*/
+        
         return rootview;
     }
+
+
+    /**
+     * Method for loading the faq data
+     */
+    public void loadFaqData(){
+        SystemInfoRepository systemInfoRepository = mainActivity.restAdapter.createRepository(SystemInfoRepository.class);
+        systemInfoRepository.getInfo(Constants.faqName, new ObjectCallback<SystemInfo>() {
+            @Override
+            public void onSuccess(SystemInfo systemInfo) {
+                if(systemInfo == null){
+                    Log.e(Constants.TAG, "FAQ data not present in the server.");
+                }else{
+                    String faqData = systemInfo.getHtml();
+                    faq.setText((Html.fromHtml(faqData)));
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "An Error  FAQ data from the server.");
+            }
+        });
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

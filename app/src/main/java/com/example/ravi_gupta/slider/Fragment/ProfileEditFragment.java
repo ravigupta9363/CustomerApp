@@ -87,7 +87,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_profile_edit, container, false);
         fragment = getArguments().getString("fragment");
-        Log.v("ProfileFrgament",fragment);
+        Log.v("ProfileFragment",fragment);
         //Bundle bundle = getArguments();
         //ArrayList<String> infoUser = bundle.getStringArrayList("infoUser");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
@@ -127,6 +127,9 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerName.setCompoundDrawables(sd1.getDrawable(), null, null, null);
         customerMail.setCompoundDrawables(sd2.getDrawable(), null, null, null);
         customerPhone.setCompoundDrawables(sd3.getDrawable(), null, null, null);
+
+
+
 
         //ProfileDetail profileDetail = profileDatabase.getProfile();
 
@@ -231,17 +234,24 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         Customer customer = repository.getCachedCurrentUser();
         Log.i(TAG, "Setting the profile data in edit profile fragment");
 
-        if(customer != null) {
+        if( !(customer == null) ) {
             updatedMail = customer.getEmail();
             updatedPhone = customer.getContactNo();
             updatedName = customer.getName();
-            customerName.setText(updatedName);
-            customerMail.setText(updatedMail);
-            customerPhone.setText(updatedPhone);
+
         }else{
             /*Dont do anything*/
+            //Just add the primary email..
+            String email = mainActivity.getActivityHelper().getEmail(mainActivity);
+            updatedMail = email;
         }
+        //Now setting the text..
+        customerName.setText(updatedName);
+        customerMail.setText(updatedMail);
+        customerPhone.setText(updatedPhone);
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -250,16 +260,21 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         }
     }
 
+
     //http://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
+
 
     boolean isPhoneValid(String phone) {
         boolean i = phone.matches("^//d{10,10}$");
         Log.v("Data",i+"");
         return phone.matches("^\\d{10,10}$");
     }
+
+
 
     boolean isNameValid(String name) {
         return name.matches("^[a-zA-Z ]{3,30}$");

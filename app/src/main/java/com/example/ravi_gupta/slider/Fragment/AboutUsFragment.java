@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.SystemInfo;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.SystemInfoRepository;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,19 +32,14 @@ import com.example.ravi_gupta.slider.R;
  * create an instance of this fragment.
  */
 public class AboutUsFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     TextView productName;
     TextView version;
     TextView aboutText;
     MainActivity mainActivity;
     public static String TAG = "AboutUsFragment";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -98,15 +98,47 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
 
         aboutText.setMovementMethod(new ScrollingMovementMethod());
 
-        String aboutTextString  = "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>" +
+        loadAboutData();
+
+       /* String aboutTextString  = "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>" +
                 "<p> Aenean massa Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>" +
                 "<p> Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>" +
                 "<p> Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>" +
                 "<p> Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget </p>" +
                 "<p> Aenean massa Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>";
-        aboutText.setText(Html.fromHtml(aboutTextString));
+        aboutText.setText(Html.fromHtml(aboutTextString));*/
         return rootview;
     }
+
+
+
+
+    /**
+     * Method for loading the faq data
+     */
+    public void loadAboutData(){
+        SystemInfoRepository systemInfoRepository = mainActivity.restAdapter.createRepository(SystemInfoRepository.class);
+        systemInfoRepository.getInfo(Constants.aboutName, new ObjectCallback<SystemInfo>() {
+            @Override
+            public void onSuccess(SystemInfo systemInfo) {
+                if(systemInfo == null){
+                    Log.e(Constants.TAG, "About Us data not present in the server.");
+                }else{
+                    String aboutData = systemInfo.getHtml();
+                    aboutText.setText((Html.fromHtml(aboutData)));
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "An Error  About data from the server.");
+            }
+        });
+    }
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

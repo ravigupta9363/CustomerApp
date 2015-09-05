@@ -6,6 +6,7 @@ package com.example.ravi_gupta.slider;
 import android.app.Application;
 import android.net.Uri;
 
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
@@ -74,9 +75,7 @@ public class MyApplication extends Application {
             // server - create as many Adapters as you need.
             adapter = new RestAdapter(
                     getApplicationContext(),
-
-                    "http://192.168.1.100:3001/api/");
-
+                    Constants.apiUrl);
         }
         return adapter;
     }

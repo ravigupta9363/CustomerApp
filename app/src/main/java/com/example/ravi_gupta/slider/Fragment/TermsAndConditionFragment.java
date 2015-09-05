@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +17,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.SystemInfo;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.SystemInfoRepository;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,10 +38,8 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM2 = "param2";
     MainActivity mainActivity;
     public static String TAG = "TermsAndConditionFragment";
+    TextView termsAndCondition;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,13 +65,14 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_terms_and_condition, container, false);
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_terms_and_conditions_imagebutton1);
-        TextView termsAndCondition = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview1);
+        termsAndCondition = (TextView)rootview.findViewById(R.id.fragment_terms_and_conditions_textview1);
         toolbarTitle.setTypeface(typeface1);
+        termsAndCondition.setMovementMethod(new ScrollingMovementMethod());
+
+        loadTermsData();
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +84,34 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
 
         return rootview;
     }
+
+
+
+    /**
+     * Method for loading the faq data
+     */
+    public void loadTermsData(){
+        SystemInfoRepository systemInfoRepository = mainActivity.restAdapter.createRepository(SystemInfoRepository.class);
+        systemInfoRepository.getInfo(Constants.termName, new ObjectCallback<SystemInfo>() {
+            @Override
+            public void onSuccess(SystemInfo systemInfo) {
+                if(systemInfo == null){
+                    Log.e(Constants.TAG, " TERMS AND COND. data not present in the server.");
+                }else{
+                    String termsData = systemInfo.getHtml();
+                    termsAndCondition.setText((Html.fromHtml(termsData)));
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "An Error  TERMS data from the server.");
+            }
+        });
+    }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

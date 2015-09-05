@@ -313,8 +313,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
-            String presUrl =  "/api/containers/" + userId + "/download/" + file;
-            String thumbUrl =  "/api/containers/thumb/download/" + file;
+            String presUrl =  "/containers/" + userId + "/download/" + file;
+            String thumbUrl =  "/containers/thumb/download/" + file;
             Log.d(Constants.TAG, presUrl);
             //Adding to the list map
             Map<String, String> image = new HashMap<>();

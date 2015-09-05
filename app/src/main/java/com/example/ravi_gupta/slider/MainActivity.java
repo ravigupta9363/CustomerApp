@@ -78,6 +78,7 @@ import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
@@ -131,7 +132,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public TextView tv;
     //public String OTP;
     public boolean enableEditText = true;
-    public String actionbarTitle = "DRUGCORNER";
+    public String actionbarTitle = Constants.appName;
     MainFragment mainFragment;
     AppLocationService appLocationService;
     //private CharSequence mDrawerTitle;
@@ -141,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
     public RestAdapter restAdapter;
-    public String baseURL = "http://192.168.1.100:3001";
+    public String baseURL = Constants.apiUrl;
     public String tempName;
     public String tempEmail;
     public String tempPhone;

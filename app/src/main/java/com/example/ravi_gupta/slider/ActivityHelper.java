@@ -1,5 +1,7 @@
 package com.example.ravi_gupta.slider;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -102,7 +104,7 @@ public class ActivityHelper {
         //Making Server Call
         activity.restAdapter = new RestAdapter(application, Constants.baseURL + "/api");
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
-        application.setOrder( orderRepository.createObject(ImmutableMap.of("code", 0)) );
+        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
         //Now fetching the current logged in user ..
         activity.setCustomerRepo(activity.restAdapter.createRepository(CustomerRepository.class));
         orderStatusDataBase = new OrderStatusDataBase(activity);
@@ -195,7 +197,7 @@ public class ActivityHelper {
             showLocationAlert();
         }
         latLong.put("lat",address.getLatitude()+"");
-        latLong.put("lng",address.getLongitude()+"");
+        latLong.put("lng", address.getLongitude() + "");
         application.getOrder().setGoogleAddr(result);
         application.getOrder().setPincode(Integer.parseInt(pincode));
         application.getOrder().setGeoLocation(latLong);
@@ -265,7 +267,7 @@ public class ActivityHelper {
     }
 
     public void launchRingDialog(MainActivity activity, String body) {
-        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", body	, true);
+        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", body, true);
         ringProgressDialog.setCancelable(true);
     }
 
@@ -275,6 +277,38 @@ public class ActivityHelper {
     }
 
 
+    /**
+     * Getting the primary email address of the user
+     * @param context
+     * @return String EmailAddress
+     */
+    public static String getEmail(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account account = getAccount(accountManager);
+        if (account == null) {
+            return null;
+        } else {
+            return account.name;
+        }
+    }
+
+    /**
+     * Getting the account details of the google
+     * @param accountManager
+     * @return
+     */
+    private static Account getAccount(AccountManager accountManager) {
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account account;
+        if (accounts.length > 0) {
+            account = accounts[0];
+        } else {
+            account = null;
+        }
+        Log.i(Constants.TAG, account.toString());
+
+        return account;
+    }
 
 
     private void  runOnUiThread(final boolean internetConnection){
