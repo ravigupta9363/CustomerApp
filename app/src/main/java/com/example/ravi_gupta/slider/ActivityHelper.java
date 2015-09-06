@@ -105,7 +105,7 @@ public class ActivityHelper {
         /**
          * Add the order repository
          */
-        activity.restAdapter = new RestAdapter(application, Constants.baseURL + "/api");
+        activity.restAdapter = new RestAdapter(application, Constants.apiUrl);
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
         application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
         //Now fetching the current logged in user ..
@@ -393,10 +393,9 @@ public class ActivityHelper {
                         imageDownloaded = true;
                         //Now saving the images to the application ..
 
-                        String baseURL = Constants.baseURL;
                         List<RequestCreator> requestCreators = new ArrayList<RequestCreator>();
                         for (File file : objects) {
-                            Uri imageUri = Uri.parse(baseURL + "/api/containers/" + file.getContainer() + "/download/" + file.getName());
+                            Uri imageUri = Uri.parse(Constants.apiUrl  + "/containers/" + file.getContainer() + "/download/" + file.getName());
                             RequestCreator requestCreator = Picasso.with(activity).load(imageUri);
                             requestCreators.add(requestCreator);
                         }

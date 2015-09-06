@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.TouchImageView;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
@@ -52,6 +53,9 @@ public class ServerViewPagerAdapter extends PagerAdapter {
             public void onPageScrollStateChanged(int state) {
             }
         });*/
+
+
+
     }
 
 
@@ -80,7 +84,7 @@ public class ServerViewPagerAdapter extends PagerAdapter {
         // Capture position and set to the ImageView
         Map<String, String> imageThumbnail = mapList.get(position);
         Object bigImage = "image";
-        Uri imageUri = Uri.parse(mainActivity.baseURL + imageThumbnail.get(bigImage));
+        Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
         Log.v("server","BigImage = "+imageUri+"");
         Picasso.with(mainActivity).load(imageUri).into(sliderItem);
        // sliderItem.setImageResource(sliderItems[position]);

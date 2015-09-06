@@ -142,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private ArrayList<NavigationDrawerItemDetails> navDrawerItems;
     private NavDrawerListAdapter adapter;
     public RestAdapter restAdapter;
-    public String baseURL = Constants.apiUrl;
+
     public String tempName;
     public String tempEmail;
     public String tempPhone;

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
@@ -99,7 +100,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         final List<Map<String, String>> mapList = pastOrdersDetail.drawable;
         Map<String, String> imageThumbnail = mapList.get(0);
         Object thumb = "thumb";
-        Uri imageUri = Uri.parse(mainActivity.baseURL + imageThumbnail.get(thumb));
+        Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(thumb));
         Picasso.with(mainActivity).load(imageUri).into(holder.prescription);
 
         if(pastOrdersDetail.isDelivered)
