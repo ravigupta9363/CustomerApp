@@ -328,7 +328,7 @@ public class ActivityHelper {
                     officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
                         @Override
                         public void onSuccess(Office officeObj) {
-                            if (officeObj.getName() == null) {
+                            if (officeObj.getName() == "") {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
                                 closeLoadingBar();
                                 //We are not providing service in your area..

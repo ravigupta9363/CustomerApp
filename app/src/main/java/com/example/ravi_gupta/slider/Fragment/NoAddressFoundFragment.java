@@ -86,18 +86,6 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /*if(mainActivity.haveNetworkConnection() && mainActivity.matchPincode != null && mainActivity.status == "Delivered") {
-                    mainActivity.replaceFragment(R.layout.fragment_main, null);
-                }
-                else if(!mainActivity.haveNetworkConnection()) {
-                    //replaceFragment(R.layout.fragment_);
-                    mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    mainActivity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-                }
-                else {
-
-                }*/
                 mainActivity.getActivityHelper().startHelperActivity();
             }
         });
