@@ -102,6 +102,9 @@ public class ActivityHelper {
 
     private void checkLogin(){
         //Making Server Call
+        /**
+         * Add the order repository
+         */
         activity.restAdapter = new RestAdapter(application, Constants.baseURL + "/api");
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
         application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));

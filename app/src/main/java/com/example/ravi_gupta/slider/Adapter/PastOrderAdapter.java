@@ -14,7 +14,11 @@ import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Order;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.google.common.collect.ImmutableMap;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -105,8 +109,16 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             @Override
             public void onClick(View v) {
                 mainActivity.replaceFragment(R.id.past_order_layout_button2, null);//Open OTP if data is entered
+                //Create an order when reorder button is pressed..
+                /**
+                 * Create an order
+                 * Status code 5000 for new order
+                 */
+                createOrder(mainActivity, pastOrdersDetail.drawable, pastOrdersDetail.retailerId, "5000");
             }
         });
+
+
 
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +126,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
                 mainActivity.replaceFragment(R.id.past_order_layout_button1,null);//Open Status
             }
         });
+
 
         holder.prescription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,5 +139,44 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
 
         return row;
     }
+
+
+
+
+
+    /**
+     * Create order when reorder button is pressed
+     * @param activity
+     * @param prescription
+     * @param retailerId
+     * @param prototypeStatusCode
+     */
+    private void createOrder(
+            MainActivity activity,
+            List<Map<String, String>> prescription,
+            String retailerId,
+            String prototypeStatusCode
+    ){
+        OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
+        Order order = orderRepository.createObject(ImmutableMap.of(
+                "prescription", prescription,
+                "retailerId", retailerId,
+                "prototypeStatusCode", prototypeStatusCode
+        ));
+
+        //Now add this order to the application order making it the current order..
+        MyApplication myApplication =  (MyApplication)activity.getApplication();
+        myApplication.setOrder(order);
+        /**
+         * "landmark", landmark,
+         "pincode", pincode,
+         "flatNo", flatNo,
+         "geoLocation", geoLocation,
+         "prescription", prescription,
+         "retailerId", retailerId,
+         "prototypeStatusCode", prototypeStatusCode
+         */
+    }
+
 
 }

@@ -25,8 +25,10 @@ import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import java.text.ParseException;
@@ -124,7 +126,9 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
-
+    /**
+     * Connect to the server and load the past order.
+     */
     private void loadPastOrder(){
         /**
          * Show the loading bar..
@@ -166,8 +170,32 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                                     String orderMonth = date.toString().substring(4, 7);
                                     String orderYear = date.toString().substring(30, 34);
                                     String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
+                                    boolean isDelievered = false;
+                                    try{
 
-                                    pastOrdersDetails.add(new PastOrdersDetail(actualDate, time, order.getId().toString(), order.getGoogleAddr(), prescription, true));
+                                        //Getting the delivery report
+                                        if(order.getPrototypeStatusCode().equals("5003")){
+                                            isDelievered = true;
+                                        }else{
+                                            isDelievered = false;
+                                        }
+                                    }catch (Exception e){
+                                        //If value is null
+                                        isDelievered = false;
+                                    }
+
+                                    pastOrdersDetails.add(
+                                            new PastOrdersDetail(
+                                                    actualDate,
+                                                    time,
+                                                    order.getId().toString(),
+                                                    order.getGoogleAddr(),
+                                                    prescription,
+                                                    isDelievered,
+                                                    order.getRetailerId()
+                                            )
+                                    );
+
                                 }
                                 pastOrderAdapter.notifyDataSetChanged();
                             }//public void run() {
@@ -205,6 +233,8 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             addProfileButton.setVisibility(View.VISIBLE);
         }
     }
+
+
 
 
 

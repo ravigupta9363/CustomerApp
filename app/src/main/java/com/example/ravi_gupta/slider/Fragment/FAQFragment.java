@@ -134,7 +134,7 @@ public class FAQFragment extends android.support.v4.app.Fragment {
                 ", whenever you download the App in future. REFER TO DETAILED COUPON AND CASHBACK POLICY.</p>";
 
         faq.setText((Html.fromHtml(faqData)));*/
-        
+
         return rootview;
     }
 

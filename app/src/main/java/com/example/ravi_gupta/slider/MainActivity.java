@@ -264,6 +264,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
+
+
         // Check device for Play Services APK.
         checkPlayServices();
         final MyApplication app = (MyApplication) getApplication();

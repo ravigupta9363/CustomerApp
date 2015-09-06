@@ -264,46 +264,60 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         MainActivity activity = (MainActivity)getActivity();
         final Object userId = activity.getCustomerRepo().getCurrentUserId();
 
-        ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
-        containerRepo.get((String)userId,  new ObjectCallback<Container>() {
-            @Override
-            public void onSuccess(Container container) {
-                final int listSize = byteArrayList.size();
-                for(byte[] bytes : byteArrayList){
-                    String fileName = String.valueOf(code) + '.' + id;
-                    container.upload(fileName, bytes, "image/jpeg",
-                            new ObjectCallback<File>() {
-                                @Override
-                                public void onSuccess(File remoteFile) {
-                                    // Update GUI - add remoteFile to the list of documents
-                                    fileList.add(remoteFile.getName());
-                                    totalImageUploaded++;
-                                    if(totalImageUploaded == listSize){
-                                        /**
-                                         * Call upload order now to the server..
-                                         */
-                                         uploadOrder(adapter, fileList, code, (String)userId);
+        /**
+         * Now before sending order first checking
+         * if the order is the NEW ORDER or the repeated order
+         */
+        if(app.getOrder().getPrescription() == null){
+            //CURRENT ORDER IS THE NEW ORDER..ADD PRESCRIPTION FIRST..
+            ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
+            containerRepo.get((String)userId,  new ObjectCallback<Container>() {
+                @Override
+                public void onSuccess(Container container) {
+                    final int listSize = byteArrayList.size();
+                    for(byte[] bytes : byteArrayList){
+                        String fileName = String.valueOf(code) + '.' + id;
+                        container.upload(fileName, bytes, "image/jpeg",
+                                new ObjectCallback<File>() {
+                                    @Override
+                                    public void onSuccess(File remoteFile) {
+                                        // Update GUI - add remoteFile to the list of documents
+                                        fileList.add(remoteFile.getName());
+                                        totalImageUploaded++;
+                                        if(totalImageUploaded == listSize){
+                                            /**
+                                             * Call upload order now to the server..
+                                             */
+                                            uploadOrder(adapter, fileList, code, (String)userId);
 
-                                        Log.d(Constants.TAG, "Successfully images to the server");
+                                            Log.d(Constants.TAG, "Successfully images to the server");
 
+                                        }
+                                    }//onSuccess
+
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        // upload failed
+                                        Log.e(Constants.TAG, "Error uploading images to the server.");
                                     }
-                                }//onSuccess
-
-                                @Override
-                                public void onError(Throwable error) {
-                                    // upload failed
-                                    Log.e(Constants.TAG, "Error uploading images to the server.");
                                 }
-                            }
-                    );
+                        );
+                    }
                 }
-            }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.e(Constants.TAG, "Error: Container not found");
-            }
-        });
+                @Override
+                public void onError(Throwable t) {
+                    Log.e(Constants.TAG, "Error: Container not found");
+                }
+            });
+
+        }else{
+            //CURRENT ORDER IS THE REPEATED ORDER....
+            //Just save the order..
+            saveOrder( app.getOrder() );
+        }
+
+
     }
 
 
@@ -326,6 +340,12 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         Order order  = app.getOrder();
         order.setCode(code);
         order.setCustomerId(userId);
+
+        //Now saving the order..
+        saveOrder(order);
+    }
+
+    private void saveOrder(Order order){
         /**
          * Now Saving Order finally..
          */
