@@ -255,7 +255,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     private void uploadToServer(final RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
         final Office office = app.getOffice();
-        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploa Order..");
+        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Prescription..");
         /**
          * Sending verification code + installation code..
          */
@@ -282,6 +282,9 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                                 new ObjectCallback<File>() {
                                     @Override
                                     public void onSuccess(File remoteFile) {
+                                        //Close the loading bar
+                                        mainActivity.getActivityHelper().closeLoadingBar();
+
                                         // Update GUI - add remoteFile to the list of documents
                                         fileList.add(remoteFile.getName());
                                         totalImageUploaded++;
@@ -322,6 +325,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
     private void uploadOrder(RestAdapter adapter, List<String> fileList, int code, String userId){
+        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Order..");
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
@@ -350,15 +354,17 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         order.save(new VoidCallback() {
             @Override
             public void onSuccess() {
+                //Close the loading bar
+                mainActivity.getActivityHelper().closeLoadingBar();
                 Log.d(Constants.TAG, "New Order successfully created on the server.");
                 mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
-                mainActivity.getActivityHelper().closeLoadingBar();
             }
 
             @Override
             public void onError(Throwable t) {
-                Log.e(Constants.TAG, "Error Saving order to the server.");
+                //Close the loading bar
                 mainActivity.getActivityHelper().closeLoadingBar();
+                Log.e(Constants.TAG, "Error Saving order to the server.");
             }
         });
     }
@@ -411,11 +417,12 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             if (code != 0) {
 
                 // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
-                uploadPrescription(mainActivity, databaseHelper, code);
                 mainActivity.getActivityHelper().closeLoadingBar();
+                uploadPrescription(mainActivity, databaseHelper, code);
                 Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step
             }else {
+                mainActivity.getActivityHelper().closeLoadingBar();
                 //Timeout occurs retry the process..
                 //If code isn't found then time out occurs..
                 //Repeat the verification process in this case by showing a retry button..
