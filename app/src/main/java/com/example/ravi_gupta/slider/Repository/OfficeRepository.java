@@ -83,6 +83,7 @@ public class OfficeRepository extends ModelRepository<Office> {
                 RetailerRepository retailerRepo = getRestAdapter().createRepository(RetailerRepository.class);
                 for (Map<String, Object> obj : objList) {
                     Retailer retailer = retailerRepo.createObject(obj);
+                    retailer.setIsReturn((boolean)obj.get("isReturn"));
                     retailerList.add(retailer);
                 }
 

@@ -57,7 +57,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
     MainActivity mainActivity;
     Button retryButton;
-    ProgressBar progressBar;
     TextView textView;
     private NotificationRepository repository;
     private DatabaseHelper databaseHelper;
@@ -95,8 +94,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_verifying_order, container, false);
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
 
-        new AsyncCaller().execute();
-
         textView = (TextView) rootview.findViewById(R.id.fragment_verifying_order_textview1);
         retryButton = (Button) rootview.findViewById(R.id.fragment_verifying_order_button1);
         textView.setTypeface(typeface2);
@@ -104,13 +101,14 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 sendRequest();
-
                 textView.setText("Verifying your order");
                 retryButton.setVisibility(View.GONE);
+
             }
         });
         //Requesting Verification code from server
         sendRequest();
+
 
         return rootview;
     }
@@ -159,7 +157,11 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onSuccess() {
+
                 Log.i(TAG, "OTP Request send to the server");
+                //Create the order..
+                new AsyncCaller().execute();
+
             }
         });
 
@@ -212,7 +214,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             protected void onPreExecute() {
                 super.onPreExecute();
                 //this method will be running on UI thread
-                progressBar.setVisibility(View.VISIBLE);
+//                progressBar.setVisibility(View.VISIBLE);
                 textView.setText("Uploading Prescription..");
             }
 
@@ -240,7 +242,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
                 uploadToServer(mainActivity.restAdapter, code, byteArrayList);
-                progressBar.setVisibility(View.GONE);
+
             }
 
         }.execute(null, null, null);
@@ -253,8 +255,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     private void uploadToServer(final RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
         final Office office = app.getOffice();
-        //RestAdapter adapter_ = mainActivity.restAdapter;
-        //repository = adapter_.createRepository(NotificationRepository.class);
+        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploa Order..");
         /**
          * Sending verification code + installation code..
          */
@@ -316,14 +317,11 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             //Just save the order..
             saveOrder( app.getOrder() );
         }
-
-
     }
 
 
 
     private void uploadOrder(RestAdapter adapter, List<String> fileList, int code, String userId){
-
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
@@ -374,7 +372,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             //this method will be running on UI thread
-            mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Order..");
+            mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Verifying Order..");
 
         }
         @Override
@@ -411,10 +409,10 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             super.onPostExecute(result);
             //this method will be running on UI thread
             if (code != 0) {
-                if(checkVerificationCode(code)) {
-                   // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
-                    uploadPrescription(mainActivity, databaseHelper, code);
-                }
+
+                // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+                uploadPrescription(mainActivity, databaseHelper, code);
+                mainActivity.getActivityHelper().closeLoadingBar();
                 Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step
             }else {
@@ -422,7 +420,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 //If code isn't found then time out occurs..
                 //Repeat the verification process in this case by showing a retry button..
                 retryButton.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
                 textView.setText("Tap to Retry");
                 //And recall this async class..
             }

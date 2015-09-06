@@ -26,6 +26,15 @@ public class Retailer extends Model {
     private int fulfillement;
     private String area;
     private Map<String, Object> discount;
+
+    public boolean isReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(boolean isReturn) {
+        this.isReturn = isReturn;
+    }
+
     private boolean isReturn;
     private String ownerName;
     private String ownerContact;
@@ -175,6 +184,12 @@ public class Retailer extends Model {
                 revisedTime = newTime + ":" + m.group(2)  + " " + m.group(3);
                 return revisedTime;
             }else{
+                if(pm.equals("AM")){
+                    if(hour == 12){
+                        revisedTime = 0 + ":" + m.group(2)  + " " + m.group(3);
+                        return revisedTime;
+                    }
+                }
                 return time;
             }
         }else{
@@ -219,7 +234,8 @@ public class Retailer extends Model {
     }
 
     public boolean getReturn() {
-        return isReturn;
+        boolean returnAvail = isReturn;
+        return returnAvail;
     }
 
     public void setReturn() {

@@ -96,7 +96,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         requestCreatorList = myApplication.getImageList();
 
         databaseHelper = new DatabaseHelper(getActivity());
-        Address address = mainActivity.getActivityHelper().getUpdatedAddress();
+        MainActivity activity = (MainActivity)getActivity();
+        Address address = activity.getActivityHelper().getUpdatedAddress();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
             sb.append(address.getAddressLine(i)).append("\n");

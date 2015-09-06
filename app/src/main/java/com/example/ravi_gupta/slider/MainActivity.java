@@ -181,25 +181,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     /*Push Implementation*/
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
-    String SENDER_ID = "999371974017";
-
-    /**
-     * Substitute your own application ID here. This is the id of the
-     * application you registered in your LoopBack server by calling
-     * Application.register().
-     * This is the IMEI NUMBER
-     */
-    String LOOPBACK_APP_ID = "loopback-component-push-app";
-
-    /**
-     * Tag used on log messages.
-     */
-    static final String TAG = "drugcorner";
-
     GoogleCloudMessaging gcm;
     Context context;
     public Address updatedAddress;
@@ -281,15 +262,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (checkPlayServices()) {
             if (customer != null) {
                 // logged in
-                Log.d(TAG, "User logged in successfully");
+                Log.d(Constants.TAG, "User logged in successfully");
                 updateRegistration((String) customer.getId());
             } else {
                 // anonymous user
-                Log.d(TAG, "User not logged in ");
+                Log.d(Constants.TAG, "User not logged in ");
                 updateRegistration("anonymous");
             }
         } else {
-            Log.e(TAG, "No valid Google Play Services APK found.");
+            Log.e(Constants.TAG, "No valid Google Play Services APK found.");
         }
     }
 
@@ -313,7 +294,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         /*TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         LOOPBACK_APP_ID = mngr.getDeviceId();*/
         // Enter the id of the LoopBack Application
-        installation.setAppId(LOOPBACK_APP_ID);
+        installation.setAppId(Constants.LOOPBACK_APP_ID);
        /* Log.i(TAG, LOOPBACK_APP_ID);*/
         // Substitute a real id of the user logged in this application
         installation.setUserId( userId );
@@ -344,7 +325,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i(TAG, "This device is not supported.");
+                Log.i(Constants.TAG, "This device is not supported.");
                 finish();
             }
             return false;
@@ -364,11 +345,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             @Override
             protected String doInBackground(final Void... params) {
                 try {
-                    final String regid = gcm.register(SENDER_ID);
+                    final String regid = gcm.register(Constants.SENDER_ID);
                     installation.setDeviceToken(regid);
                     return "Device registered, registration ID=" + regid;
                 } catch (final IOException ex) {
-                    Log.e(TAG, "GCM registration failed.", ex);
+                    Log.e(Constants.TAG, "GCM registration failed.", ex);
                     return "Cannot register with GCM:" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
@@ -398,13 +379,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 final Object id = installation_.getId();
                 installation = installation_;
                 final String msg = "Installation saved with id " + id;
-                Log.i(TAG, msg);
+                Log.i(Constants.TAG, msg);
 
             }
 
             @Override
             public void onError(final Throwable t) {
-                Log.e(TAG, "Error saving Installation.", t);
+                Log.e(Constants.TAG, "Error saving Installation.", t);
 
             }
         });
@@ -439,7 +420,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             switch (position) {
                 case 0:
                     Customer user = customerRepo.getCachedCurrentUser();
-                    Log.i(TAG, "Getting current id");
+                    Log.i(Constants.TAG, "Getting current id");
                     //Log.i(TAG, user.getEmail());
                     if(user == null) {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -1358,7 +1339,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
 
 
-    //Async caller for running long running task..
+  /*  //Async caller for running long running task..
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
 
@@ -1383,7 +1364,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
 
     }
-
+*/
 
 
 
