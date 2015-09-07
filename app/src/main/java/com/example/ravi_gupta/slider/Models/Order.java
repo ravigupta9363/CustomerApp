@@ -124,6 +124,16 @@ public class Order extends Model {
     private String prototypeStatusCode;
     private String prototypeOrderCancelReason;
 
+    public String getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(String officeId) {
+        this.officeId = officeId;
+    }
+
+    private String officeId;
+
     public String getRegistrationId() {
         return registrationId;
     }

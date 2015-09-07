@@ -255,7 +255,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     private void uploadToServer(final RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
         final Office office = app.getOffice();
-        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Prescription..");
+        //mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Prescription..");
         /**
          * Sending verification code + installation code..
          */
@@ -283,8 +283,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                                     @Override
                                     public void onSuccess(File remoteFile) {
                                         //Close the loading bar
-                                        mainActivity.getActivityHelper().closeLoadingBar();
-
+                                        //mainActivity.getActivityHelper().closeLoadingBar();
+                                        mainActivity.getActivityHelper().setProgressBarMessage("Uploading Order..");
                                         // Update GUI - add remoteFile to the list of documents
                                         fileList.add(remoteFile.getName());
                                         totalImageUploaded++;
@@ -301,6 +301,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
                                     @Override
                                     public void onError(Throwable error) {
+                                        mainActivity.getActivityHelper().closeLoadingBar();
                                         // upload failed
                                         Log.e(Constants.TAG, "Error uploading images to the server.");
                                     }
@@ -311,6 +312,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onError(Throwable t) {
+                    mainActivity.getActivityHelper().closeLoadingBar();
                     Log.e(Constants.TAG, "Error: Container not found");
                 }
             });
@@ -325,7 +327,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
     private void uploadOrder(RestAdapter adapter, List<String> fileList, int code, String userId){
-        mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Order..");
+
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
@@ -358,6 +360,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 mainActivity.getActivityHelper().closeLoadingBar();
                 Log.d(Constants.TAG, "New Order successfully created on the server.");
                 mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
+
             }
 
             @Override
@@ -417,7 +420,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             if (code != 0) {
 
                 // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
-                mainActivity.getActivityHelper().closeLoadingBar();
+
+                mainActivity.getActivityHelper().setProgressBarMessage("Uploading Prescription..");
                 uploadPrescription(mainActivity, databaseHelper, code);
                 Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step

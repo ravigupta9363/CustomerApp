@@ -101,17 +101,10 @@ public class ActivityHelper {
 
 
     private void checkLogin(){
+        createRestAdapter();
+        createOrderObject();
         //Making Server Call
-        /**
-         * Add the order repository
-         */
-        activity.restAdapter = new RestAdapter(application, Constants.apiUrl);
-        OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
-        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
-        //Now fetching the current logged in user ..
-        activity.setCustomerRepo(activity.restAdapter.createRepository(CustomerRepository.class));
         orderStatusDataBase = new OrderStatusDataBase(activity);
-
         activity.getCustomerRepo().findCurrentUser(new ObjectCallback<Customer>() {
             @Override
             public void onSuccess(Customer customer) {
@@ -126,7 +119,23 @@ public class ActivityHelper {
                 activity.registerInstallation(null);
             }
         });
+    }
 
+    private void createRestAdapter(){
+        activity.restAdapter = new RestAdapter(application, Constants.apiUrl);
+        //Now fetching the current logged in user ..
+        activity.setCustomerRepo(activity.restAdapter.createRepository(CustomerRepository.class));
+    }
+
+
+    private void createOrderObject(){
+        /**
+         * Add the order repository
+         */
+
+        OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
+
+        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0 )) );
 
     }
 
@@ -272,7 +281,15 @@ public class ActivityHelper {
     public void launchRingDialog(MainActivity activity, String body) {
         ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", body, true);
         ringProgressDialog.setCancelable(true);
+
     }
+
+
+    public void setProgressBarMessage(String body){
+        ringProgressDialog.setMessage(body);
+    }
+
+
 
 
     public void closeLoadingBar(){
@@ -336,6 +353,11 @@ public class ActivityHelper {
 
                             } else {
                                 application.setOffice(officeObj);
+
+                                //Now setting the office id to the order...
+                                application.getOrder().setOfficeId((String) officeObj.getId());
+
+
                                 officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                                     @Override
                                     public void onSuccess(List<Retailer> retailerArray) {

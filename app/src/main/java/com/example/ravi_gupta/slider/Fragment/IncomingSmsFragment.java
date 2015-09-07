@@ -148,8 +148,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         resendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //removeChangeListener();
-                //otpEdittext.setText("");
                 requestCodeOTP();
                 /**
                  * Loading the loading bar
@@ -185,7 +183,8 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onError(Throwable t) {
                 Log.e(TAG, t.toString());
-                Toast.makeText(getActivity(), "ERROR REQUESTING", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "ERROR REQUESTING VERIFICATION CODE TO THE SERVER");
+                //Toast.makeText(getActivity(), "ERROR REQUESTING", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -194,7 +193,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                 Log.i(TAG, "OTP Request send to the server");
 
 
-                Toast.makeText(getActivity(), "REQUEST SEND", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "REQUEST SEND", Toast.LENGTH_SHORT).show();
             }
         });
     }
