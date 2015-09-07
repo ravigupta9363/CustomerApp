@@ -5,11 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +20,6 @@ import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -41,17 +36,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static String TAG = "OrderStatusFragment" ;
-    ViewPager pager;
     TextView date;
     TextView time;
     TextView orderId;
     TextView orderStatusText;
-    TextView subTotalText;
-    TextView subTotal;
-    TextView serviceChargesText;
-    TextView serviceCharge;
-    TextView totalText;
-    TextView total;
     ImageView orderStatusImage;
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
     MainActivity mainActivity;
@@ -99,12 +87,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         time = (TextView) rootview.findViewById(R.id.fragment_order_status_textview2);
         orderId = (TextView) rootview.findViewById(R.id.fragment_order_status_textview3);
         orderStatusText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview4);
-        subTotalText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview5);
-        subTotal = (TextView) rootview.findViewById(R.id.fragment_order_status_textview6);
-        serviceChargesText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview7);
-        serviceCharge = (TextView) rootview.findViewById(R.id.fragment_order_status_textview8);
-        totalText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview9);
-        total = (TextView) rootview.findViewById(R.id.fragment_order_status_textview10);
         orderStatusImage = (ImageView) rootview.findViewById(R.id.fragment_order_status_imageview1);
         cancelOrder = (Button) rootview.findViewById(R.id.fragment_order_status_button1);
         home = (Button) rootview.findViewById(R.id.fragment_order_status_button2);
@@ -113,12 +95,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         time.setTypeface(typeface2);
         orderId.setTypeface(typeface2);
         orderStatusText.setTypeface(typeface2);
-        subTotalText.setTypeface(typeface2);
-        serviceChargesText.setTypeface(typeface2);
-        totalText.setTypeface(typeface2);
-        subTotal.setTypeface(typeface2);
-        serviceCharge.setTypeface(typeface2);
-        total.setTypeface(typeface2);
         cancelOrder.setTypeface(typeface2);
         home.setTypeface(typeface2);
 
@@ -173,51 +149,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         });
 
         //http://stackoverflow.com/questions/18413309/how-to-implement-a-viewpager-with-different-fragments-layouts
-        pager = (ViewPager) rootview.findViewById(R.id.fragment_order_status_viewPager1);
-        pager.setAdapter(new MyPagerAdapter(getFragmentManager()));
         return rootview;
 
     }
 
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int pos) {
-            switch(pos) {
-
-                case 0:
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    return OrderStatusShopDetailFragment.newInstance("Apollo Pharmacy","120/-",orderStatusDetails);
-
-                case 1: orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    return OrderStatusShopDetailFragment.newInstance("Gupta Pharmacy","130/-",orderStatusDetails);
-
-                //case 2: return ThirdFragment.newInstance("ThirdFragment, Instance 1");
-                //case 3: return ThirdFragment.newInstance("ThirdFragment, Instance 2");
-                //case 4: return ThirdFragment.newInstance("ThirdFragment, Instance 3");
-                default: orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    orderStatusDetails.add(new OrderStatusDetail("Crocin",5,10,50,"Piramal"));
-                    return OrderStatusShopDetailFragment.newInstance("Apollo Pharmacy","120/-",orderStatusDetails);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -283,29 +218,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
-    }
-
-    public static void disableShowHideAnimation(ActionBar actionBar) {
-        try
-        {
-            actionBar.getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(actionBar, false);
-        }
-        catch (Exception exception)
-        {
-            try {
-                Field mActionBarField = actionBar.getClass().getSuperclass().getDeclaredField("mActionBar");
-                mActionBarField.setAccessible(true);
-                Object icsActionBar = mActionBarField.get(actionBar);
-                Field mShowHideAnimationEnabledField = icsActionBar.getClass().getDeclaredField("mShowHideAnimationEnabled");
-                mShowHideAnimationEnabledField.setAccessible(true);
-                mShowHideAnimationEnabledField.set(icsActionBar,false);
-                Field mCurrentShowAnimField = icsActionBar.getClass().getDeclaredField("mCurrentShowAnim");
-                mCurrentShowAnimField.setAccessible(true);
-                mCurrentShowAnimField.set(icsActionBar,null);
-            }catch (Exception e){
-                //....
-            }
-        }
     }
 
 }
