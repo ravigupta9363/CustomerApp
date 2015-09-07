@@ -59,9 +59,9 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         View row = convertView;
         mainActivity = (MainActivity) getContext();
         PastOrderHolder holder = null;
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
+
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+
         if(row == null)
         {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -101,6 +101,9 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         Map<String, String> imageThumbnail = mapList.get(0);
         Object thumb = "thumb";
         Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(thumb));
+
+        Log.d(Constants.TAG, imageUri.toString());
+
         Picasso.with(mainActivity).load(imageUri).into(holder.prescription);
 
         if(pastOrdersDetail.isDelivered)

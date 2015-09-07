@@ -157,7 +157,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                                     mListview.setVisibility(View.VISIBLE);
 
                                     List<Map<String, String>> prescription = order.getPrescription();
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm.SSS'Z'", Locale.ENGLISH);
                                     format.setTimeZone(TimeZone.getTimeZone("IST"));
                                     java.util.Date date = null;
                                     try {
