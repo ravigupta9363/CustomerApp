@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 
@@ -129,7 +130,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:91-9953473059"));
+                callIntent.setData(Uri.parse(Constants.appPhone));
                 startActivity(callIntent);
             }
         });

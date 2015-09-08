@@ -157,7 +157,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                                     mListview.setVisibility(View.VISIBLE);
 
                                     List<Map<String, String>> prescription = order.getPrescription();
-                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm.SSS'Z'", Locale.ENGLISH);
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                                     format.setTimeZone(TimeZone.getTimeZone("IST"));
                                     java.util.Date date = null;
                                     try {
@@ -211,7 +211,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onError(Throwable t) {
 
-                    Log.d(TAG, "Error fetching order for customer");
+                    Log.d(Constants.TAG, "Error fetching past order for customer");
                     noPastOrderText.setText("Unable to connect to server");
                     noPastOrder.setVisibility(View.VISIBLE);
                     noPastOrder.setImageResource(R.drawable.order_cancelled);
