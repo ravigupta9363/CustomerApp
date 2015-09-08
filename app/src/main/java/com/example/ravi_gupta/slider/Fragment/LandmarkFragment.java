@@ -176,8 +176,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             }
         });
 
-
-
         return rootview;
     }
 
@@ -195,8 +193,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     boolean isLandmarkValid(String landmark) {
         return landmark.matches("^[a-zA-Z0-9\\s,'-\\\\/]+$");
     }
-
-
 
     private void hiddenKeyboard(View v) {
         InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -248,10 +244,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         MenuItem item= menu.findItem(R.id.cart);
         item.setEnabled(false);
         item.setVisible(false);
-
-
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
