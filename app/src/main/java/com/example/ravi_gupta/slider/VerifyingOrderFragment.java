@@ -205,7 +205,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
-    private void uploadPrescription(MainActivity activity, final DatabaseHelper databaseHelper, final int code){
+    private void uploadPrescription(MainActivity activity, final DatabaseHelper databaseHelper, final String code){
         final List<byte[]> byteArrayList = new ArrayList<>();
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         new  AsyncTask<Void, Void, Void>()
@@ -215,7 +215,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 super.onPreExecute();
                 //this method will be running on UI thread
 //                progressBar.setVisibility(View.VISIBLE);
-                textView.setText("Uploading Prescription..");
+                //textView.setText("Uploading Prescription..");
+                setStatus("Uploading Prescription..");
             }
 
 
@@ -232,8 +233,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         e.printStackTrace();
                     }
                     byteArrayList.add(byteArray);
-
-
                 }
                 return null;
             }
@@ -252,10 +251,9 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
     //TODO CHECK FOR IMAGE MEMORY OVERFLOW
-    private void uploadToServer(final RestAdapter adapter, final int code, final List<byte[]> byteArrayList){
+    private void uploadToServer(final RestAdapter adapter, final String code, final List<byte[]> byteArrayList){
         MyApplication app =  (MyApplication)mainActivity.getApplication() ;
-        final Office office = app.getOffice();
-        //mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Prescription..");
+
         /**
          * Sending verification code + installation code..
          */
@@ -278,41 +276,18 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                     final int listSize = byteArrayList.size();
                     for(byte[] bytes : byteArrayList){
                         String fileName = String.valueOf(code) + '.' + id;
-                        container.upload(fileName, bytes, "image/jpeg",
-                                new ObjectCallback<File>() {
-                                    @Override
-                                    public void onSuccess(File remoteFile) {
-                                        //Close the loading bar
-                                        //mainActivity.getActivityHelper().closeLoadingBar();
-                                        mainActivity.getActivityHelper().setProgressBarMessage("Uploading Order..");
-                                        // Update GUI - add remoteFile to the list of documents
-                                        fileList.add(remoteFile.getName());
-                                        totalImageUploaded++;
-                                        if(totalImageUploaded == listSize){
-                                            /**
-                                             * Call upload order now to the server..
-                                             */
-                                            uploadOrder(adapter, fileList, code, (String)userId);
+                        //Applying final step for image upload..
+                        finalImageUpload(fileName, container, bytes, listSize, code, userId );
+                    }//for loop
 
-                                            Log.d(Constants.TAG, "Successfully images to the server");
-
-                                        }
-                                    }//onSuccess
-
-                                    @Override
-                                    public void onError(Throwable error) {
-                                        mainActivity.getActivityHelper().closeLoadingBar();
-                                        // upload failed
-                                        Log.e(Constants.TAG, "Error uploading images to the server.");
-                                    }
-                                }
-                        );
-                    }
-                }
+                }//onSuccess
 
                 @Override
                 public void onError(Throwable t) {
+                    setStatus("Connection Failed!");
                     mainActivity.getActivityHelper().closeLoadingBar();
+                    retryButton.setVisibility(View.VISIBLE);
+                    textView.setText("Tap to Retry");
                     Log.e(Constants.TAG, "Error: Container not found");
                 }
             });
@@ -320,14 +295,66 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         }else{
             //CURRENT ORDER IS THE REPEATED ORDER....
             //Just save the order..
-            saveOrder( app.getOrder() );
+            saveOrder( app.getOrder(), (String)userId, code );
         }
     }
 
 
 
-    private void uploadOrder(RestAdapter adapter, List<String> fileList, int code, String userId){
 
+
+    /**
+     * Final step for image upload
+     * Automatic tyyes to retry in case uploading fails..
+     */
+    private void finalImageUpload(
+            final String fileName,
+            final Container container,
+            final byte[] bytes,
+            final int listSize,
+            final String code,
+            final Object userId
+    ){
+        container.upload(fileName, bytes, "image/jpeg",
+                new ObjectCallback<File>() {
+                    @Override
+                    public void onSuccess(File remoteFile) {
+                        // Update GUI - add remoteFile to the list of documents..
+                        fileList.add(remoteFile.getName());
+                        totalImageUploaded++;
+                        if(totalImageUploaded == listSize){
+                            /**
+                             * Call upload order now to the server..
+                             */
+                            uploadOrder(fileList, code, (String)userId);
+                            Log.d(Constants.TAG, "Successfully images to the server");
+
+                        }
+                    }//onSuccess
+
+                    @Override
+                    public void onError(Throwable error) {
+                        setStatus("Connection Failed! Retrying");
+                        //Call recursively the same function..
+                        finalImageUpload( fileName, container, bytes, listSize, code, userId);
+                        //mainActivity.getActivityHelper().closeLoadingBar();
+                        // upload failed
+                        retryButton.setVisibility(View.VISIBLE);
+                        textView.setText("Tap to Retry");
+                        Log.e(Constants.TAG, "Error uploading images to the server.");
+                    }
+                }
+        );
+    }
+
+
+    /**
+     *
+     * @param fileList
+     * @param code
+     * @param userId
+     */
+    private void uploadOrder(List<String> fileList, String code, String userId){
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
@@ -340,22 +367,28 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             image.put("thumb", thumbUrl);
             prescription.add(image);
         }
+
         app.getOrder().setPrescription(prescription);
         Order order  = app.getOrder();
-        order.setCode(code);
-        order.setCustomerId(userId);
-
         //Now saving the order..
-        saveOrder(order);
+        saveOrder(order, userId, code);
     }
 
-    private void saveOrder(Order order){
+
+
+
+    private void saveOrder(final Order order, String customerId, String code){
+        setStatus("Placing Order..");
+        order.setCode(code);
+        order.setCustomerId(customerId);
+
         /**
          * Now Saving Order finally..
          */
         order.save(new VoidCallback() {
             @Override
             public void onSuccess() {
+                setStatus("Order Placed..");
                 //Close the loading bar
                 mainActivity.getActivityHelper().closeLoadingBar();
                 Log.d(Constants.TAG, "New Order successfully created on the server.");
@@ -365,6 +398,11 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onError(Throwable t) {
+                setStatus("Retrying Upload..");
+                /**
+                 * In case of error recursive call the same function..
+                 */
+                //saveOrder(order);
                 //Close the loading bar
                 mainActivity.getActivityHelper().closeLoadingBar();
                 Log.e(Constants.TAG, "Error Saving order to the server.");
@@ -373,9 +411,17 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
+
+
+    private void setStatus(String status){
+        mainActivity.getActivityHelper().setProgressBarMessage(status);
+        textView.setText(status);
+    }
+
+
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
-        private int code;
+        private String code;
 
         @Override
         protected void onPreExecute() {
@@ -398,15 +444,15 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 long diff = curTime - initialTime;
                 //Getting the difference in seconds..
                 diff = diff / 1000 % 60;
-               // Log.i("drugcorner",diff+"");
+                // Log.i("drugcorner",diff+"");
                 if (diff > (long) till) {
                     break;
                 }
 
                 //Checking if the verification code is obtained..
                 code = GcmIntentService.getVerificationCode();
-                
-                if (code != 0) {
+
+                if (!(code == null)) {
                     break;
                 }
             }
@@ -417,15 +463,13 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             //this method will be running on UI thread
-            if (code != 0) {
+            if (!(code == null)) {
 
-                // mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
-
-                mainActivity.getActivityHelper().setProgressBarMessage("Uploading Prescription..");
                 uploadPrescription(mainActivity, databaseHelper, code);
                 Log.d("drugcorner", "Verification code found from fragment interface " + code);
                 //add the code to the verification and follow the next step
             }else {
+                setStatus("Verification TimeOut! Please Retry");
                 mainActivity.getActivityHelper().closeLoadingBar();
                 //Timeout occurs retry the process..
                 //If code isn't found then time out occurs..

@@ -12,6 +12,25 @@ public class Order extends Model {
 
     private int _id;
 
+
+
+    private String date;
+    private String googleAddr;
+    private String landmark;
+    private int pincode;
+    private String flatNo;
+    private Map<String, String> geoLocation;
+    private String status;
+    private Map<String, Boolean> callCustomer;
+    private String note;
+    private String sendNotice;
+    private Map<String, String> forwardOrder;
+    private List<Map<String, String>> prescription;
+    private String retailerId;
+    private String prototypeStatusCode;
+    private String prototypeOrderCancelReason;
+
+
     public String getLandmark() {
         return landmark;
     }
@@ -108,22 +127,6 @@ public class Order extends Model {
         this.prototypeOrderCancelReason = prototypeOrderCancelReason;
     }
 
-    private String date;
-    private String googleAddr;
-    private String landmark;
-    private int pincode;
-    private String flatNo;
-    private Map<String, String> geoLocation;
-    private String status;
-    private Map<String, Boolean> callCustomer;
-    private String note;
-    private String sendNotice;
-    private Map<String, String> forwardOrder;
-    private List<Map<String, String>> prescription;
-    private String retailerId;
-    private String prototypeStatusCode;
-    private String prototypeOrderCancelReason;
-
     public String getOfficeId() {
         return officeId;
     }
@@ -156,14 +159,14 @@ public class Order extends Model {
 
 
 
-    private int code;
+    private String code;
 
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
