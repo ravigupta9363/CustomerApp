@@ -160,7 +160,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         this.customerRepo = customerRepo;
     }
 
+
     private CustomerRepository customerRepo;
+
 
     /**
      *

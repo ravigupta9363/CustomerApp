@@ -313,7 +313,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                             //If OTP validation fails..
                             //Email exists or internet connection not avail..
                             Log.d(TAG, "Error occured in File IncomingSmsFragment");
-                            Log.d(TAG, t.getMessage());
+                            ////Log.d(TAG, t.getMessage());
                             /**
                              * Close the loading bar
                              */

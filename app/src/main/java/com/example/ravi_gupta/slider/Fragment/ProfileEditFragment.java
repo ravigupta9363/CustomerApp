@@ -136,18 +136,26 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         //    updatedPhone = profileDetail.getPhone();
 
         if(mainActivity.invalidEmail) {
-            customerName.setText(mainActivity.tempName);
-            customerPhone.setText(mainActivity.tempPhone);
-            customerMail.setText(mainActivity.tempEmail);
+            //customerName.setText(mainActivity.tempName);
+            //customerPhone.setText(mainActivity.tempPhone);
+            //customerMail.setText(mainActivity.tempEmail);
             mailLayout.setError("Email already exists");
             mainActivity.invalidEmail = false;
+            updatedName = mainActivity.tempName;
+            updatedMail = mainActivity.tempEmail;
+            updatedPhone = mainActivity.tempPhone;
         }
+
+        setProfileData();
+
+
+
 
 
         //customerName.setText(updatedName);
         //customerMail.setText(updatedMail);
         //customerPhone.setText(updatedPhone);
-        setProfileData();
+
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
