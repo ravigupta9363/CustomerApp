@@ -4,6 +4,7 @@ package com.example.ravi_gupta.slider;
  * Created by robins on 26/8/15.
  */
 import android.app.Application;
+import android.location.Address;
 import android.net.Uri;
 
 import com.example.ravi_gupta.slider.Models.Constants;
@@ -22,6 +23,16 @@ public class MyApplication extends Application {
     private RestAdapter adapter;
     private Office office;
     private List<Retailer> retailerList;
+
+    public Address getUpdatedAddress() {
+        return updatedAddress;
+    }
+
+    public void setUpdatedAddress(Address updatedAddress) {
+        this.updatedAddress = updatedAddress;
+    }
+
+    private Address updatedAddress;
 
     public Order getOrder() {
         return order;
