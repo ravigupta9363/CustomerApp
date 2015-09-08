@@ -213,11 +213,11 @@ public class ActivityHelper {
     public void parseAddress() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < updatedAddress.getMaxAddressLineIndex(); i++) {
-            sb.append(updatedAddress.getAddressLine(i)).append("\n");
+            sb.append(updatedAddress.getAddressLine(i)).append(" ");
         }
 
-        sb.append(updatedAddress.getLocality()).append("\n");
-        sb.append(updatedAddress.getPostalCode()).append("\n");
+        sb.append(updatedAddress.getLocality()).append(" ");
+        sb.append(updatedAddress.getPostalCode()).append(" ");
         sb.append(updatedAddress.getCountryName());
         result = sb.toString();
     }

@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -101,7 +102,7 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
         mailUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "admin@drugcorner.co.in"));
+                Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + Constants.appMail));
                 startActivity(intent);
             }
         });
@@ -110,7 +111,7 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:+91-9953473059"));
+                callIntent.setData(Uri.parse(Constants.appPhone));
                 startActivity(callIntent);
             }
         });

@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
@@ -51,7 +50,6 @@ import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
-import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.Dialog.ImageZoomDialog;
 import com.example.ravi_gupta.slider.Dialog.SendPrescriptionDialog;
 import com.example.ravi_gupta.slider.Dialog.ServerImageZoomDialog;
@@ -81,13 +79,11 @@ import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
-import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.File;
@@ -474,19 +470,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     break;
                 case 4:
 
-                    Uri uri = Uri.parse("market://details?id=" + "com.cubeactive.qnotelistfree");// this.getPackageName()
+                    Uri uri = Uri.parse("market://details?id=" + Constants.appPlayStoreLink);// this.getPackageName()
                     Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                     try {
                         startActivity(goToMarket);
                     } catch (ActivityNotFoundException e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + "com.cubeactive.qnotelistfree")));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink)));
                     }
                     break;
                 case 5:
 
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
-                    String shareBody = "Here is the share content body";
+                    String shareBody = Constants.appShareText;
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                     startActivity(Intent.createChooser(sharingIntent, "Share Via"));

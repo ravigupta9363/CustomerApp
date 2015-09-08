@@ -1,6 +1,7 @@
 package com.example.ravi_gupta.slider.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
@@ -51,7 +52,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         //TextView price;
         TextView address;
         Button reorder;
-        Button cancel;
+        TextView cancelOrDelivered;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             //holder.price = (TextView)row.findViewById(R.id.past_order_layout_textview4);
             holder.address = (TextView)row.findViewById(R.id.past_order_layout_textview5);
             holder.reorder = (Button)row.findViewById(R.id.past_order_layout_button2);
-            holder.cancel = (Button)row.findViewById(R.id.past_order_layout_button1);
+            holder.cancelOrDelivered = (TextView)row.findViewById(R.id.past_order_layout_button1);
             holder.prescription = (ImageView)row.findViewById(R.id.past_order_layout_imageview1);
 
             row.setTag(holder);
@@ -97,6 +98,8 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.orderId.setText(pastOrdersDetail.orderId);
         //holder.price.setText(String.valueOf(pastOrdersDetail.price) + "/-");
         holder.address.setText(pastOrdersDetail.address);
+        //If Delivered == true than
+
         final List<Map<String, String>> mapList = pastOrdersDetail.drawable;
         Map<String, String> imageThumbnail = mapList.get(0);
         Object thumb = "thumb";
@@ -106,8 +109,14 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
 
         Picasso.with(mainActivity).load(imageUri).into(holder.prescription);
 
-        if(pastOrdersDetail.isDelivered)
-            holder.cancel.setVisibility(View.GONE);
+        if(pastOrdersDetail.isDelivered) {
+            holder.cancelOrDelivered.setText("Delivered");
+            holder.cancelOrDelivered.setTextColor(Color.parseColor("#36B666"));
+        }
+        else {
+            holder.cancelOrDelivered.setText("Cancelled");
+            holder.cancelOrDelivered.setTextColor(Color.parseColor("#FF0000"));
+        }
 
         holder.reorder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,15 +128,6 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
                  * Status code 5000 for new order
                  */
                 createOrder(mainActivity, pastOrdersDetail.drawable, pastOrdersDetail.retailerId, "5000");
-            }
-        });
-
-
-
-        holder.cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.past_order_layout_button1,null);//Open Status
             }
         });
 

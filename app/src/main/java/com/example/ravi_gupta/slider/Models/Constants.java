@@ -31,6 +31,14 @@ public class Constants {
      */
     public static String LOOPBACK_APP_ID = "drugcorner-push-application";
 
+    public static String appPlayStoreLink = "com.cubeactive.qnotelistfree";
+
+    public static String appShareText = "Order on drugcorner and enjoy the hassle free delivery of medicines http://www.drugcorner.co.in";
+
+    public static String appMail = "admin@drugcorner.co.in";
+
+    public static String appPhone = "tel:+91-9953473059";
+
 
 
 }
