@@ -33,7 +33,7 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
-    private static int verificationCode;
+    private static String verificationCode;
     public Matcher m;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
@@ -73,7 +73,7 @@ public class GcmIntentService extends IntentService {
                 if(m.find()){
                     //Now parse the code from message
                     Log.i(TAG, "The code is " + m.group(1));
-                    verificationCode = Integer.parseInt(m.group(1));
+                    verificationCode = m.group(1);
                 }else {
                     //The push message found was of notification type
                     //display notification
@@ -91,7 +91,7 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public static int getVerificationCode() {
+    public static String getVerificationCode() {
         return verificationCode;
     }
 

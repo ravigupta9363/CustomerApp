@@ -202,8 +202,17 @@ public class ActivityHelper {
         } else {
             showLocationAlert();
         }
-        latLong.put("lat",address.getLatitude()+"");
-        latLong.put("lng", address.getLongitude() + "");
+        try{
+            latLong.put("lat",address.getLatitude()+"");
+            latLong.put("lng", address.getLongitude() + "");
+        }
+        catch (Exception e){
+            Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
+            closeLoadingBar();
+            //Show no internet connection..
+            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+        }
+
         application.getOrder().setGoogleAddr(result);
         application.getOrder().setPincode(Integer.parseInt(pincode));
         application.getOrder().setGeoLocation(latLong);
@@ -343,7 +352,7 @@ public class ActivityHelper {
                             if (officeObj.getName() == null) {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
                                 closeLoadingBar();
-                                //We are not providing service in your area..
+                                //We are not providing service in your area....
                                 activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
                             } else {
@@ -430,6 +439,7 @@ public class ActivityHelper {
                     @Override
                     public void onError(Throwable t) {
                         Log.e(Constants.TAG, "Error fetching all the offers images.");
+
                     }
                 });
             }
