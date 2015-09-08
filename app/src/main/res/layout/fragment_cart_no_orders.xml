@@ -54,7 +54,7 @@
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
             android:layout_gravity="center"
-            android:src="@mipmap/no_prescription_image"/>
+            android:src="@mipmap/no_prescription"/>
 
        <TextView
            android:layout_width="match_parent"
@@ -65,7 +65,7 @@
            android:layout_gravity="center"
            android:textSize="13sp"
            android:textColor="#555"
-           android:layout_marginTop="5dp"
+           android:layout_marginTop="10dp"
            android:id="@+id/fragment_cart_no_orders_textview1"/>
 
         <TextView

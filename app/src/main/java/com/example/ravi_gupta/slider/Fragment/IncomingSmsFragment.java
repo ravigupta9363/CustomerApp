@@ -21,9 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.ProfileDetail;
@@ -32,7 +30,6 @@ import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.strongloop.android.loopback.AccessToken;
-import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.UserRepository;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
@@ -327,7 +324,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4, fragment);
                             } else if (t.getMessage().equals("Unauthorized")) {
                                 //errorOccured = true;
-
                                 resendCode.setVisibility(View.VISIBLE);
                                 validationFailed.setVisibility(View.VISIBLE);
                             } else {

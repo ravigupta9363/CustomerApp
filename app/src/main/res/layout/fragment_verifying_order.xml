@@ -8,14 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:id="@+id/linear_layout">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/profile_main"/>
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center|top"
+            android:src="@mipmap/dispatched_for_delivery"/>
 
         <TextView
             android:layout_width="wrap_content"
