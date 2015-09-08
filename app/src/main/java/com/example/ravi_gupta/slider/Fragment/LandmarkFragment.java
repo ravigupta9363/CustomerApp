@@ -145,8 +145,7 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         FlatNumberLayout.setErrorEnabled(true);
         //FlatNumberLayout.setError("This field is mandotary");
         LandmarkLayout.setErrorEnabled(true);
-        flatNumber = flatNumberEditText.getText().toString();
-        landmark = landmarkEditText.getText().toString();
+
        // http://www.truiton.com/2015/06/android-floating-label-edittext/
 
         placeOrder.setOnClickListener(new View.OnClickListener() {
@@ -154,14 +153,16 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 hiddenKeyboard(flatNumberEditText);
                 //mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
+                flatNumber = flatNumberEditText.getText().toString();
+                landmark = landmarkEditText.getText().toString();
                 if (!isFlatNumberValid(flatNumber))
                     FlatNumberLayout.setError("Enter correct format");
                 if (!isLandmarkValid(landmark))
                     LandmarkLayout.setError("Enter correct format");
                 if (flatNumberEditText.getText().toString().matches(""))
-                    FlatNumberLayout.setError("This field is mandotary");
+                    FlatNumberLayout.setError("This field is mandatary");
                 if (landmarkEditText.getText().toString().matches(""))
-                    LandmarkLayout.setError("This field is mandotary");
+                    LandmarkLayout.setError("This field is mandatary");
                 if (isFlatNumberValid(flatNumber) && isLandmarkValid(landmark)) {
                     mainActivity.replaceFragment(R.id.fragment_landmark_button1, null);
                 }
@@ -187,11 +188,12 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     }
 
     boolean isFlatNumberValid(String flatNumber) {
-        return flatNumber.matches("^[a-zA-Z0-9\\s,'-\\\\/]+$");
+        boolean result = flatNumber.matches("^[a-zA-Z0-9\\s,'-/]+$");
+        return result;
     }
 
     boolean isLandmarkValid(String landmark) {
-        return landmark.matches("^[a-zA-Z0-9\\s,'-\\\\/]+$");
+        return landmark.matches("^[a-zA-Z0-9\\s,'-/]+$");
     }
 
     private void hiddenKeyboard(View v) {

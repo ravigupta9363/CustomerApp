@@ -128,7 +128,13 @@ public class Office extends Model {
                 revisedTime = newTime + ":" + m.group(2)  + " " + m.group(3);
                 return revisedTime;
             }else{
-             return time;
+                if(pm.equals("AM")){
+                    if(hour == 12){
+                        revisedTime = 0 + ":" + m.group(2)  + " " + m.group(3);
+                        return revisedTime;
+                    }
+                }
+                return time;
             }
         }else{
             return time;
