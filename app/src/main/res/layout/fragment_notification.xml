@@ -55,7 +55,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/no_notifications"
+            android:src="@mipmap/no_notification"
             android:layout_gravity="center"
             android:id="@+id/fragment_notification_imageview1" />
 
