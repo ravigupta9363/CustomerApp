@@ -268,8 +268,8 @@ public class ActivityHelper {
 
 
     public void launchRingDialog(MainActivity activity) {
-        ringProgressDialog = ProgressDialog.show(activity,"", "Fetching Pharmacies...", true);
-        ringProgressDialog.setCancelable(false);
+        ringProgressDialog = ProgressDialog.show(activity,"", "Please wait...", true);
+        ringProgressDialog.setCancelable(true);
         //ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
@@ -277,7 +277,6 @@ public class ActivityHelper {
     public void launchRingDialog(MainActivity activity, String body) {
         ringProgressDialog = ProgressDialog.show(activity,"", body, true);
         ringProgressDialog.setCancelable(false);
-
     }
 
 

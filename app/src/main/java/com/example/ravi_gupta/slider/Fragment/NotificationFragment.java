@@ -17,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.MyRecyclerViewAdapter;
+import com.example.ravi_gupta.slider.Database.NotificationDatabase;
 import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.SwipeableRecyclerViewTouchListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +46,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
     MainActivity mainActivity;
     public static String TAG = "NotificationFragment";
     ArrayList notificationItemDetails;
+    NotificationDatabase notificationDatabase;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -72,6 +75,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notificationDatabase = new NotificationDatabase(mainActivity);
     }
 
     @Override
@@ -103,6 +107,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
                                 for (int position : reverseSortedPositions) {
                                     notificationItemDetails.remove(position);
                                     mAdapter.notifyItemRemoved(position);
+                                    notificationDatabase.deleteNotification(position);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -112,6 +117,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
                                 for (int position : reverseSortedPositions) {
                                     notificationItemDetails.remove(position);
                                     mAdapter.notifyItemRemoved(position);
+                                    notificationDatabase.deleteNotification(position);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -189,11 +195,17 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
 
     private ArrayList<NotificationItemDetail> getDataSet() {
         notificationItemDetails = new ArrayList<NotificationItemDetail>();
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
-        notificationItemDetails.add(new NotificationItemDetail("Huge Discount On Medicines !!", "Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        //notificationItemDetails.add(new NotificationItemDetail(0,"Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        //notificationItemDetails.add(new NotificationItemDetail(1,"Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        //notificationItemDetails.add(new NotificationItemDetail(2,"Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        //notificationItemDetails.add(new NotificationItemDetail(3,"Huge Discount On Medicines !!","Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        //notificationItemDetails.add(new NotificationItemDetail(4,"Huge Discount On Medicines !!", "Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        notificationDatabase.addNotification(new NotificationItemDetail(mainActivity.notificationId, "Huge Discount On Medicines !!", "Now you can get the medicines from your local store at very low cost, If medicines are not available at one shop it will made available to you from other retailer, There is no restriction on the amount of order"));
+        mainActivity.notificationId++;
+        List<NotificationItemDetail> notificationItemDetailList = notificationDatabase.getAllNotifications();
+        for (NotificationItemDetail notificationItemDetail : notificationItemDetailList) {
+            notificationItemDetails.add(new NotificationItemDetail(notificationItemDetail.getId(),notificationItemDetail.getNotificationHeading(),notificationItemDetail.getNotificationDetail()));
+        }
         return notificationItemDetails;
     }
 

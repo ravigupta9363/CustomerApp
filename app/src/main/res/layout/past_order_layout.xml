@@ -99,14 +99,16 @@
 
         </LinearLayout>
 
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="230/-"
+            android:layout_height="30dp"
+            android:text="Delivered"
             android:gravity="right"
-            android:visibility="gone"
-            android:textSize="15sp"
-            android:id="@+id/past_order_layout_textview4" />
+            android:layout_gravity="right"
+            android:id="@+id/past_order_layout_button1"
+            android:textColor="#36B666"
+            android:focusable="false"/>
 
     </LinearLayout>
 
@@ -126,18 +128,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="Delivered"
-                android:layout_gravity="left"
-                android:background="@drawable/button_style"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:gravity="left|center"
-                android:id="@+id/past_order_layout_button1"
-                android:textColor="#36B666"
-                android:focusable="false"/>
 
         <Button
             android:layout_width="wrap_content"

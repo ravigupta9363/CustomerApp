@@ -152,18 +152,6 @@
 
         </RadioGroup>
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Just one more step to go !!"
-            android:gravity="center"
-            android:layout_marginTop="75dp"
-            android:textColor="#333"
-            android:layout_gravity="center"
-            android:textSize="28sp"
-            android:id="@+id/fragment_landmark_textview4"/>
-
     </LinearLayout>
 
     </LinearLayout>

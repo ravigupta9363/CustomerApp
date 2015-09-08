@@ -72,7 +72,9 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         ShopListDetails shopListDetails = shopListDetailses.get(position);
         String firstCharacter = String.valueOf(shopListDetails.shopName.charAt(0));
         holder.shopName.setText(shopListDetails.shopName);
-        holder.discount.setText(String.valueOf((shopListDetails.discount)+"%"));
+        Double d = new Double(shopListDetails.discount);
+        int i = d.intValue();
+        holder.discount.setText(String.valueOf((i)+"%"));
         holder.address.setText(shopListDetails.address);
 
 
