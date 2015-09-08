@@ -17,7 +17,7 @@
         android:layout_weight="1"
         android:paddingLeft="10dp"
         android:background="@drawable/button_style"
-        android:drawableLeft="@mipmap/dc_prescription"
+        android:drawableLeft="@mipmap/no_prescription_image"
         android:textAllCaps="false"
         android:drawablePadding="15dp"/>
 
@@ -38,7 +38,7 @@
         android:background="@drawable/button_style"
         android:textSize="18sp"
         android:layout_weight="1"
-        android:drawableLeft="@mipmap/dc_replace"
+        android:drawableLeft="@mipmap/doctor_main"
         android:textAllCaps="false"
         android:drawablePadding="15dp"/>
 
@@ -56,7 +56,7 @@
         android:text="Call Us"
         android:textSize="18sp"
         android:gravity="left|center"
-        android:drawableLeft="@mipmap/dc_call_me"
+        android:drawableLeft="@mipmap/no_notifications"
         android:background="@drawable/button_style"
         android:layout_weight="1"
         android:textAllCaps="false"

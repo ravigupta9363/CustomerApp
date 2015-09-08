@@ -125,6 +125,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public DatabaseHelper databaseHelper;
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
+    public int notificationId = 0;
     public TextView tv;
     //public String OTP;
     public boolean enableEditText = true;

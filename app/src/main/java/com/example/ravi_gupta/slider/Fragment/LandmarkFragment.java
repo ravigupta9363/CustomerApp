@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +51,8 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
     RadioGroup requestCallback;
     RadioButton callBack;
     RadioButton notCallBack;
+    String flatNumber;
+    String landmark;
     public static String TAG = "LandmarkFragment";
     boolean callCustomer = false;
     Map<String, Boolean> verifyOrder = new HashMap<>();
@@ -86,7 +87,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         //flatNumberTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview1);
         //landmarkTextView = (TextView)rootview.findViewById(R.id.fragment_landmark_textview2);
@@ -99,7 +99,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         notCallBack = (RadioButton)rootview.findViewById(R.id.fragment_landmark_radio_button2);
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_landmark_textview3);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_landmark_imagebutton1);
-        TextView oneMoreStepText = (TextView)rootview.findViewById(R.id.fragment_landmark_textview4);
 
         callBack.setText("Send all medicines as prescribed");
         notCallBack.setText("Call me to confirm prescription");
@@ -107,7 +106,6 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
 
         //Button toolbarButton = (Button)rootview.findViewById(R.id.fragment_cart_no_orders_button1);
         toolbarTitle.setTypeface(typeface1);
-        oneMoreStepText.setTypeface(typeface4);
         //toolbarButton.setTypeface(typeface);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +145,8 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
         FlatNumberLayout.setErrorEnabled(true);
         //FlatNumberLayout.setError("This field is mandotary");
         LandmarkLayout.setErrorEnabled(true);
-
+        flatNumber = flatNumberEditText.getText().toString();
+        landmark = landmarkEditText.getText().toString();
        // http://www.truiton.com/2015/06/android-floating-label-edittext/
 
         placeOrder.setOnClickListener(new View.OnClickListener() {
@@ -155,15 +154,15 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 hiddenKeyboard(flatNumberEditText);
                 //mainActivity.replaceFragment(R.id.fragment_landmark_button1,null);
-                if (!flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                if (!isFlatNumberValid(flatNumber))
                     FlatNumberLayout.setError("Enter correct format");
-                if (!landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$"))
+                if (!isLandmarkValid(landmark))
                     LandmarkLayout.setError("Enter correct format");
                 if (flatNumberEditText.getText().toString().matches(""))
                     FlatNumberLayout.setError("This field is mandotary");
                 if (landmarkEditText.getText().toString().matches(""))
                     LandmarkLayout.setError("This field is mandotary");
-                if (flatNumberEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$") && landmarkEditText.getText().toString().matches("^[a-zA-Z0-9\\s,'-]+$")) {
+                if (isFlatNumberValid(flatNumber) && isLandmarkValid(landmark)) {
                     mainActivity.replaceFragment(R.id.fragment_landmark_button1, null);
                 }
 
@@ -188,6 +187,16 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    boolean isFlatNumberValid(String flatNumber) {
+        return flatNumber.matches("^[a-zA-Z0-9\\s,'-\\\\/]+$");
+    }
+
+    boolean isLandmarkValid(String landmark) {
+        return landmark.matches("^[a-zA-Z0-9\\s,'-\\\\/]+$");
+    }
+
+
 
     private void hiddenKeyboard(View v) {
         InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -80,7 +80,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:background="#EEE"
-        android:visibility="gone"
         android:scrollbars="vertical"
         android:layout_below="@id/view"/>
 
