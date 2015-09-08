@@ -12,11 +12,10 @@
         android:id="@+id/linear_layout">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="150dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:src="@drawable/profile"/>
+            android:layout_gravity="center"
+            android:src="@mipmap/profile_main"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -90,7 +90,12 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.isReturn.setTextColor(Color.RED);
         }
         holder.deliveryTime.setText(String.valueOf(shopListDetails.deliveryTime) + " min");
-        holder.orderFulfilment.setText(String.valueOf("Order fulfilment " + shopListDetails.orderFulfilment) + "%");
+        if(shopListDetails.orderFulfilment == 0) {
+            holder.orderFulfilment.setVisibility(View.GONE);
+        }
+        else {
+            holder.orderFulfilment.setText(String.valueOf("Order fulfilment " + shopListDetails.orderFulfilment) + "%");
+        }
         //holder.icon.setImageDrawable(shopListDetails.icon);
         holder.icon.setText(firstCharacter);
         switch (counter){

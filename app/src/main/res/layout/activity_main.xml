@@ -11,9 +11,10 @@
         android:id="@+id/linear_layout">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="85dp"
-            android:src="@drawable/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher_main"
             android:id="@+id/activity_splash_logo"/>
     </LinearLayout>
 

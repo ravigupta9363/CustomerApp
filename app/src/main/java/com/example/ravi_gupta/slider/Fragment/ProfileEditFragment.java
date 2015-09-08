@@ -21,8 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.ravi_gupta.slider.Database.ProfileDatabase;
-import com.example.ravi_gupta.slider.Details.ProfileDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.R;
@@ -317,7 +315,11 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
                     hiddenKeyboard(customerPhone);
+                    if(fragment.equals("directHomeFragment")) {
+                        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    }
                     mainActivity.onBackPressed();
+
 
                     return true;
                 }

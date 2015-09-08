@@ -15,7 +15,7 @@
         android:layout_height="150dp"
         android:gravity="center"
         android:layout_marginTop="2dp"
-        android:src="@drawable/doctor"
+        android:src="@mipmap/doctor_main"
         android:layout_gravity="center" />
 
 

@@ -47,15 +47,16 @@
         android:layout_below="@id/toolbar"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="200dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@mipmap/no_notifications"
+            android:layout_gravity="center"
             android:id="@+id/fragment_notification_imageview1" />
 
         <TextView
@@ -65,7 +66,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="13sp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:textColor="#999"
             android:id="@+id/fragment_notification_textview1"
             android:layout_marginBottom="50dp"/>

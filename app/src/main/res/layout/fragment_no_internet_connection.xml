@@ -13,9 +13,9 @@
         android:id="@+id/linear_layout">
 
    <ImageView
-       android:layout_width="wrap_content"
+       android:layout_width="150dp"
        android:layout_height="150dp"
-       android:src="@drawable/no_internet_connection"
+       android:src="@mipmap/no_internet_connection_main"
        android:layout_marginLeft="100dp"
        android:layout_marginRight="100dp"
        android:id="@+id/fragment_no_internet_connection_imageview1"/>

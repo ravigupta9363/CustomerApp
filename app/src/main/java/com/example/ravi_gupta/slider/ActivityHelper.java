@@ -7,19 +7,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
+import android.view.WindowManager;
 
-import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
@@ -30,7 +25,6 @@ import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.google.common.collect.ImmutableMap;
-import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
@@ -274,13 +268,15 @@ public class ActivityHelper {
 
 
     public void launchRingDialog(MainActivity activity) {
-        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", "Loading ...", true);
-        ringProgressDialog.setCancelable(true);
+        ringProgressDialog = ProgressDialog.show(activity,"", "Fetching Pharmacies...", true);
+        ringProgressDialog.setCancelable(false);
+        //ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+        ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void launchRingDialog(MainActivity activity, String body) {
-        ringProgressDialog = ProgressDialog.show(activity, "Please wait ...", body, true);
-        ringProgressDialog.setCancelable(true);
+        ringProgressDialog = ProgressDialog.show(activity,"", body, true);
+        ringProgressDialog.setCancelable(false);
 
     }
 

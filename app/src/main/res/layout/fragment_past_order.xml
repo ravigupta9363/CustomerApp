@@ -51,11 +51,10 @@
         android:layout_centerInParent="true">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/past_order"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="90dp"
+            android:src="@mipmap/past_order_main"
+            android:layout_gravity="center"
             android:visibility="gone"
             android:id="@+id/fragment_past_order_imageview1"/>
 
