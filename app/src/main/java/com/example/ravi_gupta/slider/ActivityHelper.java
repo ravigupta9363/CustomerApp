@@ -277,7 +277,7 @@ public class ActivityHelper {
                 runOnUiThread(internetConnection);
             }
 
-        }, 1500);
+        }, 10000);
 
     }
 

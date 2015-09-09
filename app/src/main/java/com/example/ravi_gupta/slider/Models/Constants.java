@@ -9,7 +9,7 @@ public class Constants {
     public static String imageContainer = "offers";
     //public static String baseURL = "http://192.168.1.100:3001";
     public static String returnDays  = "15 Days Return";
-    public static String apiUrl = "http://192.168.1.102:3001/api";
+    public static String apiUrl = "http://192.168.1.100:3001/api";
     //public static String apiUrl = "http://api.drugcorner.co.in";
     public static String appName = "DRUGCORNER";
 
