@@ -32,16 +32,12 @@ import com.strongloop.android.loopback.callbacks.ObjectCallback;
  * create an instance of this fragment.
  */
 public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     MainActivity mainActivity;
     public static String TAG = "TermsAndConditionFragment";
     TextView termsAndCondition;
-
-
     private OnFragmentInteractionListener mListener;
+
+
 
     // TODO: Rename and change types and number of parameters
     public static TermsAndConditionFragment newInstance() {
@@ -49,14 +45,20 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
         return fragment;
     }
 
+
+
     public TermsAndConditionFragment() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +89,8 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
 
 
 
+
+
     /**
      * Method for loading the faq data
      */
@@ -96,7 +100,7 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess(SystemInfo systemInfo) {
                 if(systemInfo == null){
-                    Log.e(Constants.TAG, " TERMS AND COND. data not present in the server.");
+                    Log.e(Constants.TAG, " TERMS AND COND. Data not present in the server.");
                 }else{
                     String termsData = systemInfo.getHtml();
                     termsAndCondition.setText((Html.fromHtml(termsData)));
@@ -113,12 +117,16 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
 
 
 
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -132,11 +140,15 @@ public class TermsAndConditionFragment extends android.support.v4.app.Fragment {
         }
     }
 
+
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
