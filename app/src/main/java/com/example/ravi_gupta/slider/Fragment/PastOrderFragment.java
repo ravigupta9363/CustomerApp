@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,10 +23,8 @@ import com.example.ravi_gupta.slider.Details.PastOrdersDetail;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
-import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
-import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import java.text.ParseException;
@@ -37,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -214,7 +209,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                     Log.d(Constants.TAG, "Error fetching past order for customer");
                     noPastOrderText.setText("Unable to connect to server");
                     noPastOrder.setVisibility(View.VISIBLE);
-                    noPastOrder.setImageResource(R.drawable.order_cancelled);
+                    noPastOrder.setImageResource(R.mipmap.order_cancelled);
                     noPastOrderText.setVisibility(View.VISIBLE);
                     mListview.setVisibility(View.GONE);
 
