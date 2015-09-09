@@ -64,10 +64,6 @@ public class ActivityHelper {
     MainActivity activity;
     MyApplication application;
 
-    private Address updatedAddress;
-    public Address getUpdatedAddress() {
-        return updatedAddress;
-    }
     public ProgressDialog ringProgressDialog;
     public String result;
     /**=====================================================*/
@@ -182,8 +178,8 @@ public class ActivityHelper {
                         List<Address> updatedAddressList = geocoder.getFromLocation(
                                 address.getLatitude(), address.getLongitude(), 1);
                         if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                            updatedAddress = updatedAddressList.get(0);
-                            Log.v("address", "Updated Address = " + updatedAddress + "");
+                            application.setUpdatedAddress(updatedAddressList.get(0));
+                            Log.v("address", "Updated Address = " + application.getUpdatedAddress() + "");
                             parseAddress();
                         }
                     }
@@ -191,7 +187,7 @@ public class ActivityHelper {
 
                     }
                     final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher(updatedAddress.toString() );
+                    final Matcher m = p.matcher(application.getUpdatedAddress().toString() );
                     if ( m.find() ) {
                         pincode =  m.group(0);
                     }
@@ -222,13 +218,13 @@ public class ActivityHelper {
 
     public void parseAddress() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < updatedAddress.getMaxAddressLineIndex(); i++) {
-            sb.append(updatedAddress.getAddressLine(i)).append(" ");
+        for (int i = 0; i < application.getUpdatedAddress().getMaxAddressLineIndex(); i++) {
+            sb.append(application.getUpdatedAddress().getAddressLine(i)).append(" ");
         }
 
-        sb.append(updatedAddress.getLocality()).append(" ");
-        sb.append(updatedAddress.getPostalCode()).append(" ");
-        sb.append(updatedAddress.getCountryName());
+        sb.append(application.getUpdatedAddress().getLocality()).append(" ");
+        sb.append(application.getUpdatedAddress().getPostalCode()).append(" ");
+        sb.append(application.getUpdatedAddress().getCountryName());
         result = sb.toString();
     }
 
