@@ -32,5 +32,6 @@ dependencies {
     compile 'com.strongloop:loopback-sdk-android:1.5.+'
     compile "com.google.android.gms:play-services:7.0.+"
     compile 'com.pnikosis:materialish-progress:1.5'
+    compile project(':libs:elasticdownload')
 
 }

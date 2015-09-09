@@ -324,6 +324,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview4, fragment);
                             } else if (t.getMessage().equals("Unauthorized")) {
                                 //errorOccured = true;
+
                                 resendCode.setVisibility(View.VISIBLE);
                                 validationFailed.setVisibility(View.VISIBLE);
                             } else {

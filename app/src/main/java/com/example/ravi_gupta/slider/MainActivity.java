@@ -95,6 +95,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import is.arontibo.library.ElasticDownloadView;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -146,9 +147,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public boolean invalidEmail = false;
     private static LocalInstallation installation;
 
-
-
-
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -184,8 +182,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     String regid;
     String deviceId;
     ProgressBar mainProgressBar;
-
-
+    TextView appName;
 
 
     @Override
@@ -242,18 +239,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
-
-
         // Check device for Play Services APK.
         checkPlayServices();
         final MyApplication app = (MyApplication) getApplication();
 
+        appName = (TextView)findViewById(R.id.activity_main_textview1);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
+        appName.setTypeface(typeface);
         activityHelper = new ActivityHelper(this, app);
+        ElasticDownloadView mElasticDownloadView = (ElasticDownloadView)findViewById(R.id.elastic_download_view);
+        mElasticDownloadView.startIntro();
+        mElasticDownloadView.setProgress(5);
+        mElasticDownloadView.success();
+
 
     }
-
-
-
 
     public void registerInstallation(Customer customer){
         if (checkPlayServices()) {
@@ -270,9 +270,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             Log.e(Constants.TAG, "No valid Google Play Services APK found.");
         }
     }
-
-
-
 
     /**
      * Updates the registration for push notifications.
@@ -308,8 +305,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
-
-
     /**
      * Checks the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -329,8 +324,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return true;
     }
-
-
 
     /**
      * Registers the application with GCM servers asynchronously.
@@ -362,8 +355,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }.execute(null, null, null);
     }
 
-
-
     /**
      * Saves the Installation to the LoopBack server and reports the result.
      * @param installation_
@@ -387,13 +378,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         });
     }
-
-
-
-
-
-
-
 
     private class SlideMenuClickListener implements //Naviagation menu class
             ListView.OnItemClickListener {
@@ -433,7 +417,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         ft.commitAllowingStateLoss();
                     }
                     else {
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top)
+                        fragmentManager.beginTransaction()
                                 .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
                                 .commitAllowingStateLoss();
                     }
@@ -553,16 +537,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return super.onPrepareOptionsMenu(menu);
     }
 
-
-
-
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
         getActionBar().setTitle(mTitle);
     }
-
-
 
     /**
      * When using the ActionBarDrawerToggle, you must call it during
@@ -766,9 +745,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             }
     }
-
-
-
 
     /*==================REPLACE FRAGMENTS METHOD AREA==============================*/
     private void fragmentMain(FragmentTransaction ft){

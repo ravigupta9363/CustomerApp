@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -270,17 +271,27 @@ public class ActivityHelper {
          * Launching dialog.
          */
         launchRingDialog(activity);
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
 
-        internetConnection = activity.haveNetworkConnection();
-        runOnUiThread(internetConnection);
+            @Override
+            public void run() {
+                //start your activity here
+                internetConnection = activity.haveNetworkConnection();
+                runOnUiThread(internetConnection);
+            }
+
+        }, 1500);
+
     }
 
 
     public void launchRingDialog(MainActivity activity) {
         ringProgressDialog = ProgressDialog.show(activity,"", "Please wait...", true);
         ringProgressDialog.setCancelable(true);
-        //ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
-        ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+        ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ringProgressDialog.dismiss();
     }
 
     public void launchRingDialog(MainActivity activity, String body) {
