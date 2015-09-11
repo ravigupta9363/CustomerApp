@@ -144,9 +144,15 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         //================Now sending the request to server for sending the otp====================
         RestAdapter adapter = mainActivity.restAdapter;
         repository = adapter.createRepository(NotificationRepository.class);
+        String id;
+        try{
+            LocalInstallation installation = MainActivity.getInstallation();
+            id = (String)installation.getId();
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Getting null value from main activity installation obj in VerifyingOrderFragment file");
+            throw e;
+        }
 
-        LocalInstallation installation = MainActivity.getInstallation();
-        String id = (String)installation.getId();
 
         repository.requestCode(id, new VoidCallback() {
             @Override
@@ -167,9 +173,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
     }
 
-    public boolean checkVerificationCode(int code) {
-        return true;
-    }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -206,10 +210,12 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
 
     private void uploadPrescription(MainActivity activity, final DatabaseHelper databaseHelper, final String code){
-        final List<byte[]> byteArrayList = new ArrayList<>();
-        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         new  AsyncTask<Void, Void, Void>()
         {
+            List<byte[]> byteArrayList = new ArrayList<>();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -229,6 +235,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         bitmap = BitmapFactory.decodeStream(mainActivity.getContentResolver().openInputStream(prescriptionDetail.getImageUri()));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();
+                        stream.reset();
                     } catch (FileNotFoundException e) {
                         Log.e(Constants.TAG, e.getMessage());
                         e.printStackTrace();
@@ -280,6 +287,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 public void onSuccess(Container container) {
                     final int listSize = byteArrayList.size();
                     for(byte[] bytes : byteArrayList){
+                        String byteSize = ""+ bytes.length;
+                        Log.i(Constants.TAG, byteSize);
                         String fileName = String.valueOf(code) + '.' + id;
                         //Applying final step for image upload..
                         finalImageUpload(fileName, container, bytes, listSize, code, userId );
