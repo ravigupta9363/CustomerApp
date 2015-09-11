@@ -14,25 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Models.Constants;
-import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Repository.NotificationRepository;
-import com.example.ravi_gupta.slider.Repository.OrderRepository;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
 import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
