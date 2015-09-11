@@ -842,6 +842,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
+            bitmap.recycle();
+            System.gc();
         } catch (Exception e) {
             e.printStackTrace();
         }
