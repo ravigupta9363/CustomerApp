@@ -210,9 +210,17 @@ public class ActivityHelper {
             activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
         }
 
-        application.getOrder().setGoogleAddr(result);
-        application.getOrder().setPincode(Integer.parseInt(pincode));
-        application.getOrder().setGeoLocation(latLong);
+        try{
+            application.getOrder().setGoogleAddr(result);
+            application.getOrder().setPincode(Integer.parseInt(pincode));
+            application.getOrder().setGeoLocation(latLong);
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Error fetching pincode from the address.");
+            //TODO SHOW ANOTHER FRAGMENT HERE..
+            //We are not providing service in your area....
+            activity.replaceFragment(R.layout.fragment_no_address_found, null);
+        }
+
         return pincode;
     }
 
@@ -267,17 +275,11 @@ public class ActivityHelper {
          * Launching dialog.
          */
         launchRingDialog(activity);
-        Handler mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
                 //start your activity here
                 internetConnection = activity.haveNetworkConnection();
                 runOnUiThread(internetConnection);
-            }
 
-        }, 10000);
 
     }
 
@@ -337,7 +339,6 @@ public class ActivityHelper {
             account = null;
         }
         Log.i(Constants.TAG, account.toString());
-
         return account;
     }
 

@@ -843,6 +843,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             out.flush();
             out.close();
             bitmap.recycle();
+            bitmap = null;
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();

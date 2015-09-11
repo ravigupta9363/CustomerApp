@@ -14,18 +14,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Repository.NotificationRepository;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
 import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
@@ -215,18 +222,22 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
             @Override
             protected Void doInBackground(Void... params) {
+                //TODO FIX Caused by: java.lang.OutOfMemoryError: Failed to allocate a 31961100 byte allocation with 4194272 free bytes and 4MB until OOM
                 List<PrescriptionDetail> prescriptionDetails =  databaseHelper.getAllPrescription();
                 for(PrescriptionDetail prescriptionDetail : prescriptionDetails){
                     try {
                         bitmap = BitmapFactory.decodeStream(mainActivity.getContentResolver().openInputStream(prescriptionDetail.getImageUri()));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();
                     } catch (FileNotFoundException e) {
                         Log.e(Constants.TAG, e.getMessage());
                         e.printStackTrace();
                     }
                     byteArrayList.add(byteArray);
-
+                    byteArray = null;
+                    //Now clearing the bitmap cache..
+                    bitmap.recycle();
+                    bitmap = null;
                 }
                 return null;
             }
@@ -272,6 +283,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         String fileName = String.valueOf(code) + '.' + id;
                         //Applying final step for image upload..
                         finalImageUpload(fileName, container, bytes, listSize, code, userId );
+                        bytes = null;
                     }//for loop
 
                 }//onSuccess
@@ -393,6 +405,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onError(Throwable t) {
                 setStatus("Retrying Upload..");
+                Log.e(Constants.TAG, t.toString());
                 /**
                  * In case of error recursive call the same function..
                  */
