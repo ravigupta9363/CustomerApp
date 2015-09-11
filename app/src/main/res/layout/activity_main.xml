@@ -53,8 +53,6 @@
         android:layout_below="@+id/linear_layout"
         elastic:backgroundColor="@android:color/transparent"
         android:layout_centerInParent="true"
-        elastic:vc_fillColor="#36B666"
-        elastic:vc_strokeColor="#36B666"
         elastic:vc_viewportWidth="100"/>
 
 </RelativeLayout>
