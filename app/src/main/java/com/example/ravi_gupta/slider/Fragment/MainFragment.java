@@ -1,48 +1,32 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
-import com.example.ravi_gupta.slider.Location.AppLocationService;
-import com.example.ravi_gupta.slider.Location.LocationAddress;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 import com.squareup.picasso.RequestCreator;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -100,10 +84,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
         Address address = myApplication.getUpdatedAddress();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-            sb.append(address.getAddressLine(i)).append("\n");
+            sb.append(address.getAddressLine(i)).append(" ");
         }
-        sb.append(address.getLocality()).append("\n");
-        sb.append(address.getPostalCode()).append("\n");
+        sb.append(address.getLocality()).append(" ");
+        sb.append(address.getPostalCode()).append(" ");
         sb.append(address.getCountryName());
         result = sb.toString();
 
