@@ -222,17 +222,22 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
             @Override
             protected Void doInBackground(Void... params) {
+                //TODO FIX Caused by: java.lang.OutOfMemoryError: Failed to allocate a 31961100 byte allocation with 4194272 free bytes and 4MB until OOM
                 List<PrescriptionDetail> prescriptionDetails =  databaseHelper.getAllPrescription();
                 for(PrescriptionDetail prescriptionDetail : prescriptionDetails){
                     try {
                         bitmap = BitmapFactory.decodeStream(mainActivity.getContentResolver().openInputStream(prescriptionDetail.getImageUri()));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();
                     } catch (FileNotFoundException e) {
                         Log.e(Constants.TAG, e.getMessage());
                         e.printStackTrace();
                     }
                     byteArrayList.add(byteArray);
+                    byteArray = null;
+                    //Now clearing the bitmap cache..
+                    bitmap.recycle();
+                    bitmap = null;
                 }
                 return null;
             }
@@ -278,6 +283,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         String fileName = String.valueOf(code) + '.' + id;
                         //Applying final step for image upload..
                         finalImageUpload(fileName, container, bytes, listSize, code, userId );
+                        bytes = null;
                     }//for loop
 
                 }//onSuccess
@@ -399,6 +405,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onError(Throwable t) {
                 setStatus("Retrying Upload..");
+                Log.e(Constants.TAG, t.toString());
                 /**
                  * In case of error recursive call the same function..
                  */

@@ -33,14 +33,6 @@ import com.example.ravi_gupta.slider.R;
  * create an instance of this fragment.
  */
 public class SendOrderFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     MainActivity mainActivity;
     DatabaseHelper databaseHelper;
     public static String TAG = "SendOrderFragment";
@@ -75,25 +67,25 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         mainActivity.enableEditText = false;
 
         //Setting Drawable small
-        Drawable drawablePrescription = getResources().getDrawable(R.mipmap.no_prescription_image);
-        drawablePrescription.setBounds(0, 0, (int) (drawablePrescription.getIntrinsicWidth() * 1.2),
-                (int) (drawablePrescription.getIntrinsicHeight() * 1.2));
+        Drawable drawablePrescription = getResources().getDrawable(R.mipmap.dc_prescription);
+        drawablePrescription.setBounds(0, 0, (int) (drawablePrescription.getIntrinsicWidth() * 0.7),
+                (int) (drawablePrescription.getIntrinsicHeight() * 0.7));
         ScaleDrawable sd1 = new ScaleDrawable(drawablePrescription, 0, 1f, 1f);
 
-        Drawable drawableRepeatOrder = getResources().getDrawable(R.mipmap.doctor_main);
-        drawableRepeatOrder.setBounds(0, 0, (int) (drawableRepeatOrder.getIntrinsicWidth() * 1.2),
-                (int) (drawableRepeatOrder.getIntrinsicHeight() * 1.2));
+        Drawable drawableRepeatOrder = getResources().getDrawable(R.mipmap.dc_replace);
+        drawableRepeatOrder.setBounds(0, 0, (int) (drawableRepeatOrder.getIntrinsicWidth() * 0.7),
+                (int) (drawableRepeatOrder.getIntrinsicHeight() * 0.7));
         ScaleDrawable sd2 = new ScaleDrawable(drawableRepeatOrder, 0, 1f, 1f);
 
-        Drawable drawableCallUs = getResources().getDrawable(R.mipmap.no_notifications);
-        drawableCallUs.setBounds(0, 0, (int) (drawableCallUs.getIntrinsicWidth() * 1.2),
-                (int) (drawableCallUs.getIntrinsicHeight() * 1.2));
+        Drawable drawableCallUs = getResources().getDrawable(R.mipmap.dc_call_me);
+        drawableCallUs.setBounds(0, 0, (int) (drawableCallUs.getIntrinsicWidth() * 0.7),
+                (int) (drawableCallUs.getIntrinsicHeight() * 0.7));
         ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);
 
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
+
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Lato-Regular.ttf");
+
 
         Button sendPrescriptionButton = (Button) rootview.findViewById(R.id.fragment_send_order_button1);
         Button repeatOrderButton = (Button) rootview.findViewById(R.id.fragment_send_order_button2);

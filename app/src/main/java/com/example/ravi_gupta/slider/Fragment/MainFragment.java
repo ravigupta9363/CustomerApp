@@ -92,11 +92,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
-        myApplication = (MyApplication)mainActivity.getApplication();
+        MainActivity activity = (MainActivity)getActivity();
+        myApplication = (MyApplication)activity.getApplication();
         requestCreatorList = myApplication.getImageList();
 
         databaseHelper = new DatabaseHelper(getActivity());
-        MainActivity activity = (MainActivity)getActivity();
+
         Address address = myApplication.getUpdatedAddress();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
