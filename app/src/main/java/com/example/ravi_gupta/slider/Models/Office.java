@@ -87,7 +87,14 @@ public class Office extends Model {
             openTimeHour = Integer.parseInt( openTimeMatcher.group(1) );
             if(currentTimeHour >= closedTimeHour){
                 //Show office is closed right now closed..
-                return true;
+                int currentTimeMin = Integer.parseInt( currTimeMatcher.group(2));
+                int closedTimeMin = Integer.parseInt( closedTimeMatcher.group(2));
+                if(closedTimeMin >= currentTimeMin){
+                    return false;
+                }else {
+                    return true;
+                }
+
             }else{
                 if(openTimeHour > currentTimeHour){
                     //Show office is closed right now closed..

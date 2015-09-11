@@ -82,10 +82,10 @@ public class ServerViewPagerAdapter extends PagerAdapter {
         TouchImageView sliderItem = (TouchImageView)itemView.findViewById(R.id.server_viewpager_item);
 
         // Capture position and set to the ImageView
-        Map<String, String> imageThumbnail = mapList.get(position);
+        Map<String, String> orderList = mapList.get(position);
         Object bigImage = "image";
-        Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
-        Log.v("server","BigImage = "+imageUri+"");
+        Uri imageUri = Uri.parse(Constants.apiUrl + orderList.get(bigImage));
+        Log.d(Constants.TAG, "BigImage = "+imageUri+"");
         Picasso.with(mainActivity).load(imageUri).into(sliderItem);
        // sliderItem.setImageResource(sliderItems[position]);
 

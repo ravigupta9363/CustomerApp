@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -76,7 +77,22 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+         * To Maintain freezing of UI Applying postDelayed
+         */
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Load order from the database..
+                loadPastOrder();
+            }
+        }, 100);
+
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -288,10 +304,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
-
-
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -315,8 +327,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
-        //Load order from the database..
-        loadPastOrder();
+
     }
 
 
