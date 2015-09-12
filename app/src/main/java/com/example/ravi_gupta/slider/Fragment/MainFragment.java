@@ -57,7 +57,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     DatabaseHelper databaseHelper;
     String result;
     MyApplication myApplication;
-    List<RequestCreator> requestCreatorList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -78,7 +77,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         //sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
         MainActivity activity = (MainActivity)getActivity();
         myApplication = (MyApplication)activity.getApplication();
-        requestCreatorList = myApplication.getImageList();
 
         databaseHelper = new DatabaseHelper(getActivity());
 
@@ -108,7 +106,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
         cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
-        pagerAdapter = new ViewPagerAdapter(getActivity(), requestCreatorList, viewPager);
+        pagerAdapter = new ViewPagerAdapter(getActivity(), myApplication.getImageFileArray(), viewPager);
 
         viewPager.setPadding(40, 0, 40, 0);
         viewPager.setClipToPadding(false);
@@ -119,7 +117,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setScrollDurationFactor(3);
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
-        Log.v("images",requestCreatorList.size()+"");
+
 
         disabledocationEditText.setText(result);
         Log.d("address", "Display Address = " + result);
@@ -177,16 +175,16 @@ public class MainFragment extends android.support.v4.app.Fragment {
                         // Showing a toast for just testing purpose
                     } else {
                         if (page == 0) {
-                            viewPager.setCurrentItem(requestCreatorList.size()-2);
+                            viewPager.setCurrentItem( myApplication.getImageFileArray().size() - 2);
                         }
 
                         // skip fake page (last), go to first page
-                        if (page == requestCreatorList.size()-1) {
+                        if (page == myApplication.getImageFileArray().size() - 1) {
                             viewPager.setCurrentItem(0);
                             //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                         } else {
                             viewPager.setCurrentItem(page++);
-                            if (page == requestCreatorList.size()-1)
+                            if (page == myApplication.getImageFileArray().size() - 1)
                                 page = 1;
                         }
                     }

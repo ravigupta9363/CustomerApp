@@ -11,7 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -25,17 +24,17 @@ import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.google.common.collect.ImmutableMap;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
 import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +64,10 @@ public class ActivityHelper {
 
     public ProgressDialog ringProgressDialog;
     public String result;
+    public int totalImages;
+    public int totalDownloaded;
+    private java.io.File localFile;
+    private List<java.io.File> fileList = new ArrayList<>();
     /**=====================================================*/
 
 
@@ -414,6 +417,7 @@ public class ActivityHelper {
 
 
     public void fetchAllImages(RestAdapter adapter){
+
         ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
         containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
             @Override
@@ -421,29 +425,18 @@ public class ActivityHelper {
                 container.getAllFiles(new ListCallback<File>() {
                     @Override
                     public void onSuccess(List<File> objects) {
-                        imageDownloaded = true;
-                        //Now saving the images to the application ..
+                        totalImages = objects.size();
 
-                        List<RequestCreator> requestCreators = new ArrayList<RequestCreator>();
                         for (File file : objects) {
-                            Uri imageUri = Uri.parse(Constants.apiUrl  + "/containers/" + file.getContainer() + "/download/" + file.getName());
-                            RequestCreator requestCreator = Picasso.with(activity).load(imageUri);
-                            requestCreators.add(requestCreator);
-                        }
-
-                        application.setImageList(requestCreators);
-
-                        //app.setImageList(imageList);
-                        if (imageDownloaded && retailerListFetched) {
-                            //Go to main fragment
-                            //Now resolving the route..
-                            resolveRoute();
+                            downloadImages(file);
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
+                        //TODO CANNOT CONNECT TO SERVER FRAGMENT ADD
                         Log.e(Constants.TAG, "Error fetching all the offers images.");
+                        Log.e(Constants.TAG, t.toString());
 
                     }
                 });
@@ -452,6 +445,47 @@ public class ActivityHelper {
             @Override
             public void onError(Throwable t) {
                 Log.e(Constants.TAG, "Error founding the containers.");
+            }
+        });
+    }
+
+
+
+
+    public void downloadImages(File remoteFile){
+        remoteFile.setUrl(Constants.apiUrl + "/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
+        String fileName = activity.getApplicationInfo().dataDir + "/" + remoteFile.getName();
+        localFile = new java.io.File( fileName);
+        fileList.add(localFile);
+        remoteFile.download(localFile, new VoidCallback() {
+
+            @Override
+            public void onSuccess() {
+                MyApplication app = (MyApplication)activity.getApplication();
+                Date date = new Date();
+                //long time = date.getTime();
+                //String timeString = "offersImage" + timeString.toString() + ".png";
+                java.io.File tempFile = fileList.get(totalDownloaded);
+                app.getImageFileArray().add( tempFile );
+                // localFile contains the content
+                Log.d(Constants.TAG, localFile.getAbsolutePath());
+                //Increment the value..
+                totalDownloaded++;
+                if(totalImages == totalDownloaded){
+                    imageDownloaded = true;
+                    if (imageDownloaded && retailerListFetched) {
+                        //Go to main fragment
+                        //Now resolving the route..
+                        resolveRoute();
+                    }
+                }
+            }
+
+
+            @Override
+            public void onError(Throwable error) {
+                // download failed
+                Log.e(Constants.TAG, "Error downloading images files..");
             }
         });
     }
