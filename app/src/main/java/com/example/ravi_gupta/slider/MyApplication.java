@@ -24,6 +24,18 @@ public class MyApplication extends Application {
     private Office office;
     private List<Retailer> retailerList;
 
+    public List<java.io.File> getImageFileArray() {
+        return imageFileArray;
+    }
+
+
+   /* public void setImageFileArray(java.io.File[] imageFileArray) {
+        this.imageFileArray = imageFileArray;
+    }*/
+
+    // TODO: Convert this array into list
+    private List<java.io.File> imageFileArray = new ArrayList<>();
+
     public Address getUpdatedAddress() {
         return updatedAddress;
     }
@@ -47,8 +59,9 @@ public class MyApplication extends Application {
 
 
 
-    List<RequestCreator> imageList;
+    //List<RequestCreator> imageList;
 
+/*
     public List<RequestCreator> getImageList() {
         return imageList;
     }
@@ -56,6 +69,7 @@ public class MyApplication extends Application {
     public void setImageList(List<RequestCreator> imageList) {
         this.imageList = imageList;
     }
+*/
 
 
 

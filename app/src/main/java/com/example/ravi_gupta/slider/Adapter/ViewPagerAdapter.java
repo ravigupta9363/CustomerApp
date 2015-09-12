@@ -1,6 +1,8 @@
 package com.example.ravi_gupta.slider.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -25,14 +27,15 @@ public class ViewPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
-    ListIterator<RequestCreator> requestCreatorListIterator;
+    List<java.io.File> imageFileArray;
 
 
-    public ViewPagerAdapter(Context context, final List<RequestCreator> sliderItems, final ViewPagerCustomDuration viewPager) {
+    public ViewPagerAdapter(Context context, List<java.io.File> imageFileArray
+            , final ViewPagerCustomDuration viewPager) {
         this.context = context;
-        this.sliderItems = sliderItems;
+        this.imageFileArray = imageFileArray;
         this.viewPager = viewPager;
-        requestCreatorListIterator = sliderItems.listIterator();
+       // requestCreatorListIterator = sliderItems.listIterator();
         enabled = true;
 
        /* viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -56,7 +59,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public int getCount() {
         //return sliderItems.length;
-        return sliderItems.size();
+        return imageFileArray.size();
     }
 
     @Override
@@ -76,8 +79,14 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView sliderItem = (ImageView) itemView.findViewById(R.id.viewpagerImageView1);
 
         // Capture position and set to the ImageView
-        if(requestCreatorListIterator.hasNext()) {
-            requestCreatorListIterator.next().into(sliderItem);
+        java.io.File localImage = imageFileArray.get(position);
+        if(localImage.exists()){
+
+            String path = localImage.getAbsolutePath();
+            Bitmap myBitmap = BitmapFactory.decodeFile(path);
+            sliderItem.setImageBitmap(myBitmap);
+
+        }
 
 
             // Add viewpager_item.xml to ViewPager
@@ -94,11 +103,11 @@ public class ViewPagerAdapter extends PagerAdapter {
                 public void onPageSelected(int position) {
                     // skip fake page (first), go to last page
                     if (position == 0) {
-                        ((ViewPager) container).setCurrentItem(sliderItems.size() - 2);
+                        ((ViewPager) container).setCurrentItem(imageFileArray.size() - 2);
                     }
 
                     // skip fake page (last), go to first page
-                    if (position == sliderItems.size() - 1) {
+                    if (position == imageFileArray.size() - 1) {
                         ((ViewPager) container).setCurrentItem(1); //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                     }
 
@@ -109,7 +118,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
                 }
             });
-        }
 
             return itemView;
     }
