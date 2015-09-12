@@ -77,8 +77,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         // Capture position and set to the ImageView
         if(requestCreatorListIterator.hasNext()) {
-            requestCreatorListIterator.next().into(sliderItem);
-
+            requestCreatorListIterator.next().error(R.drawable.slider_one).into(sliderItem);
 
             // Add viewpager_item.xml to ViewPager
             ((ViewPager) container).addView(itemView);

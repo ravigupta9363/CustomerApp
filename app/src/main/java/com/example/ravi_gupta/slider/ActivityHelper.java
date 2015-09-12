@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -126,22 +125,8 @@ public class ActivityHelper {
 
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
 
-        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0 )) );
+        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
 
-    }
-
-
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            appLocationService = new AppLocationService(activity);
-            Location location = appLocationService
-                    .getLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                //replaceFragment(R.layout.fragment_main,null);
-            }
-        }
     }
 
 
@@ -257,6 +242,18 @@ public class ActivityHelper {
                     }
                 });
         alertDialog.show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
+        if (requestCode == 1) {
+          //  TODO: check service again after calling setting activity
+            appLocationService = new AppLocationService(activity);
+            Location location = appLocationService
+                    .getLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                //replaceFragment(R.layout.fragment_main,null);
+            }
+        }
     }
 
 

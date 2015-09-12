@@ -573,7 +573,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void takePhoto() {
         if (isExternalStorageWritable()) {
             Calendar cal = Calendar.getInstance();
-            File dir = getPicStorageDir("Drugcorner Prescription");
+            File dir = getPicStorageDir("Drugcorner");
             File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
             fileUri = Uri.fromFile(imageFile);
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -830,7 +830,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 findFragmentByTag(CartFragment.TAG);
         //Thumbnail is being saved
         Calendar calendar = Calendar.getInstance();
-        File dir = getPicStorageDir("Drugcorner Thumbnails");
+        File dir = getPicStorageDir("Drugcorner_Thumbnails");
         File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
 
         File oldFile = new File(fileUri.getPath());
