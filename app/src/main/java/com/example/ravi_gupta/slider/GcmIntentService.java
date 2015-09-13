@@ -94,6 +94,8 @@ public class GcmIntentService extends IntentService {
         return verificationCode;
     }
 
+
+
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
@@ -118,6 +120,8 @@ public class GcmIntentService extends IntentService {
 
 
     }
+
+
     public void showImageNotification() {
 
         Drawable d = getResources().getDrawable(R.drawable.pills1);
@@ -132,7 +136,7 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
         bigPicStyle.bigPicture(bitmap);
         bigPicStyle.setBigContentTitle("Drug Corner");
-        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get surprise gift with every order");
         mBuilder.setStyle(bigPicStyle);
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.setAction("OpenNotificationFragment");

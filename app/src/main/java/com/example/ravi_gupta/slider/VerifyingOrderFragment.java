@@ -152,6 +152,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             public void onError(Throwable t) {
                 Log.e(TAG, "Error sending OTP Push request to the server.");
                 Log.e(TAG, t.toString());
+                retryButton.setVisibility(View.VISIBLE);
+                textView.setText("Tap to Retry");
             }
 
             @Override
@@ -387,8 +389,11 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
     private void saveOrder(final Order order, String customerId, String code){
         setStatus("Placing Order..");
+        LocalInstallation installation = MainActivity.getInstallation();
+        final String id = (String)installation.getId();
         order.setCode(code);
         order.setCustomerId(customerId);
+        order.setRegistrationId(id);
 
         /**
          * Now Saving Order finally..
