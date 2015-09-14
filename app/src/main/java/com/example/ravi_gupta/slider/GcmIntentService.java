@@ -16,7 +16,10 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Message;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +36,12 @@ public class GcmIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
     private static String verificationCode;
+
+    public static String getStatus() {
+        return status;
+    }
+
+    private static String status;
     public Matcher m;
     int mNotificationId1 = 001;
     int mNotificationId2 = 002;
@@ -76,14 +85,63 @@ public class GcmIntentService extends IntentService {
                 }else {
                     //The push message found was of notification type
                     //display notification
-                    // Post notification of received message.
+                    // Post notification of received message...
                     //Log.i(TAG, "The  " + m);
                     //sendNotification("Received: " + extras.toString());
                     //Log.v("Notification",extras.toString());
+                    Gson gson = new Gson();
+                    final Message data = gson.fromJson(message, Message.class);
+                    //Log.d(Constants.TAG, data.getMessage());
+                    if( !(data.getMessage() == null) ){
+                        if(!(data.getImages() == null)){
+                            if( !(data.getStatus()==null) ){
+                                /**
+                                 * Notification showing order status
+                                 */
+                                String subject;
+                                //Set status to be received by GUI interface as polling method..
+                                status = data.getStatus();
+                                if(data.getStatus().equals("5003")){
+
+                                    subject =  "Order successfully delievered";
+                                    sendNotification(data.getMessage(), subject);
+                                }
+                                else if(data.getStatus().equals("5001")){
+                                    subject =  "Order Preparing";
+                                    sendNotification(data.getMessage(), subject);
+                                }
+                                else if(data.getStatus().equals("5002")){
+                                    subject =  "At Retailer";
+                                    sendNotification(data.getMessage(), subject);
+                                }
+                                else if(data.getStatus().equals("5004")){
+                                    subject =  "Order Cancelled";
+                                    sendNotification(data.getMessage(), subject);
+                                }
+                                else{
+                                    //Just post notification in this case..
+                                    sendNotification(data.getMessage());
+                                }
+                            }
+                            else{
+                                /**
+                                 * TEXT BASED STATUS ABOUT OFFERS OR SOME MESSAGE..
+                                 */
+                                sendNotification(data.getMessage());
+                            }
+                        }
+                        else{
+                            /**
+                             * Show images type status here..
+                             */
+                            //TODO PROCESSING OF IMAGES TYPE NOTIFICATION STILL NEEDS TO BE DONE
 
 
-                    showStatusNotification();
-                    showImageNotification();
+                        }
+
+                    }
+                    //showStatusNotification();
+                    //showImageNotification();
                 }
             }
         }
@@ -101,7 +159,7 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String msg) {
-
+        int color = 0xff14649f;
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -111,10 +169,37 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo) // notification icon
-                        .setContentTitle("GCM Notification")
+                        .setContentTitle("drugcorner")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
-                        .setContentText(msg);
+                        .setContentText(msg)
+                        .setColor(color);
+
+        mBuilder.setContentIntent(contentIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+
+    }
+
+    // Put the message into a notification and post it.
+    // This is just one simple example of what you might choose to do with
+    // a GCM message.
+    private void sendNotification(String msg, String subject) {
+        int color = 0xff14649f;
+        mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo) // notification icon
+                        .setContentTitle(subject)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentText(msg)
+                        .setColor(color);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
@@ -123,7 +208,9 @@ public class GcmIntentService extends IntentService {
     }
 
 
-    public void showImageNotification() {
+
+
+    public void showImageNotification(String message, String subject, String imageUri) {
 
         Drawable d = getResources().getDrawable(R.drawable.pills1);
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
@@ -153,7 +240,7 @@ public class GcmIntentService extends IntentService {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId1, mBuilder.build());
     }
-
+/*
     public void showStatusNotification() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -179,6 +266,9 @@ public class GcmIntentService extends IntentService {
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId2, mBuilder.build());
-    }
+    }*/
+
+
+
 }
 

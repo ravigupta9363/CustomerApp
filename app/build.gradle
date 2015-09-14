@@ -33,5 +33,5 @@ dependencies {
     compile "com.google.android.gms:play-services:7.0.+"
     compile 'com.pnikosis:materialish-progress:1.5'
     compile project(':libs:elasticdownload')
-
+    compile 'com.google.code.gson:gson:2.2.4'
 }
