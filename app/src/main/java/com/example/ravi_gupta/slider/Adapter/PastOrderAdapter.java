@@ -19,8 +19,6 @@ import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
-import com.example.ravi_gupta.slider.Repository.OrderRepository;
-import com.google.common.collect.ImmutableMap;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -97,7 +95,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.time.setText(pastOrdersDetail.time);
         holder.orderId.setText(pastOrdersDetail.orderId);
         //holder.price.setText(String.valueOf(pastOrdersDetail.price) + "/-");
-        holder.address.setText(pastOrdersDetail.address);
+        holder.address.setText(pastOrdersDetail.address.substring(0,30)+"...");
         //If Delivered == true than
 
         final List<Map<String, String>> mapList = pastOrdersDetail.drawable;

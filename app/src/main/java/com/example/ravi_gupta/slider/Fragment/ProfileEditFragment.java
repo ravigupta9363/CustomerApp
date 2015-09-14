@@ -17,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.Models.Customer;
@@ -49,6 +51,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
     EditText customerName;
     EditText customerMail;
     EditText customerPhone;
+    CheckBox checkBox;
     Button saveButton;
     ArrayList<String> updatedArrayList;
     MainActivity mainActivity;
@@ -89,7 +92,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         //Bundle bundle = getArguments();
         //ArrayList<String> infoUser = bundle.getStringArrayList("infoUser");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
-        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
         Drawable drawableProfile = getResources().getDrawable(R.mipmap.dc_profile);
@@ -110,6 +113,7 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
         customerName = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext1);
         customerMail = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext2);
         customerPhone = (EditText) rootview.findViewById(R.id.fragment_profile_edit_edittext3);
+        checkBox = (CheckBox) rootview.findViewById(R.id.fragment_profile_edit_checkbox1);
         saveButton = (Button) rootview.findViewById(R.id.fragment_profile_edit_button1);
         final TextInputLayout nameLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_profile_edit_layout1);
         final TextInputLayout mailLayout = (TextInputLayout) rootview.findViewById(R.id.fragment_profile_edit_layout2);
@@ -189,13 +193,15 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                     mailLayout.setError("This field is mandatary");
                 if(updatedPhone.matches(""))
                     phoneLayout.setError("This field is mandatary");
+                if(!checkBox.isChecked())
+                    Toast.makeText(mainActivity,"Accept T & C to continue",Toast.LENGTH_SHORT).show();
 
 
                 //mainFragment = (MainFragment) getActivity().getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
                 //Log.v("profile", "Profile " + updatedName + updatedMail + updatedPhone);
                 hiddenKeyboard(customerPhone);
                 //http://stackoverflow.com/questions/15805555/java-regex-to-validate-full-name-allow-only-spaces-and-letters
-                if(isNameValid(updatedName) && isEmailValid(updatedMail) && isPhoneValid(updatedPhone)) {
+                if(isNameValid(updatedName) && isEmailValid(updatedMail) && isPhoneValid(updatedPhone) && checkBox.isChecked()) {
                     if (fragment.equals("profileFragment")) {
                            // profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                             mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "ProfileFragment");

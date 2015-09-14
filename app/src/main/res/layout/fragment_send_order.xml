@@ -6,41 +6,81 @@
     android:layout_marginTop="2dp" android:weightSum="3" android:clickable="true">
 
 
-    <Button
-        android:id="@+id/fragment_send_order_button1"
-        android:layout_gravity="center"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Prescription"
-        android:textSize="18sp"
-        android:gravity="left|center"
         android:layout_weight="1"
-        android:paddingLeft="10dp"
-        android:background="@drawable/button_style"
-        android:drawableLeft="@mipmap/no_prescription_image"
-        android:textAllCaps="false"
-        android:drawablePadding="15dp"/>
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/icon_color_one"
+            android:id="@+id/shop_list_textview7"
+            android:layout_gravity="center"
+            android:text="S"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/fragment_send_order_button1"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Send Prescription"
+            android:textSize="18sp"
+            android:gravity="left|center"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:background="@drawable/button_style"
+            android:textAllCaps="false"
+            android:layout_marginLeft="5dp"
+            android:drawablePadding="15dp"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#EEE"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/icon_color_four"
+            android:id="@+id/shop_list_textview2"
+            android:layout_gravity="center"
+            android:text="R"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:scaleType="fitStart"/>
 
 
     <Button
         android:id="@+id/fragment_send_order_button2"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="Repeat Order"
         android:gravity="left|center"
         android:paddingLeft="10dp"
         android:background="@drawable/button_style"
         android:textSize="18sp"
         android:layout_weight="1"
-        android:drawableLeft="@mipmap/doctor_main"
         android:textAllCaps="false"
+        android:layout_marginLeft="5dp"
         android:drawablePadding="15dp"/>
+
+        </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -48,19 +88,41 @@
         android:background="#EEE"/>
 
 
-    <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/icon_color_three"
+            android:id="@+id/shop_list_textview3"
+            android:layout_gravity="center"
+            android:text="C"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:scaleType="fitStart"/>
+
+
+
+        <Button
         android:id="@+id/fragment_send_order_button3"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="Call Us"
         android:textSize="18sp"
         android:gravity="left|center"
-        android:drawableLeft="@mipmap/no_notifications"
         android:background="@drawable/button_style"
         android:layout_weight="1"
+            android:layout_marginLeft="5dp"
         android:textAllCaps="false"
         android:paddingLeft="10dp"
         android:drawablePadding="15dp"/>
+
+        </LinearLayout>
 
 </LinearLayout>

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,7 +65,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         mainActivity.enableEditText = false;
 
         //Setting Drawable small
-        Drawable drawablePrescription = getResources().getDrawable(R.mipmap.dc_prescription);
+      /*  Drawable drawablePrescription = getResources().getDrawable(R.mipmap.dc_prescription);
         drawablePrescription.setBounds(0, 0, (int) (drawablePrescription.getIntrinsicWidth() * 0.7),
                 (int) (drawablePrescription.getIntrinsicHeight() * 0.7));
         ScaleDrawable sd1 = new ScaleDrawable(drawablePrescription, 0, 1f, 1f);
@@ -80,7 +78,7 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         Drawable drawableCallUs = getResources().getDrawable(R.mipmap.dc_call_me);
         drawableCallUs.setBounds(0, 0, (int) (drawableCallUs.getIntrinsicWidth() * 0.7),
                 (int) (drawableCallUs.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);
+        ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);*/
 
 
 
@@ -95,9 +93,10 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         repeatOrderButton.setTypeface(typeface2);
         callUsButton.setTypeface(typeface2);
 
-        sendPrescriptionButton.setCompoundDrawables(sd1.getDrawable(), null, null, null);
+
+        /*sendPrescriptionButton.setCompoundDrawables(sd1.getDrawable(), null, null, null);
         repeatOrderButton.setCompoundDrawables(sd2.getDrawable(), null, null, null);
-        callUsButton.setCompoundDrawables(sd3.getDrawable(), null, null, null);
+        callUsButton.setCompoundDrawables(sd3.getDrawable(), null, null, null);*/
 
         sendPrescriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override

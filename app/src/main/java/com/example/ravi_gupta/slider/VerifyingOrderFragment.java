@@ -101,8 +101,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         });
         //Requesting Verification code from server
         sendRequest();
-
-
         return rootview;
     }
 
