@@ -3,13 +3,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.ravi_gupta.slider.Fragment.OrderStatusFragment"
-       android:background="#EEE" android:clickable="true" >
+       android:background="#f9f9f7" android:clickable="true" >
 
 
      <android.support.v7.widget.Toolbar
          xmlns:android="http://schemas.android.com/apk/res/android"
          xmlns:app="http://schemas.android.com/apk/res-auto"
-         android:id="@+id/toolbar"
+         android:id="@+id/order_status_toolbar"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:background="?attr/colorPrimary"
@@ -41,35 +41,41 @@
          android:layout_width="match_parent"
          android:layout_height="2dp"
          android:background="#EEE"
-         android:id="@+id/view"
-         android:layout_below="@+id/toolbar"/>
+         android:id="@+id/order_status_view"
+         android:layout_below="@+id/order_status_toolbar"/>
 
      <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical"
+         android:background="@drawable/status_gradient"
+         android:id="@+id/fragment_order_status_linear_layout"
          android:layout_below="@+id/view">
 
      <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical"
-         android:paddingRight="10dp"
-         android:background="#f9f9f7">
+         android:alpha="0.8"
+         android:id="@+id/fragment_order_status_background_layout"
+         android:background="@mipmap/order_status_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="@drawable/status_gradient"
             android:paddingTop="5dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginLeft="5dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="25dp"
                     android:src="@mipmap/dc_date" />
 
@@ -79,6 +85,8 @@
                     android:text="26 JULY 2015"
                     android:textSize="12sp"
                     android:paddingTop="4dp"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
                     android:id="@+id/fragment_order_status_textview1"
                     android:gravity="center"/>
 
@@ -93,6 +101,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
+                    android:visibility="gone"
                     android:src="@mipmap/dc_time"/>
 
                 <TextView
@@ -101,6 +110,8 @@
                     android:text="02:52 PM"
                     android:textSize="12sp"
                     android:paddingTop="4dp"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
                     android:gravity="right|center"
                     android:id="@+id/fragment_order_status_textview2" />
 
@@ -120,19 +131,7 @@
                  android:layout_height="wrap_content"
                  android:orientation="horizontal">
 
-                 <ImageView
-                     android:layout_width="wrap_content"
-                     android:layout_height="25dp"
-                     android:src="@mipmap/dc_order"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="DC112553"
-                    android:id="@+id/fragment_order_status_textview3"
-                    android:textSize="12sp"
-                    android:paddingTop="4dp"
-                    android:gravity="center|left"/>
 
              </LinearLayout>
 
@@ -145,33 +144,23 @@
                  android:layout_marginRight="0dp">
 
 
-                 <Button
+                 <ImageView
                      android:layout_width="wrap_content"
-                     android:layout_height="30dp"
-                     android:text="@string/fragment_order_status_cancel_order"
-                     android:textAllCaps="false"
-                     android:textColor="#36B666"
-                     android:id="@+id/fragment_order_status_button1"
-                     android:background="@drawable/button_style"
-                     android:textSize="14sp"
+                     android:layout_height="25dp"
                      android:visibility="gone"
-                     android:layout_marginRight="0dp"
-                     android:gravity="right|center"
-                     android:layout_gravity="right|center"/>
+                     android:layout_gravity="right"
+                     android:src="@mipmap/dc_order"/>
 
-                 <Button
-                     android:layout_width="wrap_content"
-                     android:layout_height="30dp"
-                     android:text="@string/fragment_order_status_home"
-                     android:textAllCaps="false"
-                     android:textColor="#36B666"
-                     android:id="@+id/fragment_order_status_button2"
-                     android:background="@drawable/button_style"
-                     android:textSize="14sp"
-                     android:layout_marginRight="0dp"
-                     android:gravity="right|center"
-                     android:visibility="gone"
-                     android:layout_gravity="right|center"/>
+                 <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="DC112553"
+                     android:id="@+id/fragment_order_status_textview3"
+                     android:textSize="12sp"
+                     android:paddingTop="4dp"
+                     android:textColor="#FFF"
+                     android:textStyle="bold"
+                     android:gravity="center|right"/>
 
              </LinearLayout>
 
@@ -185,7 +174,6 @@
          <ImageView
              android:layout_width="wrap_content"
              android:layout_height="150dp"
-             android:src="@drawable/delivered"
              android:layout_marginRight="100dp"
              android:layout_marginLeft="100dp"
              android:id="@+id/fragment_order_status_imageview1"
@@ -193,13 +181,23 @@
 
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ready for Delivery"
-            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="Preparing"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:textStyle="bold"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textAllCaps="true"
             android:id="@+id/fragment_order_status_textview4"
-            android:textColor="#888"
-            android:textSize="13sp"
+            android:textColor="#FFFF00"
+            android:textSize="30sp"
+            android:layout_alignParentRight="true"
+            android:background="#000"
             android:layout_below="@+id/fragment_order_status_imageview1"
             android:layout_marginBottom="50dp"/>
 
@@ -209,6 +207,7 @@
                 android:text="@string/fragment_order_status_textview12"
                 android:textSize="12sp"
                 android:textColor="#14649F"
+                android:visibility="gone"
                 android:id="@+id/fragment_order_status_textview12"
                 android:layout_alignParentBottom="true"/>
 
@@ -217,12 +216,88 @@
                 android:layout_height="wrap_content"
                 android:text="**You can only order one at a time"
                 android:textSize="12sp"
+                android:visibility="gone"
                 android:textColor="#14649F"
                 android:id="@+id/fragment_order_status_textview13"
                 android:layout_above="@+id/fragment_order_status_textview12"/>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/fragment_order_status_cancel_order"
+                android:textAllCaps="true"
+                android:textColor="#FFF"
+                android:id="@+id/fragment_order_status_button1"
+                android:background="@drawable/round_status_button"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"
+                android:layout_gravity="right|center"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/fragment_order_status_home"
+                android:textAllCaps="true"
+                android:textColor="#FFF"
+                android:id="@+id/fragment_order_status_button2"
+                android:background="@drawable/round_status_button"
+                android:textSize="16sp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_gravity="right|center"/>
+
+
         </RelativeLayout>
      </LinearLayout>
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:layout_centerInParent="true"
+         android:visibility="gone"
+         android:id="@+id/fragment_order_status_linear_layout2">
+
+         <ImageView
+             android:layout_width="200dp"
+             android:layout_height="120dp"
+             android:src="@mipmap/past_order"
+             android:layout_gravity="center"
+             android:id="@+id/fragment_order_status_imageview2"/>
+
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="@string/fragment_past_orders_textview1"
+             android:layout_gravity="center"
+             android:gravity="center"
+             android:textSize="13sp"
+             android:textColor="#999"
+             android:id="@+id/fragment_order_status_textview14"
+             android:layout_marginBottom="50dp"/>
+
+         <Button
+             android:layout_width="wrap_content"
+             android:layout_height="35dp"
+             android:layout_centerInParent="true"
+             android:background="@drawable/round_button"
+             android:text="@string/fragment_order_status_button3"
+             android:paddingLeft="15dp"
+             android:paddingRight="15dp"
+             android:textColor="#FFF"
+             android:layout_gravity="center"
+             android:id="@+id/fragment_order_status_button3" />
+
+
      </LinearLayout>
 
  </RelativeLayout>

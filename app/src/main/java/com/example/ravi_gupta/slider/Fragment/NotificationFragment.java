@@ -132,6 +132,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         toolbarTitle.setTypeface(typeface1);
         noNotificationText.setTypeface(typeface2);
 
+//TODO Hide list view here
         noNotification.setVisibility(View.VISIBLE);
         noNotificationText.setVisibility(View.VISIBLE);
 

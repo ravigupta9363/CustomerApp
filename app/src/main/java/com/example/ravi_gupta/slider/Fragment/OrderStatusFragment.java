@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,11 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     String fragment;
     Button cancelOrder;
     Button home;
+    Button orderNow;
+    LinearLayout linearLayout;
+    LinearLayout noOrderStatusLayout;
+    android.support.v7.widget.Toolbar statusToolbar;
+    View view;
 
 
     // TODO: Rename and change types of parameters
@@ -90,6 +96,17 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         orderStatusImage = (ImageView) rootview.findViewById(R.id.fragment_order_status_imageview1);
         cancelOrder = (Button) rootview.findViewById(R.id.fragment_order_status_button1);
         home = (Button) rootview.findViewById(R.id.fragment_order_status_button2);
+        linearLayout = (LinearLayout) rootview.findViewById(R.id.fragment_order_status_linear_layout);
+        noOrderStatusLayout = (LinearLayout) rootview.findViewById(R.id.fragment_order_status_linear_layout2);
+        orderNow = (Button) rootview.findViewById(R.id.fragment_order_status_button3);
+        statusToolbar = (android.support.v7.widget.Toolbar) rootview.findViewById(R.id.order_status_toolbar);
+        view = (View)rootview.findViewById(R.id.order_status_view);
+
+        linearLayout.setVisibility(View.GONE);
+        noOrderStatusLayout.setVisibility(View.VISIBLE);
+        orderNow.setVisibility(View.VISIBLE);
+        statusToolbar.setVisibility(View.VISIBLE);
+        view.setVisibility(View.VISIBLE);
 
         date.setTypeface(typeface2);
         time.setTypeface(typeface2);
@@ -106,8 +123,16 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         realTimeSystemText.setTypeface(typeface2);
         onlyOneOrder.setTypeface(typeface2);
 
+        //Drawable orderStatusBackground = rootview.findViewById(R.id.fragment_order_status_background_layout).getBackground();
+        //orderStatusBackground.setAlpha(127);
+
         if (fragment.equals("HomeFragment")) {
             cancelOrder.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.VISIBLE);
+            noOrderStatusLayout.setVisibility(View.GONE);
+            orderNow.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
+            statusToolbar.setVisibility(View.GONE);
             toolbarIcon.setVisibility(View.GONE);
         }
 
@@ -129,13 +154,21 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        orderNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.onBackPressed();
+                mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            }
+        });
+
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                orderStatusText.setText("Your Order has been cancelled as per your request");
+                orderStatusText.setText("Cancelled");
                 cancelOrder.setVisibility(View.GONE);
                 home.setVisibility(View.VISIBLE);
-                orderStatusImage.setImageResource(R.drawable.order_cancelled);
+                //orderStatusImage.setImageResource(R.drawable.order_cancelled);
                 //Open Main Fragment when order has been cancelled or delivered
             }
         });

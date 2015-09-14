@@ -132,5 +132,12 @@
             android:singleLine="true"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I accept all T &amp; C of company"
+            android:id="@+id/fragment_profile_edit_checkbox1"/>
     </LinearLayout>
 </RelativeLayout>
