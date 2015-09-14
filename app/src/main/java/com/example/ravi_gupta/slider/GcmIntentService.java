@@ -93,7 +93,7 @@ public class GcmIntentService extends IntentService {
                     final Message data = gson.fromJson(message, Message.class);
                     //Log.d(Constants.TAG, data.getMessage());
                     if( !(data.getMessage() == null) ){
-                        if(!(data.getImages() == null)){
+                        if(data.getImages() == null){
                             if( !(data.getStatus()==null) ){
                                 /**
                                  * Notification showing order status

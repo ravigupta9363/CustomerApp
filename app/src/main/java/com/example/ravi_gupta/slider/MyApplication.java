@@ -8,9 +8,11 @@ import android.location.Address;
 import android.net.Uri;
 
 import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Message;
 import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
+import com.google.gson.Gson;
 import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.File;
 import com.strongloop.android.loopback.RestAdapter;
@@ -41,6 +43,8 @@ public class MyApplication extends Application {
     }
 
     public void setUpdatedAddress(Address updatedAddress) {
+        //Gson gson = new Gson();
+        //final Message data = gson.fromJson(updatedAddress, Address.class);
         this.updatedAddress = updatedAddress;
     }
 

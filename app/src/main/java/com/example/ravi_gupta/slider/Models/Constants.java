@@ -39,6 +39,9 @@ public class Constants {
 
     public static String appPhone = "tel:+91-9953473059";
 
+    // MY_PREFS_NAME - a static String variable like:
+    public static final String MY_PREFS_NAME = "DrugCorner App";
+
 
 
 }
