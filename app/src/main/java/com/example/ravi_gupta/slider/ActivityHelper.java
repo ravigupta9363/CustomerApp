@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -412,7 +413,51 @@ public class ActivityHelper {
 
     }
 
+    //=======================================SHARED PREFERENCES======================================================
+    /**
+     *
+     * @param activity
+     * @param key
+     * @param value
+     */
+    public void addData(MainActivity activity, String key, String value){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
 
+    public void addData(MainActivity activity, String key, int value){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
+        editor.putInt(key, value);
+        editor.apply();
+    }
+
+
+    public void clear(MainActivity activity){
+        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+    }
+
+
+    public String getData(MainActivity activity, String key){
+        SharedPreferences prefs = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE);
+        String text = prefs.getString(key, null);
+        return text;
+    }
+
+
+    public int getIntData(MainActivity activity, String key){
+        SharedPreferences prefs = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE);
+        int text = prefs.getInt(key, 0);
+        return text;
+    }
+
+
+
+
+
+    //=======================================END SHARED PREFERENCES======================================================
 
 
 
