@@ -11,8 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -26,8 +24,6 @@ import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.google.common.collect.ImmutableMap;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
 import com.strongloop.android.loopback.File;
@@ -134,20 +130,6 @@ public class ActivityHelper {
 
         application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
 
-    }
-
-
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            appLocationService = new AppLocationService(activity);
-            Location location = appLocationService
-                    .getLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                //replaceFragment(R.layout.fragment_main,null);
-            }
-        }
     }
 
 
@@ -263,6 +245,18 @@ public class ActivityHelper {
                     }
                 });
         alertDialog.show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
+        if (requestCode == 1) {
+          //  TODO: check service again after calling setting activity
+            appLocationService = new AppLocationService(activity);
+            Location location = appLocationService
+                    .getLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                //replaceFragment(R.layout.fragment_main,null);
+            }
+        }
     }
 
 

@@ -79,6 +79,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView sliderItem = (ImageView) itemView.findViewById(R.id.viewpagerImageView1);
 
         // Capture position and set to the ImageView
+
         java.io.File localImage = imageFileArray.get(position);
         if(localImage.exists()){
 
