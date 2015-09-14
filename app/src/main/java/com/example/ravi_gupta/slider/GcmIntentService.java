@@ -78,9 +78,10 @@ public class GcmIntentService extends IntentService {
                     //The push message found was of notification type
                     //display notification
                     // Post notification of received message.
-                    Log.i(TAG, "The  " + m);
-                    sendNotification("Received: " + extras.toString());
-                    Log.v("Notification",extras.toString());
+                    //Log.i(TAG, "The  " + m);
+                    //sendNotification("Received: " + extras.toString());
+                    //Log.v("Notification",extras.toString());
+
 
                     showStatusNotification();
                     showImageNotification();
