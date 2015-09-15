@@ -170,8 +170,6 @@ public class CustomerRepository extends UserRepository<Customer> {
                 callback.onError(t);
             }
         });
-
-
     }
 
 

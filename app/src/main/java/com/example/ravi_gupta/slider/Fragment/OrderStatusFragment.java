@@ -19,12 +19,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
 import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
 import com.example.ravi_gupta.slider.GcmIntentService;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.R;
+import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +65,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     android.support.v7.widget.Toolbar statusToolbar;
     View view;
     String status;
+    OrderStatusDataBase orderStatusDataBase;
 
 
     // TODO: Rename and change types of parameters
@@ -78,6 +88,9 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        orderStatusDataBase = new OrderStatusDataBase(mainActivity);
+        String id = orderStatusDataBase.getOrderStatus();
+        loadOrder(id);
     }
 
     @Override
@@ -257,21 +270,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         new AsyncCaller().execute();
     }
 
-    /*private void startTimerThread(final String subject) {
-       final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            public void run() {
-                    handler.post(new Runnable(){
-                        public void run() {
-                            orderStatusText.setText(subject);
-                            Log.d("serverFarm", subject);
-                        }
-                    });
-                }
 
-        };
-        new Thread(runnable).start();
-    }*/
 
 
     private void changeStatus(MainActivity activity, final String subject){
@@ -321,6 +320,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                     }
 
                 }//if
+
             }//While
         }//doInBackground
 
@@ -331,6 +331,72 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             home.setVisibility(View.VISIBLE);
 
         }
-    }//AsyncCalle
+    }//AsyncCaller
+
+
+    private void loadStatus(String status){
+        if (!(status == null)) {
+            if(status.equals("5003")){
+                changeStatus(mainActivity, "Delivered");
+
+            }
+            else if(status.equals("5001")){
+                changeStatus(mainActivity, "Preparing");
+            }
+            else if(status.equals("5002")){
+                changeStatus(mainActivity, "At Retailer");
+            }
+            else if(status.equals("5004")){
+                changeStatus(mainActivity, "Cancelled");
+
+            }
+            else{
+                //do nothing here..
+                /**
+                 * If status doesnot belong to any of these category..
+                 */
+            }
+
+        }//if
+    }
+
+
+    private void loadOrder(final String id){
+        mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+        OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
+        orderRepository.getOrder(id, new ObjectCallback<Order>() {
+            @Override
+            public void onSuccess(Order order) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                format.setTimeZone(TimeZone.getTimeZone("IST"));
+                java.util.Date date_ = null;
+                try {
+                    date_ = format.parse(order.getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String time_ = date_.toString().substring(12, 16);
+                String orderDay = date_.toString().substring(8, 10);
+                String orderMonth = date_.toString().substring(4, 7);
+                String orderYear = date_.toString().substring(30, 34);
+                String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
+
+                /**
+                 * Load data ..
+                 */
+                String orderStatus = order.getStatus();
+                loadStatus(orderStatus);
+                date.setText(actualDate);
+                time.setText(time_);
+                orderId.setText(id);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, "Error fetching order ");
+                Log.e(Constants.TAG, t.toString());
+            }
+        });
+    }
 
 }
