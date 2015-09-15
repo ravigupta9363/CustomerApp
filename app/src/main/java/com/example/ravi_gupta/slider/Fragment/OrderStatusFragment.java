@@ -101,8 +101,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         fragment = getArguments().getString("fragment");
 
@@ -143,7 +141,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         //Drawable orderStatusBackground = rootview.findViewById(R.id.fragment_order_status_background_layout).getBackground();
         //orderStatusBackground.setAlpha(127);
 
-        if (fragment.equals("HomeFragment")) {
+        if (fragment.equals("HomeFragment") || fragment.equals("NotDelivered")) {
             cancelOrder.setVisibility(View.VISIBLE);
             linearLayout.setVisibility(View.VISIBLE);
             noOrderStatusLayout.setVisibility(View.GONE);
@@ -152,6 +150,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             statusToolbar.setVisibility(View.GONE);
             toolbarIcon.setVisibility(View.GONE);
         }
+
+
 
        /* final Drawable drawable = getResources().getDrawable(R.mipmap.dc_cancel_order);
         drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * 0.4),
@@ -362,7 +362,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
 
     private void loadOrder(final String id){
-        mainActivity.getActivityHelper().launchRingDialog(mainActivity);
         OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
         orderRepository.getOrder(id, new ObjectCallback<Order>() {
             @Override

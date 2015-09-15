@@ -134,7 +134,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <CheckBox
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I accept all T &amp; C of company"

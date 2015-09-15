@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="10dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -96,13 +96,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="right">
+                android:gravity="right"
+                android:layout_marginRight="10dp">
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:visibility="gone"
-                    android:src="@mipmap/dc_time"/>
+                    android:layout_height="wrap_content"
+                    android:text="TIme : "
+                    android:id="@+id/fragment_order_status_textview16"
+                    android:textSize="12sp"
+                    android:paddingTop="4dp"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:layout_marginRight="2dp"
+                    android:gravity="center|right"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,18 +148,23 @@
                  android:orientation="horizontal"
                  android:layout_gravity="right"
                  android:gravity="right"
-                 android:layout_marginRight="0dp">
+                 android:layout_marginRight="10dp">
 
-
-                 <ImageView
-                     android:layout_width="wrap_content"
-                     android:layout_height="25dp"
-                     android:visibility="gone"
-                     android:layout_gravity="right"
-                     android:src="@mipmap/dc_order"/>
 
                  <TextView
-                     android:layout_width="match_parent"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Order Id : "
+                     android:id="@+id/fragment_order_status_textview15"
+                     android:textSize="12sp"
+                     android:paddingTop="4dp"
+                     android:textColor="#FFF"
+                     android:textStyle="bold"
+                     android:layout_marginRight="2dp"
+                     android:gravity="center|right"/>
+
+                 <TextView
+                     android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="DC112553"
                      android:id="@+id/fragment_order_status_textview3"

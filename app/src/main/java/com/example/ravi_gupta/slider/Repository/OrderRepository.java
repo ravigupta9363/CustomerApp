@@ -37,8 +37,7 @@ public class OrderRepository extends ModelRepository<Order> {
 
 
 
-    public void getOrder(Object id, final ObjectCallback<Order> callback) {
-
+    public void getOrder(Object id, final ObjectCallback<Order> callback){
         invokeStaticMethod("findById", ImmutableMap.of("id", id), new Adapter.JsonObjectCallback() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -65,12 +64,6 @@ public class OrderRepository extends ModelRepository<Order> {
             }
         });
     }
-
-
-
-
-
-
 }
 
 

@@ -496,7 +496,4 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             }
         }
     }//AsyncCaller
-
-
-
 }

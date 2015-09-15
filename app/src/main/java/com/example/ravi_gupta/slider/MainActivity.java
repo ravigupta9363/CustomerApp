@@ -73,6 +73,7 @@ import com.example.ravi_gupta.slider.Fragment.ProfileEditFragment;
 import com.example.ravi_gupta.slider.Fragment.ProfileFragment;
 import com.example.ravi_gupta.slider.Fragment.SendOrderFragment;
 import com.example.ravi_gupta.slider.Fragment.TermsAndConditionFragment;
+import com.example.ravi_gupta.slider.Fragment.TryAgain;
 import com.example.ravi_gupta.slider.Fragment.changeLocationFragment;
 import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
@@ -109,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
         NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
-        VerifyingOrderFragment.OnFragmentInteractionListener{
+        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -742,8 +743,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     addProfile(ft,object);
                     break;
 
+                case R.layout.fragment_order_status:
+                    openOrderStatus(ft,object);
+                    break;
+
+                case R.layout.fragment_try_again:
+                    tryAgain(ft);
+                    break;
+
                 case R.id.fragment_incoming_sms_textview4:
                     invalidEmail(ft,object);
+
 
             }
     }
@@ -1107,6 +1117,32 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         bundle.putString("fragment", fragment);
         profileEditFragment.setArguments(bundle);
         ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
+        ft.commitAllowingStateLoss();
+    }
+
+    private void openOrderStatus(FragmentTransaction ft,Object object) {
+        OrderStatusFragment frag14 = (OrderStatusFragment) getSupportFragmentManager().
+                findFragmentByTag(OrderStatusFragment.TAG);
+        if (frag14 == null) {
+            frag14 = OrderStatusFragment.newInstance();
+        }
+        Bundle bundle7 = new Bundle();
+        bundle7.putString("fragment", "HomeFragment");
+        frag14.setArguments(bundle7);
+        ft.replace(R.id.container, frag14, OrderStatusFragment.TAG);
+        ft.commitAllowingStateLoss();
+    }
+
+    private void tryAgain(FragmentTransaction ft) {
+        TryAgain frag14 = (TryAgain) getSupportFragmentManager().
+                findFragmentByTag(TryAgain.TAG);
+        if (frag14 == null) {
+            frag14 = TryAgain.newInstance();
+        }
+        Bundle bundle7 = new Bundle();
+        bundle7.putString("fragment", "HomeFragment");
+        frag14.setArguments(bundle7);
+        ft.replace(R.id.container, frag14, TryAgain.TAG);
         ft.commitAllowingStateLoss();
     }
 

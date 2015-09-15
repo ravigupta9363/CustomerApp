@@ -207,7 +207,7 @@ public class ActivityHelper {
             Log.e(Constants.TAG, "Error fetching pincode from the address.");
             //TODO SHOW ANOTHER FRAGMENT HERE..
             //We are not providing service in your area....
-            activity.replaceFragment(R.layout.fragment_no_address_found, null);
+            activity.replaceFragment(R.layout.fragment_try_again, null);
         }
 
         return pincode;
@@ -462,7 +462,7 @@ public class ActivityHelper {
 
 
 
-    public void fetchAllImages(RestAdapter adapter){
+    public void fetchAllImages(final RestAdapter adapter){
 
         ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
         containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
@@ -480,9 +480,11 @@ public class ActivityHelper {
 
                     @Override
                     public void onError(Throwable t) {
-                        //TODO CANNOT CONNECT TO SERVER FRAGMENT ADD
+
                         Log.e(Constants.TAG, "Error fetching all the offers images.");
                         Log.e(Constants.TAG, t.toString());
+                        activity.replaceFragment(R.layout.fragment_try_again, null);
+
 
                     }
                 });
@@ -553,7 +555,7 @@ public class ActivityHelper {
             //TODO CHECK VALUE FROM SERVER
             //Check from server and get the status of main settings
             Log.d(Constants.TAG, "Delivery status pending..");
-            activity.replaceFragment(R.layout.fragment_order_status,null);
+            activity.replaceFragment(R.layout.fragment_order_status, null);
         }
     }//resolveRoute
 
