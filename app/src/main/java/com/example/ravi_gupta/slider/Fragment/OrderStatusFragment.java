@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -256,12 +257,29 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         new AsyncCaller().execute();
     }
 
+    /*private void startTimerThread(final String subject) {
+       final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                    handler.post(new Runnable(){
+                        public void run() {
+                            orderStatusText.setText(subject);
+                            Log.d("serverFarm", subject);
+                        }
+                    });
+                }
+
+        };
+        new Thread(runnable).start();
+    }*/
+
 
     private void changeStatus(MainActivity activity, final String subject){
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 orderStatusText.setText(subject);
+                Log.d("serverFarm",subject);
             }//public void run() {
         });
     }

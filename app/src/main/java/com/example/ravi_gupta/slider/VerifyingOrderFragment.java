@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
+import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
@@ -58,6 +59,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     List<String> fileList = new ArrayList<>();
     int totalImageUploaded = 0;
     public static String TAG = "VerifyingOrderFragment";
+    OrderStatusDataBase orderStatusDataBase;
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,6 +78,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         databaseHelper = new DatabaseHelper(mainActivity);
+        orderStatusDataBase = new OrderStatusDataBase(mainActivity);
     }
 
 
@@ -400,6 +403,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess() {
                 setStatus("Order Placed..");
+                orderStatusDataBase.addOrderStatus(order.getId().toString());
                 //Close the loading bar
                 mainActivity.getActivityHelper().closeLoadingBar();
                 Log.d(Constants.TAG, "New Order successfully created on the server.");

@@ -290,7 +290,6 @@ public class ActivityHelper {
         ringProgressDialog.setCancelable(true);
         ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ringProgressDialog.dismiss();
     }
 
     public void launchRingDialog(MainActivity activity, String body) {
