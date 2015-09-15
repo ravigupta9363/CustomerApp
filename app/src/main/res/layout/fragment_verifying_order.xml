@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.VerifyingOrderFragment" android:clickable="true"
-    android:background="#f9f9f7">
+    android:background="@mipmap/verifying_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:id="@+id/linear_layout">
 
         <ImageView
@@ -17,28 +18,35 @@
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
             android:layout_gravity="center|top"
+            android:visibility="gone"
             android:src="@mipmap/dispatched_for_delivery"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Verifying your order"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="50dp"
+            android:background="#000"
+            android:padding="10dp"
+            android:textColor="#FFFF00"
+            android:textStyle="bold"
+            android:alpha="0.5"
+            android:textAllCaps="true"
+            android:textSize="20sp"
             android:id="@+id/fragment_verifying_order_textview1"/>
 
 
         <Button
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="50dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_button"
+            android:layout_gravity="bottom"
+            android:background="@drawable/round_status_button"
             android:text="Retry"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:textColor="#FFF"
-            android:layout_centerHorizontal="true"
             android:visibility="gone"
             android:id="@+id/fragment_verifying_order_button1"/>
 

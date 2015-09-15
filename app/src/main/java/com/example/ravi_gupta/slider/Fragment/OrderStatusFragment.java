@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Details.OrderStatusDetail;
+import com.example.ravi_gupta.slider.GcmIntentService;
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
 
@@ -52,6 +54,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     LinearLayout noOrderStatusLayout;
     android.support.v7.widget.Toolbar statusToolbar;
     View view;
+    String status;
 
 
     // TODO: Rename and change types of parameters
@@ -241,8 +244,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     // handle back button's click listener
                     if (fragment.equals("HomeFragment")) {
-                    }
-                    else {
+                    } else {
                         mainActivity.onBackPressed();
                     }
                     mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -251,6 +253,66 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
+        new AsyncCaller().execute();
     }
+
+
+    private void changeStatus(MainActivity activity, final String subject){
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                orderStatusText.setText(subject);
+            }//public void run() {
+        });
+    }
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //this method will be running on UI thread
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (true ) {
+                //Checking if status has been changed..
+                status = GcmIntentService.getStatus();
+                if (!(status == null)) {
+                    if(status.equals("5003")){
+                        changeStatus(mainActivity, "Delivered");
+                        return null;
+                    }
+                    else if(status.equals("5001")){
+                        changeStatus(mainActivity, "Preparing");
+                    }
+                    else if(status.equals("5002")){
+                        changeStatus(mainActivity, "At Retailer");
+                    }
+                    else if(status.equals("5004")){
+                        changeStatus(mainActivity, "Cancelled");
+                        return null;
+                    }
+                    else{
+                        //do nothing here..
+                        /**
+                         * If status doesnot belong to any of these category..
+                         */
+
+                    }
+
+                }//if
+            }//While
+        }//doInBackground
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            cancelOrder.setVisibility(View.GONE);
+            home.setVisibility(View.VISIBLE);
+
+        }
+    }//AsyncCalle
 
 }

@@ -4,7 +4,6 @@ package com.example.ravi_gupta.slider;
  * Created by robins on 26/8/15.
  */
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Message;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;

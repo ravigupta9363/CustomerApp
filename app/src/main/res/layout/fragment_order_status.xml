@@ -234,6 +234,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:visibility="gone"
                 android:layout_gravity="right|center"
                 />
@@ -252,6 +253,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:visibility="gone"
+                android:layout_marginRight="10dp"
                 android:layout_gravity="right|center"/>
 
 
