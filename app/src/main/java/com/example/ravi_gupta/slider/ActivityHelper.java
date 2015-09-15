@@ -425,6 +425,8 @@ public class ActivityHelper {
         editor.apply();
     }
 
+
+
     public void addData(MainActivity activity, String key, int value){
         SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
         editor.putInt(key, value);
