@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -78,6 +80,8 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
         orderStatusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MyApplication myApplication = (MyApplication)  mainActivity.getApplication();
+                myApplication.setShowSplash(Constants.splash, mainActivity);
                 mainActivity.replaceFragment(R.id.fragment_confirm_order_button1, null);
             }
         });

@@ -129,7 +129,7 @@ public class ActivityHelper {
 
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
 
-        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)));
+        application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)), activity);
 
     }
 
@@ -210,9 +210,9 @@ public class ActivityHelper {
         }
 
         try{
-            application.getOrder().setGoogleAddr(parseAddress());
-            application.getOrder().setPincode(Integer.parseInt(pincode));
-            application.getOrder().setGeoLocation(latLong);
+            application.getOrder(activity).setGoogleAddr(parseAddress());
+            application.getOrder(activity).setPincode(Integer.parseInt(pincode));
+            application.getOrder(activity).setGeoLocation(latLong);
         }catch (Exception e){
             Log.e(Constants.TAG, "Error fetching pincode from the address.");
             //TODO SHOW ANOTHER FRAGMENT HERE..
@@ -374,10 +374,10 @@ public class ActivityHelper {
                                 activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
                             } else {
-                                application.setOffice(officeObj);
+                                application.setOffice(officeObj, activity);
 
                                 //Now setting the office id to the order...
-                                application.getOrder().setOfficeId((String) officeObj.getId());
+                                application.getOrder(activity).setOfficeId((String) officeObj.getId());
 
 
                                 officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {

@@ -275,7 +275,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
          * Now before sending order first checking
          * if the order is the NEW ORDER or the repeated order
          */
-        if(app.getOrder().getPrescription() == null){
+        if(app.getOrder(mainActivity).getPrescription() == null){
             //CURRENT ORDER IS THE NEW ORDER..ADD PRESCRIPTION FIRST..
             ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
             containerRepo.get((String)userId,  new ObjectCallback<Container>() {
@@ -306,7 +306,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         }else{
             //CURRENT ORDER IS THE REPEATED ORDER....
             //Just save the order..
-            saveOrder( app.getOrder(), (String)userId, code );
+            saveOrder( app.getOrder(mainActivity), (String)userId, code );
         }
     }
 
@@ -375,8 +375,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             prescription.add(image);
         }
 
-        app.getOrder().setPrescription(prescription);
-        Order order  = app.getOrder();
+        app.getOrder(mainActivity).setPrescription(prescription);
+        Order order  = app.getOrder(mainActivity);
         //Now saving the order..
         saveOrder(order, userId, code);
     }
@@ -405,7 +405,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                     mainActivity.getActivityHelper().closeLoadingBar();
                 }
                 catch (Exception e){
-                    Log.e(Constants.TAG, "Error Loading bar doesnt have any instance in VerifyingOrderFragment");
+                    Log.e(Constants.TAG, "Error Loading bar doesn't have any instance in VerifyingOrderFragment");
                 }
 
                 Log.d(Constants.TAG, "New Order successfully created on the server.");

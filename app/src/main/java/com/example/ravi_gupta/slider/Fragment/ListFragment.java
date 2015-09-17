@@ -72,7 +72,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
         mListview.setAdapter(shopListAdapter);
         application = (MyApplication)getActivity().getApplication();
         //TODO NEEDS TO BE CHECKED FOR FURTHER INSPECTION
-        if(application.getOffice().isClosed() == false) {
+        if(application.getOffice(mainActivity).isClosed() == false) {
             mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,7 +80,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
                     if (!shopListDetails.IsClosed) {
                         mainActivity.replaceFragment(R.id.shopListview, shopListDetails);
-                        application.getOrder().setRetailerId((String)shopListDetails.id);
+                        application.getOrder(mainActivity).setRetailerId((String)shopListDetails.id);
                     }
                 }
             });

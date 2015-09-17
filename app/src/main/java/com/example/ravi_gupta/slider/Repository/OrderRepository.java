@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Order;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
@@ -38,23 +39,24 @@ public class OrderRepository extends ModelRepository<Order> {
 
 
     public void getOrder(Object id, final ObjectCallback<Order> callback){
-        invokeStaticMethod("findById", ImmutableMap.of("id", id), new Adapter.JsonObjectCallback() {
+        invokeStaticMethod("findById", ImmutableMap.of("id", id), new Adapter.JsonArrayCallback(){
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(JSONArray response) {
                 Log.d(Constants.TAG, "Order fetched for given id" );
                 Log.d(Constants.TAG, response.toString());
-                if (response != null) {
-                    //Now converting jsonObject to list
-                    Map<String, Object> orderObj = JsonUtil.fromJson(response);
-                    //List<Order> orderList = new ArrayList<Order>();
-                    OrderRepository orderRepo = getRestAdapter().createRepository(OrderRepository.class);
-                    Order order = orderRepo.createObject(orderObj);
-
-                    callback.onSuccess(order);
-                } else {
+                List<Map<String, Object>> objList = (List) JsonUtil.fromJson(response);
+                OrderRepository orderRepo = getRestAdapter().createRepository(OrderRepository.class);
+                Order order;
+                if(objList.size() == 0){
                     callback.onSuccess(null);
                 }
+                //Now converting jsonObject to list
+                for(Map<String, Object> orderObj: objList) {
+                    order = orderRepo.createObject(orderObj);
+                    callback.onSuccess(order);
+                }
             }
+
 
             @Override
             public void onError(Throwable t) {

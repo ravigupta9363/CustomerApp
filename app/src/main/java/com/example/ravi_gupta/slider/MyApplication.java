@@ -24,6 +24,21 @@ public class MyApplication extends Application {
     private List<Retailer> retailerList;
     private Address updatedAddress;
 
+    public String getShowSplash(MainActivity activity) {
+        if(this.showSplash == null){
+            String json = getData(activity, Constants.splash);
+            this.showSplash = json;
+        }
+        return this.showSplash;
+    }
+
+    public void setShowSplash(String showSplash, MainActivity activity) {
+        this.showSplash = showSplash;
+        addData(activity, Constants.splash, this.showSplash);
+    }
+
+    private String showSplash;
+
     public List<java.io.File> getImageFileArray() {
         return imageFileArray;
     }
@@ -56,29 +71,27 @@ public class MyApplication extends Application {
 
 
 
-    public Order getOrder() {
+    public Order getOrder(MainActivity activity) {
+        if(this.order == null){
+            Gson gson = new Gson();
+            String json = getData(activity, Constants.order);
+            this.order = gson.fromJson(json, Order.class);
+        }
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(Order order, MainActivity activity) {
         this.order = order;
+        //Converting object to string..
+        Gson gson = new Gson();
+        String json = gson.toJson(order);
+        addData(activity, Constants.order, json);
     }
 
     private Order order;
 
 
 
-
-    //List<RequestCreator> imageList;
-
-/*
-    public List<RequestCreator> getImageList() {
-        return imageList;
-    }
-    public void setImageList(List<RequestCreator> imageList) {
-        this.imageList = imageList;
-    }
-*/
 
 
     //=======================================SHARED PREFERENCES======================================================
@@ -141,13 +154,27 @@ public class MyApplication extends Application {
     }
 
 
-    public Office getOffice() {
-        return office;
+    public Office getOffice(MainActivity activity) {
+        if(this.office == null){
+            Gson gson = new Gson();
+            String json = getData(activity, Constants.office);
+            this.office = gson.fromJson(json, Office.class);
+        }
+        return this.office;
     }
 
-    public void setOffice(Office office) {
+
+
+
+    public void setOffice(Office office, MainActivity activity) {
         this.office = office;
+        //Converting object to string..
+        Gson gson = new Gson();
+        String json = gson.toJson(office);
+        addData(activity, Constants.office, json);
     }
+
+
 
     public RestAdapter getLoopBackAdapter() {
         if (adapter == null) {

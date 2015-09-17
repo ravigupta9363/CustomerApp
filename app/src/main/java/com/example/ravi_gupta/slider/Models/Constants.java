@@ -17,6 +17,9 @@ public class Constants {
     public static String termName = "term";
     public static String aboutName = "about";
     public static String address = "Address";
+    public static String office = "Office";
+    public static String order = "Order";
+    public static String splash = "Splash";
 
     /**
      * Substitute you own sender ID here. This is the project number you got

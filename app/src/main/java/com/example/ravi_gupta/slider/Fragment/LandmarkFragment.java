@@ -170,10 +170,10 @@ public class LandmarkFragment extends android.support.v4.app.Fragment {
                 /**
                  * Adding data to ORDER Object
                  */
-                application.getOrder().setLandmark(landmarkEditText.getText().toString());
-                application.getOrder().setFlatNo(flatNumberEditText.getText().toString());
+                application.getOrder(mainActivity).setLandmark(landmarkEditText.getText().toString());
+                application.getOrder(mainActivity).setFlatNo(flatNumberEditText.getText().toString());
                 verifyOrder.put("call",callCustomer);
-                application.getOrder().setCallCustomer(verifyOrder);
+                application.getOrder(mainActivity).setCallCustomer(verifyOrder);
             }
         });
 

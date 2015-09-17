@@ -161,16 +161,11 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
     ){
         //Now add this order to the application order making it the current order..
         MyApplication myApplication =  (MyApplication)activity.getApplication();
-        Order order = myApplication.getOrder();
+        Order order = myApplication.getOrder(mainActivity);
         order.setPrescription(prescription);
         order.setRetailerId(retailerId);
         order.setPrototypeStatusCode(prototypeStatusCode);
-        //OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
-        /*Order order = orderRepository.createObject(ImmutableMap.of(
-                "prescription", prescription,
-                "retailerId", retailerId,
-                "prototypeStatusCode", prototypeStatusCode
-        ));*/
+
 
 
 

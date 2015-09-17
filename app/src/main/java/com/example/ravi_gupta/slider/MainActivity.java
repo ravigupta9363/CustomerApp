@@ -251,10 +251,26 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
         that = this;
-        linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
-        if(orderStatusDataBase.getOrderStatus() == null) {
-            linearLayoutSplash.setVisibility(View.GONE);
-        }
+       // linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
+
+        final MyApplication app = (MyApplication) getApplication();
+/*        String id = orderStatusDataBase.getOrderStatus();
+        if(id.equals("")) {
+            String splash = app.getShowSplash(this);
+            try {
+                if(splash.equals(Constants.splash)){
+                    //Reset value of splash to show splash from next time...
+                    app.setShowSplash(null, this);
+                    //Dont show splash here in this line of code..
+                    linearLayoutSplash.setVisibility(View.GONE);
+                }
+            }
+            catch (NullPointerException e){
+                //Show splash here in this line of code..
+                linearLayoutSplash.setVisibility(View.VISIBLE);
+            }
+
+        }*/
 
 
 
@@ -264,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             public void run() {*/
                 // Check device for Play Services APK.
                 checkPlayServices();
-                final MyApplication app = (MyApplication) getApplication();
+
                 activityHelper = new ActivityHelper(that, app);
            /* }
         }, 100);*/

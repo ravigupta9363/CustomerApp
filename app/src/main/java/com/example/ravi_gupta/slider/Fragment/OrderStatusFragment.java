@@ -60,6 +60,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     String fragment;
     Button cancelOrder;
     Button home;
+    Button retry;
     Button orderNow;
     LinearLayout linearLayout;
     LinearLayout noOrderStatusLayout;
@@ -68,6 +69,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     String status;
     OrderStatusDataBase orderStatusDataBase;
     Order order_;
+    String id;
 
 
     // TODO: Rename and change types of parameters
@@ -91,7 +93,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         orderStatusDataBase = new OrderStatusDataBase(mainActivity);
-        String id = orderStatusDataBase.getOrderStatus();
+        id = orderStatusDataBase.getOrderStatus();
         loadOrder(id);
     }
 
@@ -113,6 +115,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         orderStatusImage = (ImageView) rootview.findViewById(R.id.fragment_order_status_imageview1);
         cancelOrder = (Button) rootview.findViewById(R.id.fragment_order_status_button1);
         home = (Button) rootview.findViewById(R.id.fragment_order_status_button2);
+        retry = (Button) rootview.findViewById(R.id.fragment_order_status_button4);
         linearLayout = (LinearLayout) rootview.findViewById(R.id.fragment_order_status_linear_layout);
         noOrderStatusLayout = (LinearLayout) rootview.findViewById(R.id.fragment_order_status_linear_layout2);
         orderNow = (Button) rootview.findViewById(R.id.fragment_order_status_button3);
@@ -210,7 +213,16 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(),"Redirect to home",Toast.LENGTH_SHORT).show();
-                mainActivity.replaceFragment(R.id.fragment_order_status_button2,null);
+                mainActivity.replaceFragment(R.id.fragment_order_status_button2, null);
+            }
+        });
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadOrder(id);
+                retry.setVisibility(View.GONE);
+                cancelOrder.setVisibility(View.VISIBLE);
             }
         });
 
@@ -388,6 +400,9 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         orderRepository.getOrder(id, new ObjectCallback<Order>() {
             @Override
             public void onSuccess(Order order) {
+                if(order == null){
+                    showRetryButton("Order not found.");
+                }
                 order_ = order;
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                 format.setTimeZone(TimeZone.getTimeZone("IST"));
@@ -406,9 +421,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 String orderYear = date_.toString().substring(30, 34);
                 String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
 
-                /**
-                 * Load data ..
-                 * */
+
                 String orderStatus = order.getPrototypeStatusCode();
                 loadStatus(orderStatus);
                 date.setText(actualDate);
@@ -420,7 +433,15 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             public void onError(Throwable t) {
                 Log.e(Constants.TAG, "Error fetching order ");
                 Log.e(Constants.TAG, t.toString());
+                showRetryButton("Error Loading Order");
             }
         });
+    }
+
+    private void showRetryButton(String message){
+        orderStatusText.setText(message);
+        retry.setVisibility(View.VISIBLE);
+        cancelOrder.setVisibility(View.GONE);
+        home.setVisibility(View.GONE);
     }
 }

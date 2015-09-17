@@ -82,7 +82,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="26 JULY 2015"
                     android:textSize="12sp"
                     android:paddingTop="4dp"
                     android:textColor="#FFF"
@@ -114,7 +113,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="02:52 PM"
                     android:textSize="12sp"
                     android:paddingTop="4dp"
                     android:textColor="#FFF"
@@ -166,7 +164,6 @@
                  <TextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="DC112553"
                      android:id="@+id/fragment_order_status_textview3"
                      android:textSize="12sp"
                      android:paddingTop="4dp"
@@ -256,6 +253,23 @@
                 android:textAllCaps="true"
                 android:textColor="#FFF"
                 android:id="@+id/fragment_order_status_button2"
+                android:background="@drawable/round_status_button"
+                android:textSize="16sp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="right|center"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="Retry"
+                android:textAllCaps="true"
+                android:textColor="#FFF"
+                android:id="@+id/fragment_order_status_button4"
                 android:background="@drawable/round_status_button"
                 android:textSize="16sp"
                 android:layout_alignParentBottom="true"
