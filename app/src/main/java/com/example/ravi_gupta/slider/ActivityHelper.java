@@ -166,13 +166,19 @@ public class ActivityHelper {
                     try {
                         List<Address> updatedAddressList = geocoder.getFromLocation(
                                 address.getLatitude(), address.getLongitude(), 1);
-                        if (updatedAddressList != null && updatedAddressList.size() > 0) {
+                        if (updatedAddressList.size() > 0) {
                             application.setUpdatedAddress(updatedAddressList.get(0), activity);
                             Log.v("address", "Updated Address = " + application.getUpdatedAddress(activity) + "");
-                            parseAddress();
+                            //result = parseAddress();
+                        }
+                        else{
+                            //Show try again as address not found
+                            activity.replaceFragment(R.layout.fragment_try_again, null);
                         }
                     }
                     catch (Exception e) {
+                        Log.e(Constants.TAG, "Error getting address info.");
+                        throw e;
 
                     }
                     final Pattern p = Pattern.compile( "(\\d{6})" );
@@ -204,7 +210,7 @@ public class ActivityHelper {
         }
 
         try{
-            application.getOrder().setGoogleAddr(result);
+            application.getOrder().setGoogleAddr(parseAddress());
             application.getOrder().setPincode(Integer.parseInt(pincode));
             application.getOrder().setGeoLocation(latLong);
         }catch (Exception e){
@@ -217,7 +223,7 @@ public class ActivityHelper {
         return pincode;
     }
 
-    public void parseAddress() {
+    public String parseAddress() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < application.getUpdatedAddress(activity).getMaxAddressLineIndex(); i++) {
             sb.append(application.getUpdatedAddress(activity).getAddressLine(i)).append(" ");
@@ -226,7 +232,7 @@ public class ActivityHelper {
         sb.append(application.getUpdatedAddress(activity).getLocality()).append(" ");
         sb.append(application.getUpdatedAddress(activity).getPostalCode()).append(" ");
         sb.append(application.getUpdatedAddress(activity).getCountryName());
-        result = sb.toString();
+        return sb.toString();
     }
 
 
@@ -402,7 +408,7 @@ public class ActivityHelper {
                             Log.e(Constants.TAG, "Error loading office settings from server");
                             //closeLoadingBar();
                             //Show no internet connection..
-                            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+                            activity.replaceFragment(R.layout.fragment_try_again, null);
                         }
                     }); //SearchOfficePincode method
                 } else {
@@ -416,53 +422,7 @@ public class ActivityHelper {
 
     }
 
-    //=======================================SHARED PREFERENCES======================================================
-    /**
-     *
-     * @param activity
-     * @param key
-     * @param value
-     */
-    public void addData(MainActivity activity, String key, String value){
-        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
 
-
-
-    public void addData(MainActivity activity, String key, int value){
-        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
-
-    public void clear(MainActivity activity){
-        SharedPreferences.Editor editor = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE).edit();
-        editor.clear();
-        editor.apply();
-    }
-
-
-    public String getData(MainActivity activity, String key){
-        SharedPreferences prefs = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE);
-        String text = prefs.getString(key, null);
-        return text;
-    }
-
-
-    public int getIntData(MainActivity activity, String key){
-        SharedPreferences prefs = activity.getSharedPreferences(Constants.MY_PREFS_NAME, activity.MODE_PRIVATE);
-        int text = prefs.getInt(key, 0);
-        return text;
-    }
-
-
-
-
-
-    //=======================================END SHARED PREFERENCES======================================================
 
 
 

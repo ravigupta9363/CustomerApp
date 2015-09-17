@@ -249,20 +249,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         that = this;
 
 
-        final Handler handler = new Handler();
+        /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
-            public void run() {
+            public void run() {*/
                 // Check device for Play Services APK.
                 checkPlayServices();
                 final MyApplication app = (MyApplication) getApplication();
                 activityHelper = new ActivityHelper(that, app);
-            }
-        }, 100);
+           /* }
+        }, 100);*/
 
 
 
     }
+
 
     public void registerInstallation(Customer customer){
         if (checkPlayServices()) {
