@@ -310,10 +310,6 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         }
     }
 
-
-
-
-
     /**
      * Final step for image upload
      * Automatic tyyes to retry in case uploading fails..
@@ -333,11 +329,11 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         // Update GUI - add remoteFile to the list of documents..
                         fileList.add(remoteFile.getName());
                         totalImageUploaded++;
-                        if(totalImageUploaded == listSize){
+                        if (totalImageUploaded == listSize) {
                             /**
                              * Call upload order now to the server..
                              */
-                            uploadOrder(fileList, code, (String)userId);
+                            uploadOrder(fileList, code, (String) userId);
                             Log.d(Constants.TAG, "Successfully images to the server");
 
                         }
@@ -347,7 +343,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                     public void onError(Throwable error) {
                         setStatus("Connection Failed! Retrying");
                         //Call recursively the same function..
-                        finalImageUpload( fileName, container, bytes, listSize, code, userId);
+                        finalImageUpload(fileName, container, bytes, listSize, code, userId);
                         //mainActivity.getActivityHelper().closeLoadingBar();
                         // upload failed
                         retryButton.setVisibility(View.VISIBLE);
@@ -403,9 +399,15 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess() {
                 setStatus("Order Placed..");
-                orderStatusDataBase.addOrderStatus(order.getId().toString());
-                //Close the loading bar
-                mainActivity.getActivityHelper().closeLoadingBar();
+             //   orderStatusDataBase.addOrderStatus(order.getId().toString());
+                try{
+                    //Close the loading bar
+                    mainActivity.getActivityHelper().closeLoadingBar();
+                }
+                catch (Exception e){
+                    Log.e(Constants.TAG, "Error Loading bar doesnt have any instance in VerifyingOrderFragment");
+                }
+
                 Log.d(Constants.TAG, "New Order successfully created on the server.");
                 mainActivity.replaceFragment(R.id.fragment_verifying_order_textview1, null);
 
@@ -413,7 +415,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onError(Throwable t) {
-                setStatus("Retrying Upload..");
+                //TODO AUTOMATIC UPLOAD
+                setStatus("Error Uploading..");
                 Log.e(Constants.TAG, t.toString());
                 /**
                  * In case of error recursive call the same function..

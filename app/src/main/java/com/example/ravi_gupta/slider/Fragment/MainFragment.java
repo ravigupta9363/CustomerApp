@@ -80,7 +80,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
         databaseHelper = new DatabaseHelper(getActivity());
 
-        Address address = myApplication.getUpdatedAddress();
+        Address address = myApplication.getUpdatedAddress(activity);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
             sb.append(address.getAddressLine(i)).append(" ");
@@ -165,31 +165,34 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
             // As the TimerTask run on a seprate thread from UI thread we have
             // to call runOnUiThread to do work on UI thread.
-            if(getActivity() == null)
+            if(mainActivity == null) {
                 return;
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
+            }
+            else {
+                mainActivity.runOnUiThread(new Runnable() {
+                    public void run() {
 
-                    if (page > 9999) { // In my case the number of pages are 5
-                        timer.cancel();
-                        // Showing a toast for just testing purpose
-                    } else {
-                        if (page == 0) {
-                            viewPager.setCurrentItem( myApplication.getImageFileArray().size() - 2);
-                        }
-
-                        // skip fake page (last), go to first page
-                        if (page == myApplication.getImageFileArray().size() - 1) {
-                            viewPager.setCurrentItem(0);
-                            //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
+                        if (page > 9999) { // In my case the number of pages are 5
+                            timer.cancel();
+                            // Showing a toast for just testing purpose
                         } else {
-                            viewPager.setCurrentItem(page++);
-                            if (page == myApplication.getImageFileArray().size() - 1)
-                                page = 1;
+                            if (page == 0) {
+                                viewPager.setCurrentItem(myApplication.getImageFileArray().size() - 2);
+                            }
+
+                            // skip fake page (last), go to first page
+                            if (page == myApplication.getImageFileArray().size() - 1) {
+                                viewPager.setCurrentItem(0);
+                                //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
+                            } else {
+                                viewPager.setCurrentItem(page++);
+                                if (page == myApplication.getImageFileArray().size() - 1)
+                                    page = 1;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
         }
     }

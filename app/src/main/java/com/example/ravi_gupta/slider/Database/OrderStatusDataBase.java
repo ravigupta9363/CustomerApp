@@ -77,5 +77,7 @@ public class OrderStatusDataBase extends SQLiteOpenHelper {
     public void deleteOrderStatus() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ORDER_STATUS, null, null);
+        db.close();
     }
+
 }

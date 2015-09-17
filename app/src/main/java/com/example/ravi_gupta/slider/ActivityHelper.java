@@ -167,8 +167,8 @@ public class ActivityHelper {
                         List<Address> updatedAddressList = geocoder.getFromLocation(
                                 address.getLatitude(), address.getLongitude(), 1);
                         if (updatedAddressList != null && updatedAddressList.size() > 0) {
-                            application.setUpdatedAddress(updatedAddressList.get(0));
-                            Log.v("address", "Updated Address = " + application.getUpdatedAddress() + "");
+                            application.setUpdatedAddress(updatedAddressList.get(0), activity);
+                            Log.v("address", "Updated Address = " + application.getUpdatedAddress(activity) + "");
                             parseAddress();
                         }
                     }
@@ -176,7 +176,7 @@ public class ActivityHelper {
 
                     }
                     final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher(application.getUpdatedAddress().toString() );
+                    final Matcher m = p.matcher(application.getUpdatedAddress(activity).toString() );
                     if ( m.find() ) {
                         pincode =  m.group(0);
                     }
@@ -194,7 +194,11 @@ public class ActivityHelper {
         }
         catch (Exception e){
             Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
-            closeLoadingBar();
+            try{
+                closeLoadingBar();
+            }catch(Exception error){
+                Log.e(Constants.TAG, "Error loading bar instance not created");
+            }
             //Show no internet connection..
             activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
         }
@@ -215,13 +219,13 @@ public class ActivityHelper {
 
     public void parseAddress() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < application.getUpdatedAddress().getMaxAddressLineIndex(); i++) {
-            sb.append(application.getUpdatedAddress().getAddressLine(i)).append(" ");
+        for (int i = 0; i < application.getUpdatedAddress(activity).getMaxAddressLineIndex(); i++) {
+            sb.append(application.getUpdatedAddress(activity).getAddressLine(i)).append(" ");
         }
 
-        sb.append(application.getUpdatedAddress().getLocality()).append(" ");
-        sb.append(application.getUpdatedAddress().getPostalCode()).append(" ");
-        sb.append(application.getUpdatedAddress().getCountryName());
+        sb.append(application.getUpdatedAddress(activity).getLocality()).append(" ");
+        sb.append(application.getUpdatedAddress(activity).getPostalCode()).append(" ");
+        sb.append(application.getUpdatedAddress(activity).getCountryName());
         result = sb.toString();
     }
 
@@ -275,7 +279,7 @@ public class ActivityHelper {
         /**
          * Launching dialog.
          */
-        launchRingDialog(activity);
+        //launchRingDialog(activity);
 
                 //start your activity here
                 internetConnection = activity.haveNetworkConnection();
@@ -359,7 +363,7 @@ public class ActivityHelper {
                         public void onSuccess(Office officeObj) {
                             if (officeObj.getName() == null) {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
-                                closeLoadingBar();
+                                //closeLoadingBar();
                                 //We are not providing service in your area....
                                 activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
@@ -396,13 +400,13 @@ public class ActivityHelper {
                         @Override
                         public void onError(Throwable t) {
                             Log.e(Constants.TAG, "Error loading office settings from server");
-                            closeLoadingBar();
+                            //closeLoadingBar();
                             //Show no internet connection..
                             activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
                         }
                     }); //SearchOfficePincode method
                 } else {
-                    closeLoadingBar();
+                    //closeLoadingBar();
                     //Show no internet connection..
                     activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
 
@@ -509,17 +513,17 @@ public class ActivityHelper {
 
             @Override
             public void onSuccess() {
-                MyApplication app = (MyApplication)activity.getApplication();
+                MyApplication app = (MyApplication) activity.getApplication();
                 Date date = new Date();
                 //long time = date.getTime();
                 //String timeString = "offersImage" + timeString.toString() + ".png";
                 java.io.File tempFile = fileList.get(totalDownloaded);
-                app.getImageFileArray().add( tempFile );
+                app.getImageFileArray().add(tempFile);
                 // localFile contains the content
                 Log.d(Constants.TAG, localFile.getAbsolutePath());
                 //Increment the value..
                 totalDownloaded++;
-                if(totalImages == totalDownloaded){
+                if (totalImages == totalDownloaded) {
                     imageDownloaded = true;
                     if (imageDownloaded && retailerListFetched) {
                         //Go to main fragment
@@ -534,6 +538,8 @@ public class ActivityHelper {
             public void onError(Throwable error) {
                 // download failed
                 Log.e(Constants.TAG, "Error downloading images files..");
+                Log.e(Constants.TAG, error.toString());
+                activity.replaceFragment(R.layout.fragment_try_again, null);
             }
         });
     }
@@ -543,10 +549,15 @@ public class ActivityHelper {
 
     public void resolveRoute(){
         //On success
-        closeLoadingBar();
+        try{
+            closeLoadingBar();
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Error loading bar instance has not been created. in ActivityHelper resolveroute");
+        }
+
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();
-        Log.d(Constants.TAG, "Checking value of pending delivery =  " );
+        Log.d(Constants.TAG, "Checking value of pending delivery =  ");
         if (pendingDelivery == "") {
             //Go to main fragment
             activity.replaceFragment(R.layout.fragment_main, null);
@@ -559,4 +570,36 @@ public class ActivityHelper {
         }
     }//resolveRoute
 
+
+    /**
+     * Parse indian ist time to am and pm time
+     * @param time format 12:00 || 18:00 ||08:00
+     * @return
+     */
+    public String parseISTTime(String time){
+        String pattern = "\\s?(\\d\\d?):(\\d\\d)\\s?";
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+        int hour;
+        int min;
+        String type = "AM" ;
+        // Now create matcher object.
+        Matcher m = r.matcher(time);
+        if (m.find()) {
+            hour = Integer.parseInt( m.group(1));
+            min  = Integer.parseInt( m.group(2));
+
+            if(hour >= 12){
+                type = "PM";
+                if(hour > 12){
+                    hour = hour - 12;
+                }
+            }
+            return "" + Integer.toString(hour) + ":" + Integer.toString(min) + " " + type;
+        }
+        else{
+            Log.e(Constants.TAG, "Error parsing time");
+            return time;
+        }
+    }
 }

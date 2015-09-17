@@ -28,6 +28,7 @@ import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,6 +67,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     View view;
     String status;
     OrderStatusDataBase orderStatusDataBase;
+    Order order_;
 
 
     // TODO: Rename and change types of parameters
@@ -183,6 +185,20 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 orderStatusText.setText("Cancelled");
+                order_.setPrototypeStatusCode("5004");
+                order_.save(new VoidCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //do something
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(Constants.TAG,"Error Cancelling Order");
+                        Log.e(Constants.TAG,t.getMessage());
+
+                    }
+                });
                 cancelOrder.setVisibility(View.GONE);
                 home.setVisibility(View.VISIBLE);
                 //orderStatusImage.setImageResource(R.drawable.order_cancelled);
@@ -338,6 +354,9 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         if (!(status == null)) {
             if(status.equals("5003")){
                 changeStatus(mainActivity, "Delivered");
+                orderStatusDataBase.deleteOrderStatus();
+                cancelOrder.setVisibility(View.GONE);
+                home.setVisibility(View.VISIBLE);
 
             }
             else if(status.equals("5001")){
@@ -348,6 +367,9 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             }
             else if(status.equals("5004")){
                 changeStatus(mainActivity, "Cancelled");
+                orderStatusDataBase.deleteOrderStatus();
+                cancelOrder.setVisibility(View.GONE);
+                home.setVisibility(View.VISIBLE);
 
             }
             else{
@@ -366,6 +388,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         orderRepository.getOrder(id, new ObjectCallback<Order>() {
             @Override
             public void onSuccess(Order order) {
+                order_ = order;
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                 format.setTimeZone(TimeZone.getTimeZone("IST"));
                 java.util.Date date_ = null;
@@ -374,7 +397,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                String time_ = date_.toString().substring(12, 16);
+                String time_ = date_.toString().substring(11, 16);
+                //Now parsing time..
+                time_ = mainActivity.getActivityHelper().parseISTTime(time_);
+
                 String orderDay = date_.toString().substring(8, 10);
                 String orderMonth = date_.toString().substring(4, 7);
                 String orderYear = date_.toString().substring(30, 34);
@@ -382,8 +408,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
                 /**
                  * Load data ..
-                 */
-                String orderStatus = order.getStatus();
+                 * */
+                String orderStatus = order.getPrototypeStatusCode();
                 loadStatus(orderStatus);
                 date.setText(actualDate);
                 time.setText(time_);
@@ -397,5 +423,4 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             }
         });
     }
-
 }

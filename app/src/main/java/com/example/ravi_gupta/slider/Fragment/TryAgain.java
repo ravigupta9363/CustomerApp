@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -41,6 +43,13 @@ public class TryAgain extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*try{
+            mainActivity.getActivityHelper().closeLoadingBar();
+        }catch (java.lang.NullPointerException e){
+            Log.e(Constants.TAG, "Error: CloseLoadingBar instance has not been created.");
+
+        }*/
+
 
     }
 

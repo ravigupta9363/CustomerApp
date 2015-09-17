@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -96,7 +98,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import is.arontibo.library.ElasticDownloadView;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -186,6 +187,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     String deviceId;
     ProgressBar mainProgressBar;
     TextView appName;
+    MainActivity that;
 
 
     @Override
@@ -241,19 +243,23 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-
-        // Check device for Play Services APK.
-        checkPlayServices();
-        final MyApplication app = (MyApplication) getApplication();
-
         appName = (TextView)findViewById(R.id.activity_main_textview1);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
-        activityHelper = new ActivityHelper(this, app);
-        ElasticDownloadView mElasticDownloadView = (ElasticDownloadView)findViewById(R.id.elastic_download_view);
-        mElasticDownloadView.startIntro();
-        mElasticDownloadView.setProgress(5);
-        mElasticDownloadView.success();
+        that = this;
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Check device for Play Services APK.
+                checkPlayServices();
+                final MyApplication app = (MyApplication) getApplication();
+                activityHelper = new ActivityHelper(that, app);
+            }
+        }, 100);
+
 
 
     }
@@ -840,13 +846,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 findFragmentByTag(CartFragment.TAG);
         //Thumbnail is being saved
         Calendar calendar = Calendar.getInstance();
-        File dir = getPicStorageDir("Drugcorner_Thumbnails");
+        File dir = getPicStorageDir("Drugcorner Thumbnails");
         File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
 
         File oldFile = new File(fileUri.getPath());
         Uri thumbnailUri = Uri.fromFile(imageFile);
-        Bitmap bitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(oldFile.getPath()),
-                100, 130);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inTempStorage = new byte[24*1024];
+        options.inJustDecodeBounds = false;
+        options.inSampleSize=8;
+        Bitmap bitmap2 =BitmapFactory.decodeFile(oldFile.getPath(),options);
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(bitmap2, 100, 130);
         try {
             FileOutputStream out = new FileOutputStream(imageFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -1139,9 +1149,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (frag14 == null) {
             frag14 = TryAgain.newInstance();
         }
-        Bundle bundle7 = new Bundle();
-        bundle7.putString("fragment", "HomeFragment");
-        frag14.setArguments(bundle7);
         ft.replace(R.id.container, frag14, TryAgain.TAG);
         ft.commitAllowingStateLoss();
     }

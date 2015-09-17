@@ -75,7 +75,7 @@ public class ProfileDatabase extends SQLiteOpenHelper {
                 //profileList.add(profileDetail);
             } while (cursor.moveToNext());
         }
-
+        //db.close();
         // return contact list
         return profileDetail;
     }
@@ -83,6 +83,9 @@ public class ProfileDatabase extends SQLiteOpenHelper {
     public void deleteProfile() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PROFILE, null, null);
+        db.close();
         //db.execSQL(DELETEPASSCODE_DETAIL);
     }
+
+
 }

@@ -4,22 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:id="@+id/container"
-    android:background="@drawable/splash_gradient">
+    android:id="@+id/container">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_centerInParent="true"
-        android:layout_marginTop="250dp"
-        android:id="@+id/linear_layout">
+        android:id="@+id/linear_layout"
+        android:background="@drawable/splash_gradient">
 
         <ImageView
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_gravity="center"
             android:src="@mipmap/logo"
+            android:layout_marginTop="150dp"
             android:background="@android:color/transparent"
             android:id="@+id/activity_splash_logo"/>
 
@@ -46,17 +46,6 @@
             android:layout_below="@+id/linear_layout"
             android:layout_marginTop="50dp"/>
 
-    <is.arontibo.library.ElasticDownloadView
-        android:id="@+id/elastic_download_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linear_layout"
-        elastic:backgroundColor="@android:color/transparent"
-        android:layout_centerInParent="true"
-        elastic:vc_viewportWidth="100"
-        android:layout_marginBottom="50dp"
-        android:visibility="gone"
-        />
 
 </RelativeLayout>
 

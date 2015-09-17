@@ -141,7 +141,6 @@ public class Office extends Model {
         }else{
             return time;
         }
-
     }
 
 
