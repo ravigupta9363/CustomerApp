@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
+import com.example.ravi_gupta.slider.Database.OrderStatusDataBase;
 import com.example.ravi_gupta.slider.Database.ProfileDatabase;
 import com.example.ravi_gupta.slider.Details.NavigationDrawerItemDetails;
 import com.example.ravi_gupta.slider.Details.PrescriptionDetail;
@@ -148,6 +149,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public String tempPhone;
     public boolean invalidEmail = false;
     private static LocalInstallation installation;
+    public LinearLayout linearLayoutSplash;
+    public OrderStatusDataBase orderStatusDataBase;
 
     public ActivityHelper getActivityHelper() {
         return activityHelper;
@@ -200,6 +203,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
         databaseHelper = new DatabaseHelper(this);
+        orderStatusDataBase = new OrderStatusDataBase(this);
         databaseHelper.deleteAllPrescription();
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
         View child = decor.getChildAt(0);
@@ -247,6 +251,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
         that = this;
+        linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
+        if(orderStatusDataBase.getOrderStatus() == null) {
+            linearLayoutSplash.setVisibility(View.GONE);
+        }
+
 
 
         /*final Handler handler = new Handler();
