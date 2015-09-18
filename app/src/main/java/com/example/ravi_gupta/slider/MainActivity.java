@@ -1,6 +1,7 @@
 package com.example.ravi_gupta.slider;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -151,6 +153,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private static LocalInstallation installation;
     public LinearLayout linearLayoutSplash;
     public OrderStatusDataBase orderStatusDataBase;
+    public ProgressDialog mainActivityProgressDialog;
 
     public ActivityHelper getActivityHelper() {
         return activityHelper;
@@ -251,10 +254,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
         that = this;
-       // linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
+        linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
 
         final MyApplication app = (MyApplication) getApplication();
-/*        String id = orderStatusDataBase.getOrderStatus();
+
+        String id = orderStatusDataBase.getOrderStatus();
         if(id.equals("")) {
             String splash = app.getShowSplash(this);
             try {
@@ -263,27 +267,30 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     app.setShowSplash(null, this);
                     //Dont show splash here in this line of code..
                     linearLayoutSplash.setVisibility(View.GONE);
+                    //Show loading bar..
+                    activityLoadingBar();
+
                 }
             }
             catch (NullPointerException e){
                 //Show splash here in this line of code..
                 linearLayoutSplash.setVisibility(View.VISIBLE);
             }
-
-        }*/
-
+        }
 
 
-        /*final Handler handler = new Handler();
+
+
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
-            public void run() {*/
+            public void run() {
                 // Check device for Play Services APK.
                 checkPlayServices();
 
                 activityHelper = new ActivityHelper(that, app);
-           /* }
-        }, 100);*/
+            }
+        }, 100);
 
 
 
@@ -424,6 +431,18 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+
+    public void activityLoadingBar() {
+        mainActivityProgressDialog = ProgressDialog.show(this, "", "Loading Home...", true);
+        mainActivityProgressDialog.setCancelable(true);
+        mainActivityProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+        mainActivityProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+
+    public void activityCloseLoadingBar(){
+        mainActivityProgressDialog.dismiss();
+    }
 
 
     public void displayView(int position) {

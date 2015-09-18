@@ -57,7 +57,7 @@ public class OrderStatusDataBase extends SQLiteOpenHelper {
     public String getOrderStatus() {
         String orderStatus = "";
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_ORDER_STATUS;
+        String selectQuery = "SELECT  * FROM " + TABLE_ORDER_STATUS + " LIMIT 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

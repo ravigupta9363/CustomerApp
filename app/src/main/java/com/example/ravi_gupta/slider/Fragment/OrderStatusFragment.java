@@ -72,10 +72,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     String id;
 
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
 
@@ -94,7 +90,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         orderStatusDataBase = new OrderStatusDataBase(mainActivity);
         id = orderStatusDataBase.getOrderStatus();
-        loadOrder(id);
     }
 
     @Override
@@ -146,6 +141,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         //Drawable orderStatusBackground = rootview.findViewById(R.id.fragment_order_status_background_layout).getBackground();
         //orderStatusBackground.setAlpha(127);
 
+
         if (fragment.equals("HomeFragment") || fragment.equals("NotDelivered")) {
             cancelOrder.setVisibility(View.VISIBLE);
             linearLayout.setVisibility(View.VISIBLE);
@@ -187,23 +183,33 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Show the loading bar..
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+
                 orderStatusText.setText("Cancelled");
                 order_.setPrototypeStatusCode("5004");
                 order_.save(new VoidCallback() {
                     @Override
                     public void onSuccess() {
                         //do something
+                        mainActivity.getActivityHelper().closeLoadingBar();
+                        //TODO DELETE ID FROM DATABASE HERE
+                        //Delete the order status
+                        orderStatusDataBase.deleteOrderStatus();
+
+                        cancelOrder.setVisibility(View.GONE);
+                        home.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        Log.e(Constants.TAG,"Error Cancelling Order");
-                        Log.e(Constants.TAG,t.getMessage());
+                        Log.e(Constants.TAG, "Error Cancelling Order");
+                        Log.e(Constants.TAG, t.getMessage());
+                        mainActivity.getActivityHelper().closeLoadingBar();
 
                     }
                 });
-                cancelOrder.setVisibility(View.GONE);
-                home.setVisibility(View.VISIBLE);
+
                 //orderStatusImage.setImageResource(R.drawable.order_cancelled);
                 //Open Main Fragment when order has been cancelled or delivered
             }
@@ -225,6 +231,13 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 cancelOrder.setVisibility(View.VISIBLE);
             }
         });
+
+
+        /**
+         * Load order
+         */
+
+        loadOrder(id);
 
         //http://stackoverflow.com/questions/18413309/how-to-implement-a-viewpager-with-different-fragments-layouts
         return rootview;
@@ -389,6 +402,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 /**
                  * If status doesnot belong to any of these category..
                  */
+                changeStatus(mainActivity, "Preparing");
             }
 
         }//if
@@ -396,6 +410,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
 
     private void loadOrder(final String id){
+
         OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
         orderRepository.getOrder(id, new ObjectCallback<Order>() {
             @Override

@@ -405,6 +405,7 @@ public class ActivityHelper {
 
                         @Override
                         public void onError(Throwable t) {
+                            Log.e(Constants.TAG, t.toString());
                             Log.e(Constants.TAG, "Error loading office settings from server");
                             //closeLoadingBar();
                             //Show no internet connection..
@@ -511,6 +512,8 @@ public class ActivityHelper {
         //On success
         try{
             closeLoadingBar();
+            //Also try to close the loading bar of the activity..
+            activity.activityCloseLoadingBar();
         }catch (Exception e){
             Log.e(Constants.TAG, "Error loading bar instance has not been created. in ActivityHelper resolveroute");
         }

@@ -17,8 +17,6 @@ import java.util.regex.Pattern;
  * Created by robins on 1/9/15.
  */
 public class Office extends Model {
-
-    private String id;
     private String name;
     private String address;
     private String OfficeSettingsId;

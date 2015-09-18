@@ -399,7 +399,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess() {
                 setStatus("Order Placed..");
-             //   orderStatusDataBase.addOrderStatus(order.getId().toString());
+                orderStatusDataBase.addOrderStatus(order.getId().toString());
                 try{
                     //Close the loading bar
                     mainActivity.getActivityHelper().closeLoadingBar();

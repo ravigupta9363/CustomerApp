@@ -84,8 +84,15 @@ public class MyApplication extends Application {
         this.order = order;
         //Converting object to string..
         Gson gson = new Gson();
-        String json = gson.toJson(order);
-        addData(activity, Constants.order, json);
+        try{
+            if(!(this.order.getFlatNo() == null)){
+                String json = gson.toJson(this.order);
+                addData(activity, Constants.order, json);
+            }
+        }
+        catch (Exception e){
+            //DO nothing here...JUST IGNORE
+        }
     }
 
     private Order order;
@@ -155,11 +162,11 @@ public class MyApplication extends Application {
 
 
     public Office getOffice(MainActivity activity) {
-        if(this.office == null){
+        /*if(this.office == null){
             Gson gson = new Gson();
             String json = getData(activity, Constants.office);
             this.office = gson.fromJson(json, Office.class);
-        }
+        }*/
         return this.office;
     }
 
@@ -168,10 +175,10 @@ public class MyApplication extends Application {
 
     public void setOffice(Office office, MainActivity activity) {
         this.office = office;
-        //Converting object to string..
+       /* //Converting object to string..
         Gson gson = new Gson();
         String json = gson.toJson(office);
-        addData(activity, Constants.office, json);
+        addData(activity, Constants.office, json);*/
     }
 
 
