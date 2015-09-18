@@ -511,9 +511,10 @@ public class ActivityHelper {
     public void resolveRoute(){
         //On success
         try{
+            activity.activityCloseLoadingBar();
             closeLoadingBar();
             //Also try to close the loading bar of the activity..
-            activity.activityCloseLoadingBar();
+
         }catch (Exception e){
             Log.e(Constants.TAG, "Error loading bar instance has not been created. in ActivityHelper resolveroute");
         }
