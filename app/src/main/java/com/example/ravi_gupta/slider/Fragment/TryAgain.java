@@ -1,17 +1,16 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.ravi_gupta.slider.MainActivity;
-import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -93,6 +92,12 @@ public class TryAgain extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        super.onResume();
     }
 
     /**

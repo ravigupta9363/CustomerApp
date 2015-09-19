@@ -24,9 +24,7 @@ import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
-import com.squareup.picasso.RequestCreator;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -259,8 +257,5 @@ public class MainFragment extends android.support.v4.app.Fragment {
         });
         //new AsyncCaller().execute();
 
-
     }
-
-
 }

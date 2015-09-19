@@ -3,9 +3,11 @@ package com.example.ravi_gupta.slider.ViewPager;
 /**
  * Created by Ravi-Gupta on 7/1/2015.
  */
+
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.animation.Interpolator;
 
 import java.lang.reflect.Field;
@@ -47,6 +49,19 @@ public class ViewPagerCustomDuration extends ViewPager {
      */
     public void setScrollDurationFactor(double scrollFactor) {
         mScroller.setScrollDurationFactor(scrollFactor);
+    }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        // Never allow swiping to switch between pages
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Never allow swiping to switch between pages
+        return false;
     }
 
 }

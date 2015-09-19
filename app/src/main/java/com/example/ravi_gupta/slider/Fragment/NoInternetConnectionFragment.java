@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
-import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
 
 /**
@@ -149,5 +146,11 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume() {
+        mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        super.onResume();
     }
 }
