@@ -6,26 +6,19 @@ package com.example.ravi_gupta.slider.Details;
 public class NotificationItemDetail {
 
     int id;
-    String notificationHeading;
     String notificationDetail;
 
     public NotificationItemDetail() {
         super();
     }
 
-    public NotificationItemDetail(int id, String notificationHeading, String notificationDetail) {
+    public NotificationItemDetail(int id, String notificationDetail) {
         this.id = id;
-        this.notificationHeading = notificationHeading;
         this.notificationDetail = notificationDetail;
     }
 
-
-    public String getNotificationHeading() {
-        return notificationHeading;
-    }
-
-    public void setNotificationHeading(String mText1) {
-        this.notificationHeading = mText1;
+    public NotificationItemDetail(String notificationDetail) {
+        this.notificationDetail = notificationDetail;
     }
 
     public String getNotificationDetail() {

@@ -3,18 +3,18 @@ package com.example.ravi_gupta.slider;
 /**
  * Created by robins on 26/8/15.
  */
+
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.ravi_gupta.slider.Database.NotificationDatabase;
+import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
 import com.example.ravi_gupta.slider.Models.Message;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
@@ -34,6 +34,7 @@ public class GcmIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
     private static String verificationCode;
+    NotificationDatabase notificationDatabase;
 
     public static String getStatus() {
         return status;
@@ -57,6 +58,7 @@ public class GcmIntentService extends IntentService {
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
+        notificationDatabase = new NotificationDatabase(this);
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             /*
@@ -133,13 +135,12 @@ public class GcmIntentService extends IntentService {
                              * Show images type status here..
                              */
                             //TODO PROCESSING OF IMAGES TYPE NOTIFICATION STILL NEEDS TO BE DONE
-
+                            sendImageNotification(data.getMessage(), data.getImages());
 
                         }
 
                     }
-                    //showStatusNotification();
-                    //showImageNotification();
+
                 }
             }
         }
@@ -149,6 +150,12 @@ public class GcmIntentService extends IntentService {
 
     public static String getVerificationCode() {
         return verificationCode;
+    }
+
+
+    private void sendImageNotification(String msg, String image) {
+        //TODO DEFINE IMAGE NOTIFICATION...
+
     }
 
 
@@ -166,7 +173,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo) // notification icon
+                        .setSmallIcon(R.drawable.logo_small) // notification icon
                         .setContentTitle("drugcorner")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
@@ -175,6 +182,7 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        notificationDatabase.addNotification(new NotificationItemDetail(msg));
 
 
     }
@@ -192,7 +200,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo) // notification icon
+                        .setSmallIcon(R.drawable.logo_small) // notification icon
                         .setContentTitle(subject)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
@@ -202,22 +210,19 @@ public class GcmIntentService extends IntentService {
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
-
     }
 
-
-
-
-    public void showImageNotification(String message, String subject, String imageUri) {
-
+  /*  public void sendImageNotification(String message, String subject, String imageUri) {
+        int color = 0xff14649f;
         Drawable d = getResources().getDrawable(R.drawable.pills1);
         Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.logo_small)
                         .setAutoCancel(true)
                         .setContentTitle("Drug Corner")
-                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order");
+                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order")
+                        .setColor(color);
 
         NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
         bigPicStyle.bigPicture(bitmap);
@@ -238,35 +243,6 @@ public class GcmIntentService extends IntentService {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId1, mBuilder.build());
     }
-/*
-    public void showStatusNotification() {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setAutoCancel(true)
-                        .setContentTitle("Order Id DC256649")
-                        .setContentText("Your Order has been cancelled as per your request");
-
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        resultIntent.setAction("OpenStatusFragment");
-
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        mBuilder.setContentIntent(resultPendingIntent);
-        mBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
-
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId2, mBuilder.build());
-    }*/
-
-
-
+*/
 }
 

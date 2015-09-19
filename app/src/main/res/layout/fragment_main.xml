@@ -83,7 +83,6 @@
 
         </RelativeLayout>
 
-
     </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -118,7 +117,6 @@
             android:inputType="textNoSuggestions"
             android:focusable="false"
             android:editable="false"/>
-
 
 
         <LinearLayout

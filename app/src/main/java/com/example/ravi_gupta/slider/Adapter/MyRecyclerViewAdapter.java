@@ -67,7 +67,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.heading.setText(mDataset.get(position).getNotificationHeading());
         holder.details.setText(mDataset.get(position).getNotificationDetail());
     }
 

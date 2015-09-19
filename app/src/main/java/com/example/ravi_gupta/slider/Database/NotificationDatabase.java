@@ -30,7 +30,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_NOTIFICATION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATION + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + NOTIFICATION_TITLE + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY,"
                 + NOTIFICATION_CONTENT + " TEXT" + ")";
         db.execSQL(CREATE_NOTIFICATION_TABLE);
     }
@@ -47,8 +47,6 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(NOTIFICATION_TITLE, String.valueOf(notificationItemDetail.getNotificationHeading()));
-        values.put(NOTIFICATION_CONTENT, String.valueOf(notificationItemDetail.getNotificationDetail()));
         values.put(NOTIFICATION_CONTENT, String.valueOf(notificationItemDetail.getNotificationDetail()));
 
         // Inserting Row
@@ -94,8 +92,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             do {
                 NotificationItemDetail notificationItemDetail = new NotificationItemDetail();
                 notificationItemDetail.setId(Integer.parseInt(cursor.getString(0)));
-                notificationItemDetail.setNotificationHeading(cursor.getString(1));
-                notificationItemDetail.setNotificationDetail(cursor.getString(2));
+                notificationItemDetail.setNotificationDetail(cursor.getString(1));
                 // Adding contact to list
                 notificationItemDetailList.add(notificationItemDetail);
             } while (cursor.moveToNext());

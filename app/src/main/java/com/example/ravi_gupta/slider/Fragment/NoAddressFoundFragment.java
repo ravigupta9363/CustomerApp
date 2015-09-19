@@ -46,12 +46,12 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
     int page = 1;
     Timer timer;
     int[] mResources = {
-            R.drawable.screenshot1,
-            R.drawable.screenshot2,
-            R.drawable.screenshot3,
-            R.drawable.screenshot4,
-            R.drawable.screenshot5,
-            R.drawable.screenshot6
+            R.mipmap.no_address_found_background,
+            R.mipmap.screenshot1,
+            R.mipmap.screenshot2,
+            R.mipmap.screenshot3,
+            R.mipmap.screenshot4,
+            R.mipmap.screenshot5
     };
 
     // TODO: Rename and change types of parameters
@@ -102,7 +102,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
                 // Check device for Play Services APK.
                 pageSwitcher(4);
             }
-        }, 4000);
+        }, 5000);
 
 
         text.setTypeface(typeface2);
