@@ -113,10 +113,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    notificationItemDetails.remove(position);
-                                    mAdapter.notifyItemRemoved(position);
-                                    notificationDatabase.deleteNotification(position+1);
-                                    Log.v("Notification",position+"");
+                                    removeOnSwipe(position);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -124,9 +121,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    notificationItemDetails.remove(position);
-                                    mAdapter.notifyItemRemoved(position);
-                                    notificationDatabase.deleteNotification(position+1);
+                                    removeOnSwipe(position);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -154,6 +149,15 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         });
 
         return rootview;
+    }
+
+
+    private void removeOnSwipe(int position){
+        NotificationItemDetail notificationItem =  (NotificationItemDetail)notificationItemDetails.get(position);
+        mAdapter.notifyItemRemoved(position);
+        notificationDatabase.deleteNotification(notificationItem.getId());
+        Log.v("Notification", position + "");
+        notificationItemDetails.remove(position);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
