@@ -343,8 +343,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                     public void onError(Throwable error) {
                         setStatus("Connection Failed! Retrying");
                         //Call recursively the same function..
-                        finalImageUpload(fileName, container, bytes, listSize, code, userId);
-                        //mainActivity.getActivityHelper().closeLoadingBar();
+                        //finalImageUpload(fileName, container, bytes, listSize, code, userId);
+                        mainActivity.getActivityHelper().closeLoadingBar();
                         // upload failed
                         retryButton.setVisibility(View.VISIBLE);
                         textView.setText("Tap to Retry");

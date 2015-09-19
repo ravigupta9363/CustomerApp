@@ -1,9 +1,5 @@
 package com.example.ravi_gupta.slider;
 
-/**
- * Created by robins on 26/8/15.
- */
-
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,12 +11,19 @@ import android.util.Log;
 
 import com.example.ravi_gupta.slider.Database.NotificationDatabase;
 import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
+import com.example.ravi_gupta.slider.GcmBroadcastReceiver;
 import com.example.ravi_gupta.slider.Models.Message;
+import com.example.ravi_gupta.slider.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
+/**
+ * Created by robins on 26/8/15.
+ */
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.

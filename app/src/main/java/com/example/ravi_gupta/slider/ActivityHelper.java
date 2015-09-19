@@ -260,7 +260,7 @@ public class ActivityHelper {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
         if (requestCode == 1) {
-          //  TODO: check service again after calling setting activity
+            //  TODO: check service again after calling setting activity
             appLocationService = new AppLocationService(activity);
             Location location = appLocationService
                     .getLocation(LocationManager.GPS_PROVIDER);
@@ -287,9 +287,9 @@ public class ActivityHelper {
          */
         //launchRingDialog(activity);
 
-                //start your activity here
-                internetConnection = activity.haveNetworkConnection();
-                runOnUiThread(internetConnection);
+        //start your activity here
+        internetConnection = activity.haveNetworkConnection();
+        runOnUiThread(internetConnection);
 
 
     }
@@ -559,7 +559,13 @@ public class ActivityHelper {
                     hour = hour - 12;
                 }
             }
-            return "" + Integer.toString(hour) + ":" + Integer.toString(min) + " " + type;
+
+            if(min < 10){
+                return "" + Integer.toString(hour) + ":" + "0" +  Integer.toString(min) + " " + type;
+            }else{
+                return "" + Integer.toString(hour) + ":" +   Integer.toString(min) + " " + type;
+            }
+
         }
         else{
             Log.e(Constants.TAG, "Error parsing time");

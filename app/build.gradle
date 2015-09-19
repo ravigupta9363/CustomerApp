@@ -36,3 +36,4 @@ dependencies {
     compile 'com.flaviofaria:kenburnsview:1.0.6'
     compile "com.dev.sacot41:scviewpager:0.0.4"
 }
+

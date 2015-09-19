@@ -8,4 +8,5 @@
         android:layout_height="match_parent"
         android:id="@+id/viewpagerImageView1"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+

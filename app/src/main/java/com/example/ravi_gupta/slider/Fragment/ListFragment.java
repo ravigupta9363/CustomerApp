@@ -64,7 +64,9 @@ public class ListFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_shop_list, container, false);
-        retailerRepository = mainActivity.restAdapter.createRepository(RetailerRepository.class);
+        MyApplication myApplication = (MyApplication)mainActivity.getApplication();
+        retailerRepository = myApplication.getLoopBackAdapter().createRepository(RetailerRepository.class);
+
         mListview = (ListView) rootview.findViewById(R.id.shopListview);
 
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);

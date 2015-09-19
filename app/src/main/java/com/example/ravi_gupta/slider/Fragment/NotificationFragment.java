@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.ravi_gupta.slider.Adapter.MyRecyclerViewAdapter;
 import com.example.ravi_gupta.slider.Database.NotificationDatabase;

@@ -105,15 +105,34 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
 
         Log.d(Constants.TAG, imageUri.toString());
 
-        Picasso.with(mainActivity).load(imageUri).into(holder.prescription);
+        Picasso.with(mainActivity).load(imageUri).resize(105, 130).into(holder.prescription);
 
-        if(pastOrdersDetail.isDelivered) {
+        if(pastOrdersDetail.status.equals("5000")) {
+            holder.cancelOrDelivered.setText("New Order");
+            holder.cancelOrDelivered.setTextColor(Color.parseColor("#36B666"));
+        }
+        else if(pastOrdersDetail.status.equals("5001")) {
+            holder.cancelOrDelivered.setText("Preparing Order");
+            holder.cancelOrDelivered.setTextColor(Color.parseColor("#36B666"));
+        }
+        else if(pastOrdersDetail.status.equals("5002")) {
+            holder.cancelOrDelivered.setText("At Retailer");
+            holder.cancelOrDelivered.setTextColor(Color.parseColor("#36B666"));
+        }
+        else if(pastOrdersDetail.status.equals("5003")) {
             holder.cancelOrDelivered.setText("Delivered");
             holder.cancelOrDelivered.setTextColor(Color.parseColor("#36B666"));
         }
-        else {
+        else if(pastOrdersDetail.status.equals("5004")) {
             holder.cancelOrDelivered.setText("Cancelled");
             holder.cancelOrDelivered.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            /**
+             * Show error
+             */
+            Log.e(Constants.TAG, "In PastOrderAdapter Error status not recognised");
+            holder.cancelOrDelivered.setVisibility(View.GONE);
         }
 
         holder.reorder.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +153,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
             @Override
             public void onClick(View v) {
                 Log.v("server","Big View");
-                mainActivity.replaceFragment(R.id.past_order_layout_imageview1,mapList);//Open Dialog
+                mainActivity.replaceFragment(R.id.past_order_layout_imageview1, mapList);//Open Dialog
                 //Toast.makeText(getContext(),"Image Dialog will appear",Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,20 +184,5 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         order.setPrescription(prescription);
         order.setRetailerId(retailerId);
         order.setPrototypeStatusCode(prototypeStatusCode);
-
-
-
-
-        /**
-         * "landmark", landmark,
-         "pincode", pincode,
-         "flatNo", flatNo,
-         "geoLocation", geoLocation,
-         "prescription", prescription,
-         "retailerId", retailerId,
-         "prototypeStatusCode", prototypeStatusCode
-         */
     }
-
-
 }
