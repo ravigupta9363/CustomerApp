@@ -16,6 +16,7 @@ public class PastOrdersDetail {
     public List<Map<String, String>> drawable;
     public boolean isDelivered;
     public String retailerId;
+    public String status;
 
 
     public PastOrdersDetail() {
@@ -23,18 +24,18 @@ public class PastOrdersDetail {
     }
 
     public PastOrdersDetail(String date,
-            String time,
-            String orderId,
-            String address,List<Map<String, String>> drawable,
-            boolean isDelivered,
-            String retailerId){
+                            String time,
+                            String orderId,
+                            String address,List<Map<String, String>> drawable,
+                            String status,
+                            String retailerId){
         this.date = date;
         this.time = time;
         this.orderId = orderId;
         //this.price = price;
         this.address = address;
         this.drawable = drawable;
-        this.isDelivered = isDelivered;
+        this.status = status;
         this.retailerId = retailerId;
     }
 }

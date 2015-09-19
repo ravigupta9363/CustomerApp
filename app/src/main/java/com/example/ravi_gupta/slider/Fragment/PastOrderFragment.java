@@ -99,7 +99,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_past_order, container, false);
-       // fragment = getArguments().getString("fragment");
+        // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         //Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
@@ -136,6 +136,21 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         return rootview;
     }
 
+    private void showNoPastOrder(){
+        noPastOrder.setVisibility(View.VISIBLE);
+        noPastOrderText.setVisibility(View.VISIBLE);
+        mListview.setVisibility(View.GONE);
+    }
+
+
+    private void showPastOrderMode(){
+        noPastOrder.setVisibility(View.GONE);
+        noPastOrderText.setVisibility(View.GONE);
+        mListview.setVisibility(View.VISIBLE);
+    }
+
+
+
 
     /**
      * Connect to the server and load the past order.
@@ -153,20 +168,13 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                 public void onSuccess(final List<Order> orderList) {
 //                Move to async task
                     if (orderList.size() == 0) {
-                        noPastOrder.setVisibility(View.VISIBLE);
-                        noPastOrderText.setVisibility(View.VISIBLE);
-                        mListview.setVisibility(View.GONE);
+                        showNoPastOrder();
                     } else {
-
+                        showPastOrderMode();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 for (Order order : orderList) {
-
-                                    noPastOrder.setVisibility(View.GONE);
-                                    noPastOrderText.setVisibility(View.GONE);
-                                    mListview.setVisibility(View.VISIBLE);
-
                                     List<Map<String, String>> prescription = order.getPrescription();
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                                     format.setTimeZone(TimeZone.getTimeZone("IST"));
@@ -176,24 +184,15 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    String time = date.toString().substring(12, 16);
+                                    String time = date.toString().substring(11, 16);
                                     String orderDay = date.toString().substring(8, 10);
                                     String orderMonth = date.toString().substring(4, 7);
                                     String orderYear = date.toString().substring(30, 34);
                                     String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
-                                    boolean isDelievered = false;
-                                    try{
 
-                                        //Getting the delivery report
-                                        if(order.getPrototypeStatusCode().equals("5003")){
-                                            isDelievered = true;
-                                        }else{
-                                            isDelievered = false;
-                                        }
-                                    }catch (Exception e){
-                                        //If value is null
-                                        isDelievered = false;
-                                    }
+                                    //Now parsing time..
+                                    time = mainActivity.getActivityHelper().parseISTTime(time);
+
 
                                     pastOrdersDetails.add(
                                             new PastOrdersDetail(
@@ -202,12 +201,12 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                                                     order.getId().toString(),
                                                     order.getGoogleAddr(),
                                                     prescription,
-                                                    isDelievered,
+                                                    order.getPrototypeStatusCode(),
                                                     order.getRetailerId()
                                             )
                                     );
 
-                                }
+                                }//for loop
                                 pastOrderAdapter.notifyDataSetChanged();
                             }//public void run() {
                         });
@@ -221,13 +220,9 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onError(Throwable t) {
-
+                    Log.e(Constants.TAG, t.toString());
                     Log.d(Constants.TAG, "Error fetching past order for customer");
-                    noPastOrderText.setText("Unable to connect to server");
-                    noPastOrder.setVisibility(View.VISIBLE);
-                    noPastOrder.setImageResource(R.mipmap.order_cancelled);
-                    noPastOrderText.setVisibility(View.VISIBLE);
-                    mListview.setVisibility(View.GONE);
+                    setErrorText("Error fetching your orders");
 
                     /**
                      * Close the loading bar
@@ -245,6 +240,13 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    private void setErrorText(String message){
+        noPastOrderText.setText(message);
+        noPastOrder.setVisibility(View.VISIBLE);
+        noPastOrder.setImageResource(R.mipmap.order_cancelled);
+        noPastOrderText.setVisibility(View.VISIBLE);
+        mListview.setVisibility(View.GONE);
+    }
 
 
 
@@ -331,40 +333,4 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     }
 
 
-
-
-
-    /*private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //spinner.setVisibility(View.VISIBLE);
-            //this method will be running on UI thread
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-            *//*mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                }
-            });*//*
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //this method will be running on UI thread
-            //spinner.setVisibility(View.GONE);
-        }
-
-    }*/
 }

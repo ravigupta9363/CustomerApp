@@ -174,7 +174,6 @@ public class ActivityHelper {
                         else{
                             //Show try again as address not found
                             activity.replaceFragment(R.layout.fragment_try_again, null);
-                            return "";
                         }
                     }
                     catch (Exception e) {
@@ -200,9 +199,7 @@ public class ActivityHelper {
             latLong.put("lng", address.getLongitude() + "");
         }
         catch (Exception e){
-
             Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
-
             try{
                 closeLoadingBar();
             }catch(Exception error){
@@ -210,7 +207,6 @@ public class ActivityHelper {
             }
             //Show no internet connection..
             activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-            return "";
         }
 
         try{
@@ -222,15 +218,10 @@ public class ActivityHelper {
             //TODO SHOW ANOTHER FRAGMENT HERE..
             //We are not providing service in your area....
             activity.replaceFragment(R.layout.fragment_try_again, null);
-            return "";
         }
 
         return pincode;
     }
-
-
-
-
 
     public String parseAddress() {
         StringBuilder sb = new StringBuilder();
@@ -269,7 +260,7 @@ public class ActivityHelper {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
         if (requestCode == 1) {
-          //  TODO: check service again after calling setting activity
+            //  TODO: check service again after calling setting activity
             appLocationService = new AppLocationService(activity);
             Location location = appLocationService
                     .getLocation(LocationManager.GPS_PROVIDER);
@@ -296,9 +287,9 @@ public class ActivityHelper {
          */
         //launchRingDialog(activity);
 
-                //start your activity here
-                internetConnection = activity.haveNetworkConnection();
-                runOnUiThread(internetConnection);
+        //start your activity here
+        internetConnection = activity.haveNetworkConnection();
+        runOnUiThread(internetConnection);
 
 
     }
@@ -370,63 +361,57 @@ public class ActivityHelper {
                 if (internetConnection) {
 
                     pincode = findNetwork();
-                    if(!(pincode.equals(""))) {
-                        final RestAdapter adapter = application.getLoopBackAdapter();
+                    final RestAdapter adapter = application.getLoopBackAdapter();
 
-                        final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
-                        officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
-                            @Override
-                            public void onSuccess(Office officeObj) {
-                                if (officeObj.getName() == null) {
-                                    Log.i(Constants.TAG, "We are not providing service in your area.");
-                                    //closeLoadingBar();
-                                    //We are not providing service in your area....
-                                    activity.replaceFragment(R.layout.fragment_no_address_found, null);
-
-                                } else {
-                                    application.setOffice(officeObj, activity);
-
-                                    //Now setting the office id to the order...
-                                    application.getOrder(activity).setOfficeId((String) officeObj.getId());
-
-
-                                    officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
-                                        @Override
-                                        public void onSuccess(List<Retailer> retailerArray) {
-                                            Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
-                                            retailerListFetched = true;
-                                            application.setRetailerList(retailerArray);
-                                            if (imageDownloaded && retailerListFetched) {
-                                                //Go to main fragment
-                                                resolveRoute();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable t) {
-                                            Log.d(Constants.TAG, "No retailer found in this area");
-                                        }
-                                    });
-
-                                    //Download all the images..
-                                    fetchAllImages(adapter);
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable t) {
-                                Log.e(Constants.TAG, t.toString());
-                                Log.e(Constants.TAG, "Error loading office settings from server");
+                    final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+                    officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
+                        @Override
+                        public void onSuccess(Office officeObj) {
+                            if (officeObj.getName() == null) {
+                                Log.i(Constants.TAG, "We are not providing service in your area.");
                                 //closeLoadingBar();
-                                //Show no internet connection..
-                                activity.replaceFragment(R.layout.fragment_try_again, null);
+                                //We are not providing service in your area....
+                                activity.replaceFragment(R.layout.fragment_no_address_found, null);
+
+                            } else {
+                                application.setOffice(officeObj, activity);
+
+                                //Now setting the office id to the order...
+                                application.getOrder(activity).setOfficeId((String) officeObj.getId());
+
+
+                                officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+                                    @Override
+                                    public void onSuccess(List<Retailer> retailerArray) {
+                                        Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
+                                        retailerListFetched = true;
+                                        application.setRetailerList(retailerArray);
+                                        if (imageDownloaded && retailerListFetched) {
+                                            //Go to main fragment
+                                            resolveRoute();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Log.d(Constants.TAG, "No retailer found in this area");
+                                    }
+                                });
+
+                                //Download all the images..
+                                fetchAllImages(adapter);
                             }
-                        }); //SearchOfficePincode method
-                    }else{
-                        /**
-                         * Do nothing..
-                         */
-                    }
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.e(Constants.TAG, t.toString());
+                            Log.e(Constants.TAG, "Error loading office settings from server");
+                            //closeLoadingBar();
+                            //Show no internet connection..
+                            activity.replaceFragment(R.layout.fragment_try_again, null);
+                        }
+                    }); //SearchOfficePincode method
                 } else {
                     //closeLoadingBar();
                     //Show no internet connection..
@@ -574,7 +559,13 @@ public class ActivityHelper {
                     hour = hour - 12;
                 }
             }
-            return "" + Integer.toString(hour) + ":" + Integer.toString(min) + " " + type;
+
+            if(min < 10){
+                return "" + Integer.toString(hour) + ":" + "0" +  Integer.toString(min) + " " + type;
+            }else{
+                return "" + Integer.toString(hour) + ":" +   Integer.toString(min) + " " + type;
+            }
+
         }
         else{
             Log.e(Constants.TAG, "Error parsing time");
