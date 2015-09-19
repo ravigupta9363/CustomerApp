@@ -80,7 +80,7 @@
 
     <string name="fragment_no_address_found_button1">Exit App</string>
     <string name="fragment_no_address_found_button2">Refresh</string>
-    <string name="fragment_no_address_found_textview1">We are currently not serving in your area</string>
+    <string name="fragment_no_address_found_textview1">Not serving in your area</string>
 
     <string name="fragment_no_internet_connection_textview1">Please check your Internet connection</string>
     <string name="fragment_no_internet_connection_button1">Retry</string>

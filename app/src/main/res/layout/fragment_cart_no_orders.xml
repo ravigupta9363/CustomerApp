@@ -54,7 +54,7 @@
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
             android:layout_gravity="center"
-            android:src="@mipmap/no_prescription"/>
+            android:src="@mipmap/no_prescription_image"/>
 
        <TextView
            android:layout_width="match_parent"

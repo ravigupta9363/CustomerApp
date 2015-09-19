@@ -174,6 +174,7 @@ public class ActivityHelper {
                         else{
                             //Show try again as address not found
                             activity.replaceFragment(R.layout.fragment_try_again, null);
+                            return "";
                         }
                     }
                     catch (Exception e) {
@@ -199,7 +200,9 @@ public class ActivityHelper {
             latLong.put("lng", address.getLongitude() + "");
         }
         catch (Exception e){
+
             Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
+
             try{
                 closeLoadingBar();
             }catch(Exception error){
@@ -207,6 +210,7 @@ public class ActivityHelper {
             }
             //Show no internet connection..
             activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
+            return "";
         }
 
         try{
@@ -218,10 +222,15 @@ public class ActivityHelper {
             //TODO SHOW ANOTHER FRAGMENT HERE..
             //We are not providing service in your area....
             activity.replaceFragment(R.layout.fragment_try_again, null);
+            return "";
         }
 
         return pincode;
     }
+
+
+
+
 
     public String parseAddress() {
         StringBuilder sb = new StringBuilder();
@@ -361,57 +370,63 @@ public class ActivityHelper {
                 if (internetConnection) {
 
                     pincode = findNetwork();
-                    final RestAdapter adapter = application.getLoopBackAdapter();
+                    if(!(pincode.equals(""))) {
+                        final RestAdapter adapter = application.getLoopBackAdapter();
 
-                    final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
-                    officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
-                        @Override
-                        public void onSuccess(Office officeObj) {
-                            if (officeObj.getName() == null) {
-                                Log.i(Constants.TAG, "We are not providing service in your area.");
-                                //closeLoadingBar();
-                                //We are not providing service in your area....
-                                activity.replaceFragment(R.layout.fragment_no_address_found, null);
+                        final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+                        officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
+                            @Override
+                            public void onSuccess(Office officeObj) {
+                                if (officeObj.getName() == null) {
+                                    Log.i(Constants.TAG, "We are not providing service in your area.");
+                                    //closeLoadingBar();
+                                    //We are not providing service in your area....
+                                    activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
-                            } else {
-                                application.setOffice(officeObj, activity);
+                                } else {
+                                    application.setOffice(officeObj, activity);
 
-                                //Now setting the office id to the order...
-                                application.getOrder(activity).setOfficeId((String) officeObj.getId());
+                                    //Now setting the office id to the order...
+                                    application.getOrder(activity).setOfficeId((String) officeObj.getId());
 
 
-                                officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
-                                    @Override
-                                    public void onSuccess(List<Retailer> retailerArray) {
-                                        Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
-                                        retailerListFetched = true;
-                                        application.setRetailerList(retailerArray);
-                                        if (imageDownloaded && retailerListFetched) {
-                                            //Go to main fragment
-                                            resolveRoute();
+                                    officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+                                        @Override
+                                        public void onSuccess(List<Retailer> retailerArray) {
+                                            Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
+                                            retailerListFetched = true;
+                                            application.setRetailerList(retailerArray);
+                                            if (imageDownloaded && retailerListFetched) {
+                                                //Go to main fragment
+                                                resolveRoute();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onError(Throwable t) {
-                                        Log.d(Constants.TAG, "No retailer found in this area");
-                                    }
-                                });
+                                        @Override
+                                        public void onError(Throwable t) {
+                                            Log.d(Constants.TAG, "No retailer found in this area");
+                                        }
+                                    });
 
-                                //Download all the images..
-                                fetchAllImages(adapter);
+                                    //Download all the images..
+                                    fetchAllImages(adapter);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            Log.e(Constants.TAG, t.toString());
-                            Log.e(Constants.TAG, "Error loading office settings from server");
-                            //closeLoadingBar();
-                            //Show no internet connection..
-                            activity.replaceFragment(R.layout.fragment_try_again, null);
-                        }
-                    }); //SearchOfficePincode method
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.e(Constants.TAG, t.toString());
+                                Log.e(Constants.TAG, "Error loading office settings from server");
+                                //closeLoadingBar();
+                                //Show no internet connection..
+                                activity.replaceFragment(R.layout.fragment_try_again, null);
+                            }
+                        }); //SearchOfficePincode method
+                    }else{
+                        /**
+                         * Do nothing..
+                         */
+                    }
                 } else {
                     //closeLoadingBar();
                     //Show no internet connection..

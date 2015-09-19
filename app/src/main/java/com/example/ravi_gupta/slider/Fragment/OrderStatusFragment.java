@@ -319,137 +319,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 orderStatusText.setText(subject);
-                Log.d("serverFarm",subject);
             }//public void run() {
-        });
-    }
-
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            while (true ) {
-                //Checking if status has been changed..
-                status = GcmIntentService.getStatus();
-                if (!(status == null)) {
-                    if(status.equals("5003")){
-                        changeStatus(mainActivity, "Delivered");
-                        return null;
-                    }
-                    else if(status.equals("5001")){
-                        changeStatus(mainActivity, "Preparing");
-                    }
-                    else if(status.equals("5002")){
-                        changeStatus(mainActivity, "At Retailer");
-                    }
-                    else if(status.equals("5004")){
-                        changeStatus(mainActivity, "Cancelled");
-                        return null;
-                    }
-                    else{
-                        //do nothing here..
-                        /**
-                         * If status doesnot belong to any of these category..
-                         */
-
-                    }
-
-                }//if
-
-            }//While
-        }//doInBackground
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            cancelOrder.setVisibility(View.GONE);
-            home.setVisibility(View.VISIBLE);
-
-        }
-    }//AsyncCaller
-
-
-    private void loadStatus(String status){
-        if (!(status == null)) {
-            if(status.equals("5003")){
-                changeStatus(mainActivity, "Delivered");
-                orderStatusDataBase.deleteOrderStatus();
-                cancelOrder.setVisibility(View.GONE);
-                home.setVisibility(View.VISIBLE);
-
-            }
-            else if(status.equals("5001")){
-                changeStatus(mainActivity, "Preparing");
-            }
-            else if(status.equals("5002")){
-                changeStatus(mainActivity, "At Retailer");
-            }
-            else if(status.equals("5004")){
-                changeStatus(mainActivity, "Cancelled");
-                orderStatusDataBase.deleteOrderStatus();
-                cancelOrder.setVisibility(View.GONE);
-                home.setVisibility(View.VISIBLE);
-
-            }
-            else{
-                //do nothing here..
-                /**
-                 * If status doesnot belong to any of these category..
-                 */
-                changeStatus(mainActivity, "Preparing");
-            }
-
-        }//if
-    }
-
-
-    private void loadOrder(final String id){
-
-        OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
-        orderRepository.getOrder(id, new ObjectCallback<Order>() {
-            @Override
-            public void onSuccess(Order order) {
-                if(order == null){
-                    showRetryButton("Order not found.");
-                }
-                order_ = order;
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-                format.setTimeZone(TimeZone.getTimeZone("IST"));
-                java.util.Date date_ = null;
-                try {
-                    date_ = format.parse(order.getDate());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String time_ = date_.toString().substring(11, 16);
-                //Now parsing time..
-                time_ = mainActivity.getActivityHelper().parseISTTime(time_);
-
-                String orderDay = date_.toString().substring(8, 10);
-                String orderMonth = date_.toString().substring(4, 7);
-                String orderYear = date_.toString().substring(30, 34);
-                String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
-
-
-                String orderStatus = order.getPrototypeStatusCode();
-                loadStatus(orderStatus);
-                date.setText(actualDate);
-                time.setText(time_);
-                orderId.setText(id);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e(Constants.TAG, "Error fetching order ");
-                Log.e(Constants.TAG, t.toString());
-                showRetryButton("Error Loading Order");
-            }
         });
     }
 
@@ -459,4 +329,148 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         cancelOrder.setVisibility(View.GONE);
         home.setVisibility(View.GONE);
     }
+
+
+    private void showCancelledButton(MainActivity activity) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                retry.setVisibility(View.GONE);
+                cancelOrder.setVisibility(View.VISIBLE);
+                home.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    private void showHomeButton(MainActivity activity) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                retry.setVisibility(View.GONE);
+                cancelOrder.setVisibility(View.GONE);
+                home.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void> {
+         @Override
+         protected void onPreExecute() {
+             super.onPreExecute();
+             //this method will be running on UI thread
+         }
+
+         @Override
+         protected Void doInBackground(Void... params) {
+             while (true) {
+                 //Checking if status has been changed..
+                 status = GcmIntentService.getStatus();
+                 if (!(status == null)) {
+                     if (status.equals("5003")) {
+                         changeStatus(mainActivity, "Delivered");
+                         return null;
+                     } else if (status.equals("5001")) {
+                         changeStatus(mainActivity, "Preparing");
+                         showCancelledButton(mainActivity);
+                     } else if (status.equals("5002")) {
+                         changeStatus(mainActivity, "At Retailer");
+                         showCancelledButton(mainActivity);
+                     } else if (status.equals("5004")) {
+                         changeStatus(mainActivity, "Cancelled");
+                         return null;
+                     } else {
+                         //do nothing here..
+                         /**
+                          * If status doesnot belong to any of these category..
+                          */
+
+                     }
+
+                 }//if
+
+             }//While
+         }//doInBackground
+
+         @Override
+         protected void onPostExecute(Void result) {
+             super.onPostExecute(result);
+             showHomeButton(mainActivity);
+         }
+    }//AsyncCaller
+
+
+    private void loadStatus(String status) {
+         if (!(status == null)) {
+             if (status.equals("5003")) {
+                 changeStatus(mainActivity, "Delivered");
+                 orderStatusDataBase.deleteOrderStatus();
+                 showHomeButton(mainActivity);
+             } else if (status.equals("5001")) {
+                 changeStatus(mainActivity, "Preparing");
+                 showCancelledButton(mainActivity);
+             } else if (status.equals("5002")) {
+                 changeStatus(mainActivity, "At Retailer");
+                 showCancelledButton(mainActivity);
+             } else if (status.equals("5004")) {
+                 changeStatus(mainActivity, "Cancelled");
+                 orderStatusDataBase.deleteOrderStatus();
+                 showHomeButton(mainActivity);
+
+             } else {
+                 //do nothing here..
+                 /**
+                  * If status doesnot belong to any of these category..
+                  */
+                 changeStatus(mainActivity, "Preparing");
+             }
+
+         }//if
+    }
+
+
+    private void loadOrder(final String id) {
+
+         OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
+         orderRepository.getOrder(id, new ObjectCallback<Order>() {
+             @Override
+             public void onSuccess(Order order) {
+                 if (order == null) {
+                     showRetryButton("Order not found.");
+                 }
+                 order_ = order;
+                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                 format.setTimeZone(TimeZone.getTimeZone("IST"));
+                 java.util.Date date_ = null;
+                 try {
+                     date_ = format.parse(order.getDate());
+                 } catch (ParseException e) {
+                     e.printStackTrace();
+                 }
+                 String time_ = date_.toString().substring(11, 16);
+                 //Now parsing time..
+                 time_ = mainActivity.getActivityHelper().parseISTTime(time_);
+
+                 String orderDay = date_.toString().substring(8, 10);
+                 String orderMonth = date_.toString().substring(4, 7);
+                 String orderYear = date_.toString().substring(30, 34);
+                 String actualDate = orderDay + " " + orderMonth.toUpperCase() + " " + orderYear;
+
+
+                 String orderStatus = order.getPrototypeStatusCode();
+                 loadStatus(orderStatus);
+                 date.setText(actualDate);
+                 time.setText(time_);
+                 orderId.setText(id);
+             }
+
+             @Override
+             public void onError(Throwable t) {
+                 Log.e(Constants.TAG, "Error fetching order ");
+                 Log.e(Constants.TAG, t.toString());
+                 showRetryButton("Error Loading Order");
+             }
+         });
+    }
+
 }
