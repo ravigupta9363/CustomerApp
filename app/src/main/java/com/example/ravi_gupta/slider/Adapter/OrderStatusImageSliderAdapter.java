@@ -51,3 +51,4 @@ public class OrderStatusImageSliderAdapter  extends PagerAdapter {
         container.removeView((LinearLayout) object);
     }
 }
+
