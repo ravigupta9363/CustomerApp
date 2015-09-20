@@ -81,6 +81,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         if(discountNumber == 0) {
             holder.discount.setVisibility(View.GONE);
         }else{
+            holder.discount.setVisibility(View.VISIBLE);
             holder.discount.setText("upto "+String.valueOf((discountNumber)+"%"));
         }
 
