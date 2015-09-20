@@ -406,6 +406,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            orderStatusDataBase.deleteOrderStatus();
             showHomeButton(mainActivity);
         }
     }//AsyncCaller
