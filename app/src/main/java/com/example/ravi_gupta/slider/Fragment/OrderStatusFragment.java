@@ -47,8 +47,6 @@ import java.util.TimeZone;
 public class OrderStatusFragment extends android.support.v4.app.Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     public static String TAG = "OrderStatusFragment" ;
     TextView date;
     TextView time;
@@ -140,7 +138,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
         //Drawable orderStatusBackground = rootview.findViewById(R.id.fragment_order_status_background_layout).getBackground();
         //orderStatusBackground.setAlpha(127);
-
+        showCancelledButton(mainActivity);
 
         if (fragment.equals("HomeFragment") || fragment.equals("NotDelivered")) {
             cancelOrder.setVisibility(View.VISIBLE);
@@ -172,6 +170,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             }
         });
 
+
+
         orderNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +179,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         });
+
+
 
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +216,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 //Open Main Fragment when order has been cancelled or delivered
             }
         });
+
+
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,9 +339,10 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                home.setVisibility(View.GONE);
                 retry.setVisibility(View.GONE);
                 cancelOrder.setVisibility(View.VISIBLE);
-                home.setVisibility(View.GONE);
+
             }
         });
     }
@@ -373,7 +378,13 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                     } else if (status.equals("5001")) {
                         changeStatus(mainActivity, "Preparing");
                         showCancelledButton(mainActivity);
-                    } else if (status.equals("5002")) {
+                    }
+                    else if (status.equals("5000")) {
+                        //Show on new order preparing too..
+                        changeStatus(mainActivity, "Preparing");
+                        showCancelledButton(mainActivity);
+                    }
+                    else if (status.equals("5002")) {
                         changeStatus(mainActivity, "At Retailer");
                         showCancelledButton(mainActivity);
                     } else if (status.equals("5004")) {
@@ -409,7 +420,11 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             } else if (status.equals("5001")) {
                 changeStatus(mainActivity, "Preparing");
                 showCancelledButton(mainActivity);
-            } else if (status.equals("5002")) {
+            } else if (status.equals("5000")) {
+                changeStatus(mainActivity, "Preparing");
+                showCancelledButton(mainActivity);
+            }
+            else if (status.equals("5002")) {
                 changeStatus(mainActivity, "At Retailer");
                 showCancelledButton(mainActivity);
             } else if (status.equals("5004")) {
