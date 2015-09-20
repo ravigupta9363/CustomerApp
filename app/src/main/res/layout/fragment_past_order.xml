@@ -82,16 +82,20 @@
         android:layout_gravity="center"/>-->
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_centerInParent="true"
-        android:background="@drawable/round_button"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/round_status_button"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/fragment_past_orders_textview2"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColor="#FFF"
+        android:visibility="gone"
         android:id="@+id/fragment_past_order_button1"
-        android:visibility="gone"/>
+        />
 
     <ListView
         android:layout_width="match_parent"
