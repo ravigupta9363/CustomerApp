@@ -137,6 +137,9 @@ public class ActivityHelper {
 
 
 
+
+
+
     public String findNetwork(){
         String pincode = "";
         //Checking Pincode lies within area
@@ -571,4 +574,33 @@ public class ActivityHelper {
             return time;
         }
     }
+
+
+
+
+
+    /**
+     * Converts texts to camel case characters..
+     * @param text
+     * @return
+     */
+    public static String toCamelCase(String text){
+        String[] parts = text.split(" ");
+        String camelCaseString = "";
+        for (String part : parts){
+            if(camelCaseString.equals("")){
+                camelCaseString = camelCaseString + toProperCase(part);
+            }else{
+                camelCaseString = camelCaseString + " " + toProperCase(part);
+            }
+
+        }
+        return camelCaseString;
+    }
+
+    static String toProperCase(String s) {
+        return s.substring(0, 1).toUpperCase() +
+                s.substring(1).toLowerCase();
+    }
+
 }

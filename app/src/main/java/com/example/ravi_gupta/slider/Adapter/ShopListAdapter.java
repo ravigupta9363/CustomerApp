@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.ravi_gupta.slider.ActivityHelper;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.R;
@@ -71,7 +72,10 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
 
         ShopListDetails shopListDetails = shopListDetailses.get(position);
         String firstCharacter = String.valueOf(shopListDetails.shopName.charAt(0));
-        holder.shopName.setText(shopListDetails.shopName);
+        String shopName = ActivityHelper.toCamelCase(shopListDetails.shopName);
+        String shopAddress = ActivityHelper.toCamelCase(shopListDetails.address);
+
+        holder.shopName.setText(shopName);
         Double d = new Double(shopListDetails.discount);
         int discountNumber = d.intValue();
         if(discountNumber == 0) {
@@ -80,7 +84,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.discount.setText("upto "+String.valueOf((discountNumber)+"%"));
         }
 
-        holder.address.setText(shopListDetails.address);
+        holder.address.setText(shopAddress);
 
 
         if(!shopListDetails.IsClosed && shopListDetails.Isreturn){
