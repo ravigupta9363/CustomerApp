@@ -37,7 +37,7 @@ public class Constants {
 
     public static String appPlayStoreLink = "com.drugcorner.slider";
 
-    public static String appShareText = "Order on drugcorner and enjoy the hassle free delivery of medicines http://www.drugcorner.co.in";
+    public static String appShareText = "Order on Drugcorner and enjoy the hassle free delivery of medicines \n\n";
 
     public static String appMail = "admin@drugcorner.co.in";
 

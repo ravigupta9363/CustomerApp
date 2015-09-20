@@ -523,6 +523,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     String shareBody = Constants.appShareText;
+                    shareBody = shareBody + "http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink;
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                     startActivity(Intent.createChooser(sharingIntent, "Share Via"));
