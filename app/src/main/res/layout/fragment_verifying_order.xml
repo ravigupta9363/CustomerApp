@@ -18,8 +18,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
             android:layout_gravity="center|top"
-            android:visibility="gone"
-            android:src="@mipmap/dispatched_for_delivery"/>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,6 +50,4 @@
             android:id="@+id/fragment_verifying_order_button1"/>
 
     </LinearLayout>
-
-
 </RelativeLayout>

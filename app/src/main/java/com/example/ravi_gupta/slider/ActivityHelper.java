@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -297,7 +296,7 @@ public class ActivityHelper {
 
     public void launchRingDialog(MainActivity activity) {
         ringProgressDialog = ProgressDialog.show(activity,"", "Please wait...", true);
-        ringProgressDialog.setCancelable(true);
+        ringProgressDialog.setCancelable(false);
         ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }

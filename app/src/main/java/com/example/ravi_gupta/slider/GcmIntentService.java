@@ -5,17 +5,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.ravi_gupta.slider.Database.NotificationDatabase;
 import com.example.ravi_gupta.slider.Details.NotificationItemDetail;
-import com.example.ravi_gupta.slider.GcmBroadcastReceiver;
 import com.example.ravi_gupta.slider.Models.Message;
-import com.example.ravi_gupta.slider.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -156,10 +158,10 @@ public class GcmIntentService extends IntentService {
     }
 
 
-    private void sendImageNotification(String msg, String image) {
+    /*private void sendImageNotification(String msg, String image) {
         //TODO DEFINE IMAGE NOTIFICATION...
 
-    }
+    }*/
 
 
 
@@ -215,22 +217,25 @@ public class GcmIntentService extends IntentService {
 
     }
 
-  /*  public void sendImageNotification(String message, String subject, String imageUri) {
+
+
+    public void sendImageNotification(String message, String imageUri) {
         int color = 0xff14649f;
-        Drawable d = getResources().getDrawable(R.drawable.pills1);
-        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+        ImageView bitmapImageView = new ImageView(this);
+        Picasso.with(this).load(imageUri).into(bitmapImageView);
+        Bitmap bitmap = ((BitmapDrawable)bitmapImageView.getDrawable()).getBitmap();
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo_small)
                         .setAutoCancel(true)
                         .setContentTitle("Drug Corner")
-                        .setContentText("Get 10% Off on Apollo Pharmacy and get suprise gift with every order")
+                        .setContentText(message)
                         .setColor(color);
 
         NotificationCompat.BigPictureStyle bigPicStyle = new NotificationCompat.BigPictureStyle();
         bigPicStyle.bigPicture(bitmap);
         bigPicStyle.setBigContentTitle("Drug Corner");
-        bigPicStyle.setSummaryText("Get 10% Off on Apollo Pharmacy and get surprise gift with every order");
+        bigPicStyle.setSummaryText(message);
         mBuilder.setStyle(bigPicStyle);
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.setAction("OpenNotificationFragment");
@@ -246,6 +251,6 @@ public class GcmIntentService extends IntentService {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(mNotificationId1, mBuilder.build());
     }
-*/
+
 }
 

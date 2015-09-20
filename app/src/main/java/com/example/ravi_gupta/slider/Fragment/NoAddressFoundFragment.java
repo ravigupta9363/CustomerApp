@@ -47,11 +47,9 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
     Timer timer;
     int[] mResources = {
             R.mipmap.no_address_found_background,
-            R.mipmap.screenshot1,
-            R.mipmap.screenshot2,
-            R.mipmap.screenshot3,
-            R.mipmap.screenshot4,
-            R.mipmap.screenshot5
+            R.mipmap.sc1,
+            R.mipmap.sc2,
+            R.mipmap.sc3,
     };
 
     // TODO: Rename and change types of parameters
