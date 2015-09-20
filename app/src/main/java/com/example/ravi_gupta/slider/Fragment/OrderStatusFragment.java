@@ -1,9 +1,7 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -186,7 +184,32 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 //Show the loading bar..
-                cancelOrder();
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+
+                orderStatusText.setText("Cancelled");
+                order_.setPrototypeStatusCode("5004");
+                order_.save(new VoidCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //do something
+                        mainActivity.getActivityHelper().closeLoadingBar();
+                        //TODO DELETE ID FROM DATABASE HERE
+                        //Delete the order status
+                        orderStatusDataBase.deleteOrderStatus();
+
+                        cancelOrder.setVisibility(View.GONE);
+                        home.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(Constants.TAG, "Error Cancelling Order");
+                        Log.e(Constants.TAG, t.getMessage());
+                        mainActivity.getActivityHelper().closeLoadingBar();
+
+                    }
+                });
+
                 //orderStatusImage.setImageResource(R.drawable.order_cancelled);
                 //Open Main Fragment when order has been cancelled or delivered
             }
@@ -296,13 +319,42 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 orderStatusText.setText(subject);
-                Log.d("serverFarm",subject);
             }//public void run() {
         });
     }
 
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
+    private void showRetryButton(String message){
+        orderStatusText.setText(message);
+        retry.setVisibility(View.VISIBLE);
+        cancelOrder.setVisibility(View.GONE);
+        home.setVisibility(View.GONE);
+    }
+
+
+    private void showCancelledButton(MainActivity activity) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                retry.setVisibility(View.GONE);
+                cancelOrder.setVisibility(View.VISIBLE);
+                home.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    private void showHomeButton(MainActivity activity) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                retry.setVisibility(View.GONE);
+                cancelOrder.setVisibility(View.GONE);
+                home.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private class AsyncCaller extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -311,25 +363,23 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            while (true ) {
+            while (true) {
                 //Checking if status has been changed..
                 status = GcmIntentService.getStatus();
                 if (!(status == null)) {
-                    if(status.equals("5003")){
+                    if (status.equals("5003")) {
                         changeStatus(mainActivity, "Delivered");
                         return null;
-                    }
-                    else if(status.equals("5001")){
+                    } else if (status.equals("5001")) {
                         changeStatus(mainActivity, "Preparing");
-                    }
-                    else if(status.equals("5002")){
+                        showCancelledButton(mainActivity);
+                    } else if (status.equals("5002")) {
                         changeStatus(mainActivity, "At Retailer");
-                    }
-                    else if(status.equals("5004")){
+                        showCancelledButton(mainActivity);
+                    } else if (status.equals("5004")) {
                         changeStatus(mainActivity, "Cancelled");
                         return null;
-                    }
-                    else{
+                    } else {
                         //do nothing here..
                         /**
                          * If status doesnot belong to any of these category..
@@ -345,36 +395,29 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            cancelOrder.setVisibility(View.GONE);
-            home.setVisibility(View.VISIBLE);
-
+            showHomeButton(mainActivity);
         }
     }//AsyncCaller
 
 
-    private void loadStatus(String status){
+    private void loadStatus(String status) {
         if (!(status == null)) {
-            if(status.equals("5003")){
+            if (status.equals("5003")) {
                 changeStatus(mainActivity, "Delivered");
                 orderStatusDataBase.deleteOrderStatus();
-                cancelOrder.setVisibility(View.GONE);
-                home.setVisibility(View.VISIBLE);
-
-            }
-            else if(status.equals("5001")){
+                showHomeButton(mainActivity);
+            } else if (status.equals("5001")) {
                 changeStatus(mainActivity, "Preparing");
-            }
-            else if(status.equals("5002")){
+                showCancelledButton(mainActivity);
+            } else if (status.equals("5002")) {
                 changeStatus(mainActivity, "At Retailer");
-            }
-            else if(status.equals("5004")){
+                showCancelledButton(mainActivity);
+            } else if (status.equals("5004")) {
                 changeStatus(mainActivity, "Cancelled");
                 orderStatusDataBase.deleteOrderStatus();
-                cancelOrder.setVisibility(View.GONE);
-                home.setVisibility(View.VISIBLE);
+                showHomeButton(mainActivity);
 
-            }
-            else{
+            } else {
                 //do nothing here..
                 /**
                  * If status doesnot belong to any of these category..
@@ -386,13 +429,13 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     }
 
 
-    private void loadOrder(final String id){
+    private void loadOrder(final String id) {
 
         OrderRepository orderRepository = mainActivity.restAdapter.createRepository(OrderRepository.class);
         orderRepository.getOrder(id, new ObjectCallback<Order>() {
             @Override
             public void onSuccess(Order order) {
-                if(order == null){
+                if (order == null) {
                     showRetryButton("Order not found.");
                 }
                 order_ = order;
@@ -430,55 +473,4 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private void showRetryButton(String message){
-        orderStatusText.setText(message);
-        retry.setVisibility(View.VISIBLE);
-        cancelOrder.setVisibility(View.GONE);
-        home.setVisibility(View.GONE);
-    }
-
-    public void cancelOrder() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                mainActivity);
-
-        alertDialog.setMessage("Cancel Order?");
-        alertDialog.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        mainActivity.getActivityHelper().launchRingDialog(mainActivity);
-
-                        orderStatusText.setText("Cancelled");
-                        order_.setPrototypeStatusCode("5004");
-                        order_.save(new VoidCallback() {
-                            @Override
-                            public void onSuccess() {
-                                //do something
-                                mainActivity.getActivityHelper().closeLoadingBar();
-                                //TODO DELETE ID FROM DATABASE HERE
-                                //Delete the order status
-                                orderStatusDataBase.deleteOrderStatus();
-
-                                cancelOrder.setVisibility(View.GONE);
-                                home.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onError(Throwable t) {
-                                Log.e(Constants.TAG, "Error Cancelling Order");
-                                Log.e(Constants.TAG, t.getMessage());
-                                mainActivity.getActivityHelper().closeLoadingBar();
-
-                            }
-                        });
-
-                    }
-                });
-        alertDialog.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialog.show();
-    }
 }
