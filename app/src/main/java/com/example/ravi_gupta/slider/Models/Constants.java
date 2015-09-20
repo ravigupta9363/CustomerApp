@@ -7,9 +7,9 @@ package com.example.ravi_gupta.slider.Models;
 public class Constants {
     public static String TAG = "drugcorner";
     public static String imageContainer = "drugcorner";
-    public static String returnDays  = "3 Days Return";
-    public static String apiUrl = "http://192.168.1.100:3001/api";
-    //public static String apiUrl = "http://api.drugcorner.co.in";
+    public static String returnDays  = "2 Days Return";
+    //public static String apiUrl = "http://192.168.1.100:3001/api";
+    public static String apiUrl = "http://api.drugcorner.co.in";
 
     public static String appName = "DRUGCORNER";
 
@@ -35,7 +35,7 @@ public class Constants {
      */
     public static String LOOPBACK_APP_ID = "drugcorner-push-application";
 
-    public static String appPlayStoreLink = "com.cubeactive.qnotelistfree";
+    public static String appPlayStoreLink = "com.drugcorner.slider";
 
     public static String appShareText = "Order on drugcorner and enjoy the hassle free delivery of medicines http://www.drugcorner.co.in";
 

@@ -73,7 +73,6 @@ public class CartNoOrdersFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
-        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         TextView text = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview1);
         TextView text2 = (TextView)rootview.findViewById(R.id.fragment_cart_no_orders_textview3);

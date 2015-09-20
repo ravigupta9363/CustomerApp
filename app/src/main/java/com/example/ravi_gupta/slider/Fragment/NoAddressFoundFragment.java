@@ -42,7 +42,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
     AppLocationService appLocationService;
     public static String TAG = "NoAddressFoundFragment";
     OrderStatusImageSliderAdapter orderStatusImageSliderAdapter;
-    com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration scViewPager;
+    com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable scViewPager;
     int page = 1;
     Timer timer;
     int[] mResources = {
@@ -88,7 +88,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
         refreshButton = (Button) rootview.findViewById(R.id.fragment_no_address_found_button2);
 
         orderStatusImageSliderAdapter = new OrderStatusImageSliderAdapter(mainActivity,mResources);
-        scViewPager = (com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration) rootview.findViewById(R.id.fragment_no_address_found_pager);
+        scViewPager = (com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable) rootview.findViewById(R.id.fragment_no_address_found_pager);
         scViewPager.setAdapter(orderStatusImageSliderAdapter);
         scViewPager.setCurrentItem(0, false);
         scViewPager.setScrollDurationFactor(5);

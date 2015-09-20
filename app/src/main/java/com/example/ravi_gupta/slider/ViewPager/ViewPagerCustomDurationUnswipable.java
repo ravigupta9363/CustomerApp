@@ -1,24 +1,24 @@
 package com.example.ravi_gupta.slider.ViewPager;
 
-/**
- * Created by Ravi-Gupta on 7/1/2015.
- */
-
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.animation.Interpolator;
 
 import java.lang.reflect.Field;
 
-public class ViewPagerCustomDuration extends ViewPager {
+/**
+ * Created by Ravi-Gupta on 9/20/2015.
+ */
+public class ViewPagerCustomDurationUnswipable  extends ViewPager {
 
-    public ViewPagerCustomDuration(Context context) {
+    public ViewPagerCustomDurationUnswipable(Context context) {
         super(context);
         postInitViewPager();
     }
 
-    public ViewPagerCustomDuration(Context context, AttributeSet attrs) {
+    public ViewPagerCustomDurationUnswipable(Context context, AttributeSet attrs) {
         super(context, attrs);
         postInitViewPager();
     }
@@ -51,4 +51,17 @@ public class ViewPagerCustomDuration extends ViewPager {
     }
 
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        // Never allow swiping to switch between pages
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Never allow swiping to switch between pages
+        return false;
+    }
+
 }
+

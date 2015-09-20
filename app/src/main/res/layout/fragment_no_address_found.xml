@@ -4,11 +4,11 @@
     tools:context="com.example.ravi_gupta.slider.Fragment.NoAddressFoundFragment"
     android:clickable="true">
 
-    <com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration
+    <com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable
         android:id="@+id/fragment_no_address_found_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration>
+    </com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable>
     
 
         <LinearLayout
