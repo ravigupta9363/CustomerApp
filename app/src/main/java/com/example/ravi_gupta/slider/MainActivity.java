@@ -44,6 +44,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -102,8 +103,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -788,14 +791,22 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     }
 
+    //================================================================
+
+
+
+
+
+
+
     @Override
     public void takePhoto() {
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (isExternalStorageWritable()) {
             Calendar cal = Calendar.getInstance();
             File dir = getPicStorageDir("Drugcorner");
             File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
             fileUri = Uri.fromFile(imageFile);
-            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -809,6 +820,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         startActivityForResult(galleryIntent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
+
+
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if(resultCode == RESULT_OK)
@@ -816,7 +830,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                fileUri = data.getData();
+                //fileUri = data.getData();
                 replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE, null);
             }
         }
@@ -1061,7 +1075,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 findFragmentByTag(CartFragment.TAG);
         //Thumbnail is being saved
         Calendar calendar = Calendar.getInstance();
-        File dir = getPicStorageDir("Drugcorner Thumbnails");
+        File dir = getPicStorageDir("Drugcorner Thumbnail");
         File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
 
         File oldFile = new File(fileUri.getPath());
@@ -1106,7 +1120,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         String path = getRealPathFromURI(this, fileUri);
 
         Calendar calendar1 = Calendar.getInstance();
-        File dir1 = getPicStorageDir("prescription_thumbnails");
+        File dir1 = getPicStorageDir("Drugcorner Thumbnail");
         File imageFile1 = new File(dir1, calendar1.getTimeInMillis() + ".jpeg");
         File oldFile1 = new File(path);
         Uri thumbnailUri1 = Uri.fromFile(imageFile1);
