@@ -124,8 +124,8 @@
     <orderEntry type="library" exported="" name="kenburnsview-1.0.6" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-7.0.0" level="project" />
-    <orderEntry type="library" exported="" name="picasso-2.3.3" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="picasso-2.3.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="circleindicator-1.1.5" level="project" />

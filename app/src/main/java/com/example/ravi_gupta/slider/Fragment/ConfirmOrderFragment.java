@@ -67,7 +67,6 @@ public class ConfirmOrderFragment extends android.support.v4.app.Fragment {
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
-        Typeface typeface4 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Allura-Regular.ttf");
 
         orderConfirmText = (TextView) rootview.findViewById(R.id.fragment_confirm_order_textview1);
         orderStatusButton = (Button) rootview.findViewById(R.id.fragment_confirm_order_button1);
