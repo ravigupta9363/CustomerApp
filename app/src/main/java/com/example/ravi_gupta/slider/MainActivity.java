@@ -817,7 +817,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 fileUri = data.getData();
-                replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE,null);
+                replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE, null);
             }
         }
         else if (requestCode == 1) {
@@ -975,6 +975,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             }
     }
+
+
+
 
     /*==================REPLACE FRAGMENTS METHOD AREA==============================*/
     private void fragmentMain(FragmentTransaction ft){
