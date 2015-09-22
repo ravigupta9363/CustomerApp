@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
@@ -84,12 +85,17 @@ import com.example.ravi_gupta.slider.Interface.OnFragmentChange;
 import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
+import com.example.ravi_gupta.slider.Models.Office;
+import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
+import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.File;
@@ -98,9 +104,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener, OnFragmentChange,
@@ -154,7 +163,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public LinearLayout linearLayoutSplash;
     public OrderStatusDataBase orderStatusDataBase;
     public ProgressDialog mainActivityProgressDialog;
-
+    double latitude;
+    double longitude;
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -288,13 +298,168 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             public void run() {
                 // Check device for Play Services APK.
                 checkPlayServices();
-
                 activityHelper = new ActivityHelper(that, app);
             }
-        }, 100);
+        }, 200);
 
 
 
+    }
+
+
+    /**
+     * TESTING
+     * @return
+     */
+
+
+    public String findNetwork(double latitude, double longitude){
+        String pincode = "";
+        /*double latitude;
+        double longitude;*/
+        //Checking Pincode lies within area
+        MyApplication application = (MyApplication)getApplication();
+        Address address = new Address(Locale.ENGLISH);
+        appLocationService = new AppLocationService(this);
+        Map<String, String> latLong = new HashMap<>();
+        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+        if (gpsLocation != null || networkLocation != null) {
+            if(gpsLocation != null) {
+                latitude = gpsLocation.getLatitude();
+                longitude = gpsLocation.getLongitude();
+            }
+            else {
+                latitude = networkLocation.getLatitude();
+                longitude = networkLocation.getLongitude();
+            }
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(
+                        latitude, longitude, 1);
+                if (addressList != null && addressList.size() > 0) {
+                    address = addressList.get(0);
+
+                    try {
+                        List<Address> updatedAddressList = geocoder.getFromLocation(
+                                address.getLatitude(), address.getLongitude(), 1);
+                        if (updatedAddressList.size() > 0) {
+                            application.setUpdatedAddress(updatedAddressList.get(0), this);
+                            Log.v("address", "Updated Address = " + application.getUpdatedAddress(this) + "");
+                            //result = parseAddress();
+                        }
+                        else{
+
+                            //Show try again as address not found
+                            this.replaceFragment(R.layout.fragment_try_again, null);
+                        }
+                    }
+                    catch (Exception e) {
+                        Log.e(Constants.TAG, "Error getting address info.");
+                        throw e;
+
+                    }
+                    final Pattern p = Pattern.compile( "(\\d{6})" );
+                    final Matcher m = p.matcher(application.getUpdatedAddress(this).toString() );
+                    if ( m.find() ) {
+                        pincode =  m.group(0);
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(address.getPostalCode());
+                }
+            }catch (IOException e) {
+            }
+        } else {
+            showLocationAlert();
+        }
+        try{
+            latLong.put("lat",address.getLatitude()+"");
+            latLong.put("lng", address.getLongitude() + "");
+        }
+        catch (Exception e){
+            Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
+            //Show no internet connection..
+            replaceFragment(R.layout.fragment_no_internet_connection, null);
+        }
+
+        try{
+            application.getOrder(this).setGoogleAddr(parseAddress());
+            application.getOrder(this).setPincode(Integer.parseInt(pincode));
+            application.getOrder(this).setGeoLocation(latLong);
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Error fetching pincode from the address.");
+            //TODO SHOW ANOTHER FRAGMENT HERE..
+            //We are not providing service in your area....
+            this.replaceFragment(R.layout.fragment_try_again, null);
+        }
+        return pincode;
+    }
+
+
+    public String parseAddress() {
+        MyApplication application = (MyApplication)getApplication();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < application.getUpdatedAddress(this).getMaxAddressLineIndex(); i++) {
+            sb.append(application.getUpdatedAddress(this).getAddressLine(i)).append(" ");
+        }
+
+        sb.append(application.getUpdatedAddress(this).getLocality()).append(" ");
+        sb.append(application.getUpdatedAddress(this).getPostalCode()).append(" ");
+        sb.append(application.getUpdatedAddress(this).getCountryName());
+        return sb.toString();
+    }
+
+
+    public void searchOffice(final ObjectCallback<Office> callback){
+        final MyApplication app = (MyApplication)getApplication();
+        final RestAdapter adapter = app.getLoopBackAdapter();
+        final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+
+        String pincode = findNetwork(latitude, longitude);
+        officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
+            @Override
+            public void onSuccess(Office object) {
+                app.setOffice(object);
+                callback.onSuccess(object);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(Constants.TAG, t.toString());
+                Log.e(Constants.TAG, "Error loading office settings from server");
+                try {
+                    activityHelper.closeLoadingBar();
+                } catch (Exception e) {
+                    Log.e(Constants.TAG, "Loading bar instanc e is not defined. MainActivity");
+                }
+
+                //Show no internet connection..
+                replaceFragment(R.layout.fragment_try_again, null);
+                //Now calling the callback
+                callback.onError(t);
+            }
+        });
+    }
+
+
+    public void searchRetailers(Office officeObj, final ListCallback<Retailer> callback){
+        final MyApplication app = (MyApplication)getApplication();
+        final RestAdapter adapter = app.getLoopBackAdapter();
+        final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+        officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+            @Override
+            public void onSuccess(List<Retailer> retailerArray) {
+                Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
+                app.setRetailerList(retailerArray);
+                callback.onSuccess(retailerArray);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(Constants.TAG, "No retailer found in this area");
+                callback.onError(t);
+            }
+        });
     }
 
 

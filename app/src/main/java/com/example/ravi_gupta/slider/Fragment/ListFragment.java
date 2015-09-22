@@ -18,11 +18,14 @@ import android.widget.Toast;
 import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
 import com.example.ravi_gupta.slider.Details.ShopListDetails;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Office;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.Repository.RetailerRepository;
 import com.strongloop.android.loopback.callbacks.ListCallback;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +75,84 @@ public class ListFragment extends android.support.v4.app.Fragment {
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
         application = (MyApplication)getActivity().getApplication();
+        if(application.getOffice() == null){
+            mainActivity.searchOffice(new ObjectCallback<Office>() {
+                @Override
+                public void onSuccess(Office object) {
+                    //Now check office for closing..
+                    checkOfficeClosed(object);
+                    ListRetailers(object);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    Log.e(Constants.TAG, t.toString());
+                    Log.e(Constants.TAG, "Error loading office settings from server");
+                    //closeLoadingBar();
+                    //Show no internet connection..
+                    mainActivity.replaceFragment(R.layout.fragment_try_again, null);
+
+                }
+            });
+        }else{
+            Office office =  application.getOffice();
+            checkOfficeClosed(office);
+            ListRetailers(office);
+        }
+
+
+
+        return rootview;
+    }
+
+
+
+    private void ListRetailers(final Office office){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                List<Retailer> retailers = application.getRetailerList();
+                if(retailers == null){
+                    //TODO ADD RETAILERS FROM SERVER FIRST
+                    mainActivity.searchRetailers(office, new ListCallback<Retailer>() {
+                        @Override
+                        public void onSuccess(List<Retailer> retailers) {
+                            showRetailersList(retailers);
+                        }
+
+                        @Override
+                        public void onError(Throwable t) {
+                            Log.e(Constants.TAG, "Error fetching retailers list from server.");
+                        }
+                    });
+                }
+                else{
+                    showRetailersList(retailers);
+                }
+
+            }//public void run() {
+        });
+    }
+
+
+    private void showRetailersList(List<Retailer> retailers){
+        for (Retailer retailerModel : retailers) {
+            Map<String, Object> discount = retailerModel.getDiscount();
+            Object allitems = "allitems";
+            try {
+                shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) ((Integer) discount.get(allitems)).intValue(), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
+            } catch (ClassCastException c) {
+                shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) discount.get(allitems), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
+            }
+
+        }
+        shopListAdapter.notifyDataSetChanged();
+    }
+
+
+    private void checkOfficeClosed(Office office){
         //TODO NEEDS TO BE CHECKED FOR FURTHER INSPECTION
-        if(application.getOffice(mainActivity).isClosed() == false) {
+        if(office.isClosed() == false) {
             mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,38 +167,13 @@ public class ListFragment extends android.support.v4.app.Fragment {
         }else{
             Toast.makeText(mainActivity, "Not serving in this particular hour", Toast.LENGTH_SHORT).show();
             mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                 @Override
-                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                     Toast.makeText(mainActivity, "Not serving in this particular hour", Toast.LENGTH_SHORT).show();
-                 }
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(mainActivity, "Not serving in this particular hour", Toast.LENGTH_SHORT).show();
+                }
             });
 
         }
-
-        //new AsyncCaller().execute();
-
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<Retailer> retailers = application.getRetailerList();
-                for (Retailer retailerModel : retailers) {
-                    Map<String, Object> discount = retailerModel.getDiscount();
-                    Object allitems = "allitems";
-                    try {
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) ((Integer) discount.get(allitems)).intValue(), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
-                    } catch (ClassCastException c) {
-                        shopListDetailses.add(new ShopListDetails(retailerModel.getId(), retailerModel.getName(), (double) discount.get(allitems), retailerModel.getArea(), retailerModel.isClosed(), retailerModel.getReturn(), retailerModel.getFulfillment()));
-                    }
-
-                }
-                shopListAdapter.notifyDataSetChanged();
-                //this method will be running on UI thread
-            }//public void run() {
-        });
-
-
-        return rootview;
     }
 
 

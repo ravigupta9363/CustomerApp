@@ -19,10 +19,12 @@ import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Models.Office;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
@@ -50,7 +52,7 @@ public class ActivityHelper {
 
     /**====================CONSTANTS========================*/
     AppLocationService appLocationService;
-    String pincode;
+    public String pincode;
     double longitude;
     double latitude;
     Intent mainIntent;
@@ -140,7 +142,7 @@ public class ActivityHelper {
 
 
 
-    public String findNetwork(){
+    /*public String findNetwork(){
         String pincode = "";
         //Checking Pincode lies within area
         MyApplication application = (MyApplication)activity.getApplication();
@@ -174,6 +176,11 @@ public class ActivityHelper {
                             //result = parseAddress();
                         }
                         else{
+                            try {
+                                closeLoadingBar();
+                            }catch (Exception e){
+                                Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHElper");
+                            }
                             //Show try again as address not found
                             activity.replaceFragment(R.layout.fragment_try_again, null);
                         }
@@ -217,15 +224,20 @@ public class ActivityHelper {
             application.getOrder(activity).setGeoLocation(latLong);
         }catch (Exception e){
             Log.e(Constants.TAG, "Error fetching pincode from the address.");
+            try {
+                closeLoadingBar();
+            }catch (Exception error){
+                Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+            }
             //TODO SHOW ANOTHER FRAGMENT HERE..
             //We are not providing service in your area....
             activity.replaceFragment(R.layout.fragment_try_again, null);
         }
 
         return pincode;
-    }
+    }*/
 
-    public String parseAddress() {
+    /*public String parseAddress() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < application.getUpdatedAddress(activity).getMaxAddressLineIndex(); i++) {
             sb.append(application.getUpdatedAddress(activity).getAddressLine(i)).append(" ");
@@ -236,7 +248,7 @@ public class ActivityHelper {
         sb.append(application.getUpdatedAddress(activity).getCountryName());
         return sb.toString();
     }
-
+*/
 
 
     public void showLocationAlert() {
@@ -355,6 +367,9 @@ public class ActivityHelper {
     }
 
 
+
+
+
     private void  runOnUiThread(final boolean internetConnection){
 
         activity.runOnUiThread(new Runnable() {
@@ -362,7 +377,7 @@ public class ActivityHelper {
             public void run() {
                 if (internetConnection) {
 
-                    pincode = findNetwork();
+                    pincode = activity.findNetwork(latitude, longitude);
                     final RestAdapter adapter = application.getLoopBackAdapter();
 
                     final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
@@ -376,7 +391,7 @@ public class ActivityHelper {
                                 activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
                             } else {
-                                application.setOffice(officeObj, activity);
+                                application.setOffice(officeObj);
 
                                 //Now setting the office id to the order...
                                 application.getOrder(activity).setOfficeId((String) officeObj.getId());
@@ -410,11 +425,21 @@ public class ActivityHelper {
                             Log.e(Constants.TAG, t.toString());
                             Log.e(Constants.TAG, "Error loading office settings from server");
                             //closeLoadingBar();
+                            try {
+                                closeLoadingBar();
+                            }catch (Exception e){
+                                Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
+                            }
                             //Show no internet connection..
                             activity.replaceFragment(R.layout.fragment_try_again, null);
                         }
                     }); //SearchOfficePincode method
                 } else {
+                    try {
+                        closeLoadingBar();
+                    }catch (Exception e){
+                        Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+                    }
                     //closeLoadingBar();
                     //Show no internet connection..
                     activity.replaceFragment(R.layout.fragment_no_internet_connection, null);

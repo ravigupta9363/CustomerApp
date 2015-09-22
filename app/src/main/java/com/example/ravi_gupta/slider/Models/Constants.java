@@ -20,12 +20,13 @@ public class Constants {
     public static String office = "Office";
     public static String order = "Order";
     public static String splash = "Splash";
+    public static String retailer = "Retailer";
 
     /**
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    public static String SENDER_ID = "999371974017";
+    public static String SENDER_ID = "673699478279";
 
     /**
      * Substitute your own application ID here. This is the id of the

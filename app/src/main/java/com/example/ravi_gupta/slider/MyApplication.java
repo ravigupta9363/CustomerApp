@@ -161,24 +161,15 @@ public class MyApplication extends Application {
     }
 
 
-    public Office getOffice(MainActivity activity) {
-        /*if(this.office == null){
-            Gson gson = new Gson();
-            String json = getData(activity, Constants.office);
-            this.office = gson.fromJson(json, Office.class);
-        }*/
+    public Office getOffice() {
         return this.office;
     }
 
 
 
 
-    public void setOffice(Office office, MainActivity activity) {
+    public void setOffice(Office office) {
         this.office = office;
-       /* //Converting object to string..
-        Gson gson = new Gson();
-        String json = gson.toJson(office);
-        addData(activity, Constants.office, json);*/
     }
 
 
