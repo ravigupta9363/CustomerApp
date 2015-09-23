@@ -438,7 +438,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 try {
                     activityHelper.closeLoadingBar();
                 } catch (Exception e) {
-                    Log.e(Constants.TAG, "Loading bar instanc e is not defined. MainActivity");
+                    Log.e(Constants.TAG, "Loading bar instance is not defined. MainActivity");
                 }
 
                 //Show no internet connection..
@@ -1404,7 +1404,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         ft.replace(R.id.container, frag14, TryAgain.TAG);
         ft.commitAllowingStateLoss();
-        
+
     }
 
     /*=================REPLACE FRAGMENT METHOD AREA ENDS==========================*/
@@ -1465,6 +1465,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
 
     }
+
+
+
 
 
 
