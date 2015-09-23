@@ -22,9 +22,12 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
+import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
+import com.google.gson.Gson;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,7 +52,31 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton menuButton;
     ImageButton cartButton;
     TextView toolbarTitle;
-    public TextView cartItems;
+    private TextView cartItems;
+
+    public TextView getCartItems() {
+        if(cartItems == null){
+            Gson gson = new Gson();
+            String json = myApplication.getData(mainActivity, "TextView");
+            cartItems = gson.fromJson(json, TextView.class);
+        }
+        return cartItems;
+    }
+
+    public void setCartItems(TextView cartItems) {
+        this.cartItems = cartItems;
+        Gson gson = new Gson();
+        try{
+
+            String json = gson.toJson(this.cartItems);
+            myApplication.addData(mainActivity, "TextView", json);
+
+        }
+        catch (Exception e){
+            //DO nothing here...JUST IGNORE
+        }
+    }
+
     MainActivity mainActivity;
     //String cartNumber;
     public static String TAG = "MainFragment";

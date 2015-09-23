@@ -50,6 +50,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -103,6 +104,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -801,10 +803,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     public void takePhoto() {
+
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (isExternalStorageWritable()) {
             Calendar cal = Calendar.getInstance();
-            File dir = getPicStorageDir("Drugcorner");
+            File dir = getPicStorageDir(Constants.imageStorageDir);
             File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
             fileUri = Uri.fromFile(imageFile);
             i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
@@ -826,6 +829,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if(resultCode == RESULT_OK)
+
                 replaceFragment(CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE, null);
         }
         else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE){
@@ -1070,15 +1074,86 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         dialog.show(getSupportFragmentManager(), SendPrescriptionDialog.TAG);
     }
 
+
+    /**
+     * Testing the bug
+     * http://stackoverflow.com/questions/14495304/camera-force-closing-issue-in-samsung-galaxy-s3-version-4-1-1/14640678#14640678
+     */
+   /* private Uri camera(){
+        // Describe the columns you'd like to have returned. Selecting from the Thumbnails location gives you both the Thumbnail Image ID, as well as the original image ID
+        String[] projection = {
+                MediaStore.Images.Thumbnails._ID,  // The columns we want
+                MediaStore.Images.Thumbnails.IMAGE_ID,
+                MediaStore.Images.Thumbnails.KIND,
+                MediaStore.Images.Thumbnails.DATA};
+        String selection = MediaStore.Images.Thumbnails.KIND + "="  + // Select only mini's
+                MediaStore.Images.Thumbnails.MINI_KIND;
+
+        String sort = MediaStore.Images.Thumbnails._ID + " DESC";
+
+        //At the moment, this is a bit of a hack, as I'm returning ALL images, and just taking the latest one. There is a better way to narrow this down I think with a WHERE clause which is currently the selection variable
+        Cursor myCursor = this.getContentResolver().query(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection, selection, null, sort);
+
+        long imageId = 0l;
+        long thumbnailImageId = 0l;
+        String thumbnailPath = "";
+
+        try{
+            myCursor.moveToFirst();
+            imageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.IMAGE_ID));
+            thumbnailImageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID));
+            thumbnailPath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
+        }
+        finally{
+            myCursor.close();
+            //http://stackoverflow.com/questions/18107404/attempted-to-access-a-cursor-after-it-has-been-closed
+            myCursor = null;
+        }
+
+        //Create new Cursor to obtain the file Path for the large image
+
+        String[] largeFileProjection = {
+                MediaStore.Images.ImageColumns._ID,
+                MediaStore.Images.ImageColumns.DATA
+        };
+
+        String largeFileSort = MediaStore.Images.ImageColumns._ID + " DESC";
+        //http://stackoverflow.com/questions/27918952/android-database-staledataexception-attempted-to-access-a-cursor-after-it-has-b
+        myCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, largeFileProjection, null, null, largeFileSort);
+        String largeImagePath = "";
+
+        try{
+            myCursor.moveToFirst();
+
+            //This will actually give yo uthe file path location of the image.
+            largeImagePath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA));
+        }
+        finally{
+            myCursor.close();
+            myCursor = null;
+        }
+        // These are the two URI's you'll be interested in. They give you a handle to the actual images
+        Uri uriLargeImage = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(imageId));
+        Uri uriThumbnailImage = Uri.withAppendedPath(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, String.valueOf(thumbnailImageId));
+        return uriLargeImage;
+        // I've left out the remaining code, as all I do is assign the URI's to my own objects anyways...
+    }*/
+
+
+
+
     private void CaptureImageActivityRequestCode(){
         CartFragment frag6 = (CartFragment) getSupportFragmentManager().
                 findFragmentByTag(CartFragment.TAG);
         //Thumbnail is being saved
         Calendar calendar = Calendar.getInstance();
-        File dir = getPicStorageDir("Drugcorner Thumbnail");
+        File dir = getPicStorageDir(Constants.imageStorageDir);
         File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
-
+/**
+ * Change
+ */
         File oldFile = new File(fileUri.getPath());
+//        File oldFile = new File(camera().getPath());
         Uri thumbnailUri = Uri.fromFile(imageFile);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inTempStorage = new byte[24*1024];
@@ -1097,13 +1172,28 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        /**
+         * CHange
+         */
         databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri));
+//        databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, camera(), thumbnailUri));
+
         prescriptionId++;
         String cartItems = databaseHelper.getPresciptionCount() + "";
-        mainFragment.cartItems.setText(cartItems);
-        mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
+        //Using handler for post delayed..
+        try{
+            mainFragment.getCartItems().setText(cartItems);
+            mainFragment.getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
+        }
+        catch (Exception e){
+            //mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+            //mainFragment.getCartItems().setText(cartItems);
+            Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+        }
+
     }
+
+
 
     private void prescriptionImageView1Fragment(Object object){
         Bundle bundle4 = new Bundle();
@@ -1120,7 +1210,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         String path = getRealPathFromURI(this, fileUri);
 
         Calendar calendar1 = Calendar.getInstance();
-        File dir1 = getPicStorageDir("Drugcorner Thumbnail");
+        File dir1 = getPicStorageDir(Constants.imageStorageDir);
         File imageFile1 = new File(dir1, calendar1.getTimeInMillis() + ".jpeg");
         File oldFile1 = new File(path);
         Uri thumbnailUri1 = Uri.fromFile(imageFile1);
@@ -1137,8 +1227,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri1));
         prescriptionId++;
         String cartItem = databaseHelper.getPresciptionCount() + "";
-        mainFragment.cartItems.setText(cartItem);
-        mainFragment.cartItems.setBackgroundColor(Color.rgb(242, 121, 53));
+
+        try{
+            mainFragment.getCartItems().setText(cartItem);
+            mainFragment.getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
+        }
+        catch (Exception e){
+            //mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+            //mainFragment.getCartItems().setText(cartItem);
+            Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void fragmentNextButton(FragmentTransaction ft){
@@ -1516,8 +1615,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         getSupportFragmentManager().popBackStack();
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
-                        mainFragment.cartItems.setText(cartItems);
-                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204, 204, 204));
+                        mainFragment.getCartItems().setText(cartItems);
+                        mainFragment.getCartItems().setBackgroundColor(Color.rgb(204, 204, 204));
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -1551,8 +1650,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         ft.commitAllowingStateLoss();
                         databaseHelper.deleteAllPrescription();
                         String cartItems = databaseHelper.getPresciptionCount() + "";
-                        mainFragment.cartItems.setText(cartItems);
-                        mainFragment.cartItems.setBackgroundColor(Color.rgb(204, 204, 204));
+                        mainFragment.getCartItems().setText(cartItems);
+                        mainFragment.getCartItems().setBackgroundColor(Color.rgb(204, 204, 204));
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -1574,17 +1673,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
+        String path = "";
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            return cursor.getString(column_index);
+            path = cursor.getString(column_index);
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
+        return path;
     }
 
 

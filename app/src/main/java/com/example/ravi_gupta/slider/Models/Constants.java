@@ -21,6 +21,7 @@ public class Constants {
     public static String order = "Order";
     public static String splash = "Splash";
     public static String retailer = "Retailer";
+    public static String imageStorageDir = "Drugcorner";
 
     /**
      * Substitute you own sender ID here. This is the project number you got

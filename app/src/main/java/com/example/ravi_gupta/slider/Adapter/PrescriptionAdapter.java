@@ -114,8 +114,8 @@ public class PrescriptionAdapter extends ArrayAdapter<PrescriptionDetail> {
                             mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                             cartItems = databaseHelper.getPresciptionCount() + "";
                             int parseItems = Integer.parseInt(cartItems)-1;
-                            mainFragment.cartItems.setText(String.valueOf(parseItems));
-                            mainFragment.cartItems.setBackgroundColor(Color.rgb(204, 204, 204));
+                            mainFragment.getCartItems().setText(String.valueOf(parseItems));
+                            mainFragment.getCartItems().setBackgroundColor(Color.rgb(204, 204, 204));
                             mainActivity.onBackPressed();
                         }
                         databaseHelper.deleteContact(prescriptionDetail.getID());
