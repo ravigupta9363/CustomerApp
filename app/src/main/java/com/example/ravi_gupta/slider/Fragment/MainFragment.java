@@ -57,6 +57,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
     public TextView getCartItems() {
 
+
         return cartItems;
     }
 

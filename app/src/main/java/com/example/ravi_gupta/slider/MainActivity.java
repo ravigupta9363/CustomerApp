@@ -1467,10 +1467,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
-
-
-
-
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
