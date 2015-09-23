@@ -63,8 +63,8 @@ public class TryAgain extends android.support.v4.app.Fragment {
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
                 mainActivity.getActivityHelper().startHelperActivity();
-
             }
         });
         return rootview;

@@ -117,6 +117,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
                 mainActivity.getActivityHelper().startHelperActivity();
             }
         });

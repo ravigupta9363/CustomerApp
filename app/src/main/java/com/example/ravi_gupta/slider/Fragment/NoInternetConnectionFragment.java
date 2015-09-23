@@ -69,6 +69,7 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
                 //runActivityHelperInThread();
                 //Running the main activity...
                 mainActivity.getActivityHelper().startHelperActivity();
