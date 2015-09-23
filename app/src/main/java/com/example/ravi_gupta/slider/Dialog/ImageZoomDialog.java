@@ -3,8 +3,10 @@ package com.example.ravi_gupta.slider.Dialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -63,7 +65,13 @@ public class ImageZoomDialog extends DialogFragment {
         //setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         final TouchImageView zoomImageview = (TouchImageView)view.findViewById(R.id.dialog_image_zoom_imageview1);
        // Drawable d = new BitmapDrawable(getResources(), bitmap);
-        zoomImageview.setImageURI(image);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inTempStorage = new byte[24*1024];
+        options.inJustDecodeBounds = false;
+        options.inSampleSize=8;
+        Bitmap bitmap2 =BitmapFactory.decodeFile(image.getPath(), options);
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(bitmap2, 400, 600);
+        zoomImageview.setImageBitmap(bitmap);
         //Log.v("signin",d+"  Image  "+bitmap);
         return view;
     }

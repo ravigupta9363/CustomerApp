@@ -2,6 +2,7 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
@@ -55,26 +56,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private TextView cartItems;
 
     public TextView getCartItems() {
-        if(cartItems == null){
-            Gson gson = new Gson();
-            String json = myApplication.getData(mainActivity, "TextView");
-            cartItems = gson.fromJson(json, TextView.class);
-        }
+
         return cartItems;
     }
 
     public void setCartItems(TextView cartItems) {
         this.cartItems = cartItems;
-        Gson gson = new Gson();
-        try{
 
-            String json = gson.toJson(this.cartItems);
-            myApplication.addData(mainActivity, "TextView", json);
-
-        }
-        catch (Exception e){
-            //DO nothing here...JUST IGNORE
-        }
     }
 
     MainActivity mainActivity;
@@ -244,6 +232,22 @@ public class MainFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    public void addCartValue(){
+        int item = databaseHelper.getPresciptionCount();
+        if(item > 0){
+            String cartItems = item + "";
+            getCartItems().setText(cartItems);
+            getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
+        }else{
+            /**
+             * Do nothing here...
+             */
+        }
+
+    }
+
+
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -284,6 +288,9 @@ public class MainFragment extends android.support.v4.app.Fragment {
                 return false;
             }
         });
+
+        //Update cart value if there is any..
+        addCartValue();
         //new AsyncCaller().execute();
 
     }

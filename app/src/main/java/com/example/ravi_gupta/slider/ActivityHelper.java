@@ -116,6 +116,8 @@ public class ActivityHelper {
         });
     }
 
+
+
     private void createRestAdapter(){
         activity.restAdapter = new RestAdapter(application, Constants.apiUrl);
         //Now fetching the current logged in user ..
@@ -137,118 +139,6 @@ public class ActivityHelper {
 
 
 
-
-
-
-
-
-    /*public String findNetwork(){
-        String pincode = "";
-        //Checking Pincode lies within area
-        MyApplication application = (MyApplication)activity.getApplication();
-        Address address = new Address(Locale.ENGLISH);
-        appLocationService = new AppLocationService(activity);
-        Map<String, String> latLong = new HashMap<>();
-        Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
-        Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
-        if (gpsLocation != null || networkLocation != null) {
-            if(gpsLocation != null) {
-                latitude = gpsLocation.getLatitude();
-                longitude = gpsLocation.getLongitude();
-            }
-            else {
-                latitude = networkLocation.getLatitude();
-                longitude = networkLocation.getLongitude();
-            }
-            Geocoder geocoder = new Geocoder(activity.getApplicationContext(), Locale.getDefault());
-            try {
-                List<Address> addressList = geocoder.getFromLocation(
-                        latitude, longitude, 1);
-                if (addressList != null && addressList.size() > 0) {
-                    address = addressList.get(0);
-
-                    try {
-                        List<Address> updatedAddressList = geocoder.getFromLocation(
-                                address.getLatitude(), address.getLongitude(), 1);
-                        if (updatedAddressList.size() > 0) {
-                            application.setUpdatedAddress(updatedAddressList.get(0), activity);
-                            Log.v("address", "Updated Address = " + application.getUpdatedAddress(activity) + "");
-                            //result = parseAddress();
-                        }
-                        else{
-                            try {
-                                closeLoadingBar();
-                            }catch (Exception e){
-                                Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHElper");
-                            }
-                            //Show try again as address not found
-                            activity.replaceFragment(R.layout.fragment_try_again, null);
-                        }
-                    }
-                    catch (Exception e) {
-                        Log.e(Constants.TAG, "Error getting address info.");
-                        throw e;
-
-                    }
-                    final Pattern p = Pattern.compile( "(\\d{6})" );
-                    final Matcher m = p.matcher(application.getUpdatedAddress(activity).toString() );
-                    if ( m.find() ) {
-                        pincode =  m.group(0);
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(address.getPostalCode());
-                }
-            }catch (IOException e) {
-            }
-        } else {
-            showLocationAlert();
-        }
-        try{
-            latLong.put("lat",address.getLatitude()+"");
-            latLong.put("lng", address.getLongitude() + "");
-        }
-        catch (Exception e){
-            Log.e(Constants.TAG,"Error Fetching latitude of the given address..");
-            try{
-                closeLoadingBar();
-            }catch(Exception error){
-                Log.e(Constants.TAG, "Error loading bar instance not created");
-            }
-            //Show no internet connection..
-            activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
-        }
-
-        try{
-            application.getOrder(activity).setGoogleAddr(parseAddress());
-            application.getOrder(activity).setPincode(Integer.parseInt(pincode));
-            application.getOrder(activity).setGeoLocation(latLong);
-        }catch (Exception e){
-            Log.e(Constants.TAG, "Error fetching pincode from the address.");
-            try {
-                closeLoadingBar();
-            }catch (Exception error){
-                Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
-            }
-            //TODO SHOW ANOTHER FRAGMENT HERE..
-            //We are not providing service in your area....
-            activity.replaceFragment(R.layout.fragment_try_again, null);
-        }
-
-        return pincode;
-    }*/
-
-    /*public String parseAddress() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < application.getUpdatedAddress(activity).getMaxAddressLineIndex(); i++) {
-            sb.append(application.getUpdatedAddress(activity).getAddressLine(i)).append(" ");
-        }
-
-        sb.append(application.getUpdatedAddress(activity).getLocality()).append(" ");
-        sb.append(application.getUpdatedAddress(activity).getPostalCode()).append(" ");
-        sb.append(application.getUpdatedAddress(activity).getCountryName());
-        return sb.toString();
-    }
-*/
 
 
     public void showLocationAlert() {
@@ -311,14 +201,14 @@ public class ActivityHelper {
 
     public void launchRingDialog(MainActivity activity) {
         ringProgressDialog = ProgressDialog.show(activity,"", "Please wait...", true);
-        //ringProgressDialog.setCancelable(false);
+        ringProgressDialog.setCancelable(true);
         ringProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         ringProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void launchRingDialog(MainActivity activity, String body) {
         ringProgressDialog = ProgressDialog.show(activity,"", body, true);
-        ringProgressDialog.setCancelable(false);
+        ringProgressDialog.setCancelable(true);
     }
 
 

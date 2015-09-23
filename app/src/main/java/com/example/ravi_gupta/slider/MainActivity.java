@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -101,10 +102,12 @@ import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -183,6 +186,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
 
     private CustomerRepository customerRepo;
+
+
 
 
     /**
@@ -316,8 +321,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * TESTING
      * @return
      */
-
-
     public String findNetwork(double latitude, double longitude){
         String pincode = "";
         /*double latitude;
@@ -484,6 +487,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+
+
     /**
      * Updates the registration for push notifications.
      */
@@ -518,6 +523,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+
+
     /**
      * Checks the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -537,6 +544,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return true;
     }
+
+
 
     /**
      * Registers the application with GCM servers asynchronously.
@@ -605,7 +614,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     public void activityLoadingBar() {
         mainActivityProgressDialog = ProgressDialog.show(this, "", "Loading Home...", true);
-        mainActivityProgressDialog.setCancelable(true);
+        mainActivityProgressDialog.setCancelable(false);
         mainActivityProgressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
         mainActivityProgressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
@@ -623,135 +632,135 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (!haveNetworkConnection()) {
             position = 99;
         }
-            switch (position) {
-                case 0:
-                    Customer user = customerRepo.getCachedCurrentUser();
-                    Log.i(Constants.TAG, "Getting current id");
-                    //Log.i(TAG, user.getEmail());
-                    if(user == null) {
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
-                                findFragmentByTag(ProfileEditFragment.TAG);
-                        if (profileEditFragment == null) {
-                            profileEditFragment = ProfileEditFragment.newInstance();
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putString("fragment", "directHomeFragment");
-                        profileEditFragment.setArguments(bundle);
-                        ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
-                        ft.commitAllowingStateLoss();
-                    }
-                    else {
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
-                                .commitAllowingStateLoss();
-                    }
-
-                    break;
-                case 1:
-                    if (databaseHelper.getPresciptionCount() > 0) {
-                        showOpenPastOrderAlert();
-                    } else {
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
-                                .commitAllowingStateLoss();
-                    }
-                    break;
-                case 2:
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(NotificationFragment.TAG)
-                            .commitAllowingStateLoss();
-                    break;
-                case 3:
-
+        switch (position) {
+            case 0:
+                Customer user = customerRepo.getCachedCurrentUser();
+                Log.i(Constants.TAG, "Getting current id");
+                //Log.i(TAG, user.getEmail());
+                if(user == null) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    OrderStatusFragment orderStatusFragment = (OrderStatusFragment) getSupportFragmentManager().
-                            findFragmentByTag(OrderStatusFragment.TAG);
-                    if (orderStatusFragment == null) {
-                        orderStatusFragment = OrderStatusFragment.newInstance();
+                    ProfileEditFragment profileEditFragment = (ProfileEditFragment) getSupportFragmentManager().
+                            findFragmentByTag(ProfileEditFragment.TAG);
+                    if (profileEditFragment == null) {
+                        profileEditFragment = ProfileEditFragment.newInstance();
                     }
                     Bundle bundle = new Bundle();
-                    bundle.putString("fragment", "StatusFragment");
-                    orderStatusFragment.setArguments(bundle);
-                    ft.replace(R.id.fragment_main_container, orderStatusFragment, OrderStatusFragment.TAG).addToBackStack(null);
+                    bundle.putString("fragment", "directHomeFragment");
+                    profileEditFragment.setArguments(bundle);
+                    ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
                     ft.commitAllowingStateLoss();
-
-                    break;
-                case 4:
-
-                    Uri uri = Uri.parse("market://details?id=" + Constants.appPlayStoreLink);// this.getPackageName()
-                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                    try {
-                        startActivity(goToMarket);
-                    } catch (ActivityNotFoundException e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink)));
-                    }
-                    break;
-                case 5:
-
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    String shareBody = Constants.appShareText;
-                    shareBody = shareBody + "http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink;
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                    startActivity(Intent.createChooser(sharingIntent, "Share Via"));
-                    break;
-                case 6:
-
+                }
+                else {
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
+                            .replace(R.id.fragment_main_container, new ProfileFragment()).addToBackStack(ProfileFragment.TAG)
                             .commitAllowingStateLoss();
+                }
 
-                    break;
-                case 7:
-
+                break;
+            case 1:
+                if (databaseHelper.getPresciptionCount() > 0) {
+                    showOpenPastOrderAlert();
+                } else {
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
+                            .replace(R.id.fragment_main_container, new PastOrderFragment()).addToBackStack(PastOrderFragment.TAG)
                             .commitAllowingStateLoss();
-                    break;
-                case 8:
+                }
+                break;
+            case 2:
 
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
-                            .commitAllowingStateLoss();
-                    break;
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new NotificationFragment()).addToBackStack(NotificationFragment.TAG)
+                        .commitAllowingStateLoss();
+                break;
+            case 3:
 
-                case 9:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                OrderStatusFragment orderStatusFragment = (OrderStatusFragment) getSupportFragmentManager().
+                        findFragmentByTag(OrderStatusFragment.TAG);
+                if (orderStatusFragment == null) {
+                    orderStatusFragment = OrderStatusFragment.newInstance();
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("fragment", "StatusFragment");
+                orderStatusFragment.setArguments(bundle);
+                ft.replace(R.id.fragment_main_container, orderStatusFragment, OrderStatusFragment.TAG).addToBackStack(null);
+                ft.commitAllowingStateLoss();
 
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new TermsAndConditionFragment()).addToBackStack(TermsAndConditionFragment.TAG)
-                            .commitAllowingStateLoss();
+                break;
+            case 4:
 
-                    break;
+                Uri uri = Uri.parse("market://details?id=" + Constants.appPlayStoreLink);// this.getPackageName()
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink)));
+                }
+                break;
+            case 5:
 
-                case 99:
-                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    mDrawerLayout.closeDrawer(mDrawerList);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_main_container, new NoInternetConnectionFragment()).addToBackStack(NoInternetConnectionFragment.TAG)
-                            .commitAllowingStateLoss();
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = Constants.appShareText;
+                shareBody = shareBody + "http://play.google.com/store/apps/details?id=" + Constants.appPlayStoreLink;
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drugcorner");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share Via"));
+                break;
+            case 6:
 
-                default:
-                    break;
-            }
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new ContactUsFragment()).addToBackStack(ContactUsFragment.TAG)
+                        .commitAllowingStateLoss();
 
-            if (fragment != null) {
-                //FragmentManager fragmentManager = getFragmentManager();
-                //fragmentManager.beginTransaction()
-                //      .replace(R.id.frame_container, fragment).commit();
+                break;
+            case 7:
 
-                // update selected item and title, then close the drawer
-                mDrawerList.setItemChecked(position, true);
-                mDrawerList.setSelection(position);
-                setTitle(navMenuTitles[position]);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new AboutUsFragment()).addToBackStack(AboutUsFragment.TAG)
+                        .commitAllowingStateLoss();
+                break;
+            case 8:
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new FAQFragment()).addToBackStack(FAQFragment.TAG)
+                        .commitAllowingStateLoss();
+                break;
+
+            case 9:
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new TermsAndConditionFragment()).addToBackStack(TermsAndConditionFragment.TAG)
+                        .commitAllowingStateLoss();
+
+                break;
+
+            case 99:
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 mDrawerLayout.closeDrawer(mDrawerList);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_main_container, new NoInternetConnectionFragment()).addToBackStack(NoInternetConnectionFragment.TAG)
+                        .commitAllowingStateLoss();
 
-            } else {
-                // error in creating fragment
-                Log.e("MainActivity", "Error in creating fragment");
-            }
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            //FragmentManager fragmentManager = getFragmentManager();
+            //fragmentManager.beginTransaction()
+            //      .replace(R.id.frame_container, fragment).commit();
+
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            setTitle(navMenuTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+        }
 
     }
 
@@ -803,15 +812,17 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     public void takePhoto() {
-
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (isExternalStorageWritable()) {
             Calendar cal = Calendar.getInstance();
-            File dir = getPicStorageDir(Constants.imageStorageDir);
+            File dir = getPicStorageDir("Drugcorner");
             File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
             fileUri = Uri.fromFile(imageFile);
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-            startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            if (i.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+
         }
     }
 
@@ -829,12 +840,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if(resultCode == RESULT_OK)
-
                 replaceFragment(CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE, null);
         }
         else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                //fileUri = data.getData();
+                fileUri = data.getData();
                 replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE, null);
             }
         }
@@ -877,121 +887,121 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             id = R.layout.fragment_no_internet_connection;
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
-            switch (id) {
+        switch (id) {
 
-                case R.layout.fragment_main:
-                    fragmentMain(ft);
-                    break;
+            case R.layout.fragment_main:
+                fragmentMain(ft);
+                break;
 
-                case R.id.shopListview:
-                    fragmentShopListView(ft);
-                    break;
+            case R.id.shopListview:
+                fragmentShopListView(ft);
+                break;
 
-                case R.id.fragment_main_edittext1:
-                    fragmentMainEditText1(ft);
-                    break;
+            case R.id.fragment_main_edittext1:
+                fragmentMainEditText1(ft);
+                break;
 
-                case R.id.fragment_change_location_button2:
-                    fragmentChangeLocationButton2(ft);
-                    break;
+            case R.id.fragment_change_location_button2:
+                fragmentChangeLocationButton2(ft);
+                break;
 
-                case R.id.fragment_past_order_listview1:
-                    fragmentPastOrderListView1(ft);
-                    break;
+            case R.id.fragment_past_order_listview1:
+                fragmentPastOrderListView1(ft);
+                break;
 
-                case R.id.fragment_main_imagebutton2:
-                    fragmentMainImageButton2(ft);
-                    break;
+            case R.id.fragment_main_imagebutton2:
+                fragmentMainImageButton2(ft);
+                break;
 
-                case R.id.fragment_send_order_button1:
-                    fragmentSendOrderButton1();
-                    break;
+            case R.id.fragment_send_order_button1:
+                fragmentSendOrderButton1();
+                break;
 
-                case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CaptureImageActivityRequestCode();
-                    break;
+            case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                CaptureImageActivityRequestCode();
+                break;
 
-                case R.id.prescription_imageview1:
-                    prescriptionImageView1Fragment(object);
-                    break;
+            case R.id.prescription_imageview1:
+                prescriptionImageView1Fragment(object);
+                break;
 
-                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
-                    GalleryImageActivityRequestCodeFragment();
-                    break;
+            case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE:
+                GalleryImageActivityRequestCodeFragment();
+                break;
 
-                case R.id.nextButton:
-                    fragmentNextButton(ft);
-                    break;
+            case R.id.nextButton:
+                fragmentNextButton(ft);
+                break;
 
-                case R.layout.fragment_no_internet_connection:
-                    noInternetConnectionFragment(ft);
-                    break;
+            case R.layout.fragment_no_internet_connection:
+                noInternetConnectionFragment(ft);
+                break;
 
-                case R.id.fragment_profile_edit_button1:
-                    profileEditButton1Fragment(ft, object);
-                    break;
+            case R.id.fragment_profile_edit_button1:
+                profileEditButton1Fragment(ft, object);
+                break;
 
-                case R.id.fragment_incoming_sms_button1:
-                    incomingSmsButton1Fragment(ft);
-                    break;
+            case R.id.fragment_incoming_sms_button1:
+                incomingSmsButton1Fragment(ft);
+                break;
 
-                case R.id.fragment_send_order_button2:
-                    sendOrderButton2Fragment(ft);
-                    break;
+            case R.id.fragment_send_order_button2:
+                sendOrderButton2Fragment(ft);
+                break;
 
-                case R.id.fragment_confirm_order_button1:
-                    confirmOrderButton1Fragment(ft);
-                    break;
+            case R.id.fragment_confirm_order_button1:
+                confirmOrderButton1Fragment(ft);
+                break;
 
-                case R.id.fragment_landmark_button1:
-                    FragmentLandmarkButton1Fragment(ft);
-                    break;
+            case R.id.fragment_landmark_button1:
+                FragmentLandmarkButton1Fragment(ft);
+                break;
 
-                case R.id.past_order_layout_imageview1:
-                    pastOrderLayoutImageView1Fragment(ft, object);
-                    break;
+            case R.id.past_order_layout_imageview1:
+                pastOrderLayoutImageView1Fragment(ft, object);
+                break;
 
-                case R.id.past_order_layout_button2:
-                    pastOrderLayoutButton2Fragment(ft);
-                    break;
+            case R.id.past_order_layout_button2:
+                pastOrderLayoutButton2Fragment(ft);
+                break;
 
-                case R.id.past_order_layout_button1:
-                    pastOrderLayoutButton1Fragment(ft);
-                    break;
+            case R.id.past_order_layout_button1:
+                pastOrderLayoutButton1Fragment(ft);
+                break;
 
-                case R.layout.fragment_no_address_found:
-                    noAddressFoundFragment(ft);
-                    break;
+            case R.layout.fragment_no_address_found:
+                noAddressFoundFragment(ft);
+                break;
 
-                case R.id.fragment_profile_button1:
-                    profileButtonFragment(ft);
-                    break;
+            case R.id.fragment_profile_button1:
+                profileButtonFragment(ft);
+                break;
 
-                case R.id.fragment_verifying_order_textview1:
-                    verifyingOrderFragment(ft);
-                    break;
+            case R.id.fragment_verifying_order_textview1:
+                verifyingOrderFragment(ft);
+                break;
 
-                case R.id.fragment_order_status_button2:
-                    orderStatusFragment();
-                    break;
+            case R.id.fragment_order_status_button2:
+                orderStatusFragment();
+                break;
 
-                case R.id.fragment_past_order_button1:
-                    addProfile(ft,object);
-                    break;
+            case R.id.fragment_past_order_button1:
+                addProfile(ft,object);
+                break;
 
-                case R.layout.fragment_order_status:
-                    openOrderStatus(ft,object);
-                    break;
+            case R.layout.fragment_order_status:
+                openOrderStatus(ft,object);
+                break;
 
-                case R.layout.fragment_try_again:
-                    tryAgain(ft);
-                    break;
+            case R.layout.fragment_try_again:
+                tryAgain(ft);
+                break;
 
-                case R.id.fragment_incoming_sms_textview4:
-                    invalidEmail(ft,object);
+            case R.id.fragment_incoming_sms_textview4:
+                invalidEmail(ft,object);
 
 
-            }
+        }
     }
 
 
@@ -1074,86 +1084,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         dialog.show(getSupportFragmentManager(), SendPrescriptionDialog.TAG);
     }
 
-
-    /**
-     * Testing the bug
-     * http://stackoverflow.com/questions/14495304/camera-force-closing-issue-in-samsung-galaxy-s3-version-4-1-1/14640678#14640678
-     */
-   /* private Uri camera(){
-        // Describe the columns you'd like to have returned. Selecting from the Thumbnails location gives you both the Thumbnail Image ID, as well as the original image ID
-        String[] projection = {
-                MediaStore.Images.Thumbnails._ID,  // The columns we want
-                MediaStore.Images.Thumbnails.IMAGE_ID,
-                MediaStore.Images.Thumbnails.KIND,
-                MediaStore.Images.Thumbnails.DATA};
-        String selection = MediaStore.Images.Thumbnails.KIND + "="  + // Select only mini's
-                MediaStore.Images.Thumbnails.MINI_KIND;
-
-        String sort = MediaStore.Images.Thumbnails._ID + " DESC";
-
-        //At the moment, this is a bit of a hack, as I'm returning ALL images, and just taking the latest one. There is a better way to narrow this down I think with a WHERE clause which is currently the selection variable
-        Cursor myCursor = this.getContentResolver().query(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection, selection, null, sort);
-
-        long imageId = 0l;
-        long thumbnailImageId = 0l;
-        String thumbnailPath = "";
-
-        try{
-            myCursor.moveToFirst();
-            imageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.IMAGE_ID));
-            thumbnailImageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID));
-            thumbnailPath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
-        }
-        finally{
-            myCursor.close();
-            //http://stackoverflow.com/questions/18107404/attempted-to-access-a-cursor-after-it-has-been-closed
-            myCursor = null;
-        }
-
-        //Create new Cursor to obtain the file Path for the large image
-
-        String[] largeFileProjection = {
-                MediaStore.Images.ImageColumns._ID,
-                MediaStore.Images.ImageColumns.DATA
-        };
-
-        String largeFileSort = MediaStore.Images.ImageColumns._ID + " DESC";
-        //http://stackoverflow.com/questions/27918952/android-database-staledataexception-attempted-to-access-a-cursor-after-it-has-b
-        myCursor = this.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, largeFileProjection, null, null, largeFileSort);
-        String largeImagePath = "";
-
-        try{
-            myCursor.moveToFirst();
-
-            //This will actually give yo uthe file path location of the image.
-            largeImagePath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA));
-        }
-        finally{
-            myCursor.close();
-            myCursor = null;
-        }
-        // These are the two URI's you'll be interested in. They give you a handle to the actual images
-        Uri uriLargeImage = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(imageId));
-        Uri uriThumbnailImage = Uri.withAppendedPath(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, String.valueOf(thumbnailImageId));
-        return uriLargeImage;
-        // I've left out the remaining code, as all I do is assign the URI's to my own objects anyways...
-    }*/
-
-
-
-
     private void CaptureImageActivityRequestCode(){
-        CartFragment frag6 = (CartFragment) getSupportFragmentManager().
-                findFragmentByTag(CartFragment.TAG);
         //Thumbnail is being saved
         Calendar calendar = Calendar.getInstance();
         File dir = getPicStorageDir(Constants.imageStorageDir);
         File imageFile = new File(dir, calendar.getTimeInMillis() + ".jpeg");
-/**
- * Change
- */
+
         File oldFile = new File(fileUri.getPath());
-//        File oldFile = new File(camera().getPath());
         Uri thumbnailUri = Uri.fromFile(imageFile);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inTempStorage = new byte[24*1024];
@@ -1172,25 +1109,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /**
-         * CHange
-         */
         databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri));
-//        databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, camera(), thumbnailUri));
-
         prescriptionId++;
-        String cartItems = databaseHelper.getPresciptionCount() + "";
-        //Using handler for post delayed..
-        try{
-            mainFragment.getCartItems().setText(cartItems);
-            mainFragment.getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
-        }
-        catch (Exception e){
-            //mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-            //mainFragment.getCartItems().setText(cartItems);
-            Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
 
@@ -1204,6 +1124,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         imageZoomDialog.setArguments(bundle4);
         imageZoomDialog.show(getFragmentManager(), ImageZoomDialog.TAG);
     }
+
+
 
     private void GalleryImageActivityRequestCodeFragment(){
         //Thumbnail is being saved
@@ -1226,19 +1148,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         databaseHelper.addPrescription(new PrescriptionDetail(prescriptionId, fileUri, thumbnailUri1));
         prescriptionId++;
-        String cartItem = databaseHelper.getPresciptionCount() + "";
-
-        try{
-            mainFragment.getCartItems().setText(cartItem);
-            mainFragment.getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
-        }
-        catch (Exception e){
-            //mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-            //mainFragment.getCartItems().setText(cartItem);
-            Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-        }
-
     }
+
+
 
     private void fragmentNextButton(FragmentTransaction ft){
         Customer customer = getCustomerRepo().getCachedCurrentUser();
@@ -1300,6 +1212,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.commitAllowingStateLoss();
     }
 
+
+
     private void sendOrderButton2Fragment(FragmentTransaction ft){
         if (databaseHelper.getPresciptionCount() > 0) {
             showOpenPastOrderAlert();
@@ -1317,6 +1231,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
     }
 
+
+
+
     private void confirmOrderButton1Fragment(FragmentTransaction ft){
         OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
                 findFragmentByTag(OrderStatusFragment.TAG);
@@ -1329,6 +1246,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();
     }
+
+
 
     private void pastOrderLayoutImageView1Fragment(FragmentTransaction ft, Object object){
         Bundle bundle8 = new Bundle();
@@ -1409,14 +1328,19 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void verifyingOrderFragment(FragmentTransaction ft){
-        ConfirmOrderFragment frag18 = (ConfirmOrderFragment) getSupportFragmentManager().
-                findFragmentByTag(ConfirmOrderFragment.TAG);
-        if (frag18 == null) {
-            frag18 = ConfirmOrderFragment.newInstance();
+        OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
+                findFragmentByTag(OrderStatusFragment.TAG);
+        if (frag12 == null) {
+            frag12 = OrderStatusFragment.newInstance();
         }
-        ft.replace(R.id.fragment_main_container, frag18, ConfirmOrderFragment.TAG).addToBackStack(null);
+        Bundle bundle7 = new Bundle();
+        bundle7.putString("fragment", "HomeFragment");
+        frag12.setArguments(bundle7);
+        ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();
     }
+
+
 
     private void orderStatusFragment(){
         Intent intent = getIntent();
@@ -1472,6 +1396,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     private void tryAgain(FragmentTransaction ft) {
+
         TryAgain frag14 = (TryAgain) getSupportFragmentManager().
                 findFragmentByTag(TryAgain.TAG);
         if (frag14 == null) {
@@ -1479,6 +1404,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         ft.replace(R.id.container, frag14, TryAgain.TAG);
         ft.commitAllowingStateLoss();
+        
     }
 
     /*=================REPLACE FRAGMENT METHOD AREA ENDS==========================*/
@@ -1687,35 +1613,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         return path;
     }
-
-
-
-  /*  //Async caller for running long running task..
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
-    {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //this method will be running on UI thread
-
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-            //this method will be running on background thread so don't update UI frome here
-            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //this method will be running on UI thread
-        }
-
-    }
-*/
 
 
 
