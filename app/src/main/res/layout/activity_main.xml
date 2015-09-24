@@ -3,6 +3,7 @@
     xmlns:elastic="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:id="@+id/container">
 
@@ -53,6 +54,7 @@
             android:visibility="gone"
             android:layout_below="@+id/linear_layout"
             android:layout_marginTop="50dp"/>
+
 
 
 </RelativeLayout>

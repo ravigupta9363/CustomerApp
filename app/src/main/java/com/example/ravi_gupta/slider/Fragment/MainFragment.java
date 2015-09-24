@@ -9,6 +9,7 @@ import android.graphics.drawable.ScaleDrawable;
 import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -23,12 +24,9 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
-import com.example.ravi_gupta.slider.Models.Constants;
-import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
-import com.google.gson.Gson;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,6 +52,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton cartButton;
     TextView toolbarTitle;
     private TextView cartItems;
+    FloatingActionButton floatingActionButton;
 
     public TextView getCartItems() {
 
@@ -89,8 +88,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
-        MainActivity activity = (MainActivity)getActivity();
-        myApplication = (MyApplication)activity.getApplication();
+        MainActivity activity = (MainActivity) getActivity();
+        myApplication = (MyApplication) activity.getApplication();
 
         databaseHelper = new DatabaseHelper(getActivity());
 
@@ -107,7 +106,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,8 +116,18 @@ public class MainFragment extends android.support.v4.app.Fragment {
         disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
         menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
         cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
-        cartItems = (TextView)rootview.findViewById(R.id.fragment_main_textview2);
+        cartItems = (TextView) rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
+        floatingActionButton = (FloatingActionButton) rootview.findViewById(R.id.fragment_main_fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.quickOrder();
+                //floatingActionButton.setVisibility(View.GONE);
+            }
+        });
+
+
         pagerAdapter = new ViewPagerAdapter(getActivity(), myApplication.getImageFileArray(), viewPager);
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -150,7 +158,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.replaceFragment(R.id.fragment_main_imagebutton2,null);
+                mainActivity.replaceFragment(R.id.fragment_main_imagebutton2, null);
             }
         });
 
@@ -180,10 +188,9 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
             // As the TimerTask run on a seprate thread from UI thread we have
             // to call runOnUiThread to do work on UI thread.
-            if(mainActivity == null) {
+            if (mainActivity == null) {
                 return;
-            }
-            else {
+            } else {
                 mainActivity.runOnUiThread(new Runnable() {
                     public void run() {
 
@@ -212,7 +219,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         }
     }
 
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -232,21 +238,18 @@ public class MainFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    public void addCartValue(){
+    public void addCartValue() {
         int item = databaseHelper.getPresciptionCount();
-        if(item > 0){
+        if (item > 0) {
             String cartItems = item + "";
             getCartItems().setText(cartItems);
             getCartItems().setBackgroundColor(Color.rgb(242, 121, 53));
-        }else{
+        } else {
             /**
              * Do nothing here...
              */
         }
-
     }
-
-
 
     @Override
     public void onDetach() {
@@ -275,7 +278,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         super.onResume();
         //((ActionBarActivity) getActivity()).getSupportActionBar().show();
         getView().setFocusableInTouchMode(true);
-            getView().requestFocus();
+        getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -293,5 +296,17 @@ public class MainFragment extends android.support.v4.app.Fragment {
         addCartValue();
         //new AsyncCaller().execute();
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        floatingActionButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        floatingActionButton.setVisibility(View.GONE);
     }
 }

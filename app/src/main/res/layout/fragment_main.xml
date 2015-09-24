@@ -1,9 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.ravi_gupta.slider.Fragment.MainFragment"
     android:background="#f9f9f7"
-    android:id="@+id/fragment_main_container" android:clickable="true">
+    android:id="@+id/fragment_main_container"
+    android:clickable="true">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
@@ -164,5 +167,17 @@
             tools:layout="@layout/fragment_shop_list" />
 
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fragment_main_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/dc_compact_camera"
+        app:backgroundTint="#9A12B3"
+        app:rippleColor="#D24D57" />
 
 </RelativeLayout>

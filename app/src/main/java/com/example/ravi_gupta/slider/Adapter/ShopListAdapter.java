@@ -40,6 +40,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
         Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+        Typeface boldTypeface = Typeface.create(typeface2, Typeface.BOLD);
         if(row == null)
         {
 
@@ -63,7 +64,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         //Assigning custom fonts
 
         holder.shopName.setTypeface(typeface3);
-        holder.discount.setTypeface(typeface2);
+        holder.discount.setTypeface(boldTypeface);
         holder.address.setTypeface(typeface2);
         holder.isReturn.setTypeface(typeface2);
         holder.deliveryTime.setTypeface(typeface2);
@@ -82,7 +83,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
             holder.discount.setVisibility(View.GONE);
         }else{
             holder.discount.setVisibility(View.VISIBLE);
-            holder.discount.setText("upto "+String.valueOf((discountNumber)+"%"));
+            holder.discount.setText("upto "+String.valueOf((discountNumber)+"% off"));
         }
 
         holder.address.setText(shopAddress);
@@ -112,19 +113,19 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         holder.icon.setText(firstCharacter);
         switch (counter){
             case 0:
-                holder.icon.setBackgroundColor(Color.parseColor("#9A12B3"));
+                holder.icon.setBackgroundResource(R.drawable.icon_color_one);
                 counter = 1;
                 break;
             case 1:
-                holder.icon.setBackgroundColor(Color.parseColor("#F27935"));
+                holder.icon.setBackgroundResource(R.drawable.icon_color_two);
                 counter = 2;
                 break;
             case 2:
-                holder.icon.setBackgroundColor(Color.parseColor("#138BC3"));
+                holder.icon.setBackgroundResource(R.drawable.icon_color_three);
                 counter = 3;
                 break;
             case 3:
-                holder.icon.setBackgroundColor(Color.parseColor("#D24D57"));
+                holder.icon.setBackgroundResource(R.drawable.icon_color_four);
                 counter = 0;
                 break;
 
