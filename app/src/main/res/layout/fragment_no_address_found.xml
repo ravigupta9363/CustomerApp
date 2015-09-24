@@ -1,14 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.NoAddressFoundFragment"
     android:clickable="true">
 
-    <com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable
-        android:id="@+id/fragment_no_address_found_pager"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDurationUnswipable>
+        android:layout_height="match_parent"
+        android:background="@mipmap/no_address_found_background"/>
     
 
         <LinearLayout
@@ -21,61 +21,18 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp">
 
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fragment_no_address_found_textview1"
-                android:gravity="center"
-                style="bold"
-                android:textAllCaps="true"
-                android:padding="10dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:background="#000"
-                android:alpha="0.5"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="75dp"
-                android:textColor="#FFFF00"
-                android:id="@+id/fragment_no_address_found_textview1"/>
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/fragment_no_address_found_button1"
+               android:background="@drawable/round_black_button"
+               android:textColor="#FFF"
+               android:text="Refresh"
+               android:textAllCaps="true"
+               android:layout_marginBottom="10dp"
+               android:paddingLeft="20dp"
+               android:paddingRight="20dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom|center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp">
-
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:text="@string/fragment_no_address_found_button1"
-            android:textColor="#FFF"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:background="@drawable/round_status_button"
-            android:id="@+id/fragment_no_address_found_button1"
-            android:layout_marginRight="30dp"
-            android:layout_gravity="left" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:text="@string/fragment_no_address_found_button2"
-            android:textColor="#FFF"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:background="@drawable/round_status_button"
-            android:id="@+id/fragment_no_address_found_button2"
-            android:layout_marginLeft="30dp"
-            android:layout_gravity="right" />
-
-            </LinearLayout>
         </LinearLayout>
 </RelativeLayout>
 
