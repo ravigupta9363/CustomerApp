@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -123,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
         NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
-        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener{
+        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener, FragmentManager.OnBackStackChangedListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -899,6 +900,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
         MyApplication app = (MyApplication)getApplication();
         //ActivityHelper helper = new ActivityHelper(this, app);
         if(!haveNetworkConnection()) {
@@ -1344,7 +1346,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         ft.replace(R.id.fragment_main_container, frag17, ProfileEditFragment.TAG).addToBackStack(null);
         Bundle bundle10 = new Bundle();
-        bundle10.putString("fragment","profileFragment");
+        bundle10.putString("fragment", "profileFragment");
         frag17.setArguments(bundle10);
         ft.commitAllowingStateLoss();
     }
@@ -1649,11 +1651,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return path;
     }
 
-
-
     // Send an upstream message.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            mainFragment.floatingActionButton.setVisibility(View.GONE);
+            Log.v("GONE","BACK STACK");
+        }
+        else {
+            mainFragment.floatingActionButton.setVisibility(View.VISIBLE);
+            Log.v("GONE", "BACK STACK 2");
+        }
     }
 }

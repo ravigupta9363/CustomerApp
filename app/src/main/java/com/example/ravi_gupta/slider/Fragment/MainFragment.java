@@ -52,7 +52,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton cartButton;
     TextView toolbarTitle;
     private TextView cartItems;
-    FloatingActionButton floatingActionButton;
+    public FloatingActionButton floatingActionButton;
 
     public TextView getCartItems() {
 
@@ -102,7 +102,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         sb.append(address.getPostalCode()).append(" ");
         sb.append(address.getCountryName());
         result = sb.toString();
-
     }
 
 
@@ -111,7 +110,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
-
         viewPager = (ViewPagerCustomDuration) rootview.findViewById(R.id.viewPager);
         disabledocationEditText = (EditText) rootview.findViewById(R.id.fragment_main_edittext1);
         menuButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton1);
@@ -140,7 +138,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setScrollDurationFactor(3);
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
-
 
         disabledocationEditText.setText(result);
         Log.d("address", "Display Address = " + result);
@@ -175,7 +172,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
 
     public void pageSwitcher(int seconds) {
-        timer = new Timer(); // At this line a new Thread will be created
+        timer = new Timer(); //  At this line a new Thread will be created
         timer.scheduleAtFixedRate(new RemindTask(), 0, seconds * 1000); // delay
         // in
         // milliseconds
@@ -298,15 +295,5 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        floatingActionButton.setVisibility(View.GONE);
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        floatingActionButton.setVisibility(View.GONE);
-    }
 }
