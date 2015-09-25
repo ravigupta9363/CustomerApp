@@ -87,7 +87,7 @@ public class ServerViewPagerAdapter extends PagerAdapter {
 
         Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
         Log.d("server","BigImage = "+imageUri+"");
-        Picasso.with(mainActivity).load(imageUri).error(R.mipmap.not_serving_area).resize(400, 520).into(sliderItem);
+        Picasso.with(mainActivity).load(imageUri).resize(400, 520).into(sliderItem);
         // sliderItem.setImageResource(sliderItems[position]);
 
         // Add viewpager_item.xml to ViewPager

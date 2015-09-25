@@ -97,7 +97,7 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_incoming_sms, container, false);
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
         fragment = getArguments().getString("fragment");
         final ProfileDetail profileDetail = profileDatabase.getProfile();
 
@@ -311,7 +311,6 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
 
                         @Override
                         public void onError(Throwable t) {
-
                             //If OTP validation fails..
                             //Email exists or internet connection not avail..
                             Log.d(TAG, "Error occured in File IncomingSmsFragment");

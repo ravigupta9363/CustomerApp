@@ -39,7 +39,6 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         ShopListHolder holder = null;
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
         Typeface boldTypeface = Typeface.create(typeface2, Typeface.BOLD);
         if(row == null)
         {
@@ -63,7 +62,7 @@ public class ShopListAdapter extends ArrayAdapter<ShopListDetails> {
         }
         //Assigning custom fonts
 
-        holder.shopName.setTypeface(typeface3);
+        holder.shopName.setTypeface(typeface2);
         holder.discount.setTypeface(boldTypeface);
         holder.address.setTypeface(typeface2);
         holder.isReturn.setTypeface(typeface2);

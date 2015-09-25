@@ -2,47 +2,67 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.TryAgain"
-    android:background="#f9f9f7" android:clickable="true">
+    android:background="@drawable/splash_gradient_black" android:clickable="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="50dp">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@mipmap/order_cancelled"
-            android:layout_marginLeft="120dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="120dp"/>
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:id="@+id/fragment_order_status_imageview1"
+            android:src="@mipmap/logo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Oops!! \n Something wrong happened.\n Please Retry"
-            android:gravity="center"
-            android:scrollbarSize="18sp"
-            android:id="@+id/fragment_try_again_textview1"/>
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
+            android:text="drugcorner"
+            android:textSize="30sp"
+            android:textColor="#FFF"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="50dp">
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragment_try_again_textview2"
+            android:layout_marginBottom="75dp"/>
+    </LinearLayout>
 
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:text="@string/fragment_no_address_found_button2"
-                android:textColor="#FFF"
-                android:background="@drawable/round_button"
-                android:id="@+id/fragment_try_again_button1" />
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Oops!! \n Something wrong happened.\n Please Retry"
+            android:gravity="center"
+            android:textColor="#FFF"
+            android:scrollbarSize="18sp"
+            android:layout_centerInParent="true"
+            android:id="@+id/fragment_try_again_textview1"/>
 
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_no_address_found_button2"
+            android:textColor="#000"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="18sp"
+            android:background="@drawable/round_button_white"
+            android:id="@+id/fragment_try_again_button1" />
 
     </LinearLayout>
 

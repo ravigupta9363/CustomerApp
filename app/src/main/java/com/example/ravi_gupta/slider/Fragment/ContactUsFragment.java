@@ -76,7 +76,6 @@ public class ContactUsFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
         contactText = (TextView)rootview.findViewById(R.id.fragment_contact_us_textview1);
         mailUs = (Button)rootview.findViewById(R.id.fragment_contact_us_button1);

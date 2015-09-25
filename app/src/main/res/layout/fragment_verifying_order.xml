@@ -2,7 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.VerifyingOrderFragment" android:clickable="true"
-    android:background="@mipmap/verifying_background">
+    android:background="@drawable/splash_gradient_black">
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="center|top"
+        android:src="@mipmap/logo"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,25 +20,16 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/linear_layout">
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center|top"
-            android:visibility="gone" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Verifying your order"
             android:layout_gravity="right"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="75dp"
             android:background="#000"
             android:padding="10dp"
-            android:textColor="#FFFF00"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:alpha="0.5"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:id="@+id/fragment_verifying_order_textview1"/>
@@ -38,10 +37,11 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/round_status_button"
+            android:background="@drawable/round_button_white"
             android:text="Retry"
+            android:textAllCaps="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"

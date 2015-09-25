@@ -37,7 +37,6 @@ public class OrderStatusDetailAdapter extends ArrayAdapter<OrderStatusDetail> {
 
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
 
         if(row == null)
         {

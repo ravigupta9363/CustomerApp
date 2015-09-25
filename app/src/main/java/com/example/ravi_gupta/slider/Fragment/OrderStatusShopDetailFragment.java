@@ -83,7 +83,6 @@ public class OrderStatusShopDetailFragment extends android.support.v4.app.Fragme
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
 
         shopName.setTypeface(typeface2);
         totalAmount.setTypeface(typeface2);

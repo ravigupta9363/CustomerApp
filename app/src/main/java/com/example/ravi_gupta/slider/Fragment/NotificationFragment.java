@@ -14,9 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.widget.RecyclerView;
 
 import com.example.ravi_gupta.slider.Adapter.MyRecyclerViewAdapter;
 import com.example.ravi_gupta.slider.Database.NotificationDatabase;
@@ -88,7 +86,7 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
         mRecyclerView = (RecyclerView) rootview.findViewById(R.id.fragment_notification_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -133,11 +131,9 @@ public class NotificationFragment extends android.support.v4.app.Fragment {
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_notification_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_notification_imagebutton1);
         TextView noNotificationText = (TextView)rootview.findViewById(R.id.fragment_notification_textview1);
-        ImageView noNotification = (ImageView)rootview.findViewById(R.id.fragment_notification_imageview1);
         toolbarTitle.setTypeface(typeface1);
         noNotificationText.setTypeface(typeface2);
 
-        noNotification.setVisibility(View.VISIBLE);
         noNotificationText.setVisibility(View.VISIBLE);
 
         toolbarIcon.setOnClickListener(new View.OnClickListener() {

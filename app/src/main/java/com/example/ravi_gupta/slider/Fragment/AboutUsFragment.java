@@ -74,12 +74,12 @@ public class AboutUsFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
         productName = (TextView) rootview.findViewById(R.id.fragment_about_us_textview1);
         version = (TextView) rootview.findViewById(R.id.fragment_about_us_textview2);
         aboutText = (TextView) rootview.findViewById(R.id.fragment_about_us_textview3);
 
-        productName.setTypeface(typeface3);
+        productName.setTypeface(typeface2);
         version.setTypeface(typeface2);
         aboutText.setTypeface(typeface2);
 

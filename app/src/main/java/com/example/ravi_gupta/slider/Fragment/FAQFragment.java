@@ -76,7 +76,6 @@ public class FAQFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_faq, container, false);
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
         faq = (TextView)rootview.findViewById(R.id.fragment_faq_textview1);
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_faq_textview4);

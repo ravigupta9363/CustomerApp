@@ -15,8 +15,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:contentDescription="drawer list"
-            android:src="@mipmap/dc_contact" />
+            android:contentDescription="drawer list" />
 
         <TextView
             android:id="@+id/drawer_list_item_textview1"

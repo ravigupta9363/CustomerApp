@@ -36,6 +36,7 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
     boolean forward = true;
     AppLocationService appLocationService;
     public static String TAG = "NoAddressFoundFragment";
+    TextView textView;
 
 
     // TODO: Rename and change types of parameters
@@ -65,12 +66,14 @@ public class NoAddressFoundFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_no_address_found, container, false);
-        Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
+
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Museo300-Regular.otf");
 
         refreshButton = (Button) rootview.findViewById(R.id.fragment_no_address_found_button1);
+        textView = (TextView) rootview.findViewById(R.id.fragment_no_address_textview1);
         refreshButton.setTypeface(typeface2);
+        textView.setTypeface(typeface3);
 
 
         refreshButton.setOnClickListener(new View.OnClickListener() {

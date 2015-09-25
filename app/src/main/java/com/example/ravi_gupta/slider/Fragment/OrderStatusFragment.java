@@ -54,6 +54,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     TextView time;
     TextView orderId;
     TextView orderStatusText;
+    TextView logoName;
     ImageView orderStatusImage;
     ArrayList<OrderStatusDetail> orderStatusDetails = new ArrayList<OrderStatusDetail>();
     MainActivity mainActivity;
@@ -100,6 +101,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
 
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Museo300-Regular.otf");
 
         fragment = getArguments().getString("fragment");
 
@@ -107,7 +109,6 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         time = (TextView) rootview.findViewById(R.id.fragment_order_status_textview2);
         orderId = (TextView) rootview.findViewById(R.id.fragment_order_status_textview3);
         orderStatusText = (TextView) rootview.findViewById(R.id.fragment_order_status_textview4);
-        orderStatusImage = (ImageView) rootview.findViewById(R.id.fragment_order_status_imageview1);
         cancelOrder = (Button) rootview.findViewById(R.id.fragment_order_status_button1);
         home = (Button) rootview.findViewById(R.id.fragment_order_status_button2);
         retry = (Button) rootview.findViewById(R.id.fragment_order_status_button4);
@@ -115,6 +116,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         noOrderStatusLayout = (LinearLayout) rootview.findViewById(R.id.fragment_order_status_linear_layout2);
         orderNow = (Button) rootview.findViewById(R.id.fragment_order_status_button3);
         statusToolbar = (android.support.v7.widget.Toolbar) rootview.findViewById(R.id.order_status_toolbar);
+        logoName = (TextView) rootview.findViewById(R.id.fragment_order_status_textview17);
         view = (View)rootview.findViewById(R.id.order_status_view);
 
         linearLayout.setVisibility(View.GONE);
@@ -129,6 +131,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
         orderStatusText.setTypeface(typeface2);
         cancelOrder.setTypeface(typeface2);
         home.setTypeface(typeface2);
+        logoName.setTypeface(typeface3);
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_order_status_textview11);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_order_status_imagebutton1);
