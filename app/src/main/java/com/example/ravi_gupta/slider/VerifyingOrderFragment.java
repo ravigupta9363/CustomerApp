@@ -136,8 +136,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
     /*Method for sending verification request to the server*/
     public void sendRequest() {
         //================Now sending the request to server for sending the otp====================
-        RestAdapter adapter = mainActivity.restAdapter;
-        repository = adapter.createRepository(NotificationRepository.class);
+        MyApplication myApplication = (MyApplication)mainActivity.getApplication();
+        repository = myApplication.getLoopBackAdapter().createRepository(NotificationRepository.class);
         String id;
         try{
             LocalInstallation installation = MainActivity.getInstallation();

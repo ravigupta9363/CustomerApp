@@ -468,8 +468,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
     public void confirmOrder() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mainActivity);
 
-        alertDialog.setMessage("Discard Prescription?");
-        alertDialog.setPositiveButton("Discard",
+        alertDialog.setMessage("Confirm cancel?");
+        alertDialog.setPositiveButton("Confirm",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mainActivity.getActivityHelper().launchRingDialog(mainActivity);
