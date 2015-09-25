@@ -621,6 +621,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
         if (!haveNetworkConnection()) {
             position = 99;
         }
@@ -637,7 +638,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                         profileEditFragment = ProfileEditFragment.newInstance();
                     }
                     Bundle bundle = new Bundle();
-                    bundle.putString("fragment", "directHomeFragment");
+                    bundle.putString("fragment", "DirectHomeFragment");
                     profileEditFragment.setArguments(bundle);
                     ft.replace(R.id.fragment_main_container, profileEditFragment, ProfileEditFragment.TAG).addToBackStack(ProfileEditFragment.TAG);
                     ft.commitAllowingStateLoss();
@@ -969,6 +970,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 incomingSmsButton1Fragment(ft);
                 break;
 
+            case R.id.fragment_incoming_sms_textview5:
+                verifyingQuickOrder(ft);
+                break;
+
             case R.id.fragment_send_order_button2:
                 sendOrderButton2Fragment(ft);
                 break;
@@ -1256,8 +1261,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
 
-
-
     private void confirmOrderButton1Fragment(FragmentTransaction ft){
         OrderStatusFragment frag12 = (OrderStatusFragment) getSupportFragmentManager().
                 findFragmentByTag(OrderStatusFragment.TAG);
@@ -1270,8 +1273,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.replace(R.id.container, frag12, OrderStatusFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();
     }
-
-
 
     private void pastOrderLayoutImageView1Fragment(FragmentTransaction ft, Object object){
         Bundle bundle8 = new Bundle();
@@ -1419,7 +1420,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.commitAllowingStateLoss();
     }
 
-    private void cameraQuickOrder(FragmentTransaction ft) {
+    private void verifyingQuickOrder(FragmentTransaction ft) {
         VerifyingOrderFragment frag13 = (VerifyingOrderFragment) getSupportFragmentManager().
                 findFragmentByTag(VerifyingOrderFragment.TAG);
         if (frag13 == null) {
@@ -1427,6 +1428,31 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();
+    }
+
+    private void cameraQuickOrder(FragmentTransaction ft) {
+        Customer customer = getCustomerRepo().getCachedCurrentUser();
+        if (customer == null) {
+            ProfileEditFragment frag7 = (ProfileEditFragment) getSupportFragmentManager().
+                    findFragmentByTag(ProfileEditFragment.TAG);
+            if (frag7 == null) {
+                frag7 = ProfileEditFragment.newInstance();
+            }
+            Bundle bundle5 = new Bundle();
+            bundle5.putString("fragment", "QuickFragment");
+            frag7.setArguments(bundle5);
+            ft.replace(R.id.fragment_main_container, frag7, ProfileEditFragment.TAG).addToBackStack(null);
+            ft.commitAllowingStateLoss();
+        } else {
+            VerifyingOrderFragment frag13 = (VerifyingOrderFragment) getSupportFragmentManager().
+                    findFragmentByTag(VerifyingOrderFragment.TAG);
+            if (frag13 == null) {
+                frag13 = VerifyingOrderFragment.newInstance();
+            }
+            ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG).addToBackStack(null);
+            ft.commitAllowingStateLoss();
+        }
+
     }
 
     private void tryAgain(FragmentTransaction ft) {
@@ -1660,12 +1686,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void onBackStackChanged() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            mainFragment.floatingActionButton.setVisibility(View.GONE);
-            Log.v("GONE","BACK STACK");
+            if(mainFragment != null) {
+                mainFragment.floatingActionButton.setVisibility(View.GONE);
+                Log.v("GONE", "BACK STACK");
+            }
         }
         else {
-            mainFragment.floatingActionButton.setVisibility(View.VISIBLE);
-            Log.v("GONE", "BACK STACK 2");
+            if(mainFragment != null){
+                mainFragment.floatingActionButton.setVisibility(View.VISIBLE);
+                Log.v("GONE", "BACK STACK 2");
+            }
         }
     }
 }

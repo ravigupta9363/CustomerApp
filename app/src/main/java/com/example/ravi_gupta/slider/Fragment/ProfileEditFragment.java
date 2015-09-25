@@ -215,6 +215,9 @@ public class ProfileEditFragment extends android.support.v4.app.Fragment {
                     else if(fragment.equals("addProfile")) {
                         mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,"addProfile");
                     }
+                    else  if(fragment.equals("QuickFragment")) {
+                        mainActivity.replaceFragment(R.id.fragment_profile_edit_button1,"QuickFragment");
+                    }
                     else {
                            // profileDatabase.addProfileData(new ProfileDetail(updatedName, updatedMail, updatedPhone));
                             mainActivity.replaceFragment(R.id.fragment_profile_edit_button1, "DirectHomeFragment");

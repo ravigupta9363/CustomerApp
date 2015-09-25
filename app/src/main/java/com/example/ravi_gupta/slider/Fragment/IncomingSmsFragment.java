@@ -304,6 +304,8 @@ public class IncomingSmsFragment extends android.support.v4.app.Fragment {
                                 mainActivity.onBackPressed();
                             } else if (fragment.equals("CartFragment") || fragment.equals("PastOrderFragment")) {
                                 mainActivity.replaceFragment(R.id.fragment_incoming_sms_button1, null);
+                            } else if(fragment.equals("QuickFragment")) {
+                                mainActivity.replaceFragment(R.id.fragment_incoming_sms_textview5,null);
                             }
                         }
 
