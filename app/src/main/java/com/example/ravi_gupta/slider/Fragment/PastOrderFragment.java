@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,11 +54,11 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     String fragment;
     OrderRepository orderRepository;
     List<Map<String, String>> prescriptionStatic = null;
-    ImageView noPastOrder;
     TextView noPastOrderText;
     View rootview;
     ProgressBar progressBar;
     Button addProfileButton;
+    LinearLayout linearLayout;
 
 
     private OnFragmentInteractionListener mListener;
@@ -91,9 +91,6 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
 
     }
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,13 +99,13 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         // fragment = getArguments().getString("fragment");
         Typeface typeface1 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
-        //Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Lato-Regular.ttf");
+
         //new AsyncCaller().execute();
         mListview = (ListView) rootview.findViewById(R.id.fragment_past_order_listview1);
 
         TextView toolbarTitle = (TextView)rootview.findViewById(R.id.fragment_past_order_textview4);
         ImageButton toolbarIcon = (ImageButton)rootview.findViewById(R.id.fragment_past_order_imagebutton1);
-        noPastOrder = (ImageView)rootview.findViewById(R.id.fragment_past_order_imageview1);
+        linearLayout = (LinearLayout) rootview.findViewById(R.id.fragment_past_order_linear_layout1);
         noPastOrderText = (TextView)rootview.findViewById(R.id.fragment_past_order_textview1);
         //progressBar = (ProgressBar)rootview.findViewById(R.id.fragment_past_order_progressbar1);
         addProfileButton = (Button) rootview.findViewById(R.id.fragment_past_order_button1);
@@ -137,14 +134,12 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     }
 
     private void showNoPastOrder(){
-        noPastOrder.setVisibility(View.VISIBLE);
         noPastOrderText.setVisibility(View.VISIBLE);
         mListview.setVisibility(View.GONE);
     }
 
 
     private void showPastOrderMode(){
-        noPastOrder.setVisibility(View.GONE);
         noPastOrderText.setVisibility(View.GONE);
         mListview.setVisibility(View.VISIBLE);
     }
@@ -237,21 +232,16 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
             mainActivity.getActivityHelper().closeLoadingBar();
             Log.d(Constants.TAG, "Customers not logged in.");
             addProfileButton.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.VISIBLE);
+            mListview.setVisibility(View.GONE);
         }
     }
 
     private void setErrorText(String message){
         noPastOrderText.setText(message);
-        noPastOrder.setVisibility(View.VISIBLE);
-        noPastOrder.setImageResource(R.mipmap.order_cancelled);
         noPastOrderText.setVisibility(View.VISIBLE);
         mListview.setVisibility(View.GONE);
     }
-
-
-
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -276,19 +266,11 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
         }
     }
 
-
-
-
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
-
-
-
 
     /**
      * This interface must be implemented by activities that contain this

@@ -2,6 +2,7 @@ package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.ravi_gupta.slider.MainActivity;
 import com.example.ravi_gupta.slider.R;
@@ -26,6 +28,7 @@ public class TryAgain extends android.support.v4.app.Fragment {
     MainActivity mainActivity;
     private OnFragmentInteractionListener mListener;
     public static  String TAG = "TryAgain";
+    TextView textView;
 
 
     // TODO: Rename and change types and number of parameters
@@ -59,6 +62,9 @@ public class TryAgain extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_try_again, container, false);
 
         Button tryAgain = (Button) rootview.findViewById(R.id.fragment_try_again_button1);
+        textView = (TextView) rootview.findViewById(R.id.fragment_try_again_textview2);
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Museo300-Regular.otf");
+        textView.setTypeface(typeface3);
 
         tryAgain.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -37,6 +37,7 @@
 
      </android.support.v7.widget.Toolbar>
 
+
      <View
          android:layout_width="match_parent"
          android:layout_height="2dp"
@@ -48,7 +49,6 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical"
-         android:background="@drawable/status_gradient"
          android:id="@+id/fragment_order_status_linear_layout"
          android:layout_below="@+id/view">
 
@@ -56,9 +56,8 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:orientation="vertical"
-         android:alpha="0.8"
          android:id="@+id/fragment_order_status_background_layout"
-         android:background="@mipmap/order_status_background">
+         android:background="@drawable/splash_gradient_black">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,7 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TIme : "
+                    android:text="Time : "
                     android:id="@+id/fragment_order_status_textview16"
                     android:textSize="12sp"
                     android:paddingTop="4dp"
@@ -172,41 +171,53 @@
                      android:gravity="center|right"/>
 
              </LinearLayout>
-
          </LinearLayout>
 
-        <RelativeLayout
+
+
+         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="75dp">
+            android:layout_height="match_parent">
 
          <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="150dp"
-             android:layout_marginRight="100dp"
-             android:layout_marginLeft="100dp"
+             android:layout_width="50dp"
+             android:layout_height="70dp"
+             android:layout_gravity="center"
              android:id="@+id/fragment_order_status_imageview1"
-             android:layout_alignParentTop="true"/>
+             android:src="@mipmap/logo"
+             android:layout_alignParentTop="true"
+             android:layout_centerHorizontal="true"
+             android:layout_marginTop="120dp"/>
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="drugcorner"
+                 android:layout_below="@+id/fragment_order_status_imageview1"
+                 android:textSize="30sp"
+                 android:textColor="#FFF"
+                 android:gravity="center"
+                 android:layout_centerHorizontal="true"
+                 android:layout_marginTop="20dp"
+                 android:id="@+id/fragment_order_status_textview17"/>
 
 
         <TextView
+            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="Preparing Order"
-            android:layout_centerVertical="true"
             android:gravity="right"
             android:textStyle="bold"
             android:padding="10dp"
             android:textAllCaps="true"
-            android:alpha="0.5"
             android:id="@+id/fragment_order_status_textview4"
-            android:textColor="#FFFF00"
+            android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:layout_alignParentRight="true"
             android:background="#000"
-            android:layout_below="@+id/fragment_order_status_imageview1"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="100dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -233,9 +244,9 @@
                 android:layout_height="45dp"
                 android:text="@string/fragment_order_status_cancel_order"
                 android:textAllCaps="true"
-                android:textColor="#FFF"
+                android:textColor="#000"
                 android:id="@+id/fragment_order_status_button1"
-                android:background="@drawable/round_status_button"
+                android:background="@drawable/round_button_white"
                 android:textSize="16sp"
                 android:gravity="center"
                 android:layout_alignParentBottom="true"
@@ -251,9 +262,9 @@
                 android:layout_height="45dp"
                 android:text="@string/fragment_order_status_home"
                 android:textAllCaps="true"
-                android:textColor="#FFF"
+                android:textColor="#000"
                 android:id="@+id/fragment_order_status_button2"
-                android:background="@drawable/round_status_button"
+                android:background="@drawable/round_button_white"
                 android:textSize="16sp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
@@ -268,9 +279,9 @@
                 android:layout_height="45dp"
                 android:text="Retry"
                 android:textAllCaps="true"
-                android:textColor="#FFF"
+                android:textColor="#000"
                 android:id="@+id/fragment_order_status_button4"
-                android:background="@drawable/round_status_button"
+                android:background="@drawable/round_button_white"
                 android:textSize="16sp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
@@ -293,12 +304,6 @@
          android:visibility="gone"
          android:id="@+id/fragment_order_status_linear_layout2">
 
-         <ImageView
-             android:layout_width="200dp"
-             android:layout_height="120dp"
-             android:src="@mipmap/past_order"
-             android:layout_gravity="center"
-             android:id="@+id/fragment_order_status_imageview2"/>
 
          <TextView
              android:layout_width="match_parent"
@@ -306,10 +311,10 @@
              android:text="@string/fragment_past_orders_textview1"
              android:layout_gravity="center"
              android:gravity="center"
-             android:textSize="13sp"
+             android:textSize="17sp"
              android:textColor="#999"
              android:id="@+id/fragment_order_status_textview14"
-             android:layout_marginBottom="50dp"/>
+             android:layout_marginBottom="30dp"/>
 
          <Button
              android:layout_width="wrap_content"

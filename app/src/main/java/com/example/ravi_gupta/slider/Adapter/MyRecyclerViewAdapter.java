@@ -29,7 +29,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             super(itemView);
             Typeface typeface1 = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/gothic.ttf");
             Typeface typeface2 = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
-            Typeface typeface3 = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Lato-Regular.ttf");
 
             heading = (TextView) itemView.findViewById(R.id.fragment_notification_textView1);
             details = (TextView) itemView.findViewById(R.id.fragment_notification_textView2);

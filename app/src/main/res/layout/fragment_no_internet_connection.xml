@@ -2,49 +2,72 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.ravi_gupta.slider.Fragment.NoInternetConnectionFragment"
-    android:background="#f9f9f7" android:orientation="vertical"
+    android:background="@drawable/splash_gradient_black" android:orientation="vertical"
     android:clickable="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:id="@+id/linear_layout">
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginTop="50dp">
 
-   <ImageView
-       android:layout_width="150dp"
-       android:layout_height="150dp"
-       android:src="@mipmap/no_internet_connection"
-       android:layout_marginLeft="100dp"
-       android:layout_marginRight="100dp"
-       android:id="@+id/fragment_no_internet_connection_imageview1"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:id="@+id/fragment_order_status_imageview1"
+            android:src="@mipmap/logo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="drugcorner"
+            android:textSize="30sp"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragment_no_internet_connection_textview2"
+            android:layout_marginBottom="75dp"/>
+    </LinearLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fragment_no_internet_connection_textview1"
-        android:textColor="#999999"
+        android:textColor="#FFF"
         android:id="@+id/fragment_no_internet_connection_textview1"
-        android:textSize="13sp"
+        android:textSize="15sp"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linear_layout">
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/fragment_no_internet_connection_button1"
-        android:textAllCaps="false"
-        android:background="@drawable/round_button"
+        android:textAllCaps="true"
+        android:background="@drawable/round_button_white"
         android:id="@+id/fragment_no_internet_connection_button1"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:layout_gravity="center"
         android:layout_below="@+id/fragment_no_internet_connection_textview1"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:textSize="15sp"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"/>
 
 
     </LinearLayout>

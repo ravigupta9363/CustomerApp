@@ -84,23 +84,12 @@
         android:layout_below="@+id/view"
         android:id="@+id/fragment_profile_linear_layout1">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
-            android:src="@mipmap/profile"
-            android:layout_marginTop="75dp"
-            android:layout_gravity="center"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/fragment_profile_linear_layout1"
-            android:layout_marginBottom="20dp"/>
-
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/fragment_profile_textview1"
            android:drawableLeft="@mipmap/dc_profile"
            android:hint="@string/fragment_profile_textview2"
-           android:layout_marginLeft="50dp"
            android:gravity="center|left"
            android:textSize="15sp"/>
 
@@ -111,17 +100,15 @@
             android:drawableLeft="@mipmap/dc_about"
             android:hint="@string/fragment_profile_textview3"
             android:gravity="center|left"
-            android:layout_marginLeft="50dp"
             android:textSize="15sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fragment_profile_textview3"
-            android:drawableLeft="@mipmap/dc_about"
+            android:drawableLeft="@mipmap/dc_nav_contact"
             android:hint="@string/fragment_profile_textview4"
             android:gravity="center|left"
-            android:layout_marginLeft="50dp"
             android:textSize="15sp"/>
 
     </LinearLayout>

@@ -93,7 +93,7 @@
     <string name="fragment_order_status_button3">Order Now</string>
 
     <string name="fragment_past_orders_textview4">Past Orders</string>
-    <string name="fragment_past_orders_textview1">No orders in the bag !!</string>
+    <string name="fragment_past_orders_textview1">No orders in the bag !</string>
     <string name="fragment_past_orders_textview2">Add Profile</string>
 
     <string name="fragment_profile_textview1">Profile</string>

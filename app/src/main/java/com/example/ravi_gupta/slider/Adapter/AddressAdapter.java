@@ -42,7 +42,7 @@ public class AddressAdapter extends ArrayAdapter<AddressDetails> {
         //Define Typeface
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/gothic.ttf");
         Typeface typeface2 = Typeface.createFromAsset(context.getAssets(),"fonts/OpenSans-Regular.ttf");
-        Typeface typeface3 = Typeface.createFromAsset(context.getAssets(),"fonts/Lato-Regular.ttf");
+
 
         if(row == null)
         {

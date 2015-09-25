@@ -51,16 +51,6 @@
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@mipmap/contacts"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:layout_gravity="center"
-            android:layout_below="@+id/view"
-            android:id="@+id/fragment_contact_us_imageview1"/>
-
    <TextView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"

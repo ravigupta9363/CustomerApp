@@ -28,6 +28,7 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
 
     MainActivity mainActivity;
     ProgressBar progressBar;
+    TextView appName;
 
     public static String TAG = "NoInternetConnectionFragment";
     NoInternetConnectionFragment that;
@@ -61,10 +62,13 @@ public class NoInternetConnectionFragment extends android.support.v4.app.Fragmen
         TextView textView = (TextView)rootview.findViewById(R.id.fragment_no_internet_connection_textview1);
         Button retryButton = (Button)rootview.findViewById(R.id.fragment_no_internet_connection_button1);
         progressBar = (ProgressBar)rootview.findViewById(R.id.fragment_no_internet_connection_progressbar1);
+        appName = (TextView) rootview.findViewById(R.id.fragment_no_internet_connection_textview2);
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Regular.ttf");
+        Typeface typeface3 = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Museo300-Regular.otf");
 
         textView.setTypeface(typeface2);
         retryButton.setTypeface(typeface2);
+        appName.setTypeface(typeface3);
         progressBar.setVisibility(View.GONE);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
