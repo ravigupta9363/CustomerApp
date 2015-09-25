@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     ViewPagerCustomDuration viewPager;
     boolean enabled;
     List<java.io.File> imageFileArray;
-
+    private boolean doNotifyDataSetChangedOnce = false;
 
     public ViewPagerAdapter(Context context, List<java.io.File> imageFileArray
             , final ViewPagerCustomDuration viewPager) {
@@ -56,8 +57,14 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
 
+
     @Override
     public int getCount() {
+
+        if (doNotifyDataSetChangedOnce) {
+            doNotifyDataSetChangedOnce = false;
+            notifyDataSetChanged();
+        }
         //return sliderItems.length;
         return imageFileArray.size();
     }

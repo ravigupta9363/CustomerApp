@@ -33,7 +33,6 @@ public class OfficeRepository extends ModelRepository<Office> {
 
     public RestContract createContract() {
         RestContract contract = super.createContract();
-
         contract.addItem(new RestContractItem("/" + getNameForRestUrl() + "/:id/retailers", "GET"), getClassName() + ".prototype.__get__retailers");
         contract.addItem(new RestContractItem("/" + getNameForRestUrl() + "/SearchOfficePincode", "GET"), getClassName() + ".SearchOfficePincode");
         return contract;

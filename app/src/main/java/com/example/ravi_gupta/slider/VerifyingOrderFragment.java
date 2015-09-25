@@ -249,11 +249,13 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
                 uploadToServer(mainActivity.restAdapter, code, byteArrayList);
-
             }
-
         }.execute(null, null, null);
     }
+
+
+
+
 
 
 
@@ -322,6 +324,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             final String code,
             final Object userId
     ){
+        //uploadUsingNewMethod(fileName, container, bytes, listSize, code, userId);
+
         container.upload(fileName, bytes, "image/jpeg",
                 new ObjectCallback<File>() {
                     @Override
@@ -330,9 +334,9 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                         fileList.add(remoteFile.getName());
                         totalImageUploaded++;
                         if (totalImageUploaded == listSize) {
-                            /**
-                             * Call upload order now to the server..
-                             */
+
+                            //Call upload order now to the server..
+
                             uploadOrder(fileList, code, (String) userId);
                             Log.d(Constants.TAG, "Successfully images to the server");
 
@@ -365,8 +369,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         MyApplication app =  (MyApplication)mainActivity.getApplication();
         List<Map<String, String>> prescription = new ArrayList<>();
         for(String file : fileList ){
-            String presUrl =  "/containers/" + userId + "/download/" + file;
-            String thumbUrl =  "/containers/thumb/download/" + file;
+            String presUrl =  "/containers/" + userId + "/download/original_" + file;
+            String thumbUrl =  "/containers/" + userId + "/download/thumb_" + file;
             Log.d(Constants.TAG, presUrl);
             //Adding to the list map
             Map<String, String> image = new HashMap<>();
@@ -467,10 +471,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 if (diff > (long) till) {
                     break;
                 }
-
                 //Checking if the verification code is obtained..
                 code = GcmIntentService.getVerificationCode();
-
                 if (!(code == null)) {
                     break;
                 }

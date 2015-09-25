@@ -276,16 +276,18 @@ public class ActivityHelper {
                         public void onSuccess(Office officeObj) {
                             if (officeObj.getName() == null) {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
-                                //closeLoadingBar();
+                                try {
+                                    closeLoadingBar();
+                                }catch (Exception e){
+                                    Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+                                }
                                 //We are not providing service in your area....
                                 activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
                             } else {
                                 application.setOffice(officeObj);
-
                                 //Now setting the office id to the order...
                                 application.getOrder(activity).setOfficeId((String) officeObj.getId());
-
 
                                 officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
                                     @Override
@@ -302,6 +304,14 @@ public class ActivityHelper {
                                     @Override
                                     public void onError(Throwable t) {
                                         Log.d(Constants.TAG, "No retailer found in this area");
+                                        try {
+                                            closeLoadingBar();
+                                        }catch (Exception e){
+                                            Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+                                        }
+                                        //Show no internet connection..
+                                        activity.replaceFragment(R.layout.fragment_try_again, null);
+
                                     }
                                 });
 
@@ -429,12 +439,21 @@ public class ActivityHelper {
         //On success
         try{
             activity.activityCloseLoadingBar();
-            closeLoadingBar();
             //Also try to close the loading bar of the activity..
 
         }catch (Exception e){
-            Log.e(Constants.TAG, "Error loading bar instance has not been created. in ActivityHelper resolveroute");
+            Log.e(Constants.TAG, "Error activityCloseLoadingBar loading bar instance has not been created. in ActivityHelper resolveroute");
         }
+
+        try{
+            closeLoadingBar();
+        }
+        catch(Exception e){
+            Log.e(Constants.TAG, "Error closeLoadingbar instance has not been created. In ActivityHelper fragment");
+        }
+
+
+
 
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();

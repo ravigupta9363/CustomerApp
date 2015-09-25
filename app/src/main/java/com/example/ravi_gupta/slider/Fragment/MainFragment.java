@@ -198,10 +198,16 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
                             // skip fake page (last), go to first page
                             if (page == myApplication.getImageFileArray().size() - 1) {
+                                //TODO NEEDS FIXING BUGS HERE ON PagerAdapter The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count
                                 viewPager.setCurrentItem(0);
                                 //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
                             } else {
-                                viewPager.setCurrentItem(page++);
+                                try{
+                                    viewPager.setCurrentItem(page++);
+                                }catch (Exception e){
+                                    pagerAdapter.notifyDataSetChanged();
+                                }
+
                                 if (page == myApplication.getImageFileArray().size() - 1)
                                     page = 1;
                             }
