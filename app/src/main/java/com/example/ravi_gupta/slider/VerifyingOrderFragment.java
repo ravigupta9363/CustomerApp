@@ -324,7 +324,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             final String code,
             final Object userId
     ){
-        //uploadUsingNewMethod(fileName, container, bytes, listSize, code, userId);
+
 
         container.upload(fileName, bytes, "image/jpeg",
                 new ObjectCallback<File>() {
