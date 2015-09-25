@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
+        android:paddingLeft="15dp"
         android:paddingTop="13dp"
         android:layout_gravity="top"
         android:gravity="top">
@@ -69,13 +69,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:id="@+id/shop_list_textview2"
-                android:text="7%"
                 android:layout_marginTop="0dp"
+                android:text="5% off"
                 android:padding="3dp"
-                android:background="@drawable/circular_text_view"
-                android:textColor="#FFF" />
+                android:textStyle="bold"
+                android:textColor="#999" />
 
         </LinearLayout>
 

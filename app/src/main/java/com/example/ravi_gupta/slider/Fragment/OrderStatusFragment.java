@@ -1,7 +1,9 @@
 package com.example.ravi_gupta.slider.Fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -186,34 +188,8 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 //Show the loading bar..
-                mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+                confirmOrder();
 
-                orderStatusText.setText("Cancelled");
-                order_.setPrototypeStatusCode("5004");
-                order_.save(new VoidCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //do something
-                        mainActivity.getActivityHelper().closeLoadingBar();
-                        //TODO DELETE ID FROM DATABASE HERE
-                        //Delete the order status
-                        orderStatusDataBase.deleteOrderStatus();
-
-                        cancelOrder.setVisibility(View.GONE);
-                        home.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Log.e(Constants.TAG, "Error Cancelling Order");
-                        Log.e(Constants.TAG, t.getMessage());
-                        mainActivity.getActivityHelper().closeLoadingBar();
-
-                    }
-                });
-
-                //orderStatusImage.setImageResource(R.drawable.order_cancelled);
-                //Open Main Fragment when order has been cancelled or delivered
             }
         });
 
@@ -487,6 +463,52 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                 showRetryButton("Error Loading Order");
             }
         });
+    }
+
+    public void confirmOrder() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mainActivity);
+
+        alertDialog.setMessage("Discard Prescription?");
+        alertDialog.setPositiveButton("Discard",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mainActivity.getActivityHelper().launchRingDialog(mainActivity);
+
+                        orderStatusText.setText("Cancelled");
+                        order_.setPrototypeStatusCode("5004");
+                        order_.save(new VoidCallback() {
+                            @Override
+                            public void onSuccess() {
+                                //do something
+                                mainActivity.getActivityHelper().closeLoadingBar();
+                                //TODO DELETE ID FROM DATABASE HERE
+                                //Delete the order status
+                                orderStatusDataBase.deleteOrderStatus();
+
+                                cancelOrder.setVisibility(View.GONE);
+                                home.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                Log.e(Constants.TAG, "Error Cancelling Order");
+                                Log.e(Constants.TAG, t.getMessage());
+                                mainActivity.getActivityHelper().closeLoadingBar();
+
+                            }
+                        });
+
+                        //orderStatusImage.setImageResource(R.drawable.order_cancelled);
+                        //Open Main Fragment when order has been cancelled or delivered
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
 }

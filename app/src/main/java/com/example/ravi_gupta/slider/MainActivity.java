@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -30,6 +29,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -45,13 +45,11 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.NavDrawerListAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
@@ -102,16 +100,11 @@ import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URI;
-import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -131,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
         NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
-        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener{
+        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener, FragmentManager.OnBackStackChangedListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -145,6 +138,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private Uri fileUri;
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+    private final int QUICK_ORDER = 102;
     public DatabaseHelper databaseHelper;
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
@@ -277,6 +271,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         that = this;
         linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
 
+
         final MyApplication app = (MyApplication) getApplication();
 
         String id = orderStatusDataBase.getOrderStatus();
@@ -311,9 +306,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 activityHelper = new ActivityHelper(that, app);
             }
         }, 200);
-
-
-
     }
 
 
@@ -509,7 +501,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         installation.setAppId(Constants.LOOPBACK_APP_ID);
        /* Log.i(TAG, LOOPBACK_APP_ID);*/
         // Substitute a real id of the user logged in this application
-        installation.setUserId( userId );
+        installation.setUserId(userId);
 
         // 4. Check if we have a valid GCM registration id
         if (installation.getDeviceToken() != null) {
@@ -804,11 +796,20 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     //================================================================
 
+    public void quickOrder() {
+        if (isExternalStorageWritable()) {
+            Calendar cal = Calendar.getInstance();
+            File dir = getPicStorageDir("Drugcorner");
+            File imageFile = new File(dir, cal.getTimeInMillis() + ".jpg");
+            fileUri = Uri.fromFile(imageFile);
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            if (i.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(i, QUICK_ORDER);
+            }
 
-
-
-
-
+        }
+    }
 
     @Override
     public void takePhoto() {
@@ -827,15 +828,27 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (fileUri != null) {
+            outState.putString("cameraImageUri", fileUri.toString());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.containsKey("cameraImageUri")) {
+            fileUri = Uri.parse(savedInstanceState.getString("cameraImageUri"));
+        }
+    }
+
+    @Override
     public void choosePhotoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
     }
-
-
-
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -846,6 +859,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             if(resultCode == RESULT_OK){
                 fileUri = data.getData();
                 replaceFragment(GALLERY_IMAGE_ACTIVITY_REQUEST_CODE, null);
+            }
+        }
+        else if(requestCode == QUICK_ORDER) {
+            if(resultCode == RESULT_OK) {
+                replaceFragment(QUICK_ORDER, null);
+                Log.v("quickOrder", "I am Called");
             }
         }
         else if (requestCode == 1) {
@@ -881,6 +900,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
         MyApplication app = (MyApplication)getApplication();
         //ActivityHelper helper = new ActivityHelper(this, app);
         if(!haveNetworkConnection()) {
@@ -919,6 +939,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
             case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                 CaptureImageActivityRequestCode();
+                break;
+
+            case QUICK_ORDER:
+                cameraQuickOrder(ft);
                 break;
 
             case R.id.prescription_imageview1:
@@ -1322,7 +1346,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }
         ft.replace(R.id.fragment_main_container, frag17, ProfileEditFragment.TAG).addToBackStack(null);
         Bundle bundle10 = new Bundle();
-        bundle10.putString("fragment","profileFragment");
+        bundle10.putString("fragment", "profileFragment");
         frag17.setArguments(bundle10);
         ft.commitAllowingStateLoss();
     }
@@ -1392,6 +1416,16 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         bundle7.putString("fragment", "HomeFragment");
         frag14.setArguments(bundle7);
         ft.replace(R.id.container, frag14, OrderStatusFragment.TAG);
+        ft.commitAllowingStateLoss();
+    }
+
+    private void cameraQuickOrder(FragmentTransaction ft) {
+        VerifyingOrderFragment frag13 = (VerifyingOrderFragment) getSupportFragmentManager().
+                findFragmentByTag(VerifyingOrderFragment.TAG);
+        if (frag13 == null) {
+            frag13 = VerifyingOrderFragment.newInstance();
+        }
+        ft.replace(R.id.fragment_main_container, frag13, VerifyingOrderFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();
     }
 
@@ -1613,11 +1647,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         return path;
     }
 
-
-
     // Send an upstream message.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            mainFragment.floatingActionButton.setVisibility(View.GONE);
+            Log.v("GONE","BACK STACK");
+        }
+        else {
+            mainFragment.floatingActionButton.setVisibility(View.VISIBLE);
+            Log.v("GONE", "BACK STACK 2");
+        }
     }
 }
