@@ -1120,7 +1120,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 frag5 = CartNoOrdersFragment.newInstance();
             }
             ft.replace(R.id.fragment_main_container, frag5, CartNoOrdersFragment.TAG).addToBackStack(CartNoOrdersFragment.TAG);
-            ft.commitAllowingStateLoss();
+            ft.commit();
         } else {
             CartFragment frag5 = (CartFragment) getSupportFragmentManager().
                     findFragmentByTag(CartFragment.TAG);

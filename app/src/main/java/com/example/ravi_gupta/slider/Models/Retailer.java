@@ -103,28 +103,33 @@ public class Retailer extends Model {
      * @return return true if given day array matches today day
      */
     private boolean compareDay(List<String> dayName){
-        if(dayName == null){
+        try{
+            if(dayName == null){
+                return false;
+            }
+            //Getting the today day name
+            Calendar calendar = Calendar.getInstance();
+            Date date = calendar.getTime();
+            // full name form of the day
+            String today = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+            boolean dayFound = false;
+            /**
+             * Now starting the matching of day
+             */
+            for(String day : dayName){
+                String pattDay = day.toUpperCase();
+                String pattTodayDay = today.toUpperCase();
+                if(pattTodayDay.equals(pattDay)){
+                    dayFound = true;
+                    break;
+                }
+            }
+
+            return dayFound;
+        }catch (NullPointerException e){
             return false;
         }
-        //Getting the today day name
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        // full name form of the day
-        String today = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
-        boolean dayFound = false;
-        /**
-         * Now starting the matching of day
-         */
-        for(String day : dayName){
-            String pattDay = day.toUpperCase();
-            String pattTodayDay = today.toUpperCase();
-            if(pattTodayDay.equals(pattDay)){
-                dayFound = true;
-                break;
-            }
-        }
 
-        return dayFound;
     }
 
 
