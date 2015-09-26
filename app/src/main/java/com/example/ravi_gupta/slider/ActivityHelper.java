@@ -2,15 +2,9 @@ package com.example.ravi_gupta.slider;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -19,18 +13,11 @@ import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Models.Office;
-import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
-import com.example.ravi_gupta.slider.Models.SplashContainer;
-import com.example.ravi_gupta.slider.Models.SplashFile;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
-import com.example.ravi_gupta.slider.Repository.SplashContainerRepository;
-import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
 import com.strongloop.android.loopback.File;
@@ -39,13 +26,9 @@ import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -141,11 +124,7 @@ public class ActivityHelper {
 
     }
 
-
-
-
-
-
+/*
     public void showLocationAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
         alertDialog.setMessage("This app requires google location to be enabled");
@@ -177,7 +156,7 @@ public class ActivityHelper {
                 //replaceFragment(R.layout.fragment_main,null);
             }
         }
-    }
+    }*/
 
 
     /**
@@ -283,7 +262,7 @@ public class ActivityHelper {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
                                 try {
                                     closeLoadingBar();
-                                } catch (Exception e) {
+                                }catch (Exception e){
                                     Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                                 }
                                 //We are not providing service in your area....
@@ -311,7 +290,7 @@ public class ActivityHelper {
                                         Log.d(Constants.TAG, "No retailer found in this area");
                                         try {
                                             closeLoadingBar();
-                                        } catch (Exception e) {
+                                        }catch (Exception e){
                                             Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                                         }
                                         //Show no internet connection..
@@ -332,8 +311,8 @@ public class ActivityHelper {
                             //closeLoadingBar();
                             try {
                                 closeLoadingBar();
-                            } catch (Exception e) {
-                                Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+                            }catch (Exception e){
+                                Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
                             }
                             //Show no internet connection..
                             activity.replaceFragment(R.layout.fragment_try_again, null);
@@ -342,7 +321,7 @@ public class ActivityHelper {
                 } else {
                     try {
                         closeLoadingBar();
-                    } catch (Exception e) {
+                    }catch (Exception e){
                         Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                     }
                     //closeLoadingBar();
@@ -361,25 +340,28 @@ public class ActivityHelper {
 
     public void fetchAllImages(final RestAdapter adapter){
 
-        SplashContainerRepository containerRepo = adapter.createRepository(SplashContainerRepository.class);
-        containerRepo.get(Constants.imageContainer, new ObjectCallback<SplashContainer>() {
+        ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
+        containerRepo.get(Constants.imageContainer, new ObjectCallback<Container>() {
             @Override
-            public void onSuccess(SplashContainer container) {
-                container.getAllFiles(new ListCallback<SplashFile>() {
+            public void onSuccess(Container container) {
+                container.getAllFiles(new ListCallback<File>() {
                     @Override
-                    public void onSuccess(List<SplashFile> objects) {
+                    public void onSuccess(List<File> objects) {
                         totalImages = objects.size();
-                        saveFileDetails(objects);
-                        for (SplashFile file : objects) {
+
+                        for (File file : objects) {
                             downloadImages(file);
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
+
                         Log.e(Constants.TAG, "Error fetching all the offers images.");
                         Log.e(Constants.TAG, t.toString());
                         activity.replaceFragment(R.layout.fragment_try_again, null);
+
+
                     }
                 });
             }
@@ -394,7 +376,7 @@ public class ActivityHelper {
 
 
 
-    public void downloadImages(SplashFile remoteFile){
+    public void downloadImages(File remoteFile){
         remoteFile.setUrl(Constants.apiUrl + "/containers/" + remoteFile.getContainer() + "/download/" + remoteFile.getName());
         String fileName = activity.getApplicationInfo().dataDir + "/" + remoteFile.getName();
         localFile = new java.io.File( fileName);
@@ -432,69 +414,6 @@ public class ActivityHelper {
                 activity.replaceFragment(R.layout.fragment_try_again, null);
             }
         });
-    }
-
-
-
-    private void saveFileDetails(List<SplashFile> objects){
-        List<SplashFile> savedSplashFiles =  getSavedSplashDetails();
-        if(savedSplashFiles == null){
-            //Then just save the files..
-            saveSplashDetails(objects);
-        }else{
-            //First compare the file validity..
-            if(savedSplashFiles.size() > 1){
-                //Now loop each objects and check if the file is present..
-                for(SplashFile savedSplashFile : savedSplashFiles){
-                    //Now further loop... ...
-                    for(SplashFile serverSplashFile : objects){
-                        if(serverSplashFile.getName().equals(savedSplashFile.getName() )) {
-                            //If match found..
-                            //Check for the validity of the file..
-                            if(serverSplashFile.getLastModified().equals(savedSplashFile.getLastModified() ) ){
-                                //Fetch this data from localfile...
-                                String filePath =  activity.getApplicationInfo().dataDir + "/" + serverSplashFile.getName();
-                                java.io.File file = new java.io.File(filePath);
-                                if(file.exists()){
-                                    //Do something
-
-                                }
-                                else{
-                                    // Do something else.
-
-                                }
-                            }//if
-                        }//if
-                    }//for
-                }//for
-            }else{
-                //Then just save the files..
-                saveSplashDetails(objects);
-            }
-
-        }
-    }
-
-
-    private List<SplashFile> getSavedSplashDetails(){
-        Gson gson = new Gson();
-        //First get files locally saved..
-        String json = application.getData(activity, Constants.splash);
-        List<SplashFile> files = gson.fromJson(json, new TypeToken<List<File>>(){}.getType());
-        return files;
-    }
-
-
-    private void saveSplashDetails(List<SplashFile> files){
-        Gson gson = new Gson();
-        try{
-            String json = gson.toJson(files);
-            application.addData(activity, Constants.splash, json);
-        }
-        catch (Exception e){
-            //DO nothing here...JUST IGNORE
-            Log.e(Constants.TAG, "Error saving the splash files to shared preferences.");
-        }
     }
 
 

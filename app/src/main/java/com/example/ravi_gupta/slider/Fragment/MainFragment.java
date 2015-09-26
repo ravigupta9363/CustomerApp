@@ -9,7 +9,6 @@ import android.graphics.drawable.ScaleDrawable;
 import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -52,7 +51,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton cartButton;
     TextView toolbarTitle;
     private TextView cartItems;
-    public FloatingActionButton floatingActionButton;
+
 
     public TextView getCartItems() {
 
@@ -116,14 +115,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
         cartItems = (TextView) rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
-        floatingActionButton = (FloatingActionButton) rootview.findViewById(R.id.fragment_main_fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainActivity.quickOrder();
-                //floatingActionButton.setVisibility(View.GONE);
-            }
-        });
+        mainActivity.showFloatingButton();
 
 
         pagerAdapter = new ViewPagerAdapter(getActivity(), myApplication.getImageFileArray(), viewPager);
