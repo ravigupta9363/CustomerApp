@@ -167,6 +167,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public ProgressDialog mainActivityProgressDialog;
     double latitude;
     double longitude;
+    String pincode = "";
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -314,7 +315,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
      * @return
      */
     public String findNetwork(double latitude, double longitude){
-        String pincode = "";
+        //String pincode = "";
         /*double latitude;
         double longitude;*/
         //Checking Pincode lies within area
@@ -415,14 +416,12 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         final RestAdapter adapter = app.getLoopBackAdapter();
         final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
 
-        String pincode = findNetwork(latitude, longitude);
         officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
             @Override
             public void onSuccess(Office object) {
                 app.setOffice(object);
                 callback.onSuccess(object);
             }
-
             @Override
             public void onError(Throwable t) {
                 Log.e(Constants.TAG, t.toString());
@@ -831,9 +830,20 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         if (fileUri != null) {
             outState.putString("cameraImageUri", fileUri.toString());
         }
+        if(pincode != null){
+            outState.putString("pincode", pincode);
+        }
+        try {
+            outState.putString("latitude", String.valueOf(latitude) );
+            outState.putString("longitude", String.valueOf(longitude));
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Error saving lat and long values in saveInstance mainActivity");
+        }
+
     }
 
     @Override
@@ -842,7 +852,21 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         if (savedInstanceState.containsKey("cameraImageUri")) {
             fileUri = Uri.parse(savedInstanceState.getString("cameraImageUri"));
         }
-    }
+        if (savedInstanceState.containsKey("pincode")) {
+            pincode = savedInstanceState.getString("pincode");
+        }
+        try{
+            if (savedInstanceState.containsKey("latitude")) {
+                latitude = Double.parseDouble(savedInstanceState.getString("latitude"));
+            }
+            if (savedInstanceState.containsKey("latitude")) {
+                longitude = Double.parseDouble(savedInstanceState.getString("longitude"));
+            }
+        }catch (Exception e){
+            Log.e(Constants.TAG, "Null value found for lat and long onRestoreInstance MainActivity");
+        }
+    }//onRestoreInstanceState
+
 
     @Override
     public void choosePhotoFromGallery() {
