@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -139,6 +140,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     private final int QUICK_ORDER = 102;
+    private final int LOCATION_ALERT = 103;
     public DatabaseHelper databaseHelper;
     public ProfileDatabase profileDatabase;
     public int prescriptionId = 0;
@@ -209,6 +211,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     ProgressBar mainProgressBar;
     TextView appName;
     MainActivity that;
+    public FloatingActionButton floatingActionButton;
 
 
     @Override
@@ -267,6 +270,15 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         appName = (TextView)findViewById(R.id.activity_main_textview1);
+        floatingActionButton = (FloatingActionButton)findViewById(R.id.fragment_main_fab);
+        floatingActionButton.setVisibility(View.GONE);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               quickOrder();
+                //floatingActionButton.setVisibility(View.GONE);
+            }
+        });
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
         that = this;
@@ -892,13 +904,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 Log.v("quickOrder", "I am Called");
             }
         }
-        else if (requestCode == 1) {
-            appLocationService = new AppLocationService(this);
-            Location location = appLocationService
-                    .getLocation(LocationManager.NETWORK_PROVIDER);
-            if (location != null) {
-                replaceFragment(R.layout.fragment_main,null);
-            }
+        else if (requestCode == LOCATION_ALERT) {
+            Log.v("GONE","Location has been Detected");
+            getActivityHelper().launchRingDialog(this);
+            getActivityHelper().startHelperActivity();
         }
     }
 
@@ -1053,7 +1062,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             case R.id.fragment_incoming_sms_textview4:
                 invalidEmail(ft,object);
 
-
         }
     }
 
@@ -1114,12 +1122,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     private void fragmentMainImageButton2(FragmentTransaction ft){
         int prescriptionCount = databaseHelper.getPresciptionCount();
         if (prescriptionCount == 0) {
-            CartNoOrdersFragment frag5 = (CartNoOrdersFragment) getSupportFragmentManager().
-                    findFragmentByTag(CartNoOrdersFragment.TAG);
-            if (frag5 == null) {
-                frag5 = CartNoOrdersFragment.newInstance();
-            }
-            ft.replace(R.id.fragment_main_container, frag5, CartNoOrdersFragment.TAG).addToBackStack(CartNoOrdersFragment.TAG);
+            Fragment newFragment = new CartNoOrdersFragment();
+            ft.replace(R.id.fragment_main_container, newFragment, CartNoOrdersFragment.TAG);
+            ft.addToBackStack(CartNoOrdersFragment.TAG); // Ads FirstFragment to the back-stack
             ft.commit();
         } else {
             CartFragment frag5 = (CartFragment) getSupportFragmentManager().
@@ -1239,7 +1244,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         ft.commitAllowingStateLoss();
     }
 
-    private void profileEditButton1Fragment(FragmentTransaction ft, Object object){
+    private void profileEditButton1Fragment(FragmentTransaction ft, Object object) {
         onBackPressed();
         IncomingSmsFragment frag9 = (IncomingSmsFragment) getSupportFragmentManager().
                 findFragmentByTag(IncomingSmsFragment.TAG);
@@ -1494,9 +1499,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     /*=================REPLACE FRAGMENT METHOD AREA ENDS==========================*/
 
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -1599,8 +1601,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     public void onClick(DialogInterface dialog, int which) {
                         String action = "com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS";
                         Intent settings = new Intent(action);
-                        startActivityForResult(settings, 1);
-                        startActivity(settings);
+                        startActivityForResult(settings, LOCATION_ALERT);
                     }
                 });
         alertDialog.setNegativeButton("Cancel",
@@ -1706,16 +1707,22 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void onBackStackChanged() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            if(mainFragment != null) {
-                mainFragment.floatingActionButton.setVisibility(View.GONE);
+            floatingActionButton.setVisibility(View.GONE);
                 Log.v("GONE", "BACK STACK");
-            }
         }
         else {
-            if(mainFragment != null){
-                mainFragment.floatingActionButton.setVisibility(View.VISIBLE);
+               floatingActionButton.setVisibility(View.VISIBLE);
                 Log.v("GONE", "BACK STACK 2");
-            }
         }
+    }
+
+    public void showFloatingButton() {
+            floatingActionButton.setVisibility(View.VISIBLE);
+            Log.v("GONE", "BACK STACK 2");
+    }
+
+    public void hideFloatingButton() {
+           floatingActionButton.setVisibility(View.GONE);
+            Log.v("GONE", "BACK STACK 2");
     }
 }

@@ -64,23 +64,6 @@ public class SendOrderFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_send_order, container, false);
         mainActivity.enableEditText = false;
 
-        //Setting Drawable small
-      /*  Drawable drawablePrescription = getResources().getDrawable(R.mipmap.dc_prescription);
-        drawablePrescription.setBounds(0, 0, (int) (drawablePrescription.getIntrinsicWidth() * 0.7),
-                (int) (drawablePrescription.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd1 = new ScaleDrawable(drawablePrescription, 0, 1f, 1f);
-
-        Drawable drawableRepeatOrder = getResources().getDrawable(R.mipmap.dc_replace);
-        drawableRepeatOrder.setBounds(0, 0, (int) (drawableRepeatOrder.getIntrinsicWidth() * 0.7),
-                (int) (drawableRepeatOrder.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd2 = new ScaleDrawable(drawableRepeatOrder, 0, 1f, 1f);
-
-        Drawable drawableCallUs = getResources().getDrawable(R.mipmap.dc_call_me);
-        drawableCallUs.setBounds(0, 0, (int) (drawableCallUs.getIntrinsicWidth() * 0.7),
-                (int) (drawableCallUs.getIntrinsicHeight() * 0.7));
-        ScaleDrawable sd3 = new ScaleDrawable(drawableCallUs, 0, 1f, 1f);*/
-
-
 
         Typeface typeface2 = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSans-Regular.ttf");
 

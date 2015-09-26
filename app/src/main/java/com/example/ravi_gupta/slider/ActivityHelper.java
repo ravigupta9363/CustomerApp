@@ -2,15 +2,9 @@ package com.example.ravi_gupta.slider;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -19,12 +13,10 @@ import com.example.ravi_gupta.slider.Location.AppLocationService;
 import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.Models.Customer;
 import com.example.ravi_gupta.slider.Models.Office;
-import com.example.ravi_gupta.slider.Models.Order;
 import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
-import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
@@ -34,13 +26,9 @@ import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,11 +124,7 @@ public class ActivityHelper {
 
     }
 
-
-
-
-
-
+/*
     public void showLocationAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
         alertDialog.setMessage("This app requires google location to be enabled");
@@ -172,7 +156,7 @@ public class ActivityHelper {
                 //replaceFragment(R.layout.fragment_main,null);
             }
         }
-    }
+    }*/
 
 
     /**
