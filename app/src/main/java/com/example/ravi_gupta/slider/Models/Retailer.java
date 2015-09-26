@@ -103,6 +103,9 @@ public class Retailer extends Model {
      * @return return true if given day array matches today day
      */
     private boolean compareDay(List<String> dayName){
+        if(dayName == null){
+            return false;
+        }
         //Getting the today day name
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
