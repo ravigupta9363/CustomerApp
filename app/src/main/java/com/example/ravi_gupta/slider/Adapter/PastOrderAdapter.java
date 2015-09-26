@@ -161,10 +161,6 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         return row;
     }
 
-
-
-
-
     /**
      * Create order when reorder button is pressed
      * @param activity
