@@ -229,7 +229,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 for(PrescriptionDetail prescriptionDetail : prescriptionDetails){
                     try {
                         bitmap = BitmapFactory.decodeStream(mainActivity.getContentResolver().openInputStream(prescriptionDetail.getImageUri()));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, stream);
                         byteArray = stream.toByteArray();
                         stream.reset();
                     } catch (FileNotFoundException e) {

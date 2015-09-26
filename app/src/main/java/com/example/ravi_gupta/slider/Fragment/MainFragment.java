@@ -88,7 +88,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sliderItems = new int[]{R.drawable.slider_three, R.drawable.slider_one, R.drawable.slider_two, R.drawable.slider_three, R.drawable.slider_one};
         MainActivity activity = (MainActivity) getActivity();
         myApplication = (MyApplication) activity.getApplication();
 
