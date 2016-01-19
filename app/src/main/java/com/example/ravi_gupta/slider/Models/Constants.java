@@ -23,6 +23,7 @@ public class Constants {
     public static String retailer = "Retailer";
     public static String imageStorageDir = "Drugcorner";
 
+
     /**
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
