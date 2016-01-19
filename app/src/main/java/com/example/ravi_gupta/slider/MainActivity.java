@@ -30,7 +30,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -125,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
         NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
-        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener, FragmentManager.OnBackStackChangedListener{
+        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -169,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public ProgressDialog mainActivityProgressDialog;
     double latitude;
     double longitude;
-    String pincode = "";
+    String pincode = "122010";
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -216,42 +215,39 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         getSupportActionBar().hide();
         context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+        mDrawerLayout = (DrawerLayout) inflater.inflate(R.layout.decor, null);
+
         databaseHelper = new DatabaseHelper(this);
         orderStatusDataBase = new OrderStatusDataBase(this);
         databaseHelper.deleteAllPrescription();
+
         ViewGroup decor = (ViewGroup) getWindow().getDecorView();
         View child = decor.getChildAt(0);
         decor.removeView(child);
         LinearLayout container = (LinearLayout) mDrawerLayout.findViewById(R.id.mContainer); // This is the container we defined just now.
         container.addView(child);
-        // Make the drawer replace the first child
         decor.addView(mDrawerLayout);
-        getSupportActionBar().setElevation(0);//Removing Shaodow
-        //Putting childs in Navigation drawer
-        // load slide menu items
+        getSupportActionBar().setElevation(0);
+
         navMenuTitles = getResources().getStringArray(R.array.sections_title);
-        // nav drawer icons from resources
         navMenuIcons = getResources().obtainTypedArray(R.array.sections_icons);
-        //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.drawerListView);
         navDrawerItems = new ArrayList<>();
         for(int i = 0; i<=9; i++){
             navDrawerItems.add(new NavigationDrawerItemDetails(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
         }
-        // Recycle the typed array
+
         navMenuIcons.recycle(); // For Menu Icons
-        // setting the nav drawer list adapter
-        adapter = new NavDrawerListAdapter(getApplicationContext(),
-                navDrawerItems);
+        adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
         mDrawerList.setAdapter(adapter);
-        // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -270,20 +266,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         appName = (TextView)findViewById(R.id.activity_main_textview1);
-        floatingActionButton = (FloatingActionButton)findViewById(R.id.fragment_main_fab);
-        floatingActionButton.setVisibility(View.GONE);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               quickOrder();
-                //floatingActionButton.setVisibility(View.GONE);
-            }
-        });
+
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Museo300-Regular.otf");
         appName.setTypeface(typeface);
         that = this;
         linearLayoutSplash = (LinearLayout) findViewById(R.id.activity_main_linear_layout);
-
 
         final MyApplication app = (MyApplication) getApplication();
 
@@ -306,9 +293,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 linearLayoutSplash.setVisibility(View.VISIBLE);
             }
         }
-
-
-
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -375,7 +359,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     final Pattern p = Pattern.compile( "(\\d{6})" );
                     final Matcher m = p.matcher(application.getUpdatedAddress(this).toString() );
                     if ( m.find() ) {
-                        pincode =  m.group(0);
+                        pincode =  "122010";
                     }
                     StringBuilder sb = new StringBuilder();
                     sb.append(address.getPostalCode());
@@ -632,7 +616,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // update the main content by replacing fragments
         Fragment fragment = null;
         final android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
         if (!haveNetworkConnection()) {
             position = 99;
         }
@@ -934,7 +917,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     @Override
     public void replaceFragment(int id, Object object) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
         MyApplication app = (MyApplication)getApplication();
         //ActivityHelper helper = new ActivityHelper(this, app);
         if(!haveNetworkConnection()) {
@@ -1704,7 +1686,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         super.onDestroy();
     }
 
-    @Override
+  /*  @Override
     public void onBackStackChanged() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             floatingActionButton.setVisibility(View.GONE);
@@ -1724,5 +1706,5 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void hideFloatingButton() {
            floatingActionButton.setVisibility(View.GONE);
             Log.v("GONE", "BACK STACK 2");
-    }
+    }*/
 }

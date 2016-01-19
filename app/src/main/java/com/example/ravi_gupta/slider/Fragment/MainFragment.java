@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
-import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -93,15 +92,15 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
         databaseHelper = new DatabaseHelper(getActivity());
 
-        Address address = myApplication.getUpdatedAddress(activity);
-        StringBuilder sb = new StringBuilder();
+//        Address address = myApplication.getUpdatedAddress(activity);
+        /*StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
             sb.append(address.getAddressLine(i)).append(" ");
         }
         sb.append(address.getLocality()).append(" ");
         sb.append(address.getPostalCode()).append(" ");
         sb.append(address.getCountryName());
-        result = sb.toString();
+        result = sb.toString();*/
     }
 
 
@@ -116,7 +115,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         cartButton = (ImageButton) rootview.findViewById(R.id.fragment_main_imagebutton2);
         cartItems = (TextView) rootview.findViewById(R.id.fragment_main_textview2);
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
-        mainActivity.showFloatingButton();
+       // mainActivity.showFloatingButton();
+
 
 
         pagerAdapter = new ViewPagerAdapter(getActivity(), myApplication.getImageFileArray(), viewPager);
@@ -132,7 +132,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
 
-        disabledocationEditText.setText(result);
+        disabledocationEditText.setText("V 21/6, Lane Number 20, DLF Phase 3, Gurgaon");
         Log.d("address", "Display Address = " + result);
 
 

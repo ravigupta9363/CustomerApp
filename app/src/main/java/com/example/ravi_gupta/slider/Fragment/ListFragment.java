@@ -3,16 +3,16 @@ package com.example.ravi_gupta.slider.Fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.ravi_gupta.slider.Adapter.ShopListAdapter;
@@ -69,8 +69,17 @@ public class ListFragment extends android.support.v4.app.Fragment {
         View rootview = inflater.inflate(R.layout.fragment_shop_list, container, false);
         MyApplication myApplication = (MyApplication)mainActivity.getApplication();
         retailerRepository = myApplication.getLoopBackAdapter().createRepository(RetailerRepository.class);
-
         mListview = (ListView) rootview.findViewById(R.id.shopListview);
+        setListViewHeightBasedOnChildren(mListview);
+        mListview.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
         shopListAdapter = new ShopListAdapter(getActivity(),R.layout.shop_list,shopListDetailses);
         mListview.setAdapter(shopListAdapter);
@@ -100,11 +109,30 @@ public class ListFragment extends android.support.v4.app.Fragment {
             ListRetailers(office);
         }
 
-
-
         return rootview;
     }
 
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 
 
     private void ListRetailers(final Office office){
@@ -175,8 +203,6 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
         }
     }
-
-
 
 
 

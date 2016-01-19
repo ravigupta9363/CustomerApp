@@ -142,11 +142,17 @@
 
     </RelativeLayout>
 
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/activity_main_relative_layout1"
+        android:fillViewport="true">
+
     <LinearLayout
         android:background="#f9f9f7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_main_relative_layout1"
         android:orientation="vertical"
         android:id="@+id/mainActivityLinearLayout1">
 
@@ -167,5 +173,5 @@
             tools:layout="@layout/fragment_shop_list" />
 
     </LinearLayout>
-
+    </ScrollView>
 </RelativeLayout>

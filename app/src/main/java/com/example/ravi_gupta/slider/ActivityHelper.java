@@ -117,9 +117,7 @@ public class ActivityHelper {
         /**
          * Add the order repository
          */
-
         OrderRepository orderRepository = activity.restAdapter.createRepository(OrderRepository.class);
-
         application.setOrder(orderRepository.createObject(ImmutableMap.of("code", 0)), activity);
 
     }
@@ -176,8 +174,8 @@ public class ActivityHelper {
         //launchRingDialog(activity);
 
         //start your activity here
-        internetConnection = activity.haveNetworkConnection();
-        runOnUiThread(internetConnection);
+        //internetConnection = activity.haveNetworkConnection();
+        runOnUiThread();
 
 
     }
@@ -244,12 +242,11 @@ public class ActivityHelper {
 
 
 
-    private void  runOnUiThread(final boolean internetConnection){
+    private void  runOnUiThread(){
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (internetConnection) {
 
                     pincode = activity.findNetwork(latitude, longitude);
                     final RestAdapter adapter = application.getLoopBackAdapter();
@@ -260,13 +257,14 @@ public class ActivityHelper {
                         public void onSuccess(Office officeObj) {
                             if (officeObj.getName() == null) {
                                 Log.i(Constants.TAG, "We are not providing service in your area.");
+                                activity.replaceFragment(R.layout.fragment_main, null);
                                 try {
                                     closeLoadingBar();
                                 }catch (Exception e){
                                     Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                                 }
                                 //We are not providing service in your area....
-                                activity.replaceFragment(R.layout.fragment_no_address_found, null);
+                                //activity.replaceFragment(R.layout.fragment_no_address_found, null);
 
                             } else {
                                 application.setOffice(officeObj);
@@ -294,7 +292,8 @@ public class ActivityHelper {
                                             Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                                         }
                                         //Show no internet connection..
-                                        activity.replaceFragment(R.layout.fragment_try_again, null);
+                                        //activity.replaceFragment(R.layout.fragment_try_again, null);
+                                        activity.replaceFragment(R.layout.fragment_main, null);
 
                                     }
                                 });
@@ -315,10 +314,11 @@ public class ActivityHelper {
                                 Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
                             }
                             //Show no internet connection..
-                            activity.replaceFragment(R.layout.fragment_try_again, null);
+                            //activity.replaceFragment(R.layout.fragment_try_again, null);
+                            activity.replaceFragment(R.layout.fragment_main, null);
                         }
                     }); //SearchOfficePincode method
-                } else {
+
                     try {
                         closeLoadingBar();
                     }catch (Exception e){
@@ -329,13 +329,9 @@ public class ActivityHelper {
                     activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
 
                 }
-            }
         });
 
     }
-
-
-
 
 
     public void fetchAllImages(final RestAdapter adapter){
@@ -417,8 +413,6 @@ public class ActivityHelper {
     }
 
 
-
-
     public void resolveRoute(){
         //On success
         try{
@@ -428,7 +422,6 @@ public class ActivityHelper {
         }catch (Exception e){
             Log.e(Constants.TAG, "Error activityCloseLoadingBar loading bar instance has not been created. in ActivityHelper resolveroute");
         }
-
         try{
             closeLoadingBar();
         }
@@ -437,13 +430,12 @@ public class ActivityHelper {
         }
 
 
-
-
         //Getting the value of delivery status..
         String pendingDelivery = orderStatusDataBase.getOrderStatus();
         Log.d(Constants.TAG, "Checking value of pending delivery =  ");
         if (pendingDelivery == "") {
             //Go to main fragment
+            //TODO DISPLAY FIRST TIME USER SIGNUP/LOGIN SCREEN
             activity.replaceFragment(R.layout.fragment_main, null);
 
         } else {

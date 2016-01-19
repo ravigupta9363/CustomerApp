@@ -68,9 +68,6 @@ public class MyApplication extends Application {
     }
 
 
-
-
-
     public Order getOrder(MainActivity activity) {
         if(this.order == null){
             Gson gson = new Gson();

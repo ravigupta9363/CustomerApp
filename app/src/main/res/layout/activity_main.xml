@@ -55,7 +55,7 @@
             android:layout_below="@+id/linear_layout"
             android:layout_marginTop="50dp"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fragment_main_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         android:layout_marginBottom="20dp"
         android:src="@mipmap/dc_compact_camera"
         app:backgroundTint="#9A12B3"
-        app:rippleColor="#D24D57" />
+        app:rippleColor="#D24D57" />-->
 
 
 
