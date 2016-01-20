@@ -17,6 +17,7 @@ import com.example.ravi_gupta.slider.Models.Retailer;
 import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.example.ravi_gupta.slider.Repository.OrderRepository;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.common.collect.ImmutableMap;
 import com.strongloop.android.loopback.Container;
 import com.strongloop.android.loopback.ContainerRepository;
@@ -25,6 +26,9 @@ import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,7 +73,8 @@ public class ActivityHelper {
     public ActivityHelper(MainActivity activity, MyApplication application){
         this.activity = activity;
         this.application = application;
-
+        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -79,6 +84,12 @@ public class ActivityHelper {
             }//public void run() {
         });
 
+    }
+
+    @Subscriber(tag = Constants.SEND_LAT_LONG)
+    private void setLatLong(LatLng latLong) {
+        latitude = latLong.latitude;
+        longitude = latLong.longitude;
     }
 
 
@@ -248,87 +259,88 @@ public class ActivityHelper {
             @Override
             public void run() {
 
-                    pincode = activity.findNetwork(latitude, longitude);
-                    final RestAdapter adapter = application.getLoopBackAdapter();
+                //pincode = activity.findNetwork(latitude, longitude);
+                pincode = "122010";
+                final RestAdapter adapter = application.getLoopBackAdapter();
 
-                    final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
-                    officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
-                        @Override
-                        public void onSuccess(Office officeObj) {
-                            if (officeObj.getName() == null) {
-                                Log.i(Constants.TAG, "We are not providing service in your area.");
-                                activity.replaceFragment(R.layout.fragment_main, null);
-                                try {
-                                    closeLoadingBar();
-                                }catch (Exception e){
-                                    Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
-                                }
-                                //We are not providing service in your area....
-                                //activity.replaceFragment(R.layout.fragment_no_address_found, null);
-
-                            } else {
-                                application.setOffice(officeObj);
-                                //Now setting the office id to the order...
-                                application.getOrder(activity).setOfficeId((String) officeObj.getId());
-
-                                officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
-                                    @Override
-                                    public void onSuccess(List<Retailer> retailerArray) {
-                                        Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
-                                        retailerListFetched = true;
-                                        application.setRetailerList(retailerArray);
-                                        if (imageDownloaded && retailerListFetched) {
-                                            //Go to main fragment
-                                            resolveRoute();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable t) {
-                                        Log.d(Constants.TAG, "No retailer found in this area");
-                                        try {
-                                            closeLoadingBar();
-                                        }catch (Exception e){
-                                            Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
-                                        }
-                                        //Show no internet connection..
-                                        //activity.replaceFragment(R.layout.fragment_try_again, null);
-                                        activity.replaceFragment(R.layout.fragment_main, null);
-
-                                    }
-                                });
-
-                                //Download all the images..
-                                fetchAllImages(adapter);
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable t) {
-                            Log.e(Constants.TAG, t.toString());
-                            Log.e(Constants.TAG, "Error loading office settings from server");
-                            //closeLoadingBar();
+                final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);
+                officeRepo.SearchOfficePincode(pincode, new ObjectCallback<Office>() {
+                    @Override
+                    public void onSuccess(Office officeObj) {
+                        if (officeObj.getName() == null) {
+                            Log.i(Constants.TAG, "We are not providing service in your area.");
+                            activity.replaceFragment(R.layout.fragment_main, null);
                             try {
                                 closeLoadingBar();
-                            }catch (Exception e){
-                                Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
+                            } catch (Exception e) {
+                                Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                             }
-                            //Show no internet connection..
-                            //activity.replaceFragment(R.layout.fragment_try_again, null);
-                            activity.replaceFragment(R.layout.fragment_main, null);
+                            //We are not providing service in your area....
+                            //activity.replaceFragment(R.layout.fragment_no_address_found, null);
+
+                        } else {
+                            application.setOffice(officeObj);
+                            //Now setting the office id to the order...
+                            application.getOrder(activity).setOfficeId((String) officeObj.getId());
+
+                            officeRepo.getRetailers(officeObj.getId(), new ListCallback<Retailer>() {
+                                @Override
+                                public void onSuccess(List<Retailer> retailerArray) {
+                                    Log.i(Constants.TAG, "Successfully fetched retailer data from the server");
+                                    retailerListFetched = true;
+                                    application.setRetailerList(retailerArray);
+                                    if (retailerListFetched) {
+                                        //Go to main fragment
+                                        resolveRoute();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Throwable t) {
+                                    Log.d(Constants.TAG, "No retailer found in this area");
+                                    try {
+                                        closeLoadingBar();
+                                    } catch (Exception e) {
+                                        Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
+                                    }
+                                    //Show no internet connection..
+                                    //activity.replaceFragment(R.layout.fragment_try_again, null);
+                                    activity.replaceFragment(R.layout.fragment_main, null);
+
+                                }
+                            });
+
+                            //Download all the images..
+                            //fetchAllImages(adapter);
                         }
-                    }); //SearchOfficePincode method
-
-                    try {
-                        closeLoadingBar();
-                    }catch (Exception e){
-                        Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                     }
-                    //closeLoadingBar();
-                    //Show no internet connection..
-                    activity.replaceFragment(R.layout.fragment_no_internet_connection, null);
 
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(Constants.TAG, t.toString());
+                        Log.e(Constants.TAG, "Error loading office settings from server");
+                        //closeLoadingBar();
+                        try {
+                            closeLoadingBar();
+                        } catch (Exception e) {
+                            Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
+                        }
+                        //Show no internet connection..
+                        //activity.replaceFragment(R.layout.fragment_try_again, null);
+                        activity.replaceFragment(R.layout.fragment_main, null);
+                    }
+                }); //SearchOfficePincode method
+
+
+                try {
+                    closeLoadingBar();
+                } catch (Exception e) {
+                    Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                 }
+                //closeLoadingBar();
+                //Show no internet connection..
+                activity.replaceFragment(R.layout.fragment_main, null);
+            }
         });
 
     }

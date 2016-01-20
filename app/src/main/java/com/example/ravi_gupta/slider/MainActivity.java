@@ -26,8 +26,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.ResultReceiver;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -92,12 +92,17 @@ import com.example.ravi_gupta.slider.Repository.CustomerRepository;
 import com.example.ravi_gupta.slider.Repository.OfficeRepository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.LocationServices;
 import com.strongloop.android.loopback.LocalInstallation;
 import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.loopback.callbacks.VoidCallback;
+
+import org.simple.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -124,7 +129,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         CartNoOrdersFragment.OnFragmentInteractionListener, NoInternetConnectionFragment.OnFragmentInteractionListener,
         IncomingSmsFragment.OnFragmentInteractionListener, ConfirmOrderFragment.OnFragmentInteractionListener,
         NoAddressFoundFragment.OnFragmentInteractionListener, TermsAndConditionFragment.OnFragmentInteractionListener,
-        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener{
+        VerifyingOrderFragment.OnFragmentInteractionListener, TryAgain.OnFragmentInteractionListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     public int updateLocation = 0;
     //public boolean updateUserInfo = false;
@@ -169,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     double latitude;
     double longitude;
     String pincode = "122010";
+    static String addressResult;
     public ActivityHelper getActivityHelper() {
         return activityHelper;
     }
@@ -210,7 +217,9 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     ProgressBar mainProgressBar;
     TextView appName;
     MainActivity that;
-    public FloatingActionButton floatingActionButton;
+    protected Location mLastLocation;
+    private AddressResultReceiver mResultReceiver;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -219,6 +228,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeGooglePlacesApi();
+        mGoogleApiClient.connect();
 
         getSupportActionBar().hide();
         context = getApplicationContext();
@@ -305,6 +316,20 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         }, 200);
     }
 
+    /**
+     * Initialize google place api and last location of the app
+     */
+    private void initializeGooglePlacesApi() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(ActivityRecognition.API)
+                .build();
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
 
     /**
      * TESTING
@@ -322,14 +347,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
         Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
         if (gpsLocation != null || networkLocation != null) {
-            if(gpsLocation != null) {
-                latitude = gpsLocation.getLatitude();
-                longitude = gpsLocation.getLongitude();
-            }
-            else {
-                latitude = networkLocation.getLatitude();
-                longitude = networkLocation.getLongitude();
-            }
             Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
             try {
                 List<Address> addressList = geocoder.getFromLocation(
@@ -346,7 +363,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                             //result = parseAddress();
                         }
                         else{
-
                             //Show try again as address not found
                             this.replaceFragment(R.layout.fragment_try_again, null);
                         }
@@ -359,7 +375,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                     final Pattern p = Pattern.compile( "(\\d{6})" );
                     final Matcher m = p.matcher(application.getUpdatedAddress(this).toString() );
                     if ( m.find() ) {
-                        pincode =  "122010";
+                        pincode =  m.group();
                     }
                     StringBuilder sb = new StringBuilder();
                     sb.append(address.getPostalCode());
@@ -389,6 +405,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             //We are not providing service in your area....
             this.replaceFragment(R.layout.fragment_try_again, null);
         }
+        Log.v("myAddress","Pincode = "+pincode);
         return pincode;
     }
 
@@ -418,6 +435,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 app.setOffice(object);
                 callback.onSuccess(object);
             }
+
             @Override
             public void onError(Throwable t) {
                 Log.e(Constants.TAG, t.toString());
@@ -587,6 +605,95 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             }
         });
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+// Gets the best and most recent location currently available,
+        // which may be null in rare cases when a location is not available.
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            // Determine whether a Geocoder is available.
+            //http://stackoverflow.com/questions/17519198/how-to-get-the-current-location-latitude-and-longitude-in-android
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+            if (!Geocoder.isPresent()) {
+                return;
+            }
+
+            startIntentService();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    /**
+     * This method is responsible to start the service ie..FetchAddressIntentService to fetch
+     * the address and display it in edittext
+     */
+    protected void startIntentService() {
+        Intent intent = new Intent(this,FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        this.startService(intent);
+    }
+
+
+
+    /**
+     * It is a class which is used to get result received from the service
+     * The result is in many forms including
+     * Error for no address found,time out etc...
+     * Or Address, if correct address is found
+     */
+    public static class AddressResultReceiver extends ResultReceiver {
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         * This method is fired when result is received from the service
+         * @param resultCode
+         * @param resultData
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            final String mAddressOutput;
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            Log.v(Constants.TAG, mAddressOutput);
+            //displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                com.google.android.gms.internal.zzip.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAddressOutput != null) {
+                            Log.v("myAddress", "Display Address = " + mAddressOutput);
+                            EventBus.getDefault().post(mAddressOutput,Constants.MAIN_ACTIVTY_SEND_LOCATION);
+
+                        }
+                    }
+                });
+            }
+
+        }
+    }
+
+
 
     private class SlideMenuClickListener implements //Naviagation menu class
             ListView.OnItemClickListener {
@@ -1055,7 +1162,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         MainFragment frag1 = (MainFragment) getSupportFragmentManager().
                 findFragmentByTag(MainFragment.TAG);
         if (frag1 == null) {
-            frag1 = MainFragment.newInstance();
+            frag1 = MainFragment.newInstance(addressResult);
         }
         ft.replace(R.id.container, frag1, MainFragment.TAG);
         ft.commitAllowingStateLoss();
@@ -1085,7 +1192,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                 findFragmentByTag(MainFragment.TAG);
         updateLocation = 3;
         if (frag3 == null) {
-            frag3 = MainFragment.newInstance();
+            frag3 = MainFragment.newInstance(addressResult);
         }
         ft.replace(R.id.container, frag3, MainFragment.TAG).addToBackStack(null);
         ft.commitAllowingStateLoss();

@@ -1,11 +1,10 @@
 package com.example.ravi_gupta.slider.Adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,8 @@ import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 import com.squareup.picasso.RequestCreator;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by Ravi-Gupta on 6/30/2015.
@@ -28,10 +27,11 @@ public class ViewPagerAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
-    List<java.io.File> imageFileArray;
+    //List<java.io.File> imageFileArray;
+    ArrayList<Drawable> imageFileArray;
     private boolean doNotifyDataSetChangedOnce = false;
 
-    public ViewPagerAdapter(Context context, List<java.io.File> imageFileArray
+    public ViewPagerAdapter(Context context, ArrayList<Drawable> imageFileArray
             , final ViewPagerCustomDuration viewPager) {
         this.context = context;
         this.imageFileArray = imageFileArray;
@@ -60,18 +60,13 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-
-        if (doNotifyDataSetChangedOnce) {
-            doNotifyDataSetChangedOnce = false;
-            notifyDataSetChanged();
-        }
         //return sliderItems.length;
         return imageFileArray.size();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object o) {
-        return view == ((RelativeLayout)o);
+        return o == view;
     }
 
     @Override
@@ -87,14 +82,9 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         // Capture position and set to the ImageView
 
-        java.io.File localImage = imageFileArray.get(position);
-        if(localImage.exists()){
-
-            String path = localImage.getAbsolutePath();
-            Bitmap myBitmap = BitmapFactory.decodeFile(path);
-            sliderItem.setImageBitmap(myBitmap);
-
-        }
+        Drawable localImage = imageFileArray.get(position);
+        sliderItem.setImageDrawable(localImage);
+        Log.v("myAdd",localImage+"");
 
 
             // Add viewpager_item.xml to ViewPager

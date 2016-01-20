@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +21,15 @@ import android.widget.TextView;
 import com.example.ravi_gupta.slider.Adapter.ViewPagerAdapter;
 import com.example.ravi_gupta.slider.Database.DatabaseHelper;
 import com.example.ravi_gupta.slider.MainActivity;
+import com.example.ravi_gupta.slider.Models.Constants;
 import com.example.ravi_gupta.slider.MyApplication;
 import com.example.ravi_gupta.slider.R;
 import com.example.ravi_gupta.slider.ViewPager.ViewPagerCustomDuration;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,7 +54,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     ImageButton cartButton;
     TextView toolbarTitle;
     private TextView cartItems;
-
+    ArrayList<Drawable> imageArray = new ArrayList<Drawable>();
 
     public TextView getCartItems() {
 
@@ -69,12 +73,13 @@ public class MainFragment extends android.support.v4.app.Fragment {
     DatabaseHelper databaseHelper;
     String result;
     MyApplication myApplication;
+    String addressResult;
 
     private OnFragmentInteractionListener mListener;
 
 
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance() {
+    public static MainFragment newInstance(String address) {
         MainFragment fragment = new MainFragment();
         return fragment;
     }
@@ -88,9 +93,15 @@ public class MainFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         MainActivity activity = (MainActivity) getActivity();
         myApplication = (MyApplication) activity.getApplication();
+        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
 
         databaseHelper = new DatabaseHelper(getActivity());
-
+        imageArray.add(0,getResources().getDrawable(R.drawable.slider0));
+        imageArray.add(1,getResources().getDrawable(R.drawable.slider1));
+        imageArray.add(2,getResources().getDrawable(R.drawable.slider2));
+        imageArray.add(3,getResources().getDrawable(R.drawable.slider3));
+        imageArray.add(4,getResources().getDrawable(R.drawable.slider4));
 //        Address address = myApplication.getUpdatedAddress(activity);
         /*StringBuilder sb = new StringBuilder();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
@@ -116,9 +127,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         toolbarTitle = (TextView) rootview.findViewById(R.id.fragment_main_textview1);
        // mainActivity.showFloatingButton();
 
-
-
-        pagerAdapter = new ViewPagerAdapter(getActivity(), myApplication.getImageFileArray(), viewPager);
+        pagerAdapter = new ViewPagerAdapter(getActivity(), imageArray, viewPager);
         mainActivity.mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         viewPager.setPadding(40, 0, 40, 0);
@@ -130,10 +139,6 @@ public class MainFragment extends android.support.v4.app.Fragment {
         viewPager.setScrollDurationFactor(3);
         viewPager.setOffscreenPageLimit(3);
         pageSwitcher(4);
-
-        disabledocationEditText.setText("V 21/6, Lane Number 20, DLF Phase 3, Gurgaon");
-        Log.d("address", "Display Address = " + result);
-
 
         //String cartItem = databaseHelper.getPresciptionCount()+"";
 
@@ -162,6 +167,12 @@ public class MainFragment extends android.support.v4.app.Fragment {
         return rootview;
     }
 
+    @Subscriber(tag = Constants.MAIN_ACTIVTY_SEND_LOCATION)
+    private void setAddress(String data) {
+        disabledocationEditText.setText(data);
+    }
+
+
 
     public void pageSwitcher(int seconds) {
         timer = new Timer(); //  At this line a new Thread will be created
@@ -188,11 +199,11 @@ public class MainFragment extends android.support.v4.app.Fragment {
                             // Showing a toast for just testing purpose
                         } else {
                             if (page == 0) {
-                                viewPager.setCurrentItem(myApplication.getImageFileArray().size() - 2);
+                                viewPager.setCurrentItem(imageArray.size() - 2);
                             }
 
                             // skip fake page (last), go to first page
-                            if (page == myApplication.getImageFileArray().size() - 1) {
+                            if (page == imageArray.size() - 1) {
                                 //TODO NEEDS FIXING BUGS HERE ON PagerAdapter The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count
                                 viewPager.setCurrentItem(0);
                                 //notice how this jumps to position 1, and not position 0. Position 0 is the fake page!
@@ -203,7 +214,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
                                     pagerAdapter.notifyDataSetChanged();
                                 }
 
-                                if (page == myApplication.getImageFileArray().size() - 1)
+                                if (page == imageArray.size() - 1)
                                     page = 1;
                             }
                         }
