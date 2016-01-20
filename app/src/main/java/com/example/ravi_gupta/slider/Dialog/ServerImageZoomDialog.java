@@ -28,7 +28,7 @@ public class ServerImageZoomDialog extends DialogFragment {
     public static String TAG = "ServerImageZoomDialog";
     Bitmap bitmap;
     Uri image;
-    List<Map<String, String>> mapList;
+    List<Map<String, Map>> mapList;
     ViewPagerCustomDuration viewPager;
     ServerViewPagerAdapter serverViewPagerAdapter;
 
@@ -60,7 +60,7 @@ public class ServerImageZoomDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         //setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.MY_DIALOG);
-        this.mapList = (List<Map<String, String>>) getArguments().getSerializable("prescription");
+        this.mapList = (List<Map<String, Map>>) getArguments().getSerializable("prescription");
     }
 
     @Override

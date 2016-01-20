@@ -25,14 +25,14 @@ import java.util.Map;
  */
 public class ServerViewPagerAdapter extends PagerAdapter {
     Context context;
-    List<Map<String, String>> mapList;
+    List<Map<String, Map>> mapList;
     LayoutInflater layoutInflater;
     ViewPagerCustomDuration viewPager;
     boolean enabled;
     int page = 0;
     MainActivity mainActivity;
 
-    public ServerViewPagerAdapter(Context context, final List<Map<String, String>> mapList, final ViewPagerCustomDuration viewPager) {
+    public ServerViewPagerAdapter(Context context, final List<Map<String, Map>> mapList, final ViewPagerCustomDuration viewPager) {
         this.context = context;
         this.mapList = mapList;
         this.viewPager = viewPager;
@@ -82,10 +82,12 @@ public class ServerViewPagerAdapter extends PagerAdapter {
         TouchImageView sliderItem = (TouchImageView)itemView.findViewById(R.id.server_viewpager_item);
 
         // Capture position and set to the ImageView
-        Map<String, String> imageThumbnail = mapList.get(position);
+        Map<String, Map> imageThumbnail = mapList.get(position);
         Object bigImage = "image";
 
-        Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
+        Uri imageUri = Uri.parse(Constants.apiUrl + "/api/containers/" +
+                imageThumbnail.get(bigImage).get("container") + "/download/" + imageThumbnail.get(bigImage).get("name") );
+        //Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
         Log.d("server","BigImage = "+imageUri+"");
         Picasso.with(mainActivity).load(imageUri).resize(400, 520).into(sliderItem);
         // sliderItem.setImageResource(sliderItems[position]);

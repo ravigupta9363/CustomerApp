@@ -207,7 +207,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="Preparing Order"
             android:gravity="right"
             android:textStyle="bold"
             android:padding="10dp"

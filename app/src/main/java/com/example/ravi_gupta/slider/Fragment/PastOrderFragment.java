@@ -53,7 +53,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
     public static String TAG = "PastOrderFragment";
     String fragment;
     OrderRepository orderRepository;
-    List<Map<String, String>> prescriptionStatic = null;
+    List<Map<String, Map>> prescriptionStatic = null;
     TextView noPastOrderText;
     View rootview;
     ProgressBar progressBar;
@@ -170,7 +170,7 @@ public class PastOrderFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void run() {
                                 for (Order order : orderList) {
-                                    List<Map<String, String>> prescription = order.getPrescription();
+                                    List<Map<String, Map>> prescription = order.getPrescription();
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                                     format.setTimeZone(TimeZone.getTimeZone("IST"));
                                     java.util.Date date = null;

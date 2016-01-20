@@ -280,7 +280,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
         if(app.getOrder(mainActivity).getPrescription() == null){
             //CURRENT ORDER IS THE NEW ORDER..ADD PRESCRIPTION FIRST..
             ContainerRepository containerRepo = adapter.createRepository(ContainerRepository.class);
-            containerRepo.get((String)userId,  new ObjectCallback<Container>() {
+            containerRepo.get("drugcorner-prescription",  new ObjectCallback<Container>() {
                 @Override
                 public void onSuccess(Container container) {
                     final int listSize = byteArrayList.size();
@@ -367,13 +367,19 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
      */
     private void uploadOrder(List<String> fileList, String code, String userId){
         MyApplication app =  (MyApplication)mainActivity.getApplication();
-        List<Map<String, String>> prescription = new ArrayList<>();
+        List<Map<String, Map>> prescription = new ArrayList<>();
         for(String file : fileList ){
-            String presUrl =  "/containers/" + userId + "/download/original_" + file;
-            String thumbUrl =  "/containers/" + userId + "/download/thumb_" + file;
-            Log.d(Constants.TAG, presUrl);
+            Map<String, String> presUrl = new HashMap<>();
+            presUrl.put("container", "drugcorner-prescription");
+            presUrl.put("name", "original_" + file);
+            //String presUrl =  "/containers/" + userId + "/download/original_" + file;
+            Map<String, String> thumbUrl = new HashMap<>();
+            thumbUrl.put("container", "drugcorner-prescription");
+            thumbUrl.put("name", "thumb_" + file);
+            //String thumbUrl =  "/containers/" + userId + "/download/thumb_" + file;
+            //Log.d(Constants.TAG, presUrl);
             //Adding to the list map
-            Map<String, String> image = new HashMap<>();
+            Map<String, Map> image = new HashMap<>();
             image.put("image", presUrl);
             image.put("thumb", thumbUrl);
             prescription.add(image);

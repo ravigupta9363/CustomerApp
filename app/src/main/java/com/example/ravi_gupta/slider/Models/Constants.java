@@ -9,8 +9,8 @@ public class Constants {
     public static String imageContainer = "drugcorner";
     public static String returnDays  = "2 Days Return";
     //public static String apiUrl = "http://192.168.1.100:3001/api";
-    public static String apiUrl = "http://api.drugcorner.co.in";
-
+    public static String apiUrl = "http://192.168.1.100:3001/api";
+    //TODO http://api.drugcorner.co.in
     public static String appName = "DRUGCORNER";
 
     public static String faqName = "faq";

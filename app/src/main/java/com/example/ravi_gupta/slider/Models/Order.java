@@ -25,7 +25,7 @@ public class Order extends Model {
     private String note;
     private String sendNotice;
     private Map<String, String> forwardOrder;
-    private List<Map<String, String>> prescription;
+    private List<Map<String, Map>> prescription;
     private String retailerId;
     private String prototypeStatusCode;
     private String prototypeOrderCancelReason;
@@ -183,11 +183,11 @@ public class Order extends Model {
         this.date = date;
     }
 
-    public List<Map<String, String>> getPrescription() {
+    public List<Map<String, Map>> getPrescription() {
         return prescription;
     }
 
-    public void setPrescription(List<Map<String, String>> prescription) {
+    public void setPrescription(List<Map<String, Map>> prescription) {
         this.prescription = prescription;
     }
 

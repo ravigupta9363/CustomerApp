@@ -13,7 +13,7 @@ public class PastOrdersDetail {
     public String orderId;
     //public int price;
     public String address;
-    public List<Map<String, String>> drawable;
+    public List<Map<String, Map>> drawable;
     public boolean isDelivered;
     public String retailerId;
     public String status;
@@ -26,7 +26,7 @@ public class PastOrdersDetail {
     public PastOrdersDetail(String date,
                             String time,
                             String orderId,
-                            String address,List<Map<String, String>> drawable,
+                            String address,List<Map<String, Map>> drawable,
                             String status,
                             String retailerId){
         this.date = date;

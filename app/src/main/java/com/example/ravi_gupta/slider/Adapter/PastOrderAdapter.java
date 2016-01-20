@@ -98,10 +98,11 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         holder.address.setText(pastOrdersDetail.address.substring(0,30)+"...");
         //If Delivered == true than
 
-        final List<Map<String, String>> mapList = pastOrdersDetail.drawable;
-        Map<String, String> imageThumbnail = mapList.get(0);
+        final List<Map<String, Map>> mapList = pastOrdersDetail.drawable;
+        Map<String, Map> imageThumbnail = mapList.get(0);
         Object thumb = "thumb";
-        Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(thumb));
+        Uri imageUri = Uri.parse(Constants.apiUrl + "/api/containers/" +
+                imageThumbnail.get(thumb).get("container") + "/download/" + imageThumbnail.get(thumb).get("name") );
 
         Log.d(Constants.TAG, imageUri.toString());
 
@@ -170,7 +171,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
      */
     private void createOrder(
             MainActivity activity,
-            List<Map<String, String>> prescription,
+            List<Map<String, Map>> prescription,
             String retailerId,
             String prototypeStatusCode
     ){

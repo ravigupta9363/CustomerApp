@@ -285,7 +285,7 @@ public class ActivityHelper {
                     public void onSuccess(Office officeObj) {
                         if (officeObj.getName() == null) {
                             Log.i(Constants.TAG, "We are not providing service in your area.");
-                            activity.replaceFragment(R.layout.fragment_main, null);
+                            activity.replaceFragment(R.layout.fragment_try_again, null);
                             try {
                                 closeLoadingBar();
                             } catch (Exception e) {
@@ -321,7 +321,7 @@ public class ActivityHelper {
                                     }
                                     //Show no internet connection..
                                     //activity.replaceFragment(R.layout.fragment_try_again, null);
-                                    activity.replaceFragment(R.layout.fragment_main, null);
+                                    //activity.replaceFragment(R.layout.fragment_main, null);
 
                                 }
                             });
@@ -339,7 +339,7 @@ public class ActivityHelper {
                         try {
                             closeLoadingBar();
                         } catch (Exception e) {
-                            Log.e(Constants.TAG, "Loading bar instanc e is not defined. ActivityHelper");
+                            Log.e(Constants.TAG, "Loading bar instance is not defined. ActivityHelper");
                         }
                         //Show no internet connection..
                         //activity.replaceFragment(R.layout.fragment_try_again, null);
@@ -355,7 +355,7 @@ public class ActivityHelper {
                 }
                 //closeLoadingBar();
                 //Show no internet connection..
-                activity.replaceFragment(R.layout.fragment_main, null);
+                //activity.replaceFragment(R.layout.fragment_main, null);
             }
         });
 
