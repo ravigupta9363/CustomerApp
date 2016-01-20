@@ -5,6 +5,8 @@ import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -259,8 +261,22 @@ public class ActivityHelper {
             @Override
             public void run() {
 
-                //pincode = activity.findNetwork(latitude, longitude);
-                pincode = "122010";
+                appLocationService = new AppLocationService(activity);
+                Location gpsLocation = appLocationService.getLocation(LocationManager.GPS_PROVIDER);
+                Location networkLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+                if (gpsLocation != null || networkLocation != null) {
+                    if (gpsLocation != null) {
+                        latitude = gpsLocation.getLatitude();
+                        longitude = gpsLocation.getLongitude();
+                    } else {
+                        latitude = networkLocation.getLatitude();
+                        longitude = networkLocation.getLongitude();
+                    }
+                }
+
+                Log.v("myAdd",latitude+" "+longitude);
+                pincode = activity.findNetwork(latitude, longitude);
+                Log.v("myAdd",pincode);
                 final RestAdapter adapter = application.getLoopBackAdapter();
 
                 final OfficeRepository officeRepo = adapter.createRepository(OfficeRepository.class);

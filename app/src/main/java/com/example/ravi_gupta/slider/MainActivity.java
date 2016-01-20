@@ -363,6 +363,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
                             //result = parseAddress();
                         }
                         else{
+
                             //Show try again as address not found
                             this.replaceFragment(R.layout.fragment_try_again, null);
                         }
@@ -405,7 +406,6 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             //We are not providing service in your area....
             this.replaceFragment(R.layout.fragment_try_again, null);
         }
-        Log.v("myAddress","Pincode = "+pincode);
         return pincode;
     }
 
