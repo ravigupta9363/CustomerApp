@@ -101,7 +101,7 @@ public class PastOrderAdapter extends ArrayAdapter<PastOrdersDetail>{
         final List<Map<String, Map>> mapList = pastOrdersDetail.drawable;
         Map<String, Map> imageThumbnail = mapList.get(0);
         Object thumb = "thumb";
-        Uri imageUri = Uri.parse(Constants.apiUrl + "/api/containers/" +
+        Uri imageUri = Uri.parse(Constants.apiUrl + "/containers/" +
                 imageThumbnail.get(thumb).get("container") + "/download/" + imageThumbnail.get(thumb).get("name") );
 
         Log.d(Constants.TAG, imageUri.toString());

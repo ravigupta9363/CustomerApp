@@ -2,7 +2,7 @@ package com.example.ravi_gupta.slider.Models;
 
 import com.strongloop.android.loopback.User;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by robins on 28/8/15.
@@ -14,6 +14,16 @@ public class Customer extends User  {
     private String email;
     private String name;
     private String created;
+
+    public Map<String, String> getLocation() {
+        return location;
+    }
+
+    public void setLocation(Map<String, String> location) {
+        this.location = location;
+    }
+
+    private Map<String, String> location;
 
 
 

@@ -123,6 +123,10 @@ public class GcmIntentService extends IntentService {
                                     subject =  "Order Cancelled";
                                     sendNotification(data.getMessage(), subject);
                                 }
+                                else if(data.getStatus().equals("5100")){
+                                    subject =  "Estimated Price";
+                                    sendNotification(data.getMessage(), subject);
+                                }
                                 else{
                                     //Just post notification in this case..
                                     sendNotification(data.getMessage());

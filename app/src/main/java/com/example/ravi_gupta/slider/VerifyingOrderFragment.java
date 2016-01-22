@@ -103,7 +103,8 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             }
         });
         //Requesting Verification code from server
-        sendRequest();
+        //sendRequest();
+        uploadPrescription(mainActivity, databaseHelper, "5555");
         return rootview;
     }
 
@@ -218,6 +219,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
                 //this method will be running on UI thread
 //                progressBar.setVisibility(View.VISIBLE);
                 //textView.setText("Uploading Prescription..");
+                mainActivity.getActivityHelper().launchRingDialog(mainActivity, "Uploading Prescription");
                 setStatus("Uploading Prescription..");
             }
 
@@ -249,6 +251,7 @@ public class VerifyingOrderFragment extends android.support.v4.app.Fragment {
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
                 uploadToServer(mainActivity.restAdapter, code, byteArrayList);
+                mainActivity.getActivityHelper().closeLoadingBar();
             }
         }.execute(null, null, null);
     }

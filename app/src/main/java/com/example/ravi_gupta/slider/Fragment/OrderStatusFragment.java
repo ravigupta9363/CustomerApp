@@ -495,7 +495,7 @@ public class OrderStatusFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void onError(Throwable t) {
                                 Log.e(Constants.TAG, "Error Cancelling Order");
-                                Log.e(Constants.TAG, t.getMessage());
+                               // Log.e(Constants.TAG, t.getMessage());
                                 mainActivity.getActivityHelper().closeLoadingBar();
 
                             }

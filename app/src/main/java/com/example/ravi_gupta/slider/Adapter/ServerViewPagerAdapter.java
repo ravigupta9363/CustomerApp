@@ -85,7 +85,7 @@ public class ServerViewPagerAdapter extends PagerAdapter {
         Map<String, Map> imageThumbnail = mapList.get(position);
         Object bigImage = "image";
 
-        Uri imageUri = Uri.parse(Constants.apiUrl + "/api/containers/" +
+        Uri imageUri = Uri.parse(Constants.apiUrl + "/containers/" +
                 imageThumbnail.get(bigImage).get("container") + "/download/" + imageThumbnail.get(bigImage).get("name") );
         //Uri imageUri = Uri.parse(Constants.apiUrl + imageThumbnail.get(bigImage));
         Log.d("server","BigImage = "+imageUri+"");
